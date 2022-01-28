@@ -1,4 +1,4 @@
-- 👋 Hi, I’m @udohjeremiah
+- 👋 Hi, I’m  Udoh Jeremiah
 - 👀 I’m interested in the Financial Markets.
 - 🌱 I’m currently into "deep learning" and its application in the financial markets.
 - 💞️ I’m looking to collaborate on "anything that has to with the financial markets!!!"
