@@ -1,7 +1,7 @@
-         me = "udoh jeremiah"
+         ME = "udoh jeremiah"
          for deep learning in artificial intelligence
              if curious && passionate
-                 activate! (me)
+                 activate! (ME)
              end
          end
      
