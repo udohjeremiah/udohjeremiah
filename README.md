@@ -1,5 +1,5 @@
          me = "udoh jeremiah"
-         for deep learning in artificial intilligence
+         for deep learning in artificial intelligence
              if curious && passionate
                  activate! (me)
              end
