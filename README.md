@@ -1,9 +1,9 @@
-- 👋 me = "udoh jeremiah"
-- 👀 for deep learning in artificial intilligence
-         if curious && passionate
-             activate! (me)
+         me = "udoh jeremiah"
+         for deep learning in artificial intilligence
+             if curious && passionate
+                 activate! (me)
+             end
          end
-     end
      
 - 🌱 I would love to collaborate and learn from you if you're curious and share the same passion as I do.
 - 📫 we can reach each other on twitter: @udohjeremiah_
