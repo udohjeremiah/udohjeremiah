@@ -1,7 +1,7 @@
          ME = "udoh jeremiah"
          for deep learning in artificial intelligence
              if curious && passionate
-                 activate! (ME)
+                 activate!(ME)
              end
          end
      
