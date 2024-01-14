@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Udoh Jeremiah
 
-## Getting Started
+> "I skate to where the puck is going to be, not where it has been." - Wayne Gretzky
 
-First, run the development server:
+Hello there! 👋 I'm Udoh Jeremiah, a passionate full-stack software developer based in Nigeria 🇳🇬. Welcome to my GitHub
+profile!
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## About Me
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+I am a full-stack software developer with a keen interest in developing robust web applications. Possessing a solid
+background in software development, I derive satisfaction from addressing intricate problems and crafting innovative
+solutions. My objective is to position myself at the intersection of technology and humanity, creating web solutions
+that enhance people's lives by incorporating technology for creative purposes, not just productivity.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 🔧 Skills
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **Programming Languages:**
 
-## Learn More
+  - [Python](https://www.python.org)
+  - [Julia](https://julialang.org)
+  - [Java](https://www.java.com)
+  - [JavaScript](https://ecma-international.org/publications-and-standards/standards/ecma-262)
 
-To learn more about Next.js, take a look at the following resources:
+- **Web Technologies:**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+  - [HTML5](https://html.spec.whatwg.org)
+  - [CSS3](https://www.w3.org/TR/CSS)
+  - [TailwindCSS](http://tailwindcss.com)
+  - [Node.js](http://nodejs.org)
+  - [Webpack](https://webpack.js.org)
+  - [Vite.js](https://vitejs.dev)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- **Frameworks:**
 
-## Deploy on Vercel
+  - [Express.js](http://expressjs.com)
+  - [React.js](http://react.dev)
+  - [Next.js](http://nextjs.org)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Databases:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+  - [MongoDB](http://mongodb.com)
+  - [Redis](http://redis.io)
+
+- **Other Skills:**
+
+  - [Git](https://git-scm.com)
+  - [RESTful API Design](https://aws.amazon.com/what-is/restful-api)
+
+## 🚀 Projects
+
+Explore some of the projects I've been working on:
+
+1. [ExamShare](http://examshare.vercel.app) - An open-source project for sharing past examination questions in higher
+   education.
+
+2. [Eleotrade](http://eleotrade.vercel.app) - A cutting-edge cryptocurrency brokerage investment platform.
+
+For more details on each project, visit my [portfolio website](https://udohjeremiah.vercel.app).
+
+## 📝 Blog
+
+I enjoy sharing my thoughts and experiences through blogging. Check out my latest articles on
+[My Blog](https://udohjeremiah.vercel.app/blog).
+
+## 🌐 Connect with Me
+
+- **Portfolio Website:** https://udohjeremiah.vercel.app
+- **Email:** udohjeremiah@icloud.com
+
+Feel free to reach out for any questions, collaborations, or just to chat. Let's connect and build something amazing
+together!
+
+Thanks for visiting! ✨
