@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { cn } from "@/lib/utils";
 
 import { useEffect } from "react";
 import Link from "next/link";
@@ -215,7 +215,7 @@ export default function Navigation() {
                                   ? "noopener noreferrer"
                                   : undefined
                               }
-                              className={clsx(
+                              className={cn(
                                 "group flex items-center gap-2.5 rounded-md border px-3 py-2 transition-colors",
                                 active?.(pathname)
                                   ? "bg-secondary"
@@ -229,7 +229,12 @@ export default function Navigation() {
                                 {name}
                               </p>
                               {shortcut ? (
-                                <kbd className="flex h-5 w-4 shrink-0 items-center justify-center rounded border text-[10px] font-medium uppercase text-muted-foreground">
+                                <kbd
+                                  className={cn(
+                                    "flex h-5 w-4 shrink-0 items-center justify-center rounded border text-[10px] font-medium uppercase text-muted-foreground",
+                                    "dark:border-neutral-600",
+                                  )}
+                                >
                                   {shortcut}
                                 </kbd>
                               ) : null}
@@ -258,7 +263,7 @@ export default function Navigation() {
       </div>
 
       {/* Desktop nav */}
-      <nav className={clsx("hidden", "lg:block")}>
+      <nav className={cn("hidden", "lg:block")}>
         {sections.map((section, sectionIndex) => (
           <section key={sectionIndex} className="space-y-2 p-3">
             {section.name ? (
@@ -278,7 +283,7 @@ export default function Navigation() {
                         ? "noopener noreferrer"
                         : undefined
                     }
-                    className={clsx(
+                    className={cn(
                       "group flex items-center gap-2.5 rounded-md border px-3 py-2 transition-colors",
                       active?.(pathname)
                         ? "bg-primary-foreground dark:border-neutral-600"
@@ -290,7 +295,7 @@ export default function Navigation() {
                       {name}
                     </p>
                     {shortcut ? (
-                      <kbd className="flex h-5 w-4 shrink-0 items-center justify-center rounded border text-[10px] font-medium uppercase text-muted-foreground">
+                      <kbd className="flex h-5 w-4 shrink-0 items-center justify-center rounded border border-neutral-600 text-[10px] font-medium uppercase text-muted-foreground">
                         {shortcut}
                       </kbd>
                     ) : null}

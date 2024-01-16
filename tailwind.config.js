@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+import animate from "tailwindcss-animate";
+import typography from "@tailwindcss/typography";
+
 module.exports = {
   darkMode: ["class"],
   content: [
@@ -75,7 +78,38 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      typography: ({ theme }) => ({
+        DEFAULT: {
+          css: {
+            letterSpacing: "-0.0125em",
+            "h1, h2, h3, h4, h5, h6": {
+              fontWeight: theme("fontWeight.semibold"),
+              letterSpacing: theme("letterSpacing.tight"),
+            },
+            "[data-rehype-pretty-code-fragment]": {
+              "[data-rehype-pretty-code-title]": {
+                borderTopLeftRadius: "0.375rem",
+                borderTopRightRadius: "0.375rem",
+                paddingTop: "0.5rem",
+                paddingRight: "0.75rem",
+                paddingBottom: "0.5rem",
+                paddingLeft: "0.75rem",
+                borderBottom: `1px solid var(--tw-prose-invert-hr)`,
+                backgroundColor: "var(--tw-prose-pre-bg)",
+                color: "var(--tw-prose-pre-code)",
+                fontSize: theme("fontSize.sm"),
+                fontFamily: theme("fontFamily.mono"),
+              },
+              pre: {
+                marginTop: 0,
+                borderTopLeftRadius: 0,
+                borderTopRightRadius: 0,
+              },
+            },
+          },
+        },
+      }),
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [animate, typography],
 };
