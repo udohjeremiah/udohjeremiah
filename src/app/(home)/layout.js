@@ -1,5 +1,5 @@
 import "@/styles/globals.css";
-import clsx from "clsx";
+import { cn } from "@/lib/utils";
 
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
@@ -7,6 +7,8 @@ import { GeistMono } from "geist/font/mono";
 import ThemeProvider from "@/providers/ThemeProvider";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata = {
   title: "Create Next App",
@@ -18,7 +20,7 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={clsx(
+      className={cn(
         GeistSans.variable,
         GeistMono.variable,
         "touch-manipulation font-sans antialiased [text-rendering:optimizelegibility]",
@@ -37,6 +39,7 @@ export default function RootLayout({ children }) {
             <Footer />
           </div>
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );
