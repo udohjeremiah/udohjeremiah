@@ -46,7 +46,7 @@ export default function ThemeToggler() {
 
   return (
     <Select value={theme} onValueChange={setTheme}>
-      <SelectTrigger className="dark:border-neutral-600">
+      <SelectTrigger className="border-border">
         <SelectValue placeholder="Theme">
           <div className="flex items-center gap-2.5">
             <Icon className="h-4 w-4 shrink-0" />

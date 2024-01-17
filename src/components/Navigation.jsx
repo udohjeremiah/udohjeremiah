@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 
 import { useEffect } from "react";
@@ -28,6 +30,7 @@ import {
   EnvelopeOpenIcon,
 } from "@radix-ui/react-icons";
 import ThemeToggler from "./ThemeToggler";
+import RandomQuotes from "./RandomQuotes";
 
 export const pages = [
   {
@@ -229,12 +232,7 @@ export default function Navigation() {
                                 {name}
                               </p>
                               {shortcut ? (
-                                <kbd
-                                  className={cn(
-                                    "flex h-5 w-4 shrink-0 items-center justify-center rounded border text-[10px] font-medium uppercase text-muted-foreground",
-                                    "dark:border-neutral-600",
-                                  )}
-                                >
+                                <kbd className="flex h-5 w-4 shrink-0 items-center justify-center rounded border text-[10px] font-medium uppercase text-muted-foreground">
                                   {shortcut}
                                 </kbd>
                               ) : null}
@@ -286,7 +284,7 @@ export default function Navigation() {
                     className={cn(
                       "group flex items-center gap-2.5 rounded-md border px-3 py-2 transition-colors",
                       active?.(pathname)
-                        ? "bg-primary-foreground dark:border-neutral-600"
+                        ? "bg-primary-foreground"
                         : "border-transparent text-muted-foreground hover:bg-primary-foreground hover:text-foreground",
                     )}
                   >
@@ -295,7 +293,7 @@ export default function Navigation() {
                       {name}
                     </p>
                     {shortcut ? (
-                      <kbd className="flex h-5 w-4 shrink-0 items-center justify-center rounded border border-neutral-600 text-[10px] font-medium uppercase text-muted-foreground">
+                      <kbd className="flex h-5 w-4 shrink-0 items-center justify-center rounded border text-[10px] font-medium uppercase text-muted-foreground">
                         {shortcut}
                       </kbd>
                     ) : null}
