@@ -62,7 +62,7 @@ export const work = [
     href: "/projects",
     icon: TokensIcon,
     shortcut: "p",
-    active: (pathname) => pathname.startsWith("/work"),
+    active: (pathname) => pathname.startsWith("/projects"),
   },
   {
     name: "Stack",

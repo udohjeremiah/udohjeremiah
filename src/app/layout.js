@@ -30,7 +30,7 @@ export default function RootLayout({ children }) {
         "touch-manipulation font-sans antialiased [text-rendering:optimizelegibility]",
       )}
     >
-      <body className="flex min-h-[100dvh] max-w-[100dvw] flex-col">
+      <body className="flex min-h-[100dvh] max-w-[100dvw] flex-col bg-background text-foreground">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
