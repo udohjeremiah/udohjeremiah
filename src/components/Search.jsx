@@ -8,10 +8,8 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -20,6 +18,7 @@ import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 
 export default function Search() {
   const [openSearchDialog, setSearchDialog] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -59,17 +58,36 @@ export default function Search() {
           </Button>
         </div>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when you&apos;re done.
-          </DialogDescription>
+      <DialogContent className="flex max-h-screen w-4/5 flex-col overflow-y-auto rounded-lg">
+        <DialogHeader className="flex border-b">
+          <div className="flex flex-1 items-center">
+            <Label id="website-search-label" htmlFor="website-search-input">
+              <span className="sr-only">Search</span>
+              <MagnifyingGlassIcon />
+            </Label>
+            <Input
+              aria-labelledby="website-search-label"
+              aria-autocomplete="both"
+              id="website-search-input"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              autoCorrect="off"
+              autoComplete="off"
+              autoCapitalize="off"
+              aria-controls="website-search-list"
+              enterKeyHint="go"
+              spellCheck="false"
+              type="text"
+              placeholder="Search website"
+              maxLength="64"
+              className={cn(
+                "flex-auto appearance-none border-none pl-3 shadow-none outline-none",
+                "focus-visible:ring-0",
+              )}
+            />
+          </div>
         </DialogHeader>
-        <div className="grid gap-4 py-4"></div>
-        <DialogFooter>
-          <Button type="submit">Save changes</Button>
-        </DialogFooter>
+        <div></div>
       </DialogContent>
     </Dialog>
   );
