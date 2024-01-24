@@ -1,5 +1,7 @@
 "use client";
 
+import { cn } from "@/lib/utils";
+
 import { useState, useEffect } from "react";
 import { quotes } from "@/data/quotes";
 
@@ -73,7 +75,7 @@ export default function RandomQuotes() {
   }, [index]);
 
   return (
-    <blockquote className="w-[60ch] text-pretty text-xs">
+    <blockquote className={cn("w-full text-pretty text-xs", "lg:w-[60ch]")}>
       <p>
         <span>&quot;{quoteText}&quot;</span>
         <span className="whitespace-nowrap">{authorText}</span>

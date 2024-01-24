@@ -5,7 +5,7 @@ export default function Profile() {
     <div className="flex w-96 items-center gap-3">
       <Avatar>
         <AvatarImage src="https://source.unsplash.com/random" />
-        <AvatarFallback>UJ</AvatarFallback>
+        <AvatarFallback className="bg-primary-foreground">UJ</AvatarFallback>
       </Avatar>
       <div>
         <p className="text-sm font-semibold">Udoh Jeremiah</p>

@@ -30,6 +30,7 @@ import {
   EnvelopeOpenIcon,
 } from "@radix-ui/react-icons";
 import ThemeToggler from "./ThemeToggler";
+import RandomQuotes from "./RandomQuotes";
 
 export const pages = [
   {
@@ -200,6 +201,9 @@ export default function Navigation() {
           <DrawerContent>
             <div className="max-h-[60vh] overflow-auto">
               <nav>
+                <div className="space-y-2 p-3">
+                  <RandomQuotes />
+                </div>
                 {sections.map((section, sectionIndex) => (
                   <section key={sectionIndex} className="space-y-2 p-3">
                     {section.name ? (
