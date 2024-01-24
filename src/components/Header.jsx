@@ -37,7 +37,7 @@ export default function Header() {
       {/* Desktop nav */}
       <div
         className={cn(
-          "hidden items-center justify-between gap-4 overflow-y-auto bg-muted px-4",
+          "hidden items-center justify-between gap-40 bg-muted px-4 py-4",
           "lg:flex",
         )}
       >

@@ -6,7 +6,9 @@ import { quotes } from "@/data/quotes";
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
 
 export default function RandomQuotes() {
-  const [quoteIndex, setQuoteIndex] = useState(null);
+  const [index, setIndex] = useState(null);
+  const [quoteText, setQuoteText] = useState("");
+  const [authorText, setAuthorText] = useState("");
 
   useEffect(() => {
     const updateQuoteIndex = () => {
@@ -16,7 +18,7 @@ export default function RandomQuotes() {
       const day = today.getUTCDate();
 
       const lastUpdate = localStorage.getItem("lastQuoteUpdate");
-      let [lastUpdateYear, lastUpdateMonth, lastUpdateDate] =
+      let [lastUpdateYear, lastUpdateMonth, lastUpdateDate, lastUpdateIndex] =
         (lastUpdate && lastUpdate.split("-")) || [];
 
       const timeDifference = lastUpdate
@@ -25,21 +27,57 @@ export default function RandomQuotes() {
         : ONE_DAY_IN_MILLISECONDS;
 
       if (lastUpdate && timeDifference >= ONE_DAY_IN_MILLISECONDS) {
-        setQuoteIndex(() => Math.floor(Math.random() * quotes.length));
-        localStorage.setItem("lastQuoteUpdate", `${year}-${month + 1}-${day}`);
+        lastUpdateIndex = Math.floor(Math.random() * quotes.length);
+        setIndex(lastUpdateIndex);
+        localStorage.setItem(
+          "lastQuoteUpdate",
+          `${year}-${month + 1}-${day}-${lastUpdateIndex}`,
+        );
       } else {
-        setQuoteIndex(0);
-        localStorage.setItem("lastQuoteUpdate", `${year}-${month + 1}-${day}`);
+        setIndex(lastUpdateIndex || 0);
+        localStorage.setItem(
+          "lastQuoteUpdate",
+          `${year}-${month + 1}-${day}-${lastUpdateIndex || 0}`,
+        );
       }
     };
 
     updateQuoteIndex();
   }, []);
 
+  useEffect(() => {
+    let i = 0;
+
+    const typingInterval = setInterval(() => {
+      if (i === quotes[index]?.quote.length) {
+        clearInterval(typingInterval);
+        startAuthorAnimation();
+      }
+      setQuoteText(quotes[index]?.quote.substring(0, i++));
+    }, 50);
+
+    const startAuthorAnimation = () => {
+      let j = 0;
+
+      const authorInterval = setInterval(() => {
+        if (j === quotes[index]?.author.length) {
+          clearInterval(authorInterval);
+        }
+        setAuthorText(" — " + quotes[index]?.author.substring(0, j++));
+      }, 50);
+    };
+
+    return () => {
+      clearInterval(typingInterval);
+    };
+  }, [index]);
+
   return (
-    <blockquote className="max-w-[40ch] text-xs">
-      <p>&quot;{quotes[quoteIndex]?.quote}&quot;</p>
-      <footer>—{quotes[quoteIndex]?.author}</footer>
+    <blockquote className="w-[60ch] text-pretty text-xs">
+      <p>
+        <span>&quot;{quoteText}&quot;</span>
+        <span className="whitespace-nowrap">{authorText}</span>
+      </p>
     </blockquote>
   );
 }
