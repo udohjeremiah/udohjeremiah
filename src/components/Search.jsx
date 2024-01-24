@@ -2,93 +2,136 @@
 
 import { cn } from "@/lib/utils";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
+
+import {
+  DesktopIcon,
+  ExternalLinkIcon,
+  MagnifyingGlassIcon,
+  MoonIcon,
+  SunIcon,
+} from "@radix-ui/react-icons";
 
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "@/components/ui/command";
+
+import { webLinks } from "@/data/weblinks";
 
 export default function Search() {
-  const [openSearchDialog, setSearchDialog] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const { setTheme } = useTheme();
 
   useEffect(() => {
     const handleKeyDown = (event) => {
       if ((event.metaKey || event.ctrlKey) && event.key === "k") {
+        if (
+          (event.target instanceof HTMLElement &&
+            event.target.isContentEditable) ||
+          event.target instanceof HTMLInputElement ||
+          event.target instanceof HTMLTextAreaElement ||
+          event.target instanceof HTMLSelectElement
+        ) {
+          return;
+        }
+
         event.preventDefault();
-        setSearchDialog((open) => !open);
+        setOpen((open) => !open);
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
 
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  const runCommand = useCallback((command) => {
+    setOpen(false);
+    command();
   }, []);
 
   return (
-    <Dialog open={openSearchDialog} onOpenChange={setSearchDialog}>
-      <DialogTrigger asChild>
-        <div>
-          <Button variant="outline" size="icon" className="lg:hidden">
-            <MagnifyingGlassIcon />
-          </Button>
-          <Button
-            className={cn(
-              "hidden w-64 items-center gap-2 border bg-primary-foreground text-sm text-muted-foreground",
-              "hover:border-card hover:bg-primary-foreground",
-              "lg:flex",
-              "xl:w-96",
-            )}
-          >
-            <MagnifyingGlassIcon />
-            <span>Search website...</span>
-            <kbd className="pointer-events-none ml-auto flex h-5 flex-none select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-semibold opacity-100">
-              <span className="text-xs">⌘</span>K
-            </kbd>
-          </Button>
-        </div>
-      </DialogTrigger>
-      <DialogContent className="flex max-h-screen w-4/5 flex-col overflow-y-auto rounded-lg">
-        <DialogHeader className="flex border-b">
-          <div className="flex flex-1 items-center">
-            <Label id="website-search-label" htmlFor="website-search-input">
-              <span className="sr-only">Search</span>
-              <MagnifyingGlassIcon />
-            </Label>
-            <Input
-              aria-labelledby="website-search-label"
-              aria-autocomplete="both"
-              id="website-search-input"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              autoCorrect="off"
-              autoComplete="off"
-              autoCapitalize="off"
-              aria-controls="website-search-list"
-              enterKeyHint="go"
-              spellCheck="false"
-              type="text"
-              placeholder="Search website"
-              maxLength="64"
-              className={cn(
-                "flex-auto appearance-none border-none pl-3 shadow-none outline-none",
-                "focus-visible:ring-0",
+    <>
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() => setOpen(true)}
+        className={cn(
+          "group items-center justify-center gap-2 border bg-primary-foreground text-sm",
+          "hover:border-muted-foreground",
+          "lg:flex lg:w-[60ch] lg:p-2 lg:text-muted-foreground",
+        )}
+      >
+        <MagnifyingGlassIcon className={cn("block", "lg:hidden")} />
+        <span className={cn("hidden", "lg:flex")}>Search website...</span>
+        <kbd
+          className={cn(
+            "pointer-events-none ml-auto hidden h-5 flex-none select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100",
+            "group-hover:border-muted-foreground",
+            "lg:flex",
+          )}
+        >
+          <span className="text-xs">⌘</span>K
+        </kbd>
+      </Button>
+      <CommandDialog open={open} onOpenChange={setOpen}>
+        <CommandInput placeholder="Type a command or search..." />
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+          {webLinks.map((linkItem) => (
+            <CommandGroup key={linkItem.title} heading={linkItem.title}>
+              {linkItem.items.map(
+                ({ title, href, external, icon: Icon, shortcut }) => (
+                  <CommandItem
+                    key={href}
+                    value={title}
+                    onSelect={() => {
+                      runCommand(() => router.push(href));
+                    }}
+                  >
+                    <Icon className="mr-2 h-4 w-4" />
+                    <span>{title}</span>
+                    {external && (
+                      <ExternalLinkIcon className="ml-auto h-4 w-4 text-muted-foreground" />
+                    )}
+                    {shortcut && (
+                      <CommandShortcut className="flex h-5 w-4 shrink-0 items-center justify-center rounded border text-[10px] font-medium uppercase text-muted-foreground">
+                        {shortcut}
+                      </CommandShortcut>
+                    )}
+                  </CommandItem>
+                ),
               )}
-            />
-          </div>
-        </DialogHeader>
-        <div></div>
-      </DialogContent>
-    </Dialog>
+            </CommandGroup>
+          ))}
+          <CommandSeparator />
+          <CommandGroup heading="Theme">
+            <CommandItem onSelect={() => runCommand(() => setTheme("light"))}>
+              <SunIcon className="mr-2 h-4 w-4" />
+              <span>Light</span>
+            </CommandItem>
+            <CommandItem onSelect={() => runCommand(() => setTheme("dark"))}>
+              <MoonIcon className="mr-2 h-4 w-4" />
+              <span>Dark</span>
+            </CommandItem>
+            <CommandItem onSelect={() => runCommand(() => setTheme("system"))}>
+              <DesktopIcon className="mr-2 h-4 w-4" />
+              <span>System</span>
+            </CommandItem>
+          </CommandGroup>
+        </CommandList>
+      </CommandDialog>
+    </>
   );
 }

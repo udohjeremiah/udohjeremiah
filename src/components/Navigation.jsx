@@ -30,7 +30,6 @@ import {
   EnvelopeOpenIcon,
 } from "@radix-ui/react-icons";
 import ThemeToggler from "./ThemeToggler";
-import RandomQuotes from "./RandomQuotes";
 
 export const pages = [
   {
@@ -190,6 +189,10 @@ export default function Navigation() {
               aria-label="Open navigation"
               variant="secondary"
               size="icon"
+              className={cn(
+                "border bg-primary-foreground",
+                "hover:border-muted-foreground",
+              )}
             >
               <HamburgerMenuIcon />
             </Button>

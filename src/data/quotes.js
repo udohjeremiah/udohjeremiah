@@ -16,11 +16,6 @@ export const quotes = [
   {
     author: "Alan Perlis",
     quote:
-      "It goes against the grain of modern education to teach students to program. What fun is there in making plans, acquiring discipline in organizing thoughts, devoting attention to detail, and learning to be self-critical?",
-  },
-  {
-    author: "Alan Perlis",
-    quote:
       "There are two ways to write error-free programs; only the third one works.",
   },
   {
@@ -43,11 +38,6 @@ export const quotes = [
       "Always code as if the guy who ends up maintaining your code will be a violent psychopath who knows where you live.",
   },
   {
-    author: "Brian Kernighan",
-    quote:
-      "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.",
-  },
-  {
     author: "Bjarne Stroustrup",
     quote:
       "There are only two kinds of languages: the ones people complain about and the ones nobody uses.",
@@ -60,11 +50,6 @@ export const quotes = [
   {
     author: "Cory House",
     quote: "Code is like humor. When you have to explain it, it's bad.",
-  },
-  {
-    author: "David Parnas",
-    quote:
-      "Everyone knows that debugging is twice as hard as writing a program in the first place. So if you're as clever as you can be when you write it, how will you ever debug it?",
   },
   {
     author: "Donald Knuth",
@@ -96,11 +81,6 @@ export const quotes = [
       "Do one thing every day that scares you. For programmers, that could be writing documentation!",
   },
   {
-    author: "Fred Brooks",
-    quote:
-      "The bearing of a child takes nine months, no matter how many women are assigned. Many software tasks have this characteristic because of the sequential nature of debugging.",
-  },
-  {
     author: "Grace Hopper",
     quote: "The computer was born to solve problems that did not exist before.",
   },
@@ -108,11 +88,6 @@ export const quotes = [
     author: "Grace Hopper",
     quote:
       "The most dangerous phrase in the language is, 'We've always done it this way.'",
-  },
-  {
-    author: "Grace Hopper",
-    quote:
-      "The most important thing I have done is training young people. They come to me, you know, and say, 'Do you think we can do this?' I say, 'Try it.' And I back 'em up. They need that. I keep track of them as they get older and I stir 'em up at intervals so they don't forget to take chances.",
   },
   {
     author: "Grace Hopper",
@@ -142,16 +117,6 @@ export const quotes = [
     author: "Jerry Weinberg",
     quote:
       "It is not enough to do your best; you must know what to do, and then do your best.",
-  },
-  {
-    author: "John Resig",
-    quote:
-      "Programming is not a zero-sum game. Teaching something to a fellow programmer doesn't take it away from you. I'm happy to share what I can because I'm in it for the love of programming.",
-  },
-  {
-    author: "Joel Spolsky",
-    quote:
-      "The best programmers are not marginally better than merely good ones. They are an order-of-magnitude better, measured by whatever standard: conceptual creativity, speed, ingenuity of design, or problem-solving ability.",
   },
   {
     author: "Ken Thompson",
@@ -230,11 +195,6 @@ export const quotes = [
     quote: "Programming is not about typing, it's about thinking.",
   },
   {
-    author: "Rob Pike",
-    quote:
-      "Data dominates. If you've chosen the right data structures and organized things well, the algorithms will almost always be self-evident. Data structures, not algorithms, are central to programming.",
-  },
-  {
     author: "Ron Jeffries",
     quote: "Code never lies, comments sometimes do.",
   },
@@ -249,11 +209,6 @@ export const quotes = [
   {
     author: "Tim Berners-Lee",
     quote: "The Web does not just connect machines, it connects people.",
-  },
-  {
-    author: "Tom Cargill",
-    quote:
-      "In software, the first 90 percent of the code accounts for the first 90 percent of the development time. The remaining 10 percent of the code accounts for the other 90 percent of the development time.",
   },
   {
     author: "Ward Cunningham",

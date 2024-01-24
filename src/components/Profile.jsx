@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Profile() {
   return (
-    <div className="flex items-center gap-3 p-4">
+    <div className="flex w-96 items-center gap-3">
       <Avatar>
         <AvatarImage src="https://source.unsplash.com/random" />
         <AvatarFallback>UJ</AvatarFallback>
