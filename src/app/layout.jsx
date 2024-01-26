@@ -9,6 +9,7 @@ import Header from "@/components/Header";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Toaster } from "@/components/ui/sonner";
 
 export const viewport = {
@@ -38,16 +39,23 @@ export default function RootLayout({ children }) {
           disableTransitionOnChange
         >
           <Header />
-          <div className="relative flex-1">
+          <div
+            className={cn(
+              "flex-1",
+              "lg:grid lg:grid-cols-[240px_minmax(0,1fr)]",
+            )}
+          >
             <div
               className={cn(
-                "absolute bottom-0 left-0 top-0 hidden w-60 overflow-y-auto border-r bg-muted py-2",
-                "lg:block",
+                "fixed top-14 hidden h-[calc(100vh-3.5rem)] w-60 border-r bg-muted",
+                "lg:sticky lg:block",
               )}
             >
-              <Navigation />
+              <ScrollArea className="h-full py-4">
+                <Navigation />
+              </ScrollArea>
             </div>
-            <div className="lg:ml-60">
+            <div className="w-full">
               <main>{children}</main>
               <Footer />
             </div>
