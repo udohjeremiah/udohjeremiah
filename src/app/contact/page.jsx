@@ -1,7 +1,9 @@
-import { createMetadata } from "@/lib/metadata";
-
-import Container from "@/components/Container";
+// Components
 import ContactForm from "@/components/ContactForm";
+import Container from "@/components/Container";
+
+// Lib
+import { createMetadata } from "@/lib/metadata";
 
 const title = "Contact";
 const description =

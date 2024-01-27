@@ -1,13 +1,18 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-
+// React
 import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+// Dependencies
 import { toast } from "sonner";
+
+// Components
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+// Lib
+import { cn } from "@/lib/utils";
 
 export default function MailingListForm() {
   const [email, setEmail] = useState("");

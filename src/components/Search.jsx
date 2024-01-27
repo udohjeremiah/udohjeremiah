@@ -1,11 +1,12 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+// React
+import { useCallback, useEffect, useState } from "react";
 
-import { useState, useEffect, useCallback } from "react";
+// Next
 import { useRouter } from "next/navigation";
-import { useTheme } from "next-themes";
 
+// Dependencies
 import {
   DesktopIcon,
   ExternalLinkIcon,
@@ -13,7 +14,9 @@ import {
   MoonIcon,
   SunIcon,
 } from "@radix-ui/react-icons";
+import { useTheme } from "next-themes";
 
+// Components
 import { Button } from "@/components/ui/button";
 import {
   CommandDialog,
@@ -26,7 +29,11 @@ import {
   CommandShortcut,
 } from "@/components/ui/command";
 
+// Data
 import { webLinks } from "@/data/weblinks";
+
+// Lib
+import { cn } from "@/lib/utils";
 
 export default function Search() {
   const [open, setOpen] = useState(false);

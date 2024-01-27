@@ -1,36 +1,32 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-
+// React
 import { useEffect } from "react";
-import Link from "next/link";
+
+// Next
 import { usePathname, useRouter } from "next/navigation";
 
-import { Button } from "@/components/ui/button";
+// Dependencies
 import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
-
-import {
-  HomeIcon,
-  EnvelopeClosedIcon,
-  ChatBubbleIcon,
-  TokensIcon,
-  LayersIcon,
   BellIcon,
+  ChatBubbleIcon,
+  EnvelopeClosedIcon,
+  EnvelopeOpenIcon,
+  GitHubLogoIcon,
+  HomeIcon,
+  LayersIcon,
   Pencil2Icon,
   ReaderIcon,
+  TokensIcon,
   VideoIcon,
-  ExternalLinkIcon,
-  GitHubLogoIcon,
-  EnvelopeOpenIcon,
 } from "@radix-ui/react-icons";
-import ThemeToggler from "./ThemeToggler";
-import RandomQuotes from "./RandomQuotes";
+
+// Components
+import DesktopNavItems from "./DesktopNavItems";
+import MobileNavItems from "./MobileNavItems";
+
+// Hooks
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 export const pages = [
   {
@@ -150,9 +146,10 @@ if (shortcuts.length !== new Set(shortcuts).size) {
   );
 }
 
-export default function Navigation() {
+export default function Navigation({ setMobileNav }) {
   const pathname = usePathname();
   const router = useRouter();
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -182,146 +179,11 @@ export default function Navigation() {
 
   return (
     <>
-      {/* Mobile nav */}
-      <div className="lg:hidden">
-        <Drawer>
-          <DrawerTrigger asChild>
-            <Button
-              aria-label="Open navigation"
-              variant="secondary"
-              size="icon"
-              className={cn(
-                "border bg-primary-foreground",
-                "hover:border-muted-foreground",
-              )}
-            >
-              <HamburgerMenuIcon />
-            </Button>
-          </DrawerTrigger>
-          <DrawerContent>
-            <div className="max-h-[60vh] overflow-auto">
-              <nav>
-                <div className="space-y-2 p-3">
-                  <RandomQuotes />
-                </div>
-                {sections.map((section, sectionIndex) => (
-                  <section key={sectionIndex} className="space-y-2 p-3">
-                    {section.name ? (
-                      <h3 className="mx-3 text-xs font-semibold uppercase tracking-wide">
-                        {section.name}
-                      </h3>
-                    ) : null}
-                    <div className="space-y-0.5">
-                      {section.links.map(
-                        ({ name, href, icon: Icon, shortcut, active }) => (
-                          <DrawerClose asChild key={name}>
-                            <Link
-                              href={href}
-                              target={
-                                href.startsWith("http") ? "_blank" : undefined
-                              }
-                              rel={
-                                href.startsWith("http")
-                                  ? "noopener noreferrer"
-                                  : undefined
-                              }
-                              className={cn(
-                                "group flex items-center gap-2.5 rounded-md border px-3 py-2 transition-colors",
-                                active?.(pathname)
-                                  ? "bg-secondary"
-                                  : "border-transparent text-muted-foreground hover:bg-accent hover:text-foreground",
-                              )}
-                            >
-                              {Icon ? (
-                                <Icon className="h-4 w-4 shrink-0" />
-                              ) : null}
-                              <p className="flex-1 text-sm font-medium leading-[22px]">
-                                {name}
-                              </p>
-                              {shortcut ? (
-                                <kbd className="flex h-5 w-4 shrink-0 items-center justify-center rounded border text-[10px] font-medium uppercase text-muted-foreground">
-                                  {shortcut}
-                                </kbd>
-                              ) : null}
-                              {href.startsWith("http") ? (
-                                <ExternalLinkIcon className="h-4 w-4 shrink-0 text-muted-foreground transition-colors" />
-                              ) : null}
-                            </Link>
-                          </DrawerClose>
-                        ),
-                      )}
-                    </div>
-                  </section>
-                ))}
-                <section className="space-y-2 p-3">
-                  <h3 className="mx-3 text-xs font-semibold uppercase tracking-wide">
-                    Other
-                  </h3>
-                  <div className="space-y-0.5">
-                    <ThemeToggler />
-                  </div>
-                </section>
-              </nav>
-            </div>
-          </DrawerContent>
-        </Drawer>
-      </div>
-
-      {/* Desktop nav */}
-      <nav className={cn("hidden", "lg:block")}>
-        {sections.map((section, sectionIndex) => (
-          <section key={sectionIndex} className="space-y-2 p-3">
-            {section.name ? (
-              <h3 className="mx-3 text-xs font-semibold uppercase tracking-wide">
-                {section.name}
-              </h3>
-            ) : null}
-            <div className="space-y-0.5">
-              {section.links.map(
-                ({ name, href, icon: Icon, shortcut, active }) => (
-                  <Link
-                    href={href}
-                    key={name}
-                    target={href.startsWith("http") ? "_blank" : undefined}
-                    rel={
-                      href.startsWith("http")
-                        ? "noopener noreferrer"
-                        : undefined
-                    }
-                    className={cn(
-                      "group flex items-center gap-2.5 rounded-md border px-3 py-2 transition-colors",
-                      active?.(pathname)
-                        ? "bg-primary-foreground"
-                        : "border-transparent text-muted-foreground hover:bg-primary-foreground hover:text-foreground",
-                    )}
-                  >
-                    {Icon ? <Icon className="h-4 w-4 shrink-0" /> : null}
-                    <p className="flex-1 text-sm font-medium leading-[22px]">
-                      {name}
-                    </p>
-                    {shortcut ? (
-                      <kbd className="flex h-5 w-4 shrink-0 items-center justify-center rounded border text-[10px] font-medium uppercase text-muted-foreground">
-                        {shortcut}
-                      </kbd>
-                    ) : null}
-                    {href.startsWith("http") ? (
-                      <ExternalLinkIcon className="h-4 w-4 shrink-0 text-muted-foreground transition-colors" />
-                    ) : null}
-                  </Link>
-                ),
-              )}
-            </div>
-          </section>
-        ))}
-        <section className="space-y-2 p-3">
-          <h3 className="mx-3 text-xs font-semibold uppercase tracking-wide">
-            Other
-          </h3>
-          <div className="space-y-0.5">
-            <ThemeToggler />
-          </div>
-        </section>
-      </nav>
+      {isDesktop ? (
+        <DesktopNavItems pathname={pathname} />
+      ) : (
+        <MobileNavItems setMobileNav={setMobileNav} pathname={pathname} />
+      )}
     </>
   );
 }

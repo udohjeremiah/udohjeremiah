@@ -1,16 +1,21 @@
+// Styles
 import "@/styles/globals.css";
-import { cn } from "@/lib/utils";
 
+// Fonts
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 
-import ThemeProvider from "@/providers/ThemeProvider";
-import Header from "@/components/Header";
-import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
-
-import { ScrollArea } from "@/components/ui/scroll-area";
+// Dependencies
 import { Toaster } from "@/components/ui/sonner";
+
+// Components
+import DesktopNav from "@/components/DesktopNav";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import ThemeProvider from "@/providers/ThemeProvider";
+
+// Lib
+import { cn } from "@/lib/utils";
 
 export const viewport = {
   colorScheme: "dark light",
@@ -31,7 +36,7 @@ export default function RootLayout({ children }) {
         "touch-manipulation font-sans antialiased [text-rendering:optimizelegibility]",
       )}
     >
-      <body className="flex min-h-[100dvh] max-w-[100dvw] flex-col bg-background text-foreground">
+      <body className="flex min-h-[100dvh] max-w-[100dvw] flex-col overflow-x-hidden bg-background text-foreground">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -39,22 +44,8 @@ export default function RootLayout({ children }) {
           disableTransitionOnChange
         >
           <Header />
-          <div
-            className={cn(
-              "flex-1",
-              "lg:grid lg:grid-cols-[240px_minmax(0,1fr)]",
-            )}
-          >
-            <div
-              className={cn(
-                "fixed top-14 hidden h-[calc(100vh-3.5rem)] w-60 border-r bg-muted",
-                "lg:sticky lg:block",
-              )}
-            >
-              <ScrollArea className="h-full py-4">
-                <Navigation />
-              </ScrollArea>
-            </div>
+          <div className={cn("flex-1", "lg:flex")}>
+            <DesktopNav />
             <div className="w-full">
               <main>{children}</main>
               <Footer />
