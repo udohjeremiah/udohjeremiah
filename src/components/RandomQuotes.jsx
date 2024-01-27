@@ -1,9 +1,13 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+// React
+import { useEffect, useState } from "react";
 
-import { useState, useEffect } from "react";
+// Data
 import { quotes } from "@/data/quotes";
+
+// Lib
+import { cn } from "@/lib/utils";
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
 
@@ -76,10 +80,8 @@ export default function RandomQuotes() {
 
   return (
     <blockquote className={cn("w-full text-pretty text-xs", "lg:w-[60ch]")}>
-      <p>
-        <span>&quot;{quoteText}&quot;</span>
-        <span className="whitespace-nowrap">{authorText}</span>
-      </p>
+      <p className="inline">&quot;{quoteText}&quot;</p>
+      <footer className="inline whitespace-nowrap">{authorText}</footer>
     </blockquote>
   );
 }

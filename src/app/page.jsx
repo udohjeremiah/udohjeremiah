@@ -1,3 +1,4 @@
+// Lib
 import { createMetadata } from "@/lib/metadata";
 
 const title = "Full-Stack Software Developer";

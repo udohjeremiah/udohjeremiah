@@ -6,7 +6,7 @@ export const quotes = [
   {
     author: "Ada Lovelace",
     quote:
-      "I am not able to rightly apprehend the kind of confusion of ideas that could provoke such a question.",
+      "The Analytical Engine weaves algebraic patterns just as the Jacquard loom weaves flowers and leaves.",
   },
   {
     author: "Alan Kay",
@@ -33,23 +33,28 @@ export const quotes = [
     quote: "It's not a bug, it's a feature.",
   },
   {
-    author: "Brendan Eich",
-    quote:
-      "Always code as if the guy who ends up maintaining your code will be a violent psychopath who knows where you live.",
-  },
-  {
     author: "Bjarne Stroustrup",
     quote:
       "There are only two kinds of languages: the ones people complain about and the ones nobody uses.",
   },
   {
-    author: "Chris Pine",
+    author: "Brendan Eich",
     quote:
-      "Programming isn't about what you know; it's about what you can figure out.",
+      "Always code as if the guy who ends up maintaining your code will be a violent psychopath who knows where you live.",
   },
   {
     author: "Cory House",
     quote: "Code is like humor. When you have to explain it, it's bad.",
+  },
+  {
+    author: "Charles Babbage",
+    quote:
+      "The whole of the developments and operations of analysis are now capable of being executed by machinery.",
+  },
+  {
+    author: "Chris Pine",
+    quote:
+      "Programming isn't about what you know; it's about what you can figure out.",
   },
   {
     author: "Donald Knuth",
@@ -92,12 +97,12 @@ export const quotes = [
   {
     author: "Grace Hopper",
     quote:
-      "The only phrase I've ever disliked is, 'Why, we've always done it that way.' I always tell young people, 'Go ahead and do it. You can always apologize later.'",
+      "To me programming is more than an important practical art. It is also a gigantic undertaking in the foundations of knowledge.",
   },
   {
-    author: "Grace Hopper",
+    author: "Guido van Rossum",
     quote:
-      "To me programming is more than an important practical art. It is also a gigantic undertaking in the foundations of knowledge.",
+      "Python's a drop-in replacement for BASIC in the sense that Optimus Prime is a drop-in replacement for a truck.",
   },
   {
     author: "Harold Abelson",
@@ -114,9 +119,9 @@ export const quotes = [
       "Real programmers don't document. If it was hard to write, it should be hard to understand.",
   },
   {
-    author: "Jerry Weinberg",
+    author: "John McCarthy",
     quote:
-      "It is not enough to do your best; you must know what to do, and then do your best.",
+      "Artificial Intelligence is the science of making machines do things that would require intelligence if done by men.",
   },
   {
     author: "Ken Thompson",
@@ -125,12 +130,12 @@ export const quotes = [
   },
   {
     author: "Larry Wall",
-    quote: "Easy things should be easy and hard things should be possible.",
-  },
-  {
-    author: "Larry Wall",
     quote:
       "The three chief virtues of a programmer are: Laziness, Impatience, and Hubris.",
+  },
+  {
+    author: "Linus Torvalds",
+    quote: "Software is like sex: it's better when it's free.",
   },
   {
     author: "Linus Torvalds",
@@ -140,6 +145,11 @@ export const quotes = [
     author: "Margaret Hamilton",
     quote:
       "It was no longer a question of having to debug the Apollo guidance software, instead, it became one of gaining enough time to complete the job.",
+  },
+  {
+    author: "Margaret Hamilton",
+    quote:
+      "The science of computing and the design of systems were becoming scientific disciplines in equal measure.",
   },
   {
     author: "Margaret Hamilton",
@@ -173,12 +183,12 @@ export const quotes = [
   {
     author: "Paul Graham",
     quote:
-      "The most damaging phrase in the language is: 'It's always been done that way.'",
+      "Programming languages differ not so much in what they make possible, but in what they make easy.",
   },
   {
-    author: "Paul Graham",
+    author: "Peter Norvig",
     quote:
-      "The most damaging thing you learned in school was that there are only a few ways to do things.",
+      "I'm not a great programmer; I'm just a good programmer with great habits.",
   },
   {
     author: "Phil Karlton",
@@ -195,8 +205,18 @@ export const quotes = [
     quote: "Programming is not about typing, it's about thinking.",
   },
   {
+    author: "Richard Stallman",
+    quote:
+      "Free software is a matter of liberty, not price. To understand the concept, you should think of 'free' as in 'free speech,' not as in 'free beer.'",
+  },
+  {
     author: "Ron Jeffries",
     quote: "Code never lies, comments sometimes do.",
+  },
+  {
+    author: "Seymour Papert",
+    quote:
+      "You can't teach people everything they need to know. The best you can do is position them where they can find what they need to know when they need to know it.",
   },
   {
     author: "Steve McConnell",
@@ -214,5 +234,19 @@ export const quotes = [
     author: "Ward Cunningham",
     quote:
       "You know you are working on clean code when each routine you read turns out to be pretty much what you expected.",
+  },
+  {
+    author: "Yoda",
+    quote: "Do or do not, there is no try (in coding).",
+  },
+  {
+    author: "Yukihiro Matsumoto",
+    quote:
+      "Programmers are not to be measured by their ingenuity and their logic but by the completeness of their case analysis.",
+  },
+  {
+    author: "Zed Shaw",
+    quote:
+      "The only way to learn a new programming language is by writing programs in it.",
   },
 ];

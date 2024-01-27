@@ -1,15 +1,15 @@
 import {
-  HomeIcon,
-  EnvelopeClosedIcon,
-  ChatBubbleIcon,
-  TokensIcon,
-  LayersIcon,
   BellIcon,
+  ChatBubbleIcon,
+  EnvelopeClosedIcon,
+  EnvelopeOpenIcon,
+  GitHubLogoIcon,
+  HomeIcon,
+  LayersIcon,
   Pencil2Icon,
   ReaderIcon,
+  TokensIcon,
   VideoIcon,
-  GitHubLogoIcon,
-  EnvelopeOpenIcon,
 } from "@radix-ui/react-icons";
 
 export const webLinks = [

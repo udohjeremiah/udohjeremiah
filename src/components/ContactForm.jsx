@@ -1,11 +1,18 @@
 "use client";
 
+// React
 import { useState } from "react";
+
+// Next
 import { useSearchParams } from "next/navigation";
 
+// Dependencies
+import { toast } from "sonner";
+
+// Components
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -14,15 +21,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
 
 export default function ContactForm() {
-  const params = useSearchParams();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [type, setType] = useState(params.get("type") ?? "general");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const params = useSearchParams();
+  const [type, setType] = useState(params.get("type") ?? "general");
 
   const handleSubmit = async (event) => {
     try {

@@ -1,3 +1,4 @@
+// Components
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Profile() {
@@ -9,7 +10,7 @@ export default function Profile() {
       </Avatar>
       <div>
         <p className="text-sm font-semibold">Udoh Jeremiah</p>
-        <p className="text-sm text-muted-foreground">Full-Stack Dev</p>
+        <p className="text-sm text-muted-foreground">Full-Stack Developer</p>
       </div>
     </div>
   );
