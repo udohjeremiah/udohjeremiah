@@ -1,7 +1,7 @@
 "use client";
 
 // React
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Dependencies
 import { ChevronLeftIcon } from "@radix-ui/react-icons";
@@ -32,6 +32,40 @@ export default function DesktopNav() {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const Icon = toggleIcons[iconIndex];
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (
+        event.metaKey ||
+        event.ctrlKey ||
+        event.altKey ||
+        event.target !== document.body
+      ) {
+        return;
+      }
+
+      if (event.key === "]") {
+        if (
+          (event.target instanceof HTMLElement &&
+            event.target.isContentEditable) ||
+          event.target instanceof HTMLInputElement ||
+          event.target instanceof HTMLTextAreaElement ||
+          event.target instanceof HTMLSelectElement
+        ) {
+          return;
+        }
+
+        event.preventDefault();
+        setOpen((open) => !open);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown, { passive: true });
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown, { passive: true });
+    };
+  }, []);
+
   return (
     <>
       {isDesktop && (
@@ -58,13 +92,21 @@ export default function DesktopNav() {
                   onClick={() => setOpen((open) => !open)}
                   onMouseEnter={() => setIconIndex(open ? 1 : 2)}
                   onMouseLeave={() => setIconIndex(0)}
-                  className="h-6 w-6 rounded-sm rounded-l-none border-l-0 bg-muted p-0"
+                  className={cn(
+                    "h-6 w-6 rounded-sm rounded-l-none border-l-0 bg-muted p-0",
+                    !iconIndex && "animate-pulse",
+                  )}
                 >
                   <Icon />
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="right">
-                <p>{open ? "Close sidebar" : "Open sidebar"}</p>
+                <p className="flex gap-1">
+                  {open ? "Close sidebar" : "Open sidebar"}
+                  <kbd className="pointer-events-none select-none rounded border px-1 font-mono font-medium">
+                    &#93;
+                  </kbd>
+                </p>
               </TooltipContent>
             </Tooltip>
           </div>
