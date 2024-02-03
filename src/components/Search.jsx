@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/command";
 
 // Data
-import { webLinks } from "@/data/weblinks";
+import { siteLinks } from "@/data/sitelinks";
 
 // Lib
 import { cn } from "@/lib/utils";
@@ -96,7 +96,7 @@ export default function Search() {
         <CommandInput placeholder="Type a command or search..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
-          {webLinks.map((linkItem) => (
+          {siteLinks.map((linkItem) => (
             <CommandGroup key={linkItem.title} heading={linkItem.title}>
               {linkItem.items.map(
                 ({ title, href, external, icon: Icon, shortcut }) => (

@@ -50,7 +50,14 @@ export default function ThemeToggler() {
               </div>
             </SelectValue>
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent
+            ref={(ref) => {
+              if (!ref) return;
+              ref.ontouchstart = (event) => {
+                event.preventDefault();
+              };
+            }}
+          >
             {themes.map((option) => (
               <ThemeSelectItem key={option} value={option} />
             ))}

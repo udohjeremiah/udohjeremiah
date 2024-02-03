@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer
       className={cn(
-        "flex items-center justify-center px-4 py-6 text-center",
+        "flex items-center justify-center border-t px-4 py-6 text-center",
         "sm:px-8",
       )}
     >
