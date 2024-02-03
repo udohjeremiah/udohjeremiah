@@ -33,6 +33,7 @@ export default function StackPage() {
                   <Link
                     key={index}
                     href={href}
+                    target="_blank"
                     className={cn(
                       "flex items-center gap-4 rounded-md p-4 no-underline transition-colors",
                       "hover:bg-muted",

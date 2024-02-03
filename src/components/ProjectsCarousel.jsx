@@ -54,7 +54,7 @@ export default function ProjectsCarousel() {
           {projects.map(({ title, description, link, image, name }, index) => (
             <CarouselItem key={index}>
               <Card className="not-prose">
-                <Link href={link} className="hover:opacity-50">
+                <Link href={link} target="_blank" className="hover:opacity-50">
                   <CardHeader>
                     <CardTitle>{title}</CardTitle>
                     <CardDescription>{description}</CardDescription>

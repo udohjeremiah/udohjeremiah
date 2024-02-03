@@ -34,6 +34,7 @@ const Project = async ({ data }) => {
     <Link
       key={data.name}
       href={data.html_url}
+      target="_blank"
       className={cn(
         "no-underline transition-transform",
         "hover:-translate-y-1",
