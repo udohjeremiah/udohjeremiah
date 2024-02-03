@@ -9,7 +9,6 @@ import { GeistMono } from "geist/font/mono";
 import { Toaster } from "@/components/ui/sonner";
 
 // Components
-import { Separator } from "@/components/ui/separator";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import DesktopNav from "@/components/DesktopNav";
 import Footer from "@/components/Footer";
@@ -51,7 +50,6 @@ export default function RootLayout({ children }) {
               <DesktopNav />
               <div className="w-full">
                 <main>{children}</main>
-                <Separator className="my-4" />
                 <Footer />
               </div>
             </div>

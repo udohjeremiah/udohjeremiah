@@ -42,7 +42,7 @@ export default function ContactForm() {
 
       if (
         previousTimestamp &&
-        Number(previousTimestamp) + 60 * 1000 > timestamp
+        Number(previousTimestamp) + 30 * 1000 > timestamp
       ) {
         throw new Error("Too many submits, please try again in a little while");
       }
@@ -109,6 +109,7 @@ export default function ContactForm() {
           <SelectContent>
             <SelectItem value="general">Just saying hi!</SelectItem>
             <SelectItem value="contract">Contract work</SelectItem>
+            <SelectItem value="employment">Job Employment</SelectItem>
             <SelectItem value="advisory">Advisory work</SelectItem>
             <SelectItem value="agency">Agency introduction</SelectItem>
           </SelectContent>

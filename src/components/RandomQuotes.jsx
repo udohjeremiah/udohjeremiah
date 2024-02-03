@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 
 // Data
-import { quotes } from "@/data/quotes";
+import quotes from "@/data/quotes";
 
 // Lib
 import { cn } from "@/lib/utils";

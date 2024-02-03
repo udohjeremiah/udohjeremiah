@@ -1,0 +1,16 @@
+[
+  {
+    "title": "Examshare",
+    "description": "An open-source project for sharing past examination questions in higher education.",
+    "link": "https://examshare.vercel.app",
+    "image": "/projects/examshare.webp",
+    "name": "examshare"
+  },
+  {
+    "title": "Eleotrade",
+    "description": "A cutting-edge cryptocurrency brokerage investment platform.",
+    "link": "https://eleotrade.vercel.app",
+    "image": "/projects/eleotrade.webp",
+    "name": "eleotrade"
+  }
+]

@@ -54,7 +54,6 @@ export default function DesktopNav() {
           return;
         }
 
-        event.preventDefault();
         setOpen((open) => !open);
       }
     };

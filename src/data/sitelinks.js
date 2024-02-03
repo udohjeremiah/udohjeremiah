@@ -1,3 +1,4 @@
+// Dependencies
 import {
   BellIcon,
   ChatBubbleIcon,
@@ -12,7 +13,7 @@ import {
   VideoIcon,
 } from "@radix-ui/react-icons";
 
-export const webLinks = [
+export const siteLinks = [
   {
     title: "",
     items: [
@@ -26,7 +27,7 @@ export const webLinks = [
       {
         title: "Mailing List",
         href: "/mailing-list",
-        icon: EnvelopeClosedIcon,
+        icon: EnvelopeOpenIcon,
         shortcut: "m",
         items: [],
       },
@@ -114,7 +115,7 @@ export const webLinks = [
         title: "Email",
         href: "mailto:udohjeremiah@icloud.com",
         external: true,
-        icon: EnvelopeOpenIcon,
+        icon: EnvelopeClosedIcon,
         shortcut: "",
         items: [],
       },

@@ -8,7 +8,7 @@ import { ExternalLinkIcon } from "@radix-ui/react-icons";
 import ThemeToggler from "./ThemeToggler";
 
 // Data
-import { sections } from "./Navigation";
+import { sections } from "@/data/navigation";
 
 // Lib
 import { cn } from "@/lib/utils";
@@ -49,7 +49,9 @@ export default function DesktopNavItems({ pathname }) {
                       {shortcut}
                     </kbd>
                   ) : null}
-                  {href.startsWith("http") ? (
+                  {["http", "mailto:"].some((prefix) =>
+                    href.startsWith(prefix),
+                  ) ? (
                     <ExternalLinkIcon className="h-4 w-4 shrink-0 text-muted-foreground transition-colors" />
                   ) : null}
                 </Link>

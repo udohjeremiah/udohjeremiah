@@ -30,7 +30,7 @@ export default function MailingListForm() {
 
       if (
         previousTimestamp &&
-        Number(previousTimestamp) + 60 * 1000 > timestamp
+        Number(previousTimestamp) + 30 * 1000 > timestamp
       ) {
         throw new Error("Too many submits, please try again in a little while");
       }
