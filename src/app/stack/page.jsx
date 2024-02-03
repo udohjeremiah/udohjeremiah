@@ -18,7 +18,7 @@ const description = "Tools and technologies I use.";
 
 export const metadata = createMetadata({ title, description, path: "/stack" });
 
-export default function Stack() {
+export default function StackPage() {
   return (
     <Container wide>
       <h1 className="mb-0">{title}</h1>
