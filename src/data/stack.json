@@ -1,0 +1,146 @@
+[
+  {
+    "type": "Coding",
+    "items": [
+      {
+        "name": "VS Code",
+        "href": "https://code.visualstudio.com/",
+        "description": "The free, open source, and cross-platform code editor that supports many languages and features.",
+        "image": "/logos/vscode.svg"
+      },
+      {
+        "name": "MongoDB Compass",
+        "href": "https://www.mongodb.com/products/tools/compass",
+        "description": "The GUI for MongoDB.",
+        "image": "/logos/mongodb.svg"
+      },
+      {
+        "name": "Postman",
+        "href": "https://www.postman.com/",
+        "description": "The API platform for building, testing, debuging, documenting, monitoring, and publishing APIs together.",
+        "image": "/logos/postman.svg"
+      },
+      {
+        "name": "GitHub Desktop",
+        "href": "https://desktop.github.com/",
+        "description": "The free and open source app that lets you manage your Git repositories from your desktop.",
+        "image": "/logos/githubdesktop.svg"
+      },
+      {
+        "name": "Icons8",
+        "href": "https://icons8.com/",
+        "description": "The curated collection of over 1,328,300 free icons that match each other.",
+        "image": "/logos/icons8.svg"
+      },
+      {
+        "name": "SVGOMG",
+        "href": "https://jakearchibald.github.io/svgomg/",
+        "description": "The web GUI for SVGO.",
+        "image": "/logos/svgomg.svg"
+      }
+    ]
+  },
+  {
+    "type": "Design",
+    "items": [
+      {
+        "name": "Dribble",
+        "href": "https://dribbble.com/",
+        "description": "The world's destination for design, where you get inspired by the work of millions of top-rated designers & agencies around the world.",
+        "image": "/logos/dribble.svg"
+      },
+      {
+        "name": "Framer",
+        "href": "https://www.framer.com/",
+        "description": "The web design tool that lets you create and publish websites with powerful and familiar tools.",
+        "image": "/logos/framer.svg"
+      },
+      {
+        "name": "Figma",
+        "href": "https://www.figma.com/",
+        "description": "The platform for teams to design, prototype, develop, and collect feedback on products in one space.",
+        "image": "/logos/figma.svg"
+      },
+      {
+        "name": "Unsplash",
+        "href": "https://unsplash.com/",
+        "description": "The platform where you can find and download beautiful, free images and photos from various categories and creators.",
+        "image": "/logos/unsplash.svg"
+      },
+      {
+        "name": "FreeConvert",
+        "href": "https://www.freeconvert.com/",
+        "description": "The platform that lets you convert files from one format to another, online, for free.",
+        "image": "/logos/freeconvert.svg"
+      }
+    ]
+  },
+  {
+    "type": "Finance",
+    "items": [
+      {
+        "name": "Chipper Cash",
+        "href": "https://chippercash.com/",
+        "description": "Send Money Directly to Bank and Mobile Money Accounts in 21+ African Countries.",
+        "image": "/logos/chippercash.svg"
+      },
+      {
+        "name": "MetaTrader 5",
+        "href": "https://www.metatrader5.com/",
+        "description": "The free application for traders that allows one to perform technical analysis and trading operations in the Forex and exchange markets.",
+        "image": "/logos/metatrader5.webp"
+      }
+    ]
+  },
+  {
+    "type": "Social",
+    "items": [
+      {
+        "name": "WhatsApp",
+        "href": "https://www.whatsapp.com/",
+        "description": "Simple, reliable, private messaging and calling for free, available all over the world.",
+        "image": "/logos/whatsapp.svg"
+      },
+      {
+        "name": "Discord",
+        "href": "https://discordapp.com/",
+        "description": "Instant messaging and VoIP social platform which allows communication through voice calls, video calls, text messaging, and media and files.",
+        "image": "/logos/discord.svg"
+      }
+    ]
+  },
+  {
+    "type": "Productivity",
+    "items": [
+      {
+        "name": "Home Workout - No Equipments",
+        "href": "https://apps.apple.com/us/app/home-workout-no-equipments/id1313192037",
+        "description": "Body weight fitness & training",
+        "image": "/logos/homeworkout.webp"
+      },
+      {
+        "name": "Flow",
+        "href": "https://apps.apple.com/us/app/flow-focus-pomodoro-timer/id1423210932",
+        "description": "Focus & pomodoro timer",
+        "image": "/logos/flow.webp"
+      },
+      {
+        "name": "Apple Podcasts",
+        "href": "https://www.apple.com/apple-podcasts/",
+        "description": "The best app for discovering and enjoying millions of the world's most popular podcasts on your iPhone, iPad, Mac, and other Apple devices.",
+        "image": "/logos/applepodcasts.svg"
+      }
+    ]
+  },
+  {
+    "type": "Other",
+    "items": [
+      {
+        "name": "TechCabal",
+        "href": "https://techcabal.com/",
+        "description": "The platform for African tech news, features, and startups.",
+        "image": "/logos/techcabal.webp"
+      }
+    ]
+  }
+]
