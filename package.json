@@ -53,7 +53,7 @@
     "clsx": "^2.1.0",
     "cmdk": "^0.2.0",
     "date-fns": "^3.2.0",
-    "embla-carousel-react": "^8.0.0-rc19",
+    "embla-carousel-react": "^8.0.0-rc22",
     "geist": "^1.2.1",
     "next": "14.0.4",
     "next-themes": "^0.2.1",
