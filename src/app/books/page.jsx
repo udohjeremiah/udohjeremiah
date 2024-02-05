@@ -14,31 +14,14 @@ import Container from "@/components/Container";
 import books from "@/data/books";
 
 // Lib
+import { cn } from "@/lib/utils";
 import { createMetadata } from "@/lib/metadata";
 
 const title = "Books";
 const description =
-  "Print and non-print materials I've read that have proven valuable in enhancing my spirituality, philosophy, psychology, productivity, programming skills, design skills, public speaking, and more.";
+  "Print and non-print materials I've read that have proven valuable in enhancing my spirituality, philosophy, psychology, productivity, programming skills, design skills, public speaking, and more (listed in alphabetical order).";
 
 export const metadata = createMetadata({ title, description, path: "/books" });
-
-const Book = async ({ data }) => {
-  return (
-    <figure className="space-y-3">
-      <Image
-        src={data.cover}
-        alt={data.title}
-        width={128}
-        height={196}
-        className="rounded-md transition-all hover:scale-105"
-      />
-      <figcaption className="space-y-1">
-        <h3 className="font-medium leading-none">{data.title}</h3>
-        <p className="text-muted-foreground">{data.author}</p>
-      </figcaption>
-    </figure>
-  );
-};
 
 export default async function BooksPage() {
   return (
@@ -49,11 +32,31 @@ export default async function BooksPage() {
         {books.map(({ category, items }, index) => (
           <AccordionItem key={index} value={category}>
             <AccordionTrigger>{category}</AccordionTrigger>
-            <AccordionContent className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-4">
+            <AccordionContent
+              className={cn(
+                "grid grid-cols-2 gap-x-4 gap-y-8",
+                "md:grid-cols-4",
+              )}
+            >
               {items
                 .sort((bookA, bookB) => bookA.title.localeCompare(bookB.title))
                 .map((book, index) => (
-                  <Book key={index} data={book} />
+                  <figure key={index} className="space-y-3">
+                    <Image
+                      src={book.cover}
+                      alt={book.title}
+                      width={128}
+                      height={196}
+                      className={cn(
+                        "rounded-md transition-all",
+                        "hover:scale-105",
+                      )}
+                    />
+                    <figcaption className="space-y-1">
+                      <h3 className="font-medium leading-none">{book.title}</h3>
+                      <p className="text-muted-foreground">{book.author}</p>
+                    </figcaption>
+                  </figure>
                 ))}
             </AccordionContent>
           </AccordionItem>
