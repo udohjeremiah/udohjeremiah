@@ -8,6 +8,7 @@ import {
   HomeIcon,
   LayersIcon,
   Pencil2Icon,
+  PlayIcon,
   ReaderIcon,
   TokensIcon,
   VideoIcon,
@@ -75,6 +76,13 @@ export const personal = [
     icon: ReaderIcon,
     shortcut: "n",
     active: (pathname) => pathname.startsWith("/books"),
+  },
+  {
+    name: "Musics",
+    href: "/musics",
+    icon: PlayIcon,
+    shortcut: "u",
+    active: (pathname) => pathname.startsWith("/musics"),
   },
   {
     name: "Videos",

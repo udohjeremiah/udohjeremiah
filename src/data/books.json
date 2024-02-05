@@ -1,0 +1,46 @@
+[
+  {
+    "category": "Spirituality",
+    "items": []
+  },
+  {
+    "category": "Philosophy",
+    "items": []
+  },
+  {
+    "category": "Psychology",
+    "items": []
+  },
+  {
+    "category": "Productivity",
+    "items": [
+      {
+        "cover": "https://covers.openlibrary.org/b/olid/OL40423376M-M.jpg",
+        "title": "So Good They Can't Ignore You",
+        "author": "Cal Newport"
+      }
+    ]
+  },
+  {
+    "category": "Programming",
+    "items": []
+  },
+  {
+    "category": "Design",
+    "items": [
+      {
+        "cover": "https://covers.openlibrary.org/b/olid/OL31679681M-M.jpg",
+        "title": "Refactoring UI",
+        "author": "Adam Wathan, Steve Schoger"
+      }
+    ]
+  },
+  {
+    "category": "Public Speaking",
+    "items": []
+  },
+  {
+    "category": "Others",
+    "items": []
+  }
+]
