@@ -84,13 +84,6 @@ export const personal = [
     shortcut: "u",
     active: (pathname) => pathname.startsWith("/musics"),
   },
-  {
-    name: "Videos",
-    href: "/videos",
-    icon: VideoIcon,
-    shortcut: "v",
-    active: (pathname) => pathname.startsWith("/videos"),
-  },
 ];
 
 export const resources = [

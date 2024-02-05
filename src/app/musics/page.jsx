@@ -24,8 +24,8 @@ export default async function MusicsPage() {
       <p>{description}</p>
       <div
         className={cn(
-          "not-prose mt-8 grid grid-cols-2 gap-x-4 gap-y-10",
-          "md:grid-cols-4",
+          "not-prose mt-8 grid grid-cols-2 place-items-center gap-x-4 gap-y-10",
+          "md:grid-cols-4 md:place-items-start",
         )}
       >
         {songs
