@@ -12,16 +12,36 @@
     "quote": "The most disastrous thing that you can ever learn is your first programming language."
   },
   {
-    "author": "Alan Perlis",
-    "quote": "There are two ways to write error-free programs; only the third one works."
-  },
-  {
     "author": "Alan Turing",
     "quote": "A computer would deserve to be called intelligent if it could deceive a human into believing that it was human."
   },
   {
-    "author": "Andy Hunt",
+    "author": "Alan Perlis",
+    "quote": "A language that doesn't affect the way you think about programming is not worth knowing."
+  },
+  {
+    "author": "Alan Perlis",
+    "quote": "I think that it's extraordinarily important that we in computer science keep fun in computing. When it started out it was an awful lot of fun."
+  },
+  {
+    "author": "Alan Perlis",
+    "quote": "Is it possible that software is not like anything else, that it is meant to be discarded: that the whole point is to always see it as a soap bubble?"
+  },
+  {
+    "author": "Alan Perlis",
+    "quote": "There are two ways to write error-free programs; only the third one works."
+  },
+  {
+    "author": "Alan Perlis",
+    "quote": "What's in your hands I think and hope is intelligence: the ability to see the machine as more than when you were ﬁrst led up to it that you can make it more."
+  },
+  {
+    "author": "Andrew Hunt",
     "quote": "No one in the brief history of computing has ever written a piece of perfect software. It's unlikely that you'll be the first."
+  },
+  {
+    "author": "Andrew Hunt",
+    "quote": "You can't write perfect software. Did that hurt? It shouldn't. Accept it as an axiom of life. Embrace it. Celebrate it. Because perfect software doesn't exist."
   },
   {
     "author": "Anonymous",
@@ -34,6 +54,10 @@
   {
     "author": "Brendan Eich",
     "quote": "Always code as if the guy who ends up maintaining your code will be a violent psychopath who knows where you live."
+  },
+  {
+    "author": "C.A.R. Hoare",
+    "quote": "The most important property of a program is whether it accomplishes the intention of its user."
   },
   {
     "author": "Chris Heilmann",
@@ -60,6 +84,14 @@
     "quote": "The only way to learn a new programming language is by writing programs in it."
   },
   {
+    "author": "Dmitry Galuscenko",
+    "quote": "If you are not willing to put a fragment of your soul into the code, don't program. Do pursue a different path instead."
+  },
+  {
+    "author": "Dmitry Galuscenko",
+    "quote": "We create programs as much as programs create us."
+  },
+  {
     "author": "Donald Knuth",
     "quote": "Premature optimization is the root of all evil."
   },
@@ -68,8 +100,16 @@
     "quote": "Programming is the art of telling another human what one wants the computer to do."
   },
   {
+    "author": "Donald Knuth",
+    "quote": "The best programs are written so that computing machines can perform them quickly and so that human beings can understand them clearly."
+  },
+  {
     "author": "Douglas Crockford",
     "quote": "The good thing about reinventing the wheel is that you can get a round one."
+  },
+  {
+    "author": "Douglas Rushkoff",
+    "quote": "We are looking at a society increasingly dependent on machines, yet decreasingly capable of making or even using them effectively."
   },
   {
     "author": "Edsger Dijkstra",
@@ -77,7 +117,19 @@
   },
   {
     "author": "Edsger Dijkstra",
+    "quote": "Program testing can be a very effective way to show the presence of bugs, but it is hopelessly inadequate for showing their absence."
+  },
+  {
+    "author": "Edsger Dijkstra",
+    "quote": "Progress is possible only if we train ourselves to think about programs without thinking of them as pieces of executable code."
+  },
+  {
+    "author": "Edsger Dijkstra",
     "quote": "Simplicity is a great virtue but it requires hard work to achieve it and education to appreciate it. And to make matters worse: complexity sells better."
+  },
+  {
+    "author": "Edward V. Berard",
+    "quote": "Walking on water and developing software from a specification are easy if both are frozen."
   },
   {
     "author": "Eleanor Roosevelt",
@@ -128,12 +180,20 @@
     "quote": "You might not think that programmers are artists, but programming is an extremely creative profession. It's logic-based creativity."
   },
   {
+    "author": "Joshua Bloch",
+    "quote": "Learning the art of programming, like most other disciplines, consists of first learning the rules and then learning when to break them."
+  },
+  {
     "author": "Ken Thompson",
     "quote": "One of my most productive days was throwing away 1,000 lines of code."
   },
   {
     "author": "Kent Beck",
     "quote": "Make it work, make it right, make it fast."
+  },
+  {
+    "author": "Larry Niven",
+    "quote": "That's the thing about people who think they hate computers. What they really hate is lousy programmers."
   },
   {
     "author": "Larry Wall",
@@ -172,6 +232,14 @@
     "quote": "Any fool can write code that a computer can understand. Good programmers write code that humans can understand."
   },
   {
+    "author": "Max Kanat-Alexander",
+    "quote": "Some of the best programming is done on paper, really. Putting it into the computer is just a minor detail."
+  },
+  {
+    "author": "Muhammad Waseem",
+    "quote": "Give a man a program, frustrate him for a day. Teach a man to program, frustrate him for a lifetime."
+  },
+  {
     "author": "Niklaus Wirth",
     "quote": "Software is getting slower more rapidly than hardware becomes faster."
   },
@@ -186,6 +254,10 @@
   {
     "author": "Paul Graham",
     "quote": "Programming languages differ not so much in what they make possible, but in what they make easy."
+  },
+  {
+    "author": "Paul Graham",
+    "quote": "Object-oriented programming offers a sustainable way to write spaghetti code. It lets you accrete programs as a series of patches."
   },
   {
     "author": "Peter Norvig",
@@ -210,6 +282,10 @@
   {
     "author": "Richard Stallman",
     "quote": "Free software is a matter of liberty, not price. To understand the concept, you should think of 'free' as in 'free speech,' not as in 'free beer.'"
+  },
+  {
+    "author": "Robert C. Martin",
+    "quote": "Truth can only be found in one place: the code."
   },
   {
     "author": "Ron Jeffries",
@@ -242,6 +318,10 @@
   {
     "author": "Ward Cunningham",
     "quote": "You know you are working on clean code when each routine you read turns out to be pretty much what you expected."
+  },
+  {
+    "author": "Why The Lucky Stiff",
+    "quote": "When you don't create things, you become defined by your tastes rather than ability. Your tastes only narrow & exclude people. So create."
   },
   {
     "author": "Yukihiro Matsumoto",
