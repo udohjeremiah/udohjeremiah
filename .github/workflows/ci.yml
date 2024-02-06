@@ -56,5 +56,5 @@ jobs:
       - name: Build with Next.js
         run: npm run build
         env:
-          SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
