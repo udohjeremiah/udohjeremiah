@@ -11,7 +11,11 @@ import { cn } from "@/lib/utils";
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
 
-export default function RandomQuotes() {
+export default function RandomQuotes({
+  animateCount = 0,
+  setAnimateCount = null,
+  animateStop = 1,
+}) {
   const [index, setIndex] = useState(null);
   const [quoteText, setQuoteText] = useState("");
   const [authorText, setAuthorText] = useState("");
@@ -52,6 +56,12 @@ export default function RandomQuotes() {
   }, []);
 
   useEffect(() => {
+    if (animateCount === animateStop) {
+      setQuoteText(quotes[index]?.quote);
+      setAuthorText(" - " + quotes[index]?.author);
+      return;
+    }
+
     let i = 0;
 
     const typingInterval = setInterval(() => {
@@ -71,12 +81,16 @@ export default function RandomQuotes() {
         }
         setAuthorText(" — " + quotes[index]?.author.substring(0, j++));
       }, 50);
+
+      setAnimateCount
+        ? setAnimateCount((prevAnimateCount) => prevAnimateCount + 1)
+        : animateCount++;
     };
 
     return () => {
       clearInterval(typingInterval);
     };
-  }, [index]);
+  }, [index, animateCount, setAnimateCount, animateStop]);
 
   return (
     <blockquote className={cn("w-full text-pretty text-xs", "lg:w-[60ch]")}>

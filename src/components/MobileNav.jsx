@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 
 export default function MobileNav() {
   const [open, setOpen] = useState(false);
+  const [animateCount, setAnimateCount] = useState(0);
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
@@ -32,7 +33,11 @@ export default function MobileNav() {
       </DrawerTrigger>
       <DrawerContent>
         <div className="max-h-[60vh] overflow-auto">
-          <Navigation setMobileNav={setOpen} />
+          <Navigation
+            mobileAnimateCount={animateCount}
+            setMobileAnimateCount={setAnimateCount}
+            setMobileNav={setOpen}
+          />
         </div>
       </DrawerContent>
     </Drawer>
