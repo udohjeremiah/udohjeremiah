@@ -14,11 +14,19 @@ import { sections } from "@/data/navigation";
 // Lib
 import { cn } from "@/lib/utils";
 
-export default function MobileNavItems({ setMobileNav, pathname }) {
+export default function MobileNavItems({
+  pathname,
+  mobileAnimateCount,
+  setMobileAnimateCount,
+  setMobileNav,
+}) {
   return (
     <nav>
       <div className="space-y-2 p-3">
-        <RandomQuotes />
+        <RandomQuotes
+          animateCount={mobileAnimateCount}
+          setAnimateCount={setMobileAnimateCount}
+        />
       </div>
       {sections.map((section, sectionIndex) => (
         <section key={sectionIndex} className="space-y-2 p-3">

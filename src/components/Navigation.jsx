@@ -16,7 +16,11 @@ import { sections } from "@/data/navigation";
 // Hooks
 import { useMediaQuery } from "@/hooks/use-media-query";
 
-export default function Navigation({ setMobileNav }) {
+export default function Navigation({
+  mobileAnimateCount,
+  setMobileAnimateCount,
+  setMobileNav,
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const isDesktop = useMediaQuery("(min-width: 1024px)");
@@ -52,7 +56,12 @@ export default function Navigation({ setMobileNav }) {
       {isDesktop ? (
         <DesktopNavItems pathname={pathname} />
       ) : (
-        <MobileNavItems setMobileNav={setMobileNav} pathname={pathname} />
+        <MobileNavItems
+          pathname={pathname}
+          mobileAnimateCount={mobileAnimateCount}
+          setMobileAnimateCount={setMobileAnimateCount}
+          setMobileNav={setMobileNav}
+        />
       )}
     </>
   );

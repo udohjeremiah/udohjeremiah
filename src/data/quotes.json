@@ -4,6 +4,14 @@
     "quote": "Hello, World!"
   },
   {
+    "author": "Abdelrahman Dwedar",
+    "quote": "Programming is a continues learning journey, software always have new updates, and so shall we update ourselves too."
+  },
+  {
+    "author": "Abhijit Naskar",
+    "quote": "In a world run by algorithms of greed write a code that helps 'n heals."
+  },
+  {
     "author": "Ada Lovelace",
     "quote": "The Analytical Engine weaves algebraic patterns just as the Jacquard loom weaves flowers and leaves."
   },
@@ -37,6 +45,10 @@
   },
   {
     "author": "Andrew Hunt",
+    "quote": "We believe that the major benefits of testing happen when you think about and write the tests, not when you run them."
+  },
+  {
+    "author": "Andrew Hunt",
     "quote": "No one in the brief history of computing has ever written a piece of perfect software. It's unlikely that you'll be the first."
   },
   {
@@ -46,6 +58,14 @@
   {
     "author": "Anonymous",
     "quote": "It's not a bug, it's a feature."
+  },
+  {
+    "author": "Bill Gates",
+    "quote": "Measuring programming progress by lines of code is like measuring aircraft building progress by weight."
+  },
+  {
+    "author": "Bjarne Stroustrup",
+    "quote": "An understanding of every language-technical detail of a language feature or library component is neither necessary nor sufficient for writing good programs."
   },
   {
     "author": "Bjarne Stroustrup",
@@ -148,6 +168,10 @@
     "quote": "To me programming is more than an important practical art. It is also a gigantic undertaking in the foundations of knowledge."
   },
   {
+    "author": "Grady Booch",
+    "quote": "The function of a good software is to make the complex appear to be simple."
+  },
+  {
     "author": "Guido van Rossum",
     "quote": "Python's a drop-in replacement for BASIC in the sense that Optimus Prime is a drop-in replacement for a truck."
   },
@@ -186,6 +210,10 @@
   {
     "author": "Ken Thompson",
     "quote": "One of my most productive days was throwing away 1,000 lines of code."
+  },
+  {
+    "author": "Kent Beck",
+    "quote": "Listening , Testing , Coding , Designing. That's all there is to software. Anyone who tells you different is selling something."
   },
   {
     "author": "Kent Beck",
@@ -249,6 +277,10 @@
   },
   {
     "author": "Paul Graham",
+    "quote": "A programming language is for thinking about programs, not for expressing programs you've already thought of. It should be a pencil, not a pen."
+  },
+  {
+    "author": "Paul Graham",
     "quote": "In programming, the hard part isn't solving problems, but deciding what problems to solve."
   },
   {
@@ -284,6 +316,10 @@
     "quote": "Free software is a matter of liberty, not price. To understand the concept, you should think of 'free' as in 'free speech,' not as in 'free beer.'"
   },
   {
+    "author": "Robert S. Barton",
+    "quote": "System programmers are the high priests of a low cult."
+  },
+  {
     "author": "Robert C. Martin",
     "quote": "Truth can only be found in one place: the code."
   },
@@ -314,6 +350,10 @@
   {
     "author": "Tim Berners-Lee",
     "quote": "The Web does not just connect machines, it connects people."
+  },
+  {
+    "author": "Vladimir Kameñar",
+    "quote": "Programming is another way of thinking."
   },
   {
     "author": "Ward Cunningham",
