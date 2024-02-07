@@ -34,7 +34,7 @@ export default function RootLayout({ children }) {
       className={cn(
         GeistSans.variable,
         GeistMono.variable,
-        "touch-manipulation font-sans antialiased [text-rendering:optimizelegibility]",
+        "touch-manipulation scroll-pt-20 font-sans antialiased [text-rendering:optimizelegibility]",
       )}
     >
       <body className="flex min-h-[100dvh] max-w-[100dvw] flex-col overflow-x-hidden bg-background text-foreground">
