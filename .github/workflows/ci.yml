@@ -61,3 +61,4 @@ jobs:
           RESEND_TOKEN: ${{ secrets.RESEND_TOKEN }}
           RESEND_FROM: ${{ secrets.RESEND_FROM }}
           RESEND_TO: ${{ secrets.RESEND_TO }}
+          RESEND_AUDIENCE_ID: ${{ secrets.RESEND_AUDIENCE_ID }}
