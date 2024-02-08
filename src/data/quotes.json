@@ -56,8 +56,16 @@
     "quote": "You can't write perfect software. Did that hurt? It shouldn't. Accept it as an axiom of life. Embrace it. Celebrate it. Because perfect software doesn't exist."
   },
   {
+    "author": "Andy Harris",
+    "quote": "Code is there to explain the comments to the computer."
+  },
+  {
     "author": "Anonymous",
     "quote": "It's not a bug, it's a feature."
+  },
+  {
+    "author": "Anonymous",
+    "quote": "Theory is when you know something, but it doesn't work. Practice is when something works, but you don't know why. Programmers combine theory and practice: Nothing works and they don't know why."
   },
   {
     "author": "Bill Gates",
@@ -80,24 +88,48 @@
     "quote": "The most important property of a program is whether it accomplishes the intention of its user."
   },
   {
-    "author": "Chris Heilmann",
-    "quote": "Java is to JavaScript what car is to carpet."
-  },
-  {
-    "author": "Cory House",
-    "quote": "Code is like humor. When you have to explain it, it's bad."
-  },
-  {
     "author": "Charles Babbage",
     "quote": "The whole of the developments and operations of analysis are now capable of being executed by machinery."
+  },
+  {
+    "author": "Charles Wetherell",
+    "quote": "If you don't know what you want to achieve and why, any code you write is, by definition, incorrect."
   },
   {
     "author": "Chris Pine",
     "quote": "Programming isn't about what you know; it's about what you can figure out."
   },
   {
+    "author": "Chris Heilmann",
+    "quote": "Java is to JavaScript what car is to carpet."
+  },
+  {
+    "author": "Clive Thompson",
+    "quote": "For years, coders have been programming computers so that they perform repetitive tasks for us. Now they automate our repetitive thoughts."
+  },
+  {
+    "author": "Cory House",
+    "quote": "Code is like humor. When you have to explain it, it's bad."
+  },
+  {
     "author": "Damian Conway",
     "quote": "Documentation is a love letter that you write to your future self."
+  },
+  {
+    "author": "Daniel Roy",
+    "quote": "An individual block of code takes moments to write, minutes or hours to debug, and can last forever without being touched again."
+  },
+  {
+    "author": "Daniel Roy",
+    "quote": "Code is read more than it is written."
+  },
+  {
+    "author": "Daniel Roy",
+    "quote": "Understandable code frees mental bandwidth from having to puzzle out inconsistencies, making it easier to maintain and enhance projects of all sizes."
+  },
+  {
+    "author": "David Thomas",
+    "quote": "Delivering good software today is often better than perfect software tomorrow, so finish things and ship."
   },
   {
     "author": "Dennis Ritchie",
@@ -113,6 +145,10 @@
   },
   {
     "author": "Donald Knuth",
+    "quote": "If you optimize everything, you will always be unhappy."
+  },
+  {
+    "author": "Donald Knuth",
     "quote": "Premature optimization is the root of all evil."
   },
   {
@@ -122,6 +158,10 @@
   {
     "author": "Donald Knuth",
     "quote": "The best programs are written so that computing machines can perform them quickly and so that human beings can understand them clearly."
+  },
+  {
+    "author": "Donald Knuth",
+    "quote": "The real problem is that programmers have spent far too much time worrying about efficiency in the wrong places and at the wrong times."
   },
   {
     "author": "Douglas Crockford",
@@ -178,6 +218,14 @@
   {
     "author": "Harold Abelson",
     "quote": "Programs must be written for people to read, and only incidentally for machines to execute."
+  },
+  {
+    "author": "James Hague",
+    "quote": "When it comes to writing code, the number one most important skill is how to keep a tangle of features from collapsing under the weight of its own complexity."
+  },
+  {
+    "author": "Jamie Zawinski",
+    "quote": "Some people, when confronted with a problem, think 'I know, I'll use regular expressions.' Now they have two problems."
   },
   {
     "author": "Jeff Atwood",
@@ -260,6 +308,10 @@
     "quote": "Any fool can write code that a computer can understand. Good programmers write code that humans can understand."
   },
   {
+    "author": "Maurice Wilkes",
+    "quote": "The realization came over me with full force that a good part of the remainder of my life was going to be spent in finding errors in my own programs."
+  },
+  {
     "author": "Max Kanat-Alexander",
     "quote": "Some of the best programming is done on paper, really. Putting it into the computer is just a minor detail."
   },
@@ -306,6 +358,10 @@
   {
     "author": "Rasmus Lerdorf",
     "quote": "I don't care if it works on your machine! We are not shipping your machine!"
+  },
+  {
+    "author": "Ram Ray",
+    "quote": "No matter which field of work you want to go in, it is of great importance to learn at least one programming language."
   },
   {
     "author": "Rich Hickey",
