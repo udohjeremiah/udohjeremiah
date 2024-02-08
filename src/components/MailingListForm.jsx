@@ -6,6 +6,9 @@ import { useState } from "react";
 // Dependencies
 import { toast } from "sonner";
 
+// Actions
+import { subscribe } from "../actions/subscribe";
+
 // Components
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,6 +36,12 @@ export default function MailingListForm() {
         Number(previousTimestamp) + 30 * 1000 > timestamp
       ) {
         throw new Error("Too many submits, please try again in a little while");
+      }
+
+      const { error } = await subscribe(email);
+
+      if (error) {
+        throw new Error(error);
       }
 
       localStorage.setItem("loops-form-timestamp", timestamp.toString());

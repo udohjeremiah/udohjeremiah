@@ -11,6 +11,9 @@ import {
   TokensIcon,
 } from "@radix-ui/react-icons";
 
+// Content
+import { allBlogs } from "contentlayer/generated";
+
 // Components
 import {
   Accordion,
@@ -37,7 +40,7 @@ import { personal, qualifications, skills } from "@/data/about";
 import services from "@/data/services";
 
 // Lib
-import { cn } from "@/lib/utils";
+import { cn, sortBlogPostByDate } from "@/lib/utils";
 import { createMetadata } from "@/lib/metadata";
 
 const title = "Full-Stack Web Developer";
@@ -244,7 +247,21 @@ export default function HomePage() {
             <Pencil2Icon />
             Latest Blog Posts
           </h5>
-          <Link href="" className={cn("my-5 block", "hover:opacity-50")}></Link>
+          {allBlogs
+            .sort(sortBlogPostByDate)
+            .slice(0, 3)
+            .map(({ title, description, slug }, index) => (
+              <Link
+                key={index}
+                href={slug}
+                className={cn(
+                  "my-5 block font-normal underline-offset-2",
+                  "hover:opacity-50",
+                )}
+              >
+                {title} - {description}
+              </Link>
+            ))}
         </div>
         <div className={cn("text-sm", "sm:pl-8")}>
           <h5 className="flex items-center gap-x-2">
