@@ -1,3 +1,4 @@
+// Dependencies
 import { Octokit } from "@octokit/rest";
 
 if (!process.env.GITHUB_TOKEN) {
