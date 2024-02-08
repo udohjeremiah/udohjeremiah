@@ -9,6 +9,9 @@ import { useSearchParams } from "next/navigation";
 // Dependencies
 import { toast } from "sonner";
 
+// Actions
+import { contact } from "../actions/contact";
+
 // Components
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -47,11 +50,18 @@ export default function ContactForm() {
         throw new Error("Too many submits, please try again in a little while");
       }
 
+      const { error } = await contact({ name, email, message, type });
+
+      if (error) {
+        throw new Error(error);
+      }
+
       localStorage.setItem("loops-form-timestamp", timestamp.toString());
 
       setName("");
       setEmail("");
       setMessage("");
+      setType("general");
       toast.success("Thanks for getting in touch! We'll respond promptly.");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : String(error));
