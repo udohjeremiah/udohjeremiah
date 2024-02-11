@@ -5,7 +5,7 @@ export default function Profile() {
   return (
     <div className="flex w-96 items-center gap-3">
       <Avatar>
-        <AvatarImage src="" alt="Udoh Jeremiah" />
+        <AvatarImage src="/avatar.webp" alt="Udoh Jeremiah" />
         <AvatarFallback className="bg-primary-foreground">UJ</AvatarFallback>
       </Avatar>
       <div>

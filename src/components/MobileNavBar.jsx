@@ -19,7 +19,7 @@ export default function MobileNavBar() {
     >
       <Link aria-label="Home" href="/">
         <Avatar>
-          <AvatarImage src="" alt="Udoh Jeremiah" />
+          <AvatarImage src="/avatar.webp" alt="Udoh Jeremiah" />
           <AvatarFallback>UJ</AvatarFallback>
         </Avatar>
       </Link>
