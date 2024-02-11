@@ -105,8 +105,8 @@ export default function HomePage() {
           About Me
         </h2>
         <div className="flex flex-wrap justify-center gap-x-16 gap-y-8">
-          <Avatar className={cn("h-72 w-72", "sm:h-80 sm:w-80")}>
-            <AvatarImage src="" alt="Udoh Jeremiah" />
+          <Avatar className={cn("not-prose h-72 w-72", "sm:h-80 sm:w-80")}>
+            <AvatarImage src="/profile.webp" alt="Udoh Jeremiah" />
             <AvatarFallback className="text-7xl">UJ</AvatarFallback>
           </Avatar>
           <Tabs defaultValue="personal" className="flex-1">
