@@ -74,8 +74,8 @@ export default function ProjectsCarousel() {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="max-sm:sm:hidden" />
-        <CarouselNext className="max-sm:sm:hidden" />
+        <CarouselPrevious className={cn("hidden", "sm:flex")} />
+        <CarouselNext className={cn("hidden", "sm:flex")} />
       </Carousel>
       <div className="mt-4 flex items-center justify-center gap-2">
         {Array.from({ length: count }).map((_, index) => (
