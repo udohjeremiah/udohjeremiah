@@ -10,12 +10,13 @@ import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { allBlogs } from "contentlayer/generated";
 
 // Components
+import Comments from "@/components/Comments";
 import Container from "@/components/Container";
 import MDXContent from "@/components/MDXContent";
 
 // Lib
 import { createMetadata } from "@/lib/metadata";
-import { formatDate } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 
 export const generateMetadata = ({ params }) => {
   const currentPath = params.slug;
@@ -46,7 +47,10 @@ export const generateTocList = (headings) => (
       <li key={index}>
         <Link
           href={heading.url}
-          className="text-muted-foreground no-underline hover:underline"
+          className={cn(
+            "text-muted-foreground no-underline",
+            "hover:underline",
+          )}
         >
           {heading.value}
         </Link>
@@ -102,11 +106,11 @@ export default function BlogPostPage({ params }) {
                 </time>
               </p>
             )}
-            {post.editedOn && (
+            {post.updatedOn && (
               <p className="mt-4 text-sm text-muted-foreground">
                 Edited on{" "}
-                <time dateTime={post.editedOn}>
-                  {formatDate(post.editedOn)}
+                <time dateTime={post.updatedOn}>
+                  {formatDate(post.updatedOn)}
                 </time>
               </p>
             )}
@@ -134,6 +138,7 @@ export default function BlogPostPage({ params }) {
             <MDXContent code={post.body.code} />
           </div>
         </div>
+        <Comments />
         <hr className="my-8" />
         <Link
           className="flex items-center gap-1 text-xs text-muted-foreground underline-offset-2"
