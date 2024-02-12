@@ -32,7 +32,7 @@ export default function MobileNav() {
         </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="max-h-[60vh] overflow-auto">
+        <div className="h-[60vh] overflow-auto">
           <Navigation
             mobileAnimateCount={animateCount}
             setMobileAnimateCount={setAnimateCount}
