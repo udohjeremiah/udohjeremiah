@@ -137,7 +137,7 @@ export const Blog = defineDocumentType(() => ({
       type: "date",
       required: true,
     },
-    editedOn: {
+    updatedOn: {
       type: "date",
       required: false,
     },
