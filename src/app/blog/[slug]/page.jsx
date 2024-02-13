@@ -108,7 +108,7 @@ export default function BlogPostPage({ params }) {
             )}
             {post.updatedOn && (
               <p className="mt-4 text-sm text-muted-foreground">
-                Edited on{" "}
+                Updated on{" "}
                 <time dateTime={post.updatedOn}>
                   {formatDate(post.updatedOn)}
                 </time>
