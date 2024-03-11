@@ -10,7 +10,6 @@ import {
   Pencil2Icon,
   ReaderIcon,
   TokensIcon,
-  VideoIcon,
 } from "@radix-ui/react-icons";
 
 export const siteLinks = [
@@ -83,13 +82,6 @@ export const siteLinks = [
         href: "/books",
         icon: ReaderIcon,
         shortcut: "n",
-        items: [],
-      },
-      {
-        title: "Videos",
-        href: "/videos",
-        icon: VideoIcon,
-        shortcut: "v",
         items: [],
       },
     ],
