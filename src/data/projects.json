@@ -1,12 +1,12 @@
 [
   {
-    "title": "Examshare",
-    "description": "An open-source project for sharing past examination questions in higher education.",
-    "link": "https://examshare.vercel.app",
-    "image": "/projects/examshare.webp",
-    "name": "examshare",
+    "title": "Photo Album",
+    "description": "An open-source web application for seamlessly organizing and sharing your visual stories.",
+    "link": "https://photo-album-blond.vercel.app/",
+    "image": "/projects/photo-album.webp",
+    "name": "photo-album",
     "openSource": true,
-    "repositoryLink": "https://github.com/udohjeremiah/examshare"
+    "repositoryLink": "https://github.com/udohjeremiah/photo-album"
   },
   {
     "title": "Eleotrade",
@@ -15,5 +15,14 @@
     "image": "/projects/eleotrade.webp",
     "name": "eleotrade",
     "openSource": false
+  },
+  {
+    "title": "Examshare",
+    "description": "An open-source project for sharing past examination questions in higher education.",
+    "link": "https://examshare.vercel.app",
+    "image": "/projects/examshare.webp",
+    "name": "examshare",
+    "openSource": true,
+    "repositoryLink": "https://github.com/udohjeremiah/examshare"
   }
 ]
