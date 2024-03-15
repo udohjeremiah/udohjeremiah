@@ -49,7 +49,7 @@ export default function ProjectsCarousel() {
 
   return (
     <div className={cn("flex w-full flex-col items-center", "sm:w-10/12")}>
-      <Carousel setApi={setApi}>
+      <Carousel setApi={setApi} className="w-full">
         <CarouselContent>
           {projects.map(({ title, description, link, image, name }, index) => (
             <CarouselItem key={index}>

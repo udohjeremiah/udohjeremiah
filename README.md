@@ -20,6 +20,7 @@ that enhance people's lives by incorporating technology for creative purposes, n
   - [Julia](https://julialang.org)
   - [Java](https://www.java.com)
   - [JavaScript](https://ecma-international.org/publications-and-standards/standards/ecma-262)
+  - [TypeScript](https://www.typescriptlang.org)
 
 - **Web Technologies:**
 
@@ -54,6 +55,9 @@ Explore some of the projects I've been working on:
    education.
 
 2. [Eleotrade](https://eleotrade.vercel.app) - A cutting-edge cryptocurrency brokerage investment platform.
+
+3. [Photo Album](https://photo-album-blond.vercel.app) - An open-source web application for seamlessly
+   organizing and sharing your visual stories.
 
 For more details on each project, visit my [portfolio website](https://udohjeremiah.com).
 
