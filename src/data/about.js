@@ -36,6 +36,7 @@ import RedisIO from "../../public/logos/redisio.svg";
 import RESTfulAPI from "../../public/logos/restfulapi.svg";
 import ShadcnUI from "../../public/logos/shadcnui.svg";
 import TailwindCSS from "../../public/logos/tailwindcss.svg";
+import TypeScript from "../../public/logos/typescript.svg";
 import ViteJS from "../../public/logos/vitejs.svg";
 import VSCode from "../../public/logos/vscode.svg";
 import Webpack from "../../public/logos/webpack.svg";
@@ -144,6 +145,11 @@ export const skills = [
             text: "JavaScript",
             image: JavaScript,
             name: "JavaScript",
+          },
+          {
+            text: "TypeScript",
+            image: TypeScript,
+            name: "TypeScript",
           },
           {
             text: "Node.js",
