@@ -17,6 +17,7 @@ import { sections } from "@/data/navigation";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
 export default function Navigation({
+  isDesktopNavOpened,
   mobileAnimateCount,
   setMobileAnimateCount,
   setMobileNav,
@@ -54,7 +55,10 @@ export default function Navigation({
   return (
     <>
       {isDesktop ? (
-        <DesktopNavItems pathname={pathname} />
+        <DesktopNavItems
+          pathname={pathname}
+          isDesktopNavOpened={isDesktopNavOpened}
+        />
       ) : (
         <MobileNavItems
           pathname={pathname}

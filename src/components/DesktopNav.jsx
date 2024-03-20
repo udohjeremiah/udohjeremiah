@@ -71,18 +71,15 @@ export default function DesktopNav() {
         <div className="flex">
           <div
             className={cn(
-              "sticky top-14 h-[calc(100vh-3.5rem)] w-72 border-r bg-muted opacity-100 transition-[opacity_width]",
-              iconIndex && "opacity-50",
-              !open && "invisible w-0 opacity-0",
+              "sticky top-14 h-[calc(100vh-3.5rem)] w-72 border-r bg-muted transition-[opacity_width]",
+              !open && "w-14",
             )}
           >
-            {open && (
-              <ScrollArea className="h-full py-4">
-                <Navigation />
-              </ScrollArea>
-            )}
+            <ScrollArea className="h-full py-4">
+              <Navigation isDesktopNavOpened={open} />
+            </ScrollArea>
           </div>
-          <div className="sticky top-14 flex h-[calc(100vh-3.5rem)] flex-col items-center justify-center">
+          <div className="sticky top-14 -ml-3 flex h-[calc(100vh-3.5rem)] flex-col items-center justify-center">
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -91,10 +88,7 @@ export default function DesktopNav() {
                   onClick={() => setOpen((open) => !open)}
                   onMouseEnter={() => setIconIndex(open ? 1 : 2)}
                   onMouseLeave={() => setIconIndex(0)}
-                  className={cn(
-                    "h-6 w-6 rounded-sm rounded-l-none border-l-0 bg-muted p-0",
-                    !iconIndex && "animate-pulse",
-                  )}
+                  className="h-6 w-6 rounded-sm p-0"
                 >
                   <Icon />
                 </Button>

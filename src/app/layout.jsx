@@ -44,7 +44,7 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          <TooltipProvider>
+          <TooltipProvider delayDuration={0}>
             <Header />
             <div className={cn("flex-1", "lg:flex")}>
               <DesktopNav />
