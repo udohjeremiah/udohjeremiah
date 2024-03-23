@@ -59,7 +59,7 @@ export const personal = [
     icon: EnvelopeClosedIcon,
   },
   {
-    text: "+234 708 441 0069",
+    text: "+234 808 845 6477",
     icon: MobileIcon,
   },
   {
