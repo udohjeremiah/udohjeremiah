@@ -2,6 +2,8 @@
 import { cn } from "@/lib/utils";
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer
       className={cn(
@@ -16,7 +18,7 @@ export default function Footer() {
           acting on such ideas are solely the responsibility of the individual
           taking such actions.
         </p>
-        <p>&copy; 2024 Udoh Jeremiah. All rights reserved.</p>
+        <p>&copy; 2024 - {currentYear} Udoh Jeremiah. All rights reserved.</p>
       </div>
     </footer>
   );
