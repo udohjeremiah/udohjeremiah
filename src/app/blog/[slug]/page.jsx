@@ -13,10 +13,11 @@ import { allBlogs } from "contentlayer/generated";
 import Comments from "@/components/Comments";
 import Container from "@/components/Container";
 import MDXContent from "@/components/MDXContent";
+import TableOfContent from "@/components/TableOfContent";
 
 // Lib
 import { createMetadata } from "@/lib/metadata";
-import { cn, formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 export const generateMetadata = ({ params }) => {
   const currentPath = params.slug;
@@ -40,25 +41,6 @@ export const generateStaticParams = () =>
   allBlogs.map((post) => ({
     slug: post.slug,
   }));
-
-export const generateTocList = (headings) => (
-  <ul className="list-none text-sm">
-    {headings.map((heading, index) => (
-      <li key={index}>
-        <Link
-          href={heading.url}
-          className={cn(
-            "text-muted-foreground no-underline",
-            "hover:underline",
-          )}
-        >
-          {heading.value}
-        </Link>
-        {heading.children && generateTocList(heading.children)}
-      </li>
-    ))}
-  </ul>
-);
 
 export default function BlogPostPage({ params }) {
   const currentPath = params.slug;
@@ -128,12 +110,7 @@ export default function BlogPostPage({ params }) {
               quality={100}
             />
           )}
-          {post.toc && (
-            <aside>
-              <h2>Table of Contents</h2>
-              <div className="border-l">{generateTocList(post.toc)}</div>
-            </aside>
-          )}
+          {post.toc && <TableOfContent toc={post.toc} />}
           <div>
             <MDXContent code={post.body.code} />
           </div>
