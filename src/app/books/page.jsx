@@ -47,10 +47,7 @@ export default async function BooksPage() {
                       alt={book.title}
                       width={128}
                       height={196}
-                      className={cn(
-                        "rounded-md transition-all",
-                        "hover:scale-105",
-                      )}
+                      className="rounded-md transition-all"
                     />
                     <figcaption className="space-y-1">
                       <h3 className="font-medium leading-none">{book.title}</h3>

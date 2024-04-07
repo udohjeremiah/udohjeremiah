@@ -11,7 +11,6 @@ import {
   PlayIcon,
   ReaderIcon,
   TokensIcon,
-  VideoIcon,
 } from "@radix-ui/react-icons";
 
 export const pages = [

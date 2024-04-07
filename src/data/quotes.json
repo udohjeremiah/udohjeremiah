@@ -4,10 +4,6 @@
     "quote": "Hello, World!"
   },
   {
-    "author": "Abdelrahman Dwedar",
-    "quote": "Programming is a continues learning journey, software always have new updates, and so shall we update ourselves too."
-  },
-  {
     "author": "Abhijit Naskar",
     "quote": "In a world run by algorithms of greed write a code that helps 'n heals."
   },
@@ -20,40 +16,12 @@
     "quote": "The most disastrous thing that you can ever learn is your first programming language."
   },
   {
-    "author": "Alan Turing",
-    "quote": "A computer would deserve to be called intelligent if it could deceive a human into believing that it was human."
-  },
-  {
     "author": "Alan Perlis",
     "quote": "A language that doesn't affect the way you think about programming is not worth knowing."
   },
   {
     "author": "Alan Perlis",
-    "quote": "I think that it's extraordinarily important that we in computer science keep fun in computing. When it started out it was an awful lot of fun."
-  },
-  {
-    "author": "Alan Perlis",
-    "quote": "Is it possible that software is not like anything else, that it is meant to be discarded: that the whole point is to always see it as a soap bubble?"
-  },
-  {
-    "author": "Alan Perlis",
     "quote": "There are two ways to write error-free programs; only the third one works."
-  },
-  {
-    "author": "Alan Perlis",
-    "quote": "What's in your hands I think and hope is intelligence: the ability to see the machine as more than when you were ﬁrst led up to it that you can make it more."
-  },
-  {
-    "author": "Andrew Hunt",
-    "quote": "We believe that the major benefits of testing happen when you think about and write the tests, not when you run them."
-  },
-  {
-    "author": "Andrew Hunt",
-    "quote": "No one in the brief history of computing has ever written a piece of perfect software. It's unlikely that you'll be the first."
-  },
-  {
-    "author": "Andrew Hunt",
-    "quote": "You can't write perfect software. Did that hurt? It shouldn't. Accept it as an axiom of life. Embrace it. Celebrate it. Because perfect software doesn't exist."
   },
   {
     "author": "Andy Harris",
@@ -64,24 +32,12 @@
     "quote": "It's not a bug, it's a feature."
   },
   {
-    "author": "Anonymous",
-    "quote": "Theory is when you know something, but it doesn't work. Practice is when something works, but you don't know why. Programmers combine theory and practice: Nothing works and they don't know why."
-  },
-  {
     "author": "Bill Gates",
     "quote": "Measuring programming progress by lines of code is like measuring aircraft building progress by weight."
   },
   {
     "author": "Bjarne Stroustrup",
-    "quote": "An understanding of every language-technical detail of a language feature or library component is neither necessary nor sufficient for writing good programs."
-  },
-  {
-    "author": "Bjarne Stroustrup",
     "quote": "There are only two kinds of languages: the ones people complain about and the ones nobody uses."
-  },
-  {
-    "author": "Brendan Eich",
-    "quote": "Always code as if the guy who ends up maintaining your code will be a violent psychopath who knows where you live."
   },
   {
     "author": "C.A.R. Hoare",
@@ -104,10 +60,6 @@
     "quote": "Java is to JavaScript what car is to carpet."
   },
   {
-    "author": "Clive Thompson",
-    "quote": "For years, coders have been programming computers so that they perform repetitive tasks for us. Now they automate our repetitive thoughts."
-  },
-  {
     "author": "Cory House",
     "quote": "Code is like humor. When you have to explain it, it's bad."
   },
@@ -117,15 +69,7 @@
   },
   {
     "author": "Daniel Roy",
-    "quote": "An individual block of code takes moments to write, minutes or hours to debug, and can last forever without being touched again."
-  },
-  {
-    "author": "Daniel Roy",
     "quote": "Code is read more than it is written."
-  },
-  {
-    "author": "Daniel Roy",
-    "quote": "Understandable code frees mental bandwidth from having to puzzle out inconsistencies, making it easier to maintain and enhance projects of all sizes."
   },
   {
     "author": "David Thomas",
@@ -134,10 +78,6 @@
   {
     "author": "Dennis Ritchie",
     "quote": "The only way to learn a new programming language is by writing programs in it."
-  },
-  {
-    "author": "Dmitry Galuscenko",
-    "quote": "If you are not willing to put a fragment of your soul into the code, don't program. Do pursue a different path instead."
   },
   {
     "author": "Dmitry Galuscenko",
@@ -156,36 +96,8 @@
     "quote": "Programming is the art of telling another human what one wants the computer to do."
   },
   {
-    "author": "Donald Knuth",
-    "quote": "The best programs are written so that computing machines can perform them quickly and so that human beings can understand them clearly."
-  },
-  {
-    "author": "Donald Knuth",
-    "quote": "The real problem is that programmers have spent far too much time worrying about efficiency in the wrong places and at the wrong times."
-  },
-  {
     "author": "Douglas Crockford",
     "quote": "The good thing about reinventing the wheel is that you can get a round one."
-  },
-  {
-    "author": "Douglas Rushkoff",
-    "quote": "We are looking at a society increasingly dependent on machines, yet decreasingly capable of making or even using them effectively."
-  },
-  {
-    "author": "Edsger Dijkstra",
-    "quote": "If debugging is the process of removing software bugs, then programming must be the process of putting them in."
-  },
-  {
-    "author": "Edsger Dijkstra",
-    "quote": "Program testing can be a very effective way to show the presence of bugs, but it is hopelessly inadequate for showing their absence."
-  },
-  {
-    "author": "Edsger Dijkstra",
-    "quote": "Progress is possible only if we train ourselves to think about programs without thinking of them as pieces of executable code."
-  },
-  {
-    "author": "Edsger Dijkstra",
-    "quote": "Simplicity is a great virtue but it requires hard work to achieve it and education to appreciate it. And to make matters worse: complexity sells better."
   },
   {
     "author": "Edward V. Berard",
@@ -204,28 +116,12 @@
     "quote": "The most dangerous phrase in the language is, 'We've always done it this way.'"
   },
   {
-    "author": "Grace Hopper",
-    "quote": "To me programming is more than an important practical art. It is also a gigantic undertaking in the foundations of knowledge."
-  },
-  {
     "author": "Grady Booch",
     "quote": "The function of a good software is to make the complex appear to be simple."
   },
   {
-    "author": "Guido van Rossum",
-    "quote": "Python's a drop-in replacement for BASIC in the sense that Optimus Prime is a drop-in replacement for a truck."
-  },
-  {
     "author": "Harold Abelson",
     "quote": "Programs must be written for people to read, and only incidentally for machines to execute."
-  },
-  {
-    "author": "James Hague",
-    "quote": "When it comes to writing code, the number one most important skill is how to keep a tangle of features from collapsing under the weight of its own complexity."
-  },
-  {
-    "author": "Jamie Zawinski",
-    "quote": "Some people, when confronted with a problem, think 'I know, I'll use regular expressions.' Now they have two problems."
   },
   {
     "author": "Jeff Atwood",
@@ -236,32 +132,12 @@
     "quote": "Real programmers don't document. If it was hard to write, it should be hard to understand."
   },
   {
-    "author": "Joe Sondow",
-    "quote": "A computer is like a mischevious genie. It will always give you exactly what you ask for, but not always what you want."
-  },
-  {
     "author": "John Johnson",
     "quote": "First, solve the problem. Then, write the code."
   },
   {
-    "author": "John McCarthy",
-    "quote": "Artificial Intelligence is the science of making machines do things that would require intelligence if done by men."
-  },
-  {
-    "author": "John Romero",
-    "quote": "You might not think that programmers are artists, but programming is an extremely creative profession. It's logic-based creativity."
-  },
-  {
-    "author": "Joshua Bloch",
-    "quote": "Learning the art of programming, like most other disciplines, consists of first learning the rules and then learning when to break them."
-  },
-  {
     "author": "Ken Thompson",
     "quote": "One of my most productive days was throwing away 1,000 lines of code."
-  },
-  {
-    "author": "Kent Beck",
-    "quote": "Listening , Testing , Coding , Designing. That's all there is to software. Anyone who tells you different is selling something."
   },
   {
     "author": "Kent Beck",
@@ -277,10 +153,6 @@
   },
   {
     "author": "Linus Torvalds",
-    "quote": "Most good programmers do programming not because they expect to get paid or get adulation by the public, but because it is fun to program."
-  },
-  {
-    "author": "Linus Torvalds",
     "quote": "Software is like sex: it's better when it's free."
   },
   {
@@ -288,32 +160,8 @@
     "quote": "Talk is cheap. Show me the code."
   },
   {
-    "author": "Margaret Hamilton",
-    "quote": "It was no longer a question of having to debug the Apollo guidance software, instead, it became one of gaining enough time to complete the job."
-  },
-  {
-    "author": "Margaret Hamilton",
-    "quote": "The science of computing and the design of systems were becoming scientific disciplines in equal measure."
-  },
-  {
-    "author": "Margaret Hamilton",
-    "quote": "Software during Apollo was a kind of wizardry, with no formal tools, methodologies, or software engineering."
-  },
-  {
     "author": "Marijn Haverbeke",
     "quote": "The art of programming is the skill of controlling complexity."
-  },
-  {
-    "author": "Martin Fowler",
-    "quote": "Any fool can write code that a computer can understand. Good programmers write code that humans can understand."
-  },
-  {
-    "author": "Maurice Wilkes",
-    "quote": "The realization came over me with full force that a good part of the remainder of my life was going to be spent in finding errors in my own programs."
-  },
-  {
-    "author": "Max Kanat-Alexander",
-    "quote": "Some of the best programming is done on paper, really. Putting it into the computer is just a minor detail."
   },
   {
     "author": "Muhammad Waseem",
@@ -324,24 +172,12 @@
     "quote": "Software is getting slower more rapidly than hardware becomes faster."
   },
   {
-    "author": "Patrick McKenzie",
-    "quote": "Every great developer you know got there by solving problems they were unqualified to solve until they actually did it."
-  },
-  {
-    "author": "Paul Graham",
-    "quote": "A programming language is for thinking about programs, not for expressing programs you've already thought of. It should be a pencil, not a pen."
-  },
-  {
     "author": "Paul Graham",
     "quote": "In programming, the hard part isn't solving problems, but deciding what problems to solve."
   },
   {
     "author": "Paul Graham",
     "quote": "Programming languages differ not so much in what they make possible, but in what they make easy."
-  },
-  {
-    "author": "Paul Graham",
-    "quote": "Object-oriented programming offers a sustainable way to write spaghetti code. It lets you accrete programs as a series of patches."
   },
   {
     "author": "Peter Norvig",
@@ -360,16 +196,8 @@
     "quote": "I don't care if it works on your machine! We are not shipping your machine!"
   },
   {
-    "author": "Ram Ray",
-    "quote": "No matter which field of work you want to go in, it is of great importance to learn at least one programming language."
-  },
-  {
     "author": "Rich Hickey",
     "quote": "Programming is not about typing, it's about thinking."
-  },
-  {
-    "author": "Richard Stallman",
-    "quote": "Free software is a matter of liberty, not price. To understand the concept, you should think of 'free' as in 'free speech,' not as in 'free beer.'"
   },
   {
     "author": "Robert S. Barton",
@@ -386,10 +214,6 @@
   {
     "author": "Seymour Cray",
     "quote": "The trouble with programmers is that you can never tell what a programmer is doing until it's too late."
-  },
-  {
-    "author": "Seymour Papert",
-    "quote": "You can't teach people everything they need to know. The best you can do is position them where they can find what they need to know when they need to know it."
   },
   {
     "author": "Steve McConnell",
@@ -410,17 +234,5 @@
   {
     "author": "Vladimir Kameñar",
     "quote": "Programming is another way of thinking."
-  },
-  {
-    "author": "Ward Cunningham",
-    "quote": "You know you are working on clean code when each routine you read turns out to be pretty much what you expected."
-  },
-  {
-    "author": "Why The Lucky Stiff",
-    "quote": "When you don't create things, you become defined by your tastes rather than ability. Your tastes only narrow & exclude people. So create."
-  },
-  {
-    "author": "Yukihiro Matsumoto",
-    "quote": "Programmers are not to be measured by their ingenuity and their logic but by the completeness of their case analysis."
   }
 ]

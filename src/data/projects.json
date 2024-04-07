@@ -1,8 +1,26 @@
 [
   {
+    "title": "E-Commerce Store",
+    "description": "An open-source online store that coexists with its E-commerce CMS project.",
+    "link": "https://ecommerce-store-olive-gamma.vercel.app",
+    "image": "/projects/ecommerce-store.webp",
+    "name": "ecommerce-store",
+    "openSource": true,
+    "repositoryLink": "https://github.com/udohjeremiah/ecommerce-store"
+  },
+  {
+    "title": "E-Commerce Content Management System (CMS)",
+    "description": "An open-source comprehensive content management system platform for managing online stores and content.",
+    "link": "https://ecommerce-cms-mu.vercel.app",
+    "image": "/projects/ecommerce-cms.webp",
+    "name": "ecommerce-cms",
+    "openSource": true,
+    "repositoryLink": "https://github.com/udohjeremiah/ecommerce-cms"
+  },
+  {
     "title": "Photo Album",
     "description": "An open-source web application for seamlessly organizing and sharing your visual stories.",
-    "link": "https://photo-album-blond.vercel.app/",
+    "link": "https://photo-album-blond.vercel.app",
     "image": "/projects/photo-album.webp",
     "name": "photo-album",
     "openSource": true,
