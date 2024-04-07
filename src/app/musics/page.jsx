@@ -1,5 +1,9 @@
 // Next
 import Image from "next/image";
+import Link from "next/link";
+
+// Dependencies
+import { ExternalLinkIcon } from "@radix-ui/react-icons";
 
 // Components
 import Container from "@/components/Container";
@@ -13,7 +17,7 @@ import { createMetadata } from "@/lib/metadata";
 
 const title = "Musics";
 const description =
-  "Audio and video materials of music that I've listened to and continue to enjoy while meditating, working, or simply savoring the moment (listed in alphabetical order).";
+  "List of artists, musicians, composers, etc., whose music I've been blessed with and continue to enjoy while meditating, working, or savoring the moment (alphabetically listed).";
 
 export const metadata = createMetadata({ title, description, path: "/musics" });
 
@@ -29,19 +33,30 @@ export default async function MusicsPage() {
         )}
       >
         {songs
-          .sort((songA, songB) => songA.title.localeCompare(songB.title))
+          .sort((songA, songB) => songA.author.localeCompare(songB.author))
           .map((song, index) => (
             <figure key={index} className="space-y-3">
               <Image
-                src={song.cover}
-                alt={song.title}
+                src={song.profilePic}
+                alt={song.author}
                 width={128}
                 height={196}
-                className={cn("rounded-md transition-all", "hover:scale-105")}
+                className="rounded-md object-contain transition-all"
               />
-              <figcaption className="space-y-1">
-                <h3 className="font-medium leading-none">{song.title}</h3>
-                <p className="text-muted-foreground">{song.author}</p>
+              <figcaption>
+                <h3 className="font-medium leading-none">
+                  <Link
+                    href={song.youtubeLink}
+                    target="_blank"
+                    className={cn(
+                      "flex items-center underline underline-offset-4 transition",
+                      "hover:opacity-50",
+                    )}
+                  >
+                    {song.author}
+                    <ExternalLinkIcon className="ml-1 h-4 w-4" />
+                  </Link>
+                </h3>
               </figcaption>
             </figure>
           ))}

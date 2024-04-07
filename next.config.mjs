@@ -10,7 +10,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "img.youtube.com",
+        hostname: "yt3.googleusercontent.com",
       },
     ],
   },
