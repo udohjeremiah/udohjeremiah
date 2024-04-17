@@ -2,12 +2,12 @@
 import { useState } from "react";
 
 // Dependencies
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { MenuIcon } from "lucide-react";
 
 // Components
+import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import Navigation from "./Navigation";
 
 // Lib
 import { cn } from "@/lib/utils";
@@ -28,7 +28,7 @@ export default function MobileNav() {
             "hover:border-muted-foreground",
           )}
         >
-          <HamburgerMenuIcon />
+          <MenuIcon className="h-4 w-4" />
         </Button>
       </DrawerTrigger>
       <DrawerContent>

@@ -3,8 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 // Components
-import { Badge } from "@/components/ui/badge";
 import Container from "@/components/Container";
+import { Badge } from "@/components/ui/badge";
 
 // Data
 import stack from "@/data/stack";

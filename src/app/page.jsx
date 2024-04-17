@@ -3,18 +3,19 @@ import Image from "next/image";
 import Link from "next/link";
 
 // Depemdencies
+import { allBlogs } from "contentlayer/generated";
 import {
   BellIcon,
-  EnvelopeOpenIcon,
-  Pencil2Icon,
-  PersonIcon,
-  TokensIcon,
-} from "@radix-ui/react-icons";
-
-// Content
-import { allBlogs } from "contentlayer/generated";
+  MailOpenIcon,
+  NotebookPenIcon,
+  UserRoundIcon,
+  FolderOpenDotIcon,
+} from "lucide-react";
 
 // Components
+import Container from "@/components/Container";
+import MailingListForm from "@/components/MailingListForm";
+import ProjectsCarousel from "@/components/ProjectsCarousel";
 import {
   Accordion,
   AccordionContent,
@@ -31,21 +32,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Container from "@/components/Container";
-import MailingListForm from "@/components/MailingListForm";
-import ProjectsCarousel from "@/components/ProjectsCarousel";
 
 // Data
 import { personal, qualifications, skills } from "@/data/about";
 import services from "@/data/services";
 
 // Lib
-import { cn, sortBlogPostByDate } from "@/lib/utils";
 import { createMetadata } from "@/lib/metadata";
+import { cn, sortBlogPostByDate } from "@/lib/utils";
 
-const title = "Full-Stack Web Developer";
+const title = "Home";
 const description =
-  "Full-stack web developer with a keen interest in developing robust web applications and 'standing at the intersection of technology and humanity.'";
+  "A self-taught software developer standing at the intersection of technology and humanity.";
 
 export const metadata = createMetadata({
   title,
@@ -79,7 +77,7 @@ export default function HomePage() {
             </span>
           </h2>
           <span className="mb-8 block text-2xl font-extralight">
-            Industry Certified
+            Self-Taught
           </span>
           <h2
             className={cn(
@@ -87,21 +85,21 @@ export default function HomePage() {
               "sm:text-8xl",
             )}
           >
-            Full-Stack
+            Software
             <span
               className={cn(
                 "block pl-8 text-4xl font-normal opacity-40",
                 "sm:text-7xl",
               )}
             >
-              Web Developer
+              Developer
             </span>
           </h2>
         </div>
       </section>
       <section className={cn("mb-16", "lg:mb-24")}>
         <h2 className="flex items-center justify-center gap-x-3">
-          <PersonIcon className="h-5 w-5" />
+          <UserRoundIcon className="h-5 w-5" />
           About Me
         </h2>
         <div className="flex flex-wrap justify-center gap-x-16 gap-y-8">
@@ -124,12 +122,12 @@ export default function HomePage() {
             <TabsContent value="personal">
               <h3>Exceptional Service Over Time</h3>
               <p>
-                Inspired by Steve Jobs&apos; philosophy, my mission is{" "}
-                <q>to stand at the intersection of technology and humanity.</q>{" "}
-                Through my work, I aim to create web solutions that not only
-                boost productivity but also inspire creativity, enriching the
-                lives of individuals.
+                I stand at the intersection of technology and humanity, making
+                software for people who want to incorporate it into their lives
+                for creative purposes, not just productivity. I&apos;m not just
+                out to get the job done; I&apos;m out to change the world.
               </p>
+
               <div
                 className={cn("grid items-center gap-y-4", "xl:grid-cols-2")}
               >
@@ -207,7 +205,7 @@ export default function HomePage() {
       </section>
       <section className={cn("mb-16 flex flex-col items-center", "lg:mb-24")}>
         <h2 className="flex items-center gap-x-3">
-          <TokensIcon className="h-5 w-5" />
+          <FolderOpenDotIcon className="h-5 w-5" />
           Latest Projects
         </h2>
         <p className="text-center">
@@ -244,7 +242,7 @@ export default function HomePage() {
       >
         <div className={cn("text-sm", "sm:pr-8")}>
           <h5 className="flex items-center gap-x-2">
-            <Pencil2Icon />
+            <NotebookPenIcon />
             Latest Blog Posts
           </h5>
           {allBlogs
@@ -265,7 +263,7 @@ export default function HomePage() {
         </div>
         <div className={cn("text-sm", "sm:pl-8")}>
           <h5 className="flex items-center gap-x-2">
-            <EnvelopeOpenIcon />
+            <MailOpenIcon />
             Newsletter
           </h5>
           <p className="text-muted-foreground">

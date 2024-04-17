@@ -1,16 +1,17 @@
 // Dependencies
 import {
   BellIcon,
-  ChatBubbleIcon,
-  EnvelopeClosedIcon,
-  EnvelopeOpenIcon,
-  GitHubLogoIcon,
+  FolderOpenDotIcon,
+  GithubIcon,
   HomeIcon,
   LayersIcon,
-  Pencil2Icon,
-  ReaderIcon,
-  TokensIcon,
-} from "@radix-ui/react-icons";
+  LibraryIcon,
+  MailIcon,
+  MailOpenIcon,
+  MessageCircleIcon,
+  NotebookPenIcon,
+  PlayIcon,
+} from "lucide-react";
 
 export const siteLinks = [
   {
@@ -26,14 +27,14 @@ export const siteLinks = [
       {
         title: "Mailing List",
         href: "/mailing-list",
-        icon: EnvelopeOpenIcon,
+        icon: MailOpenIcon,
         shortcut: "m",
         items: [],
       },
       {
         title: "Contact",
         href: "/contact",
-        icon: ChatBubbleIcon,
+        icon: MessageCircleIcon,
         shortcut: "c",
         items: [],
       },
@@ -46,7 +47,7 @@ export const siteLinks = [
       {
         title: "Projects",
         href: "/projects",
-        icon: TokensIcon,
+        icon: FolderOpenDotIcon,
         shortcut: "p",
         items: [],
       },
@@ -73,15 +74,22 @@ export const siteLinks = [
       {
         title: "Blog",
         href: "/blog",
-        icon: Pencil2Icon,
+        icon: NotebookPenIcon,
         shortcut: "b",
         items: [],
       },
       {
         title: "Books",
         href: "/books",
-        icon: ReaderIcon,
+        icon: LibraryIcon,
         shortcut: "n",
+        items: [],
+      },
+      {
+        title: "Musics",
+        href: "/musics",
+        icon: PlayIcon,
+        shortcut: "u",
         items: [],
       },
     ],
@@ -93,7 +101,7 @@ export const siteLinks = [
       {
         title: "Code",
         href: "/code",
-        icon: GitHubLogoIcon,
+        icon: GithubIcon,
         shortcut: "g",
         items: [],
       },
@@ -107,7 +115,7 @@ export const siteLinks = [
         title: "Email",
         href: "mailto:udohjeremiah@icloud.com",
         external: true,
-        icon: EnvelopeClosedIcon,
+        icon: MailIcon,
         shortcut: "",
         items: [],
       },
@@ -115,7 +123,7 @@ export const siteLinks = [
         title: "Github",
         href: "https://github.com/udohjeremiah",
         external: true,
-        icon: GitHubLogoIcon,
+        icon: GithubIcon,
         shortcut: "",
         items: [],
       },

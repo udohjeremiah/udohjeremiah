@@ -3,10 +3,16 @@
     "type": "Coding",
     "items": [
       {
-        "name": "VS Code",
-        "href": "https://code.visualstudio.com/",
-        "description": "The free, open source, and cross-platform code editor that supports many languages and features.",
-        "image": "/logos/vscode.svg"
+        "name": "GitHub Desktop",
+        "href": "https://desktop.github.com/",
+        "description": "The free and open source app that lets you manage your Git repositories from your desktop.",
+        "image": "/logos/githubdesktop.svg"
+      },
+      {
+        "name": "Icons8",
+        "href": "https://icons8.com/",
+        "description": "The curated collection of over 1,328,300 free icons that match each other.",
+        "image": "/logos/icons8.svg"
       },
       {
         "name": "MongoDB Compass",
@@ -21,22 +27,16 @@
         "image": "/logos/postman.svg"
       },
       {
-        "name": "GitHub Desktop",
-        "href": "https://desktop.github.com/",
-        "description": "The free and open source app that lets you manage your Git repositories from your desktop.",
-        "image": "/logos/githubdesktop.svg"
-      },
-      {
-        "name": "Icons8",
-        "href": "https://icons8.com/",
-        "description": "The curated collection of over 1,328,300 free icons that match each other.",
-        "image": "/logos/icons8.svg"
-      },
-      {
         "name": "SVGOMG",
         "href": "https://jakearchibald.github.io/svgomg/",
         "description": "The web GUI for SVGO.",
         "image": "/logos/svgomg.svg"
+      },
+      {
+        "name": "VS Code",
+        "href": "https://code.visualstudio.com/",
+        "description": "The free, open source, and cross-platform code editor that supports many languages and features.",
+        "image": "/logos/vscode.svg"
       }
     ]
   },
@@ -50,28 +50,28 @@
         "image": "/logos/dribble.svg"
       },
       {
-        "name": "Framer",
-        "href": "https://www.framer.com/",
-        "description": "The web design tool that lets you create and publish websites with powerful and familiar tools.",
-        "image": "/logos/framer.svg"
-      },
-      {
         "name": "Figma",
         "href": "https://www.figma.com/",
         "description": "The platform for teams to design, prototype, develop, and collect feedback on products in one space.",
         "image": "/logos/figma.svg"
       },
       {
-        "name": "Unsplash",
-        "href": "https://unsplash.com/",
-        "description": "The platform where you can find and download beautiful, free images and photos from various categories and creators.",
-        "image": "/logos/unsplash.svg"
+        "name": "Framer",
+        "href": "https://www.framer.com/",
+        "description": "The web design tool that lets you create and publish websites with powerful and familiar tools.",
+        "image": "/logos/framer.svg"
       },
       {
         "name": "FreeConvert",
         "href": "https://www.freeconvert.com/",
         "description": "The platform that lets you convert files from one format to another, online, for free.",
         "image": "/logos/freeconvert.svg"
+      },
+      {
+        "name": "Unsplash",
+        "href": "https://unsplash.com/",
+        "description": "The platform where you can find and download beautiful, free images and photos from various categories and creators.",
+        "image": "/logos/unsplash.svg"
       }
     ]
   },
@@ -96,16 +96,22 @@
     "type": "Social",
     "items": [
       {
-        "name": "WhatsApp",
-        "href": "https://www.whatsapp.com/",
-        "description": "Simple, reliable, private messaging and calling for free, available all over the world.",
-        "image": "/logos/whatsapp.svg"
-      },
-      {
         "name": "Discord",
         "href": "https://discordapp.com/",
         "description": "Instant messaging and VoIP social platform which allows communication through voice calls, video calls, text messaging, and media and files.",
         "image": "/logos/discord.svg"
+      },
+      {
+        "name": "LinkedIn",
+        "href": "https://www.linkedin.com",
+        "description": "Business and employment-focused social media platform, primarily used for professional networking and career development.",
+        "image": "/logos/linkedin.svg"
+      },
+      {
+        "name": "WhatsApp",
+        "href": "https://www.whatsapp.com/",
+        "description": "Simple, reliable, private messaging and calling for free, available all over the world.",
+        "image": "/logos/whatsapp.svg"
       }
     ]
   },
@@ -113,28 +119,40 @@
     "type": "Productivity",
     "items": [
       {
-        "name": "Home Workout - No Equipments",
-        "href": "https://apps.apple.com/us/app/home-workout-no-equipments/id1313192037",
-        "description": "Body weight fitness & training",
-        "image": "/logos/homeworkout.webp"
-      },
-      {
-        "name": "Flow",
-        "href": "https://apps.apple.com/us/app/flow-focus-pomodoro-timer/id1423210932",
-        "description": "Focus & pomodoro timer",
-        "image": "/logos/flow.webp"
-      },
-      {
         "name": "Apple Podcasts",
         "href": "https://www.apple.com/apple-podcasts/",
         "description": "The best app for discovering and enjoying millions of the world's most popular podcasts on your iPhone, iPad, Mac, and other Apple devices.",
         "image": "/logos/applepodcasts.svg"
+      },
+      {
+        "name": "Flow",
+        "href": "https://apps.apple.com/us/app/flow-focus-pomodoro-timer/id1423210932",
+        "description": "Focus & pomodoro timer.",
+        "image": "/logos/flow.webp"
+      },
+      {
+        "name": "Grammarly",
+        "href": "https://apps.apple.com/us/app/flow-focus-pomodoro-timer/id1423210932",
+        "description": "The cloud-based typing assistant checks spelling, grammar, punctuation, clarity, and detects plagiarism, suggesting replacements for errors.",
+        "image": "/logos/grammarly.svg"
+      },
+      {
+        "name": "Home Workout - No Equipments",
+        "href": "https://apps.apple.com/us/app/home-workout-no-equipments/id1313192037",
+        "description": "Body weight fitness & training",
+        "image": "/logos/homeworkout.webp"
       }
     ]
   },
   {
     "type": "Other",
     "items": [
+      {
+        "name": "NetNewsWire",
+        "href": "https://netnewswire.com",
+        "description": "The free and open source RSS reader for Mac, iPhone, and iPad.",
+        "image": "/logos/netnewswire.webp"
+      },
       {
         "name": "TechCabal",
         "href": "https://techcabal.com/",

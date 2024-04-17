@@ -9,10 +9,10 @@ import { GeistMono } from "geist/font/mono";
 import { Toaster } from "@/components/ui/sonner";
 
 // Components
-import { TooltipProvider } from "@/components/ui/tooltip";
-import DesktopNav from "@/components/DesktopNav";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import DesktopNav from "@/components/DesktopNav";
 import ThemeProvider from "@/providers/ThemeProvider";
 
 // Lib
@@ -46,10 +46,10 @@ export default function RootLayout({ children }) {
         >
           <TooltipProvider delayDuration={0}>
             <Header />
-            <div className={cn("flex-1", "lg:flex")}>
+            <div className="flex flex-1">
               <DesktopNav />
-              <div className="w-full">
-                <main>{children}</main>
+              <div className="flex w-full flex-col">
+                <main className="flex-1">{children}</main>
                 <Footer />
               </div>
             </div>

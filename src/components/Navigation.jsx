@@ -7,8 +7,8 @@ import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
 // Components
-import DesktopNavItems from "./DesktopNavItems";
-import MobileNavItems from "./MobileNavItems";
+import DesktopNavItems from "@/components/DesktopNavItems";
+import MobileNavItems from "@/components/MobileNavItems";
 
 // Data
 import { sections } from "@/data/navigation";

@@ -24,7 +24,7 @@ export default function MailingListPage() {
         list. Receive periodic updates on cutting-edge projects and
         advancements, ensuring a spam-free experience with high-quality content.
         Gain valuable insights into the latest trends and essential developments
-        in web development. Stay well-informed and at the forefront of the
+        in software development. Stay well-informed and at the forefront of the
         ever-evolving tech landscape. Join us for continuous learning and
         innovation!
       </p>

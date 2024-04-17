@@ -2,7 +2,7 @@
 import Link from "next/link";
 
 // Dependencies
-import { ArrowLeftIcon } from "@radix-ui/react-icons";
+import { ArrowLeftIcon } from "lucide-react";
 
 // Lib
 import { cn } from "@/lib/utils";

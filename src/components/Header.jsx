@@ -1,8 +1,8 @@
 "use client";
 
 // Components
-import DesktopNavBar from "./DesktopNavBar";
-import MobileNavBar from "./MobileNavBar";
+import DesktopNavBar from "@/components/DesktopNavBar";
+import MobileNavBar from "@/components/MobileNavBar";
 
 // Hooks
 import { useMediaQuery } from "@/hooks/use-media-query";

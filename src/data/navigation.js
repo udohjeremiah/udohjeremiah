@@ -1,17 +1,19 @@
 // Dependencies
 import {
   BellIcon,
-  ChatBubbleIcon,
-  EnvelopeClosedIcon,
-  EnvelopeOpenIcon,
-  GitHubLogoIcon,
+  FolderOpenDotIcon,
+  GithubIcon,
   HomeIcon,
   LayersIcon,
-  Pencil2Icon,
+  LibraryIcon,
+  LinkedinIcon,
+  MailIcon,
+  MailOpenIcon,
+  MessageCircleIcon,
+  NotebookPenIcon,
   PlayIcon,
-  ReaderIcon,
-  TokensIcon,
-} from "@radix-ui/react-icons";
+} from "lucide-react";
+import { DiscordLogoIcon } from "@radix-ui/react-icons";
 
 export const pages = [
   {
@@ -24,14 +26,14 @@ export const pages = [
   {
     name: "Mailing List",
     href: "/mailing-list",
-    icon: EnvelopeOpenIcon,
+    icon: MailOpenIcon,
     shortcut: "m",
     active: (pathname) => pathname.startsWith("/mailing-list"),
   },
   {
     name: "Contact",
     href: "/contact",
-    icon: ChatBubbleIcon,
+    icon: MessageCircleIcon,
     shortcut: "c",
     active: (pathname) => pathname.startsWith("/contact"),
   },
@@ -41,7 +43,7 @@ export const work = [
   {
     name: "Projects",
     href: "/projects",
-    icon: TokensIcon,
+    icon: FolderOpenDotIcon,
     shortcut: "p",
     active: (pathname) => pathname.startsWith("/projects"),
   },
@@ -65,14 +67,14 @@ export const personal = [
   {
     name: "Blog",
     href: "/blog",
-    icon: Pencil2Icon,
+    icon: NotebookPenIcon,
     shortcut: "b",
     active: (pathname) => pathname.startsWith("/blog"),
   },
   {
     name: "Books",
     href: "/books",
-    icon: ReaderIcon,
+    icon: LibraryIcon,
     shortcut: "n",
     active: (pathname) => pathname.startsWith("/books"),
   },
@@ -89,7 +91,7 @@ export const resources = [
   {
     name: "Code",
     href: "/code",
-    icon: GitHubLogoIcon,
+    icon: GithubIcon,
     shortcut: "g",
     active: (pathname) => pathname.startsWith("/code"),
   },
@@ -99,12 +101,22 @@ export const connect = [
   {
     href: "mailto:udohjeremiah@icloud.com",
     name: "Email",
-    icon: EnvelopeClosedIcon,
+    icon: MailIcon,
   },
   {
     href: "https://github.com/udohjeremiah",
     name: "GitHub",
-    icon: GitHubLogoIcon,
+    icon: GithubIcon,
+  },
+  {
+    href: "https://linkedin.com/in/udoh-jeremiah-02a640304",
+    name: "LinkedIn",
+    icon: LinkedinIcon,
+  },
+  {
+    href: "https://discordapp.com/users/1229921586149331066",
+    name: "Discord",
+    icon: DiscordLogoIcon,
   },
 ];
 

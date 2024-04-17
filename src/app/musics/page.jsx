@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 // Dependencies
-import { ExternalLinkIcon } from "@radix-ui/react-icons";
+import { ExternalLinkIcon } from "lucide-react";
 
 // Components
 import Container from "@/components/Container";

@@ -9,8 +9,8 @@
     "repositoryLink": "https://github.com/udohjeremiah/ecommerce-store"
   },
   {
-    "title": "E-Commerce Content Management System (CMS)",
-    "description": "An open-source comprehensive content management system platform for managing online stores and content.",
+    "title": "E-Commerce Content Management System",
+    "description": "An open-source comprehensive content management system (CMS) platform for managing online stores and content.",
     "link": "https://ecommerce-cms-mu.vercel.app",
     "image": "/projects/ecommerce-cms.webp",
     "name": "ecommerce-cms",

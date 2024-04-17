@@ -7,6 +7,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
+// Dependencies
+import { ExternalLinkIcon } from "lucide-react";
+
 // Components
 import {
   Card,
@@ -54,21 +57,28 @@ export default function ProjectsCarousel() {
           {projects.map(({ title, description, link, image, name }, index) => (
             <CarouselItem key={index}>
               <Card className="not-prose">
-                <Link href={link} target="_blank" className="hover:opacity-50">
-                  <CardHeader>
-                    <CardTitle>{title}</CardTitle>
-                    <CardDescription>{description}</CardDescription>
-                  </CardHeader>
-                </Link>
-                <CardContent className="flex items-center justify-center p-6">
+                <CardHeader className="p-0">
                   <Image
                     src={image}
                     alt={name}
                     width={2850}
                     height={1398}
                     quality={100}
-                    className="rounded-md"
+                    className="rounded-t-xl bg-cover"
                   />
+                </CardHeader>
+                <CardContent className="flex flex-col space-y-1.5 p-6">
+                  <Link
+                    href={link}
+                    target="_blank"
+                    className="flex items-center underline"
+                  >
+                    <h3 class="font-semibold leading-none tracking-tight">
+                      {title}
+                    </h3>
+                    <ExternalLinkIcon className="ml-1 h-4 w-4" />
+                  </Link>
+                  <p class="text-sm text-muted-foreground">{description}</p>
                 </CardContent>
               </Card>
             </CarouselItem>

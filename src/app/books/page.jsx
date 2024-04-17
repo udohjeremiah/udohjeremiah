@@ -2,13 +2,13 @@
 import Image from "next/image";
 
 // Components
+import Container from "@/components/Container";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import Container from "@/components/Container";
 
 // Data
 import books from "@/data/books";

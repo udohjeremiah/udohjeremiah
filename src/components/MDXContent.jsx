@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useMDXComponent } from "next-contentlayer/hooks";
 
 // Components
-import Video from "./Video";
+import Video from "@/components/Video";
 
 const a = ({ href, ...props }) => {
   if (typeof href !== "string") {
@@ -60,14 +60,16 @@ export default function MDXContent({ code }) {
   const Component = useMDXComponent(code);
 
   return (
-    <Component
-      components={{
-        a,
-        img,
-        Video,
-        Instagram,
-        Callout,
-      }}
-    />
+    <div>
+      <Component
+        components={{
+          a,
+          img,
+          Video,
+          Instagram,
+          Callout,
+        }}
+      />
+    </div>
   );
 }
