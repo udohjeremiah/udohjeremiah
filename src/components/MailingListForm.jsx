@@ -7,7 +7,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 // Actions
-import { subscribe } from "../actions/subscribe";
+import { subscribe } from "@/actions/subscribe";
 
 // Components
 import { Button } from "@/components/ui/button";

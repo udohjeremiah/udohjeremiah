@@ -1,8 +1,9 @@
 // Next
 import Link from "next/link";
 
-// Content
+// Dependencies
 import { allBlogs } from "contentlayer/generated";
+import { RssIcon } from "lucide-react";
 
 // Components
 import Container from "@/components/Container";
@@ -31,6 +32,15 @@ export default function BlogPage() {
     <Container wide>
       <h1 className="mb-0">{title}</h1>
       <p>{description}</p>
+      <Link href="/rss.xml" className="block w-max">
+        <RssIcon
+          className={cn(
+            "h-8 w-8 font-bold text-orange-500",
+            "hover:text-orange-400",
+          )}
+        />
+        <span className="sr-only">RSS Feed</span>
+      </Link>
       <div className="mt-8 divide-y border-t">
         {Object.entries(blogPostsByYear)
           .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))

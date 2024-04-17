@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 // Dependencies
-import { StarIcon } from "@radix-ui/react-icons";
+import { GitForkIcon, StarIcon } from "lucide-react";
 import glimpse from "react-glimpse/server";
 
 // Components
@@ -14,7 +14,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import ForkIcon from "@/components/icons/ForkIcon";
 import Container from "@/components/Container";
 
 // Lib
@@ -55,7 +54,7 @@ const Project = async ({ data }) => {
               {data.stargazers_count}
             </span>
             <span className="flex items-center gap-1">
-              <ForkIcon className="h-3 w-3" />
+              <GitForkIcon className="h-3 w-3" />
               {data.forks_count}
             </span>
           </div>

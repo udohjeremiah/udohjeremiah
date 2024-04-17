@@ -8,12 +8,12 @@ import { useRouter } from "next/navigation";
 
 // Dependencies
 import {
-  DesktopIcon,
+  MonitorIcon,
   ExternalLinkIcon,
-  MagnifyingGlassIcon,
+  SearchIcon,
   MoonIcon,
   SunIcon,
-} from "@radix-ui/react-icons";
+} from "lucide-react";
 import { useTheme } from "next-themes";
 
 // Components
@@ -80,7 +80,7 @@ export default function Search() {
           "lg:flex lg:w-[60ch] lg:p-2 lg:text-muted-foreground",
         )}
       >
-        <MagnifyingGlassIcon className={cn("block", "lg:hidden")} />
+        <SearchIcon className={cn("block h-4 w-4", "lg:hidden")} />
         <span className={cn("hidden", "lg:flex")}>Search website...</span>
         <kbd
           className={cn(
@@ -133,7 +133,7 @@ export default function Search() {
               <span>Dark</span>
             </CommandItem>
             <CommandItem onSelect={() => runCommand(() => setTheme("system"))}>
-              <DesktopIcon className="mr-2 h-4 w-4" />
+              <MonitorIcon className="mr-2 h-4 w-4" />
               <span>System</span>
             </CommandItem>
           </CommandGroup>

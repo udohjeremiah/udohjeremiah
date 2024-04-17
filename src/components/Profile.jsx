@@ -10,7 +10,7 @@ export default function Profile() {
       </Avatar>
       <div>
         <p className="text-sm font-semibold">Udoh Jeremiah</p>
-        <p className="text-sm text-muted-foreground">Full-Stack Developer</p>
+        <p className="text-sm text-muted-foreground">Software Developer</p>
       </div>
     </div>
   );

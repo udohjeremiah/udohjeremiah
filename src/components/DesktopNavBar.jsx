@@ -1,7 +1,7 @@
 // Components
-import Profile from "./Profile";
-import RandomQuotes from "./RandomQuotes";
-import Search from "./Search";
+import Profile from "@/components/Profile";
+import RandomQuotes from "@/components/RandomQuotes";
+import Search from "@/components/Search";
 
 export default function DesktopNavBar() {
   return (

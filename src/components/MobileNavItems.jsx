@@ -2,11 +2,11 @@
 import Link from "next/link";
 
 // Dependencies
-import { ExternalLinkIcon } from "@radix-ui/react-icons";
+import { ExternalLinkIcon } from "lucide-react";
 
 // Components
-import RandomQuotes from "./RandomQuotes";
-import ThemeToggler from "./ThemeToggler";
+import RandomQuotes from "@/components/RandomQuotes";
+import ThemeToggler from "@/components/ThemeToggler";
 
 // Data
 import { sections } from "@/data/navigation";

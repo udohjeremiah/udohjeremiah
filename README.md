@@ -1,76 +1,73 @@
-# Udoh Jeremiah
+<h2 align="left">Hi 👋! My name is Udoh Jeremiah and I'm a Software Developer, from Nigeria 🇳🇬.</h2>
 
-> "I skate to where the puck is going to be, not where it has been." - Wayne Gretzky
+###
 
-Hello there! 👋 I'm Udoh Jeremiah, a passionate full-stack web developer based in Nigeria 🇳🇬. Welcome to my GitHub
-profile!
+<div align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=udohjeremiah&hide_title=false&hide_rank=false&show_icons=true&include_all_commits=true&count_private=true&disable_animations=false&theme=dracula&locale=en&hide_border=false" height="150" alt="stats graph"  />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs?username=udohjeremiah&locale=en&hide_title=false&layout=compact&card_width=320&langs_count=5&theme=dracula&hide_border=false" height="150" alt="languages graph"  />
+</div>
 
-## About Me
+###
 
-I am a full-stack web developer with a keen interest in developing robust web applications. Possessing a solid
-background in web development, I derive satisfaction from addressing intricate problems and crafting innovative
-solutions. My objective is to position myself at the intersection of technology and humanity, creating web solutions
-that enhance people's lives by incorporating technology for creative purposes, not just productivity.
+<div align="left">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" height="30" alt="html5 logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" height="30" alt="css3 logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" height="30" alt="javascript logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" height="30" alt="typescript logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" height="30" alt="java logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" height="30" alt="python logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/julia/julia-original.svg" height="30" alt="julia logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" height="30" alt="nodejs logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" height="30" alt="react logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" height="30" alt="express logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" height="30" alt="nextjs logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original-wordmark.svg" height="30" alt="tailwindcss logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/materialui/materialui-original.svg" height="30" alt="materialui logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/webpack/webpack-original.svg" height="30" alt="webpack logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" height="30" alt="mongodb logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" height="30" alt="redis logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jest/jest-plain.svg" height="30" alt="jest logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" height="30" alt="git logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" height="30" alt="github logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" height="30" alt="figma logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" height="30" alt="vscode logo"  />
+</div>
 
-## 🔧 Skills
+###
 
-- **Programming Languages:**
+<div align="left">
+  <a href="https://udohjeremiah.com" target="_blank">
+    <img src="https://img.shields.io/static/v1?message=LinkedIn&logo=linkedin&label=&color=0077B5&logoColor=white&labelColor=&style=for-the-badge" height="35" alt="linkedin logo"  />
+  </a>
+  <a href="https://linkedin.com/in/udoh-jeremiah-02a640304" target="_blank">
+    <img src="https://img.shields.io/static/v1?message=Discord&logo=discord&label=&color=7289DA&logoColor=white&labelColor=&style=for-the-badge" height="35" alt="discord logo"  />
+  </a>
+</div>
 
-  - [Python](https://www.python.org)
-  - [Julia](https://julialang.org)
-  - [Java](https://www.java.com)
-  - [JavaScript](https://ecma-international.org/publications-and-standards/standards/ecma-262)
-  - [TypeScript](https://www.typescriptlang.org)
+###
 
-- **Web Technologies:**
+<br clear="both">
 
-  - [HTML5](https://html.spec.whatwg.org)
-  - [CSS3](https://www.w3.org/TR/CSS)
-  - [TailwindCSS](https://tailwindcss.com)
-  - [Node.js](https://nodejs.org)
-  - [Webpack](https://webpack.js.org)
-  - [Vite.js](https://vitejs.dev)
+<img src="https://raw.githubusercontent.com/udohjeremiah/udohjeremiah/output/snake.svg" alt="Snake animation" />
 
-- **Frameworks:**
-
-  - [Express.js](https://expressjs.com)
-  - [React.js](https://react.dev)
-  - [Next.js](https://nextjs.org)
-
-- **Databases:**
-
-  - [MongoDB](https://mongodb.com)
-  - [Redis](https://redis.io)
-
-- **Other Skills:**
-
-  - [Git](https://git-scm.com)
-  - [RESTful API Design](https://aws.amazon.com/what-is/restful-api)
-
-## 🚀 Projects
-
-Explore some of the projects I've been working on:
-
-1. [ExamShare](https://examshare.vercel.app) - An open-source project for sharing past examination questions in higher
-   education.
-
-2. [Eleotrade](https://eleotrade.vercel.app) - A cutting-edge cryptocurrency brokerage investment platform.
-
-3. [Photo Album](https://photo-album-blond.vercel.app) - An open-source web application for seamlessly
-   organizing and sharing your visual stories.
-
-For more details on each project, visit my [portfolio website](https://udohjeremiah.com).
-
-## 📝 Blog
-
-I enjoy sharing my thoughts and experiences through blogging. Check out my latest articles on
-[My Blog](https://udohjeremiah.com/blog).
-
-## 🌐 Connect with Me
-
-- **Portfolio Website:** https://udohjeremiah.com
-
-Feel free to reach out for any questions, collaborations, or just to chat. Let's connect and build something amazing
-together!
-
-Thanks for visiting! ✨
+###

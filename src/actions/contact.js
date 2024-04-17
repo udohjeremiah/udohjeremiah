@@ -1,7 +1,7 @@
 "use server";
 
 // Components
-import ContactEmail from "../emails/ContactEmail";
+import ContactEmail from "@/emails/ContactEmail";
 
 // Lib
 import { resend } from "@/lib/resend";

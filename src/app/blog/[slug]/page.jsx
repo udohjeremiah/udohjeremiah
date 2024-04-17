@@ -4,16 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 
 // Dependencies
-import { ArrowLeftIcon } from "@radix-ui/react-icons";
-
-// Content
 import { allBlogs } from "contentlayer/generated";
+import { ArrowLeftIcon } from "lucide-react";
 
 // Components
-import Comments from "@/components/Comments";
 import Container from "@/components/Container";
+import DisqusComments from "@/components/DisqusComments";
 import MDXContent from "@/components/MDXContent";
-import TableOfContent from "@/components/TableOfContent";
 
 // Lib
 import { createMetadata } from "@/lib/metadata";
@@ -64,7 +61,6 @@ export default function BlogPostPage({ params }) {
       <article>
         <h1 className="mb-0">{post.title}</h1>
         <p>{post.description}</p>
-
         <div className="space-y-8">
           <div>
             {post.tags && (
@@ -110,21 +106,18 @@ export default function BlogPostPage({ params }) {
               quality={100}
             />
           )}
-          {post.toc && <TableOfContent toc={post.toc} />}
-          <div>
-            <MDXContent code={post.body.code} />
-          </div>
+          <MDXContent code={post.body.code} />
         </div>
-        <Comments />
-        <hr className="my-8" />
-        <Link
-          className="flex items-center gap-1 text-xs text-muted-foreground underline-offset-2"
-          href="/blog"
-        >
-          <ArrowLeftIcon className="h-4 w-4" />
-          Back to Blog
-        </Link>
       </article>
+      <DisqusComments post={post} />
+      <hr className="my-8" />
+      <Link
+        className="flex items-center gap-1 text-xs text-muted-foreground underline-offset-2"
+        href="/blog"
+      >
+        <ArrowLeftIcon className="h-4 w-4" />
+        Back to Blog
+      </Link>
     </Container>
   );
 }

@@ -1,5 +1,5 @@
 // Dependencies
-import { DesktopIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons";
+import { MonitorIcon, MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 
 // Components
@@ -17,7 +17,7 @@ import { useMounted } from "@/hooks/use-mounted";
 const themeIcons = {
   light: SunIcon,
   dark: MoonIcon,
-  system: DesktopIcon,
+  system: MonitorIcon,
 };
 
 const ThemeSelectItem = ({ value }) => {

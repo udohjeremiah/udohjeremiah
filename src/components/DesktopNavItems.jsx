@@ -2,15 +2,15 @@
 import Link from "next/link";
 
 // Dependencies
-import { ExternalLinkIcon } from "@radix-ui/react-icons";
+import { ExternalLinkIcon } from "lucide-react";
 
 // Components
+import ThemeToggler from "@/components/ThemeToggler";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import ThemeToggler from "./ThemeToggler";
 
 // Data
 import { sections } from "@/data/navigation";

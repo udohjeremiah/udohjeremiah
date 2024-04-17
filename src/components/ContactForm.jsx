@@ -10,7 +10,7 @@ import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 // Actions
-import { contact } from "../actions/contact";
+import { contact } from "@/actions/contact";
 
 // Components
 import { Button } from "@/components/ui/button";

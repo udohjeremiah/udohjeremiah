@@ -2,9 +2,9 @@
 import Link from "next/link";
 
 // Components
+import MobileNav from "@/components/MobileNav";
+import Search from "@/components/Search";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import MobileNav from "./MobileNav";
-import Search from "./Search";
 
 // Lib
 import { cn } from "@/lib/utils";

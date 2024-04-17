@@ -1,7 +1,6 @@
 // Dependencies
 import { defineDocumentType, makeSource } from "contentlayer/source-files";
 import lqip from "lqip-modern";
-import { extractTocHeadings } from "pliny/mdx-plugins/remark-toc-headings.js";
 import readingTime from "reading-time";
 import { rehypeAccessibleEmojis } from "rehype-accessible-emojis";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
@@ -9,9 +8,6 @@ import rehypePresetMinify from "rehype-preset-minify";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
-
-// Lib
-import { formatTocList } from "./src/lib/utils";
 
 export const computeFields = ({
   openGraphEndpoint = "/api/og",
@@ -31,14 +27,6 @@ export const computeFields = ({
     type: "string",
     description: "The estimated time to read the document, in minutes",
     resolve: (doc) => readingTime(doc.body.raw).text,
-  },
-  toc: {
-    type: "list",
-    description: "The table of contents of the document",
-    resolve: async (doc) => {
-      const toc = await extractTocHeadings(doc.body.raw);
-      return formatTocList(toc);
-    },
   },
   image: {
     type: "string",

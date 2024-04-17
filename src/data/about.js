@@ -1,16 +1,16 @@
 // Dependencies
 import {
-  AvatarIcon,
   BackpackIcon,
   CalendarIcon,
-  EnvelopeClosedIcon,
+  CircleUserRoundIcon,
   HomeIcon,
-  MixIcon,
-  MobileIcon,
-  Pencil2Icon,
+  MailIcon,
   RocketIcon,
   ScissorsIcon,
-} from "@radix-ui/react-icons";
+  ShapesIcon,
+  SmartphoneNfcIcon,
+  UniversityIcon,
+} from "lucide-react";
 
 // Assets
 import CSS3 from "../../public/logos/css3.svg";
@@ -44,7 +44,7 @@ import Webpack from "../../public/logos/webpack.svg";
 export const personal = [
   {
     text: "Udoh Jeremiah",
-    icon: AvatarIcon,
+    icon: CircleUserRoundIcon,
   },
   {
     text: "Born on 08th June, 2001",
@@ -56,11 +56,11 @@ export const personal = [
   },
   {
     text: "udohjeremiah@icloud.com",
-    icon: EnvelopeClosedIcon,
+    icon: MailIcon,
   },
   {
     text: "+234 808 845 6477",
-    icon: MobileIcon,
+    icon: SmartphoneNfcIcon,
   },
   {
     text: "Reading, Speaking, etc.,",
@@ -71,7 +71,7 @@ export const personal = [
 export const qualifications = [
   {
     title: "Education",
-    icon: Pencil2Icon,
+    icon: UniversityIcon,
     items: [
       {
         location: "Temple Gate Polytechnic, Aba, Abia State, Nigeria",
@@ -96,8 +96,13 @@ export const qualifications = [
       },
       {
         location: "Freelancing",
-        position: "Full-Stack Web Developer",
+        position: "Software Developer",
         years: "2023 - Present",
+      },
+      {
+        location: "Sapele Power Plc",
+        position: "Intern",
+        years: "March 2024 - Present",
       },
     ],
   },
@@ -106,7 +111,7 @@ export const qualifications = [
 export const skills = [
   {
     title: "Skills",
-    icon: MixIcon,
+    icon: ShapesIcon,
     items: [
       {
         title: "Programming Languages",
