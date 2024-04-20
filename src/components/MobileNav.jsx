@@ -21,12 +21,9 @@ export default function MobileNav() {
       <DrawerTrigger asChild>
         <Button
           aria-label="Open navigation"
-          variant="secondary"
+          variant="outline"
           size="icon"
-          className={cn(
-            "border bg-primary-foreground",
-            "hover:border-muted-foreground",
-          )}
+          className={cn("border", "hover:border-muted-foreground")}
         >
           <MenuIcon className="h-4 w-4" />
         </Button>
