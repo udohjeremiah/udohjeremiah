@@ -96,14 +96,14 @@ export default function BlogPostPage({ params }) {
           {post.image && post.imageBlur && (
             <Image
               src={post.image}
+              alt=""
               width={1920}
               height={1080}
-              alt=""
-              className="m-0 h-full w-full overflow-hidden rounded object-cover"
               priority
               blurDataURL={`data:image/jpg;base64,${post.imageBlur}`}
               placeholder="blur"
               quality={100}
+              className="m-0 h-full w-full overflow-hidden rounded object-cover"
             />
           )}
           <MDXContent code={post.body.code} />

@@ -47,9 +47,9 @@ export default function MobileNavItems({
                   }
                   onClick={() => setMobileNav(false)}
                   className={cn(
-                    "group flex items-center gap-2.5 rounded-md border px-3 py-2 transition-colors",
+                    "group flex items-center gap-2.5 rounded-md border px-3 py-2 text-primary-foreground transition-colors",
                     active?.(pathname)
-                      ? "bg-secondary"
+                      ? "bg-primary"
                       : "border-transparent text-muted-foreground hover:bg-accent hover:text-foreground",
                   )}
                 >
@@ -58,7 +58,7 @@ export default function MobileNavItems({
                     {name}
                   </p>
                   {shortcut ? (
-                    <kbd className="flex h-5 w-4 shrink-0 items-center justify-center rounded border text-[10px] font-medium uppercase text-muted-foreground">
+                    <kbd className="flex h-5 w-4 shrink-0 items-center justify-center rounded border bg-muted text-[10px] font-medium uppercase text-muted-foreground">
                       {shortcut}
                     </kbd>
                   ) : null}

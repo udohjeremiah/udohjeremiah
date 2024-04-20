@@ -39,9 +39,16 @@ const Project = async ({ data }) => {
         "hover:-translate-y-1",
       )}
     >
-      <Card className="not-prose overflow-hidden bg-primary-foreground">
+      <Card className="not-prose overflow-hidden">
         {image ? (
-          <Image src={image} alt="" width={1200} height={600} unoptimized />
+          <Image
+            src={image}
+            alt=""
+            width={1200}
+            height={600}
+            priority
+            unoptimized
+          />
         ) : null}
         <CardHeader>
           <CardTitle>{data.name}</CardTitle>

@@ -69,7 +69,7 @@ export default function HomePage() {
             Udoh
             <span
               className={cn(
-                "block pl-8 text-4xl font-normal opacity-40",
+                "block pl-8 text-4xl font-normal opacity-50",
                 "sm:text-7xl",
               )}
             >
@@ -88,7 +88,7 @@ export default function HomePage() {
             Software
             <span
               className={cn(
-                "block pl-8 text-4xl font-normal opacity-40",
+                "block pl-8 text-4xl font-normal opacity-50",
                 "sm:text-7xl",
               )}
             >
@@ -240,11 +240,11 @@ export default function HomePage() {
       <section
         className={cn("grid gap-8", "sm:grid-cols-2 sm:gap-0 sm:divide-x")}
       >
-        <div className={cn("text-sm", "sm:pr-8")}>
-          <h5 className="flex items-center gap-x-2">
+        <div className={cn("space-y-5 text-sm", "sm:pr-8")}>
+          <h2 className="m-0 flex items-center gap-x-2 text-sm">
             <NotebookPenIcon />
             Latest Blog Posts
-          </h5>
+          </h2>
           {allBlogs
             .sort(sortBlogPostByDate)
             .slice(0, 3)
@@ -253,7 +253,7 @@ export default function HomePage() {
                 key={index}
                 href={slug}
                 className={cn(
-                  "my-5 block font-normal underline-offset-2",
+                  "block font-normal underline-offset-2",
                   "hover:opacity-50",
                 )}
               >
@@ -261,11 +261,11 @@ export default function HomePage() {
               </Link>
             ))}
         </div>
-        <div className={cn("text-sm", "sm:pl-8")}>
-          <h5 className="flex items-center gap-x-2">
+        <div className={cn("space-y-5 text-sm", "sm:pl-8")}>
+          <h2 className="m-0 flex items-center gap-x-2 text-sm">
             <MailOpenIcon />
             Newsletter
-          </h5>
+          </h2>
           <p className="text-muted-foreground">
             Join an exclusive community of avid readers and receive periodic
             updates on cutting-edge projects and advancements. No spam, ever.

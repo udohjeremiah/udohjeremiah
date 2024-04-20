@@ -40,7 +40,7 @@ export default function ServicesPage() {
       </p>
       <div className="mt-8 space-y-4">
         {services.map(({ title, description, link, cta }, index) => (
-          <Card key={index} className="not-prose bg-primary-foreground">
+          <Card key={index} className="not-prose">
             <CardHeader>
               <CardTitle>{title}</CardTitle>
               <CardDescription>{description}</CardDescription>

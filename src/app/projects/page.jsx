@@ -51,10 +51,7 @@ export default function ProjectsPage() {
             },
             index,
           ) => (
-            <Card
-              key={index}
-              className="not-prose overflow-hidden bg-primary-foreground"
-            >
+            <Card key={index} className="not-prose overflow-hidden">
               <Image src={image} alt={name} width={1200} height={600} />
               <CardHeader>
                 <CardTitle>{title}</CardTitle>

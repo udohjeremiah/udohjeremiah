@@ -43,10 +43,10 @@ export default function DesktopNavItems({ pathname, isDesktopNavOpened }) {
                           : undefined
                       }
                       className={cn(
-                        "group flex items-center justify-center gap-2.5 rounded-md border px-3 py-2 transition-colors",
+                        "group flex items-center justify-center gap-2.5 rounded-md border px-3 py-2 text-primary-foreground transition-colors",
                         active?.(pathname)
-                          ? "bg-primary-foreground"
-                          : "border-transparent text-muted-foreground hover:bg-primary-foreground hover:text-foreground",
+                          ? "bg-primary"
+                          : "border-transparent text-muted-foreground hover:bg-primary/90 hover:text-primary-foreground",
                       )}
                     >
                       {Icon && <Icon className="h-4 w-4 shrink-0" />}
@@ -54,7 +54,7 @@ export default function DesktopNavItems({ pathname, isDesktopNavOpened }) {
                         {name}
                       </p>
                       {shortcut ? (
-                        <kbd className="flex h-5 w-4 shrink-0 items-center justify-center rounded border text-[10px] font-medium uppercase text-muted-foreground">
+                        <kbd className="bg- flex h-5 w-4 shrink-0 items-center justify-center rounded border bg-muted text-[10px] font-medium uppercase text-muted-foreground">
                           {shortcut}
                         </kbd>
                       ) : null}
@@ -95,10 +95,10 @@ export default function DesktopNavItems({ pathname, isDesktopNavOpened }) {
                           : undefined
                       }
                       className={cn(
-                        "group flex items-center justify-center gap-2.5 rounded-md border px-3 py-2 transition-colors",
+                        "group flex items-center justify-center gap-2.5 rounded-md border px-3 py-2 text-primary-foreground transition-colors",
                         active?.(pathname)
-                          ? "bg-primary-foreground"
-                          : "border-transparent text-muted-foreground hover:bg-primary-foreground hover:text-foreground",
+                          ? "bg-primary"
+                          : "border-transparent text-muted-foreground hover:bg-primary/90 hover:text-primary-foreground",
                       )}
                     >
                       {Icon && <Icon className="h-4 w-4 shrink-0" />}

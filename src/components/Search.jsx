@@ -75,13 +75,14 @@ export default function Search() {
         size="icon"
         onClick={() => setOpen(true)}
         className={cn(
-          "group items-center justify-center gap-2 border bg-primary-foreground text-sm",
+          "group items-center justify-center gap-2 border text-sm",
           "hover:border-muted-foreground",
           "lg:flex lg:w-[60ch] lg:p-2 lg:text-muted-foreground",
         )}
       >
         <SearchIcon className={cn("block h-4 w-4", "lg:hidden")} />
         <span className={cn("hidden", "lg:flex")}>Search website...</span>
+        <span className="sr-only">Search website...</span>
         <kbd
           className={cn(
             "pointer-events-none ml-auto hidden h-5 flex-none select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100",
