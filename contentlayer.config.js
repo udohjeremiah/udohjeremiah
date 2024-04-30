@@ -142,6 +142,6 @@ export default makeSource({
   documentTypes: [Blog],
   mdx: {
     remarkPlugins: remarkPlugins(),
-    rehypePlugins: rehypePlugins({ theme: "slack-dark" }),
+    rehypePlugins: rehypePlugins({ theme: "monokai" }),
   },
 });
