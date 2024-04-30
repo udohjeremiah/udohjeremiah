@@ -106,6 +106,10 @@ module.exports = {
                 borderTopRightRadius: 0,
               },
             },
+            table: {
+              overflowX: "auto",
+              display: "block",
+            },
           },
         },
       }),

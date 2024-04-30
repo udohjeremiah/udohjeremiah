@@ -1,0 +1,481 @@
+---
+title: What You May Not Know About TypeScript (Part 1)
+description: Explore the hidden depths of TypeScript in this blog series. Discover its lesser obvious details, expanding your understanding.
+tags: [TypeScript, Programming]
+publishedOn: 2024-04-30
+image: /blog/what-you-may-not-know-about-typescript.webp
+---
+
+## Introduction
+
+It's April, and I've successfully built a few projects with TypeScript. While working on these projects, a question
+would often arise in my mind: **"Do you understand TypeScript?"** During development, I frequently resorted to my
+browser for answers about TypeScript, which made me question if I truly grasped the language beyond using type
+annotations, creating interfaces, and type aliasing. Yeah, searching out stuff while you build isn't necessarily wrong,
+however, relying too heavily on it for basic aspects of the programming language you're working with, is a sign that you
+may need a deeper understanding of the language. I said,
+**"Enough is enough, it's high time I learn this language from the people building it."** TypeScript's documentation was
+my next destination.
+
+How did you learn TypeScript to build those projects in the first place? You might ask. I started with the typical
+**"TypeScript 101"** classes from YouTube. After watching a few videos, I felt confident enough to start building.
+However, as you know now, I built those projects with pain, an experience I could have avoided if I had taken the time
+to learn from the documentation after learning from YouTube. YouTube can only cover so much of the basics needed for
+development, and then you find yourself scratching your head while something you thought should work isn't working, and
+something you thought shouldn't work is working.
+
+Meticulously reading through TypeScript's documentation to gain a deeper understanding of the language, I found myself
+jotting down numerous concepts I was oblivious to during development. Alas, it became clear that the answer to the
+recurring question about my understanding of TypeScript was **"No"**. So I thought:
+**"Why not post about these things you've jotted down? Your future self might need it. Developers sharing a similar
+story of how they got into TypeScript might need it. Even the veterans might need it."** This blog post was born.
+
+This blog post is just me **"copy-pasting"** some part of TypeScript's documentation that may not be immediately
+apparent to **"shallow"** users of TypeScript. So, the words are not mine, but those of the numerous contributors to
+TypeScript's documentation; I'm only a compiler, heh. However, I added my explanation and examples whenever I thought
+the wording from the documentation was verbose, not easily understandable, or lacked a simpler example. To get the most
+out of this, treat it as reference material.
+
+## What is TypeScript?
+
+TypeScript is **JavaScript's runtime** with **additional features** and a **compile-time type checker**.
+
+- **JavaScript's runtime**: Your program would run the same way as it was before you added TypeScript to it. Or said
+  another way, TypeScript programs are JavaScript programs with **"types added"**; these types are erased after
+  compilation to produce JavaScript programs. This means that your existing working JavaScript code is also TypeScript
+  code, and adding types to them won't change the runtime behaviour of your programs.
+
+- **Additional features**: TypeScript provides additional features to JavaScript, that are not part of the ECMAScript
+  language specification, from which JavaScript is built. Some popular examples are tuples and enums. However, you can
+  use these features and the compiled code will be valid JavaScript.
+
+- **Compile-time type checker**: TypeScript as a type checker runs before your code runs (static) and ensures that the
+  types of your program are correct (type-checked).
+
+## TypeScript doesn't provide any additional runtime libraries.
+
+This means your programs will use the same standard library (or external libraries) as JavaScript programs, so there's
+no additional TypeScript-specific framework to learn.
+
+## In TypeScript, you can use a `tsconfig.json` file to specify the root files and the compiler options required to compile the project.
+
+The presence of a `tsconfig.json` file in a directory indicates that the directory is the root of a TypeScript project.
+
+The `tsconfig.json` file specifies the root files and the compiler options required to compile the project. JavaScript
+projects can use a `jsconfig.json` file instead, which acts almost the same but has some JavaScript-related compiler
+flags enabled by default.
+
+Read more about the [tsconfig.json in TypeScript](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html) from
+the documentation.
+
+## TypeScript's core value among others is that much of the time, you will know better than TypeScript.
+
+TypeScript doesn't get in your way, hence by default types are optional, inference takes the most lenient types, there's
+no checking for potentially `null`/`undefined` values, and `tsc`, the Typescript compiler, emits the compiled code in
+the face of errors. These defaults are put in place to stay out of your way. This is very useful when migrating
+JavaScript code over to TypeScript and introducing type-checking errors, as it allows you to clean things up for the
+type-checker, while your original JavaScript code is still working.
+
+To be a bit more defensive against mistakes and make TypeScript act a bit more strictly, you can use the several
+type-checking strictness flags that can be turned on or off, from using the `--strict` flag in the CLI, or
+`"strict": true` in `tsconfig.json`, which toggles them all on simultaneously, but you can opt out of them individually.
+A new codebase should always turn these strictness checks on.
+
+## TypeScript can rewrite code from newer versions of ECMAScript to older ones.
+
+This process of moving from a newer or **"higher"** version of ECMAScript, say ECMAScript 6, down to an older or
+**"lower"** one say ECMAScript 3 or ECMAScript 5 is sometimes called **"downleveling."** By default, TypeScript targets
+ECMAScript 3, an old version of ECMAScript.
+
+While the default target is ES3, most current browsers support ES2015. Developers can therefore safely specify ES2015,
+using the `--target es2015` compiler option, or above as a target, unless compatibility with certain ancient browsers is
+important.
+
+## TypeScript never changes the runtime behaviour of JavaScript code.
+
+This means that if you move code from JavaScript to TypeScript, it is guaranteed to run the same way, even if TypeScript
+thinks the code has type errors.
+
+Consider the example below:
+
+```ts
+let a; // a = "undefined"
+
+if (4 / []) {
+  // Error: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+  a = Infinity;
+} else {
+  a = 1;
+}
+
+console.log(a); // Infinity
+```
+
+The expression `4 / []` in TypeScript would throw an error, however, if you configure your TypeScript settings, either
+using compiler flags or in `tsconfig.json`, to allow emitting JavaScript output despite errors, `a` will have the value
+of `Infinity` at runtime, even when TypeScript detects an error.
+
+## TypeScript has corresponding primitive types for the built-in types in JavaScript with a few added ones.
+
+| Type in JavaScript | Type in TypeScript | `typeof` return value | Explanation                                    | Predicate                          |
+| :----------------- | :----------------- | --------------------- | ---------------------------------------------- | ---------------------------------- |
+| `Null`             | `null`             | `"object"`            | Equivalent to the unit type.                   |                                    |
+| `Undefined`        | `undefined`        | `"undefined"`         | Equivalent to the unit type.                   | `typeof undefined === "undefined"` |
+| `Boolean`          | `boolean`          | `"boolean"`           | `true` and `false`.                            | `typeof b === "boolean"`           |
+| `Number`           | `number`           | `"number"`            | A double-precision IEEE 754 floating point.    | `typeof n === "number"`            |
+| `BigInt`           | `bigint`           | `"bigint"`            | Integers in the arbitrary precision format.    | `typeof m === "bigint"`            |
+| `String`           | `string`           | `"string"`            | `true` and `false`.                            | `typeof s === "string"`            |
+| `Symbol`           | `symbol`           | `"symbol"`            | A unique value usually used as a key.          | `typeof g === "symbol"`            |
+| `Object`           | `object`           | `"object"`            | Similar to records.                            |                                    |
+|                    | `unknown`          | `"undefined"`         | The top type.                                  |                                    |
+|                    | `never`            |                       | The bottom type.                               |                                    |
+|                    | object literal     | `"object" `           | e.g. `{ property: Type }` .                    |                                    |
+|                    | `void`             | `"undefined"`         | For functions with no documented return value. | `typeof o === "object"`            |
+|                    | `T[]`              | `"object"`            | Mutable arrays, also written `Array<T>`.       | `Array.isArray(a)`                 |
+|                    | `[T, T]`           | `"object"`            | Tuples, which are fixed-length but mutable.    | `Array.isArray(a)`                 |
+|                    | `(t: T) => U`      | `"function"`          | functions                                      | `typeof f === "function"`          |
+
+## In TypeScript, you can use the `any` type to turn off the type checker.
+
+TypeScript uses the type `any` whenever it can't tell what the type of an expression should be. It just turns off the
+type checker wherever it appears, making you access any properties of a value (which will in turn be of type `any`),
+call it like a function, assign it to (or from) a value of any type, or pretty much anything else that's syntactically
+legal; so it's assumed you know the environment better than TypeScript.
+
+For example, none of the following lines of code will throw compiler errors, as `any` disables further type checking:
+
+```ts
+let obj: any = { x: 0 };
+
+obj.foo();
+
+obj();
+
+obj.bar = 100;
+
+obj = "hello";
+
+const n: number = obj;
+```
+
+You can push any value into an array with type `any[]` without marking the value in any way:
+
+```ts
+const anys: any = [];
+
+anys.push(1);
+anys.push("oh no");
+anys.push({ anything: "goes" });
+
+console.log(anys); // [ 1, 'oh no', { anything: 'goes' } ]
+```
+
+And you can use an expression of type `any` anywhere:
+
+```ts
+anys.map(anys[1]);
+```
+
+`any` is contagious, too — if you initialise a variable with an expression of type `any`, the variable has type `any`
+too:
+
+```ts
+// Hovering over `sepsis` in your TypeScript-compatible editor will show this: let helloWorld: any
+let sepsis = anys[0] + anys[1];
+```
+
+The `any` type is useful when you don't want to write out a long type just to convince TypeScript that a particular line
+of code is okay.
+
+## TypeScript knows the JavaScript language and will generate types for you in many cases.
+
+In many cases, TypeScript can even just infer (or **"figure out"**) the types for you even if we omit them. This is
+known as **"types by inference."** For example in creating a variable and assigning it to a particular value, TypeScript
+will use the value as its type:
+
+```ts
+// Hovering over `helloWorld` in your TypeScript-compatible editor will show this: let helloWorld: string
+let helloWorld = "Hello World";
+
+// Hovering over `obj` in your TypeScript-compatible editor will show this: obj: {name: string; age: number }
+let obj = { name: "John Doe", age: 48 };
+```
+
+## TypeScript never changes the behavior of your program based on the types it infers.
+
+This means that while you might see type errors during compilation, the type system itself has no bearing on how your
+program works when it runs. It accomplishes this by erasing the types to produce the resulting **"compiled"** code once
+TypeScript's compiler has completely checked your code. Consequently, once your code is compiled, the resulting plain
+JavaScript code contains no type information.
+
+For example, the TypeScript code below fails because it contains a duplicate implementation. The compiled code won't
+have any type information to determine which function to call at runtime. That is, TypeScript’s type system is not
+reified. Therefore, there's nothing at runtime that can tell us whether `num` is of type `number` or `string`, as the
+type annotation is not present in any form at runtime.
+
+```ts
+function addHundred(num: number) {
+  // Error: Duplicate function implementation.
+  return num + 100;
+}
+
+function addHundred(num: string) {
+  // Error: Duplicate function implementation.
+  return num + "-hundred";
+}
+```
+
+The compiled JavaScript code from the above TS code is:
+
+```js
+"use strict";
+function addHundred(num) {
+  return num + 100;
+}
+function addHundred(num) {
+  return num + "-hundred";
+}
+```
+
+Suppose we push the above JavaScript code to production and call `addHundred(15)`. Which `addHundred` implementation
+should be executed at runtime? If you're familiar with JavaScript, you would correctly answer **"It's the last one."**
+However, was that what you intended when you wrote the initial TypeScript code? Do you see the point? Therefore, we can
+agree that **"It's a bug!"**
+
+## TypeScript does not have a runtime mechanism for identifying the types of values other than primitives.
+
+For some values, such as the primitives `string` and `number`, we can identify their type at runtime using the `typeof`
+operator. However, for other things like functions, there's no corresponding runtime mechanism to identify their types.
+For example, consider this function:
+
+```ts
+function fn(x) {
+  return x.flip();
+}
+```
+
+By reading the code, we can observe that this function will only work if given an object with a callable `flip`
+property. However, JavaScript doesn't surface this information in a way that we can check while the code is running. The
+only way in pure JavaScript to determine what `fn` does with a particular value is to call it and see what happens. This
+kind of behaviour makes it hard to predict what the code will do before it runs, which means it's harder to know what
+your code is going to do while you're writing it.
+
+## TypeScript doesn't consider any JavaScript code to be an error because of its syntax.
+
+This means you can take any working JavaScript code and put it in a TypeScript file without worrying about how it is
+written.
+
+```ts
+// Works in TS just as it would have in JS
+let a = Number("3.1425").toExponential(2);
+
+// Fails in TS just as it would have in JS
+let a = (4 // Error: ')' expected.
+```
+
+## TypeScript might consider a JavaScript code to be an error because of how a value is used.
+
+TypeScript is a typed superset; hence, it adds rules about how different kinds of values can be used. Therefore, some
+syntactically legal programs that would run without an error in JavaScript during runtime might issue an error in
+TypeScript during its compile-time type-checking.
+
+Using the code below as an example, in JavaScript, the variable `area` would be assigned `NaN`, the result from the
+operation `obj.width * obj.height`; in TypeScript, this results in an error:
+
+```ts
+const obj = { width: 10, height: 15 };
+
+const area = obj.width * obj.heigth; // Error: Property 'heigth' does not exist on type '{ width: number; height: number; }'. Did you mean 'height'?
+```
+
+As another example from the code below, in JavaScript, `Infinity` would be logged to the console; in TypeScript, this
+results in an error:
+
+```ts
+console.log(4 / []); // Error: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint', or an enum type.
+```
+
+## In TypeScript, there are only two syntaxes for building types: Interfaces and Types.
+
+```ts
+interface Country {
+  name: string;
+  currency: string;
+}
+
+type Person = {
+  name: string;
+  age: number;
+};
+```
+
+You should prefer `interface` over `type`. Use `type` when you need specific features.
+
+## TypeScript enables creating complex types by combining simple ones.
+
+There are two popular ways to do so: with unions and with generics.
+
+With a union, you can declare that a type could be one of many types. For example, you can describe a `boolean` type as
+being either `true` or `false`:
+
+```ts
+type WindowStates = "open" | "closed" | "minimized";
+type LockStates = "locked" | "unlocked";
+type PositiveOddNumbersUnderTen = 1 | 3 | 5 | 7 | 9;
+```
+
+Generics provide variables to types. A common example is an array. An array without generics could contain anything. An
+array with generics can describe the values that the array contains.
+
+```ts
+type StringArray = Array<string>;
+type NumberArray = Array<number>;
+type ObjectWithNameArray = Array<{ name: string }>;
+```
+
+## In TypeScript, for assignability purposes, there's no difference between a type alias and an interface type if they both have the same shape.
+
+Named types simply give a name to a type; for assignability purposes, there's no difference between the type alias `One`
+and the interface type `Two` below. They both have a property `p: string`:
+
+```ts
+type One = {
+  p: string;
+};
+
+interface Two {
+  p: string;
+}
+
+class Three {
+  p = "Hello";
+}
+
+let x: One = { p: "Hi" };
+
+let two: Two = x;
+
+two = new Three();
+```
+
+Type aliases behave differently from interfaces concerning recursive definitions and type parameters, however.
+
+## TypeScript's type system is a structural type system (focuses on the shape that values have) and not a nominal type system (focuses on the name that values have).
+
+Sometimes called **"duck typing"**, in a structural type system, if two objects have the same shape, they are considered
+to be of the same type.
+
+```ts
+interface Point {
+  x: number;
+  y: number;
+}
+
+function logPoint(p: Point) {
+  console.log(`${p.x}, ${p.y}`);
+}
+
+const point = { x: 12, y: 26 };
+
+logPoint(point); // 12, 26
+```
+
+The `point` variable is never declared to be of type `Point`. However, TypeScript compares the shape of `point` to the
+shape of `Point` in the type-check. They have the same shape, so the code passes.
+
+## TypeScript considers objects or classes to match a type if and only if they have all the required properties, regardless of the implementation details.
+
+This is because type compatibility in TypeScript is based on structural subtyping. This means that if an object's shape
+matches a type — i.e., if the object's fields have all the required fields of a type, regardless of the order in which
+the fields appear or if the object's fields contain other fields not specified in the type — TypeScript will say they
+match. For example:
+
+```ts
+interface Point {
+  x: number;
+  y: number;
+  z?: number; // optional
+}
+
+function logPoint(p: Point) {
+  if (p.z) {
+    console.log(`x=${p.x}, y=${p.y}, z=${p.z}`);
+  } else {
+    console.log(`x=${p.x}, y=${p.y}`);
+  }
+}
+
+// Object's shape matches type exactly
+const point1 = { x: 12, y: 26, z: 40 };
+logPoint(point1); // x=12, y=26, z=40
+
+// Object's shape matches type regardless of having a different order of fields
+const point2 = { z: 40, x: 12, y: 26 };
+logPoint(point2); // x=12, y=26, z=40
+
+// Object's shape matches type regardless of having fewer properties (i.e., only the required)
+const point3 = { x: 12, y: 26 };
+logPoint(point3); // x=12, y=26
+
+// Object's shape matches type regardless of having more than required properties
+const point4 = { w: 8, x: 12, y: 26 };
+logPoint(point4); // x=12, y=26
+
+class VirtualPoint {
+  x: number;
+  y: number;
+
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+const newVPoint = new VirtualPoint(13, 56);
+logPoint(newVPoint); // x=13, y=56
+```
+
+Taking `point4` as an example, the object literal `{ w: 8, x: 12, y: 26 }` has a matching literal type
+`{ w: number, x: number, y: number }`. That type is assignable to `{x: number, y: number, z?: number}` since it has all
+the required properties and those properties have assignable types. The extra property doesn't prevent assignment; it
+just makes it a subtype of `{ x: number, y: number, z?: number }`. Read more about [type compatibility in TypeScript
+from the language's documentation](https://www.typescriptlang.org/docs/handbook/type-compatibility.html).
+
+## TypeScript requires the declaration of type parameters.
+
+Like most C-descended languages, TypeScript requires the declaration of type parameters.
+
+```ts
+function liftArray<T>(t: T): Array<T> {
+  return [t];
+}
+```
+
+There is no case requirement, but type parameters are conventionally single uppercase letters. Type parameters can also
+be constrained to a type, which behaves a bit like type class constraints:
+
+```ts
+function firstish<T extends { length: number }>(t1: T, t2: T): T {
+  return t1.length > t2.length ? t1 : t2;
+}
+```
+
+TypeScript can usually infer type arguments from a call based on the type of the arguments, so type arguments are
+usually not needed.
+
+Because TypeScript is structural, it doesn't need type parameters as much as nominal systems. Specifically, they are not
+needed to make a function polymorphic. Type parameters should only be used to propagate type information, such as
+constraining parameters to be the same type.
+
+```ts
+function length<T extends ArrayLike<unknown>>(t: T): number {}
+
+function length(t: ArrayLike<unknown>): number {}
+```
+
+In the first `length`, `T` is not necessary; notice that it's only referenced once, so it's not being used to constrain
+the type of the return value or other parameters.
+
+## Conclusion
+
+Remember, **"hackers hack, crackers crack, and whiners whine. Be a hacker."** Take care.
