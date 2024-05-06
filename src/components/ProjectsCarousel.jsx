@@ -73,12 +73,12 @@ export default function ProjectsCarousel() {
                     target="_blank"
                     className="flex items-center underline"
                   >
-                    <h3 class="font-semibold leading-none tracking-tight">
+                    <h3 className="font-semibold leading-none tracking-tight">
                       {title}
                     </h3>
                     <ExternalLinkIcon className="ml-1 h-4 w-4" />
                   </Link>
-                  <p class="text-sm text-muted-foreground">{description}</p>
+                  <p className="text-sm text-muted-foreground">{description}</p>
                 </CardContent>
               </Card>
             </CarouselItem>
