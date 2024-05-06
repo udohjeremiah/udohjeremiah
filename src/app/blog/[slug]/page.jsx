@@ -112,7 +112,7 @@ export default function BlogPostPage({ params }) {
       <DisqusComments post={post} />
       <hr className="my-8" />
       <Link
-        className="flex items-center gap-1 text-xs text-muted-foreground underline-offset-2"
+        className="flex w-max items-center gap-1 text-xs text-muted-foreground underline-offset-2"
         href="/blog"
       >
         <ArrowLeftIcon className="h-4 w-4" />

@@ -32,14 +32,12 @@ export default function BlogPage() {
     <Container wide>
       <h1 className="mb-0">{title}</h1>
       <p>{description}</p>
-      <Link href="/rss.xml" className="block w-max">
-        <RssIcon
-          className={cn(
-            "h-8 w-8 font-bold text-orange-500",
-            "hover:text-orange-400",
-          )}
-        />
-        <span className="sr-only">RSS Feed</span>
+      <Link
+        href="/rss.xml"
+        className={cn("flex w-max items-center text-sm", "hover:opacity-50")}
+      >
+        <RssIcon className={cn("mr-1 h-8 w-8 font-bold text-orange-500")} />
+        RSS
       </Link>
       <div className="mt-8 divide-y border-t">
         {Object.entries(blogPostsByYear)
