@@ -5,7 +5,13 @@
   },
   {
     "category": "Philosophy",
-    "items": []
+    "items": [
+      {
+        "cover": "https://covers.openlibrary.org/b/olid/OL37044614M-M.jpg",
+        "title": "Meditations",
+        "author": "Marcus Aurelius"
+      }
+    ]
   },
   {
     "category": "Psychology",
