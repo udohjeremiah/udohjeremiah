@@ -9,7 +9,6 @@ import { ArrowLeftIcon } from "lucide-react";
 
 // Components
 import Container from "@/components/Container";
-import DisqusComments from "@/components/DisqusComments";
 import MDXContent from "@/components/MDXContent";
 
 // Lib
@@ -109,7 +108,6 @@ export default function BlogPostPage({ params }) {
           <MDXContent code={post.body.code} />
         </div>
       </article>
-      <DisqusComments post={post} />
       <hr className="my-8" />
       <Link
         className="flex w-max items-center gap-1 text-xs text-muted-foreground underline-offset-2"

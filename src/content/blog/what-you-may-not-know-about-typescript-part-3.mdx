@@ -1,0 +1,740 @@
+---
+title: What You May Not Know About TypeScript (Part 3)
+description: Explore the hidden depths of TypeScript in this blog series. Discover its lesser obvious details, expanding your understanding.
+tags: [TypeScript, Programming]
+publishedOn: 2024-05-20
+image: /blog/what-you-may-not-know-about-typescript.webp
+---
+
+This is the third article (part 3) in my series about **"What You May Not Know About TypeScript."** You might want to
+start reading from [part 1](https://www.udohjeremiah.com/blog/what-you-may-not-know-about-typescript-part-1) to get an
+introduction to what led me to write this. With that said, let's get started.
+
+## In TypeScript, a property in an object type can be marked as `readonly`, which makes re-writing to it during type-checking an error.
+
+Properties can also be marked as `readonly` for TypeScript. While it won't change any behaviour at runtime, a property
+marked as `readonly` can’t be written to during type-checking:
+
+```ts
+interface SomeType {
+  readonly prop: string;
+}
+
+function doSomething(obj: SomeType) {
+  // We can read from 'obj.prop'.
+  console.log(`prop has the value '${obj.prop}'.`);
+
+  // But we can't re-assign it.
+  obj.prop = "hello"; // Error:: Cannot assign to 'prop' because it is a read-only property.
+}
+```
+
+Using the `readonly` modifier doesn't necessarily imply that a value is immutable or that its internal contents can't be
+changed. It just means the property itself can't be re-written to:
+
+```ts
+interface Home {
+  readonly resident: { name: string; age: number };
+}
+
+function visitForBirthday(home: Home) {
+  // We can read and update properties from 'home.resident'.
+  console.log(`Happy birthday ${home.resident.name}!`);
+  home.resident.age++;
+}
+
+function evict(home: Home) {
+  // But we can't write to the 'resident' property itself on a 'Home'.
+  home.resident = {
+    // Error: Cannot assign to 'resident' because it is a read-only property.
+    name: "Victor the Evictor",
+    age: 42,
+  };
+}
+```
+
+## In TypeScript, `readonly` properties in an object type can change via aliasing.
+
+It's important to manage expectations of what `readonly` implies. It's useful to signal intent during development time
+for TypeScript on how an object should be used. TypeScript doesn't factor in whether properties on two types are
+`readonly` when checking whether those types are compatible, so `readonly` properties can also change via aliasing:
+
+```ts
+interface Person {
+  name: string;
+  age: number;
+}
+
+interface ReadonlyPerson {
+  readonly name: string;
+  readonly age: number;
+}
+
+let writablePerson: Person = {
+  name: "Person McPersonface",
+  age: 42,
+};
+
+// works
+let readonlyPerson: ReadonlyPerson = writablePerson;
+console.log(readonlyPerson.age); // 42
+
+writablePerson.age++;
+console.log(readonlyPerson.age); // 43
+
+writablePerson.age = 10;
+console.log(readonlyPerson.age); // 10
+```
+
+## In TypeScript, you can use an index signature to describe the types of possible values.
+
+Sometimes you don't know all the names of a type's properties ahead of time, but the shape of the values you do know. In
+those cases, you can use an index signature to describe the types of possible values. Only some types are allowed for
+index signature properties: `string`, `number`, `symbol`, template string patterns, and union types consisting only of
+these:
+
+```ts
+interface StringArray {
+  [index: number]: string;
+}
+
+const myArray: StringArray = ["a", "b", "c"];
+
+const secondItem = myArray[1];
+console.log(typeof secondItem); // string
+
+const thirdItem = myArray["b"]; // Erorr: Element implicitly has an 'any' type because index expression is not of type 'number'.
+```
+
+Above, we have a `StringArray` interface which has an index signature. This index signature states that when a
+`StringArray` is indexed with a `number`, it will return a `string`.
+
+You can make index signatures `readonly` to prevent assignment to their indices:
+
+```ts
+interface StringArray {
+  readonly [index: number]: string;
+}
+
+const myArray: StringArray = ["a", "b", "b"];
+
+myArray[2] = "c"; // Error: Index signature in type 'StringArray' only permits reading.
+```
+
+You can’t set `myArray[2]` because the index signature is `readonly`.
+
+## In TypeScript, string index signatures enforce that all properties match their return type.
+
+While string index signatures are a powerful way to describe the **"dictionary"** pattern, they also enforce that all
+properties match their return type. This is because a string index declares that `obj.property` is also available as
+`obj["property"]`. In the following example, `name`'s type does not match the string index's type, and the type checker
+gives an error:
+
+```ts
+interface NumberDictionary {
+  [index: string]: number;
+  length: number; // ok
+  name: string; // Error: Property 'name' of type 'string' is not assignable to 'string' index type 'number'.
+}
+```
+
+However, properties of different types are acceptable if the index signature is a union of the property types:
+
+```ts
+interface NumberOrStringDictionary {
+  [index: string]: number | string;
+  length: number; // ok, length is a number
+  name: string; // ok, name is a string
+}
+```
+
+## In TypeScript, if an object literal has any properties that the "target type" doesn't have, you'll get an error.
+
+Where and how an object is assigned a type can make a difference in the type system. One of the key examples of this is
+in excess property checking, which validates the object more thoroughly when it is created and assigned to an object
+type during creation.
+
+Consider the code below:
+
+```ts
+interface SquareConfig {
+  color?: string;
+  width?: number;
+}
+
+function createSquare(config: SquareConfig): { color: string; area: number } {
+  return {
+    color: config.color || "red",
+    area: config.width ? config.width * config.width : 20,
+  };
+}
+
+let mySquare = createSquare({ colour: "red", width: 100 }); // Error: Object literal may only specify known properties, but 'colour' does not exist in type 'SquareConfig'. Did you mean to write 'color'?
+```
+
+Notice the given argument to `createSquare` is spelled `colour` instead of `color`. In plain JavaScript, this sort of
+thing fails silently. You could argue that this program is correctly typed, since the `width` properties are compatible,
+there's no `color` property present, and the extra `colour` property is insignificant.
+
+However, TypeScript takes the stance that there's probably a bug in this code. Object literals get special treatment and
+undergo excess property checking when assigning them to other variables, or passing them as arguments. If an object
+literal has any properties that the **"target type"** doesn’t have, you'll get an error, as shown above.
+
+Getting around these checks is simple. The easiest method is to use a type assertion:
+
+```ts
+let mySquare = createSquare({ colour: "red", width: 100 } as SquareConfig);
+```
+
+However, a better approach might be to add a string index signature if you're sure that the object can have some extra
+properties that are used in some special way. If `SquareConfig` can have `color` and `width` properties with the above
+types, but could also have any number of other properties, then we could define it like so:
+
+```ts
+interface SquareConfig {
+  color?: string;
+  width?: number;
+  [propName: string]: any;
+}
+```
+
+Here we're saying that `SquareConfig` can have any number of properties, and as long as they aren't `color` or `width`,
+their types don't matter.
+
+One final way to get around these checks, which might be a bit surprising, is to assign the object to another variable.
+Since assigning `squareOptions` won't undergo excess property checks, the compiler won't give you an error:
+
+```ts
+let squareOptions = { colour: "red", width: 100 };
+let mySquare = createSquare(squareOptions);
+```
+
+The above workaround will work as long as you have a common property between `squareOptions` and `SquareConfig`. In this
+example, it was the property `width`. It will however, fail if the variable does not have any common object property.
+
+For example:
+
+```ts
+let squareOptions = { colour: "red" };
+let mySquare = createSquare(squareOptions); // Error: Type '{colour: string; }` has no properties in common with 'SquareConfig'.
+```
+
+Keep in mind that for simple code like the above, you probably shouldn't be trying to "get around" these checks. For
+more complex object literals that have methods and hold state, you might need to keep these techniques in mind, but a
+majority of excess property errors are actually bugs.
+
+That means if you're running into excess property checking problems for something like option bags, you might need to
+revise some of your type declarations. In this instance, if it's okay to pass an object with both a `color` or `colour`
+property to `createSquare`, you should fix up the definition of `SquareConfig` to reflect that.
+
+## TypeScript provides a `ReadonlyArray` special type that describes arrays that shouldn’t be changed.
+
+```ts
+function doStuff(values: ReadonlyArray<string>) {
+  // We can read from 'values'
+  const copy = values.slice();
+  console.log(`The copied array is ${copy}`);
+
+  // ...but we can't mutate 'values'.
+  values.push("hello!"); // Error: Property 'push' does not exist on type 'readonly string[]'.
+}
+```
+
+Much like the `readonly` modifier for properties, it's mainly a tool we can use for intent. When we see a function that
+returns `ReadonlyArray`s, it tells us we're not meant to change the contents. When we see a function that consumes
+`ReadonlyArray`s, it tells us that we can pass any array into that function without worrying that it will change its
+contents.
+
+Unlike `Array`, there isn't a `ReadonlyArray` constructor that we can use.
+
+```ts
+new ReadonlyArray("red", "green", "blue"); // Error: 'ReadOnlyArray' only refers to a type, but is being used as a value here.
+```
+
+Instead, we can assign regular `Array`s to `ReadonlyArray`s.
+
+```ts
+const roArray: ReadonlyArray<string> = ["red", "green", "blue"];
+```
+
+Just as TypeScript provides a shorthand syntax for `Array<Type>` with `Type[]`, it also provides a shorthand syntax for
+`ReadonlyArray<Type>` with `readonly Type[]`.
+
+```ts
+function doStuff(values: readonly string[]) {
+  // We can read from 'values'...
+  const copy = values.slice();
+  console.log(`The copied array is ${copy}`);
+
+  // ...but we can't mutate 'values'.
+  values.push("hello!"); // Property 'push' does not exist on type 'readonly string[]'.
+}
+```
+
+One last thing to note is that, unlike the `readonly` property modifier, assignability isn't bidirectional between
+regular `Array`s and `ReadonlyArray`s.
+
+```ts
+let x: readonly string[] = [];
+let y: string[] = [];
+
+x = y;
+y = x; // Error: The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+```
+
+## TypeScript provides a `readonly` tuple type
+
+Tuple types have `readonly` variants, and can be specified by sticking a `readonly` modifier in front of them, just like
+with array shorthand syntax.
+
+```ts
+function doSomething(pair: readonly [string, number]) {
+  // ...
+  console.log(pair);
+}
+```
+
+As you might expect, writing to any property of a `readonly` tuple isn't allowed in TypeScript.
+
+```ts
+function doSomething(pair: readonly [string, number]) {
+  pair[0] = "hello!"; // Error: Cannot assign to '0' because it is a read-only property.
+}
+```
+
+Tuples tend to be created and left un-modified in most code, so annotating types as `readonly` tuples when possible is a
+good default. This is also important given that array literal with `const` assertions will be inferred with `readonly`
+tuple types.
+
+```ts
+let point = [3, 4] as const;
+
+function distanceFromOrigin([x, y]: [number, number]) {
+  return Math.sqrt(x ** 2 + y ** 2);
+}
+
+distanceFromOrigin(point); // Error: Argument of type 'readonly [3, 4]' is not assignable to parameter of type '[number, number]' ...
+```
+
+Here, `distanceFromOrigin` never modifies its elements but expects a mutable tuple. Since `point`'s type was inferred as
+`readonly [3, 4]`, it won't be compatible with `[number, number]` since that type can't guarantee `point`'s elements
+won't be mutated.
+
+## TypeScript's type system allows expressing types in terms of other types.
+
+This is very powerful. We have a wide variety of type operators available to use. It's also possible to express types in
+terms of values that we already have.
+
+By combining various type operators, we can express complex operations and values in a succinct, maintainable way. Below
+are the ways to express a new type in terms of an existing type or value and to keep this blog post at a readable length
+I'll just link to them since the TypeScript docs explains them very well:
+
+- [Generics](https://www.typescriptlang.org/docs/handbook/2/generics.html) - Types which take parameters
+- [Keyof Type Operator](https://www.typescriptlang.org/docs/handbook/2/keyof-types.html) - Using the `keyof` operator to
+  create new types
+- [Typeof Type Operator](https://www.typescriptlang.org/docs/handbook/2/typeof-types.html) - Using the `typeof` operator
+  to create new types
+- [Indexed Access Types](https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html) - Using `Type['a']`
+  syntax to access a subset of a type
+- [Conditional Types](https://www.typescriptlang.org/docs/handbook/2/conditional-types.html) - Types which act like if
+  statements in the type system
+- [Mapped Types](https://www.typescriptlang.org/docs/handbook/2/mapped-types.html) - Creating types by mapping each
+  property in an existing type
+- [Template Literal Types](https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html) - Mapped types
+  which change properties via template literal strings
+
+## TypeScript, unlike JavaScript, does not analyze methods you invoke from a class constructor to detect initializations, hence fields needs to be initialized in the constructor itself.
+
+Normally, fields in a class can have initializers, and these will run automatically when the class is instantiated; and
+just like with `const`, `let`, and `var`, the initializer of a class property will be used to infer its type:
+
+```ts
+class Point {
+  // No need to annotate `x` and `y` with the type `number` as it will be inferred
+  x = 0;
+  y = 0;
+}
+
+const pt = new Point();
+console.log(`${pt.x}, ${pt.y}`); // 0, 0
+pt.x = "0"; // Error: Type 'string' is not assignable to type 'number'
+```
+
+However, the `strictPropertyInitialization` setting can be turned on to make TypeScript check for class properties that
+are declared but not set in the constructor. When this is done, for a class field declared but not initialized,
+TypeScript will issue an error, requesting it is initialized in the class constructor:
+
+```ts
+class BadGreeter {
+  name: string; // Error: Property 'name' has no initializer and is not definitely assigned in the constructor.
+}
+
+class GoodGreeter {
+  name: string;
+
+  constructor() {
+    this.name = "hello";
+  }
+}
+```
+
+However, note that this initialization must be done explicitly in the constructor, and not from a method, as TypeScript
+doesn't analyze methods you invoke from a class constructor to detect initializations. This is because a derived class
+might override those methods and fail to initialize the members:
+
+```ts
+// This would work in JavaScript but fails in TypeScript
+class BadGreeter {
+  name: string; // Error: Property 'name' has no initializer and is not definitely assigned in the constructor
+
+  constructor() {
+    this.greet();
+  }
+
+  greet() {
+    this.name = "hello";
+    console.log(this.name);
+  }
+}
+```
+
+If you intend to definitely initialize a field through means other than the constructor
+(for example, maybe an external library is filling in part of your class for you), you can use the definite assignment
+assertion operator, `!`.
+
+```ts
+class OKGreeter {
+  // Not initialized, but no error
+  name!: string;
+}
+```
+
+## In TypeScript, class fields may be prefixed with the `readonly` modifier. This prevents assignments to the field outside of the constructor.
+
+```ts
+class Greeter {
+  readonly name: string = "world";
+
+  constructor(otherName?: string) {
+    if (otherName !== undefined) {
+      this.name = otherName;
+    }
+  }
+
+  err() {
+    this.name = "not ok"; // Error: Cannot assign to 'name' because it is a read-only property.
+  }
+}
+
+const g = new Greeter();
+g.name = "also not ok"; // Error: Cannot asign to 'name' because it is a read-only property.
+```
+
+## TypeScript treats class constructors as very similar to functions: you can add parameters with type annotations, default values, and overloads.
+
+```ts
+class Point {
+  x: number;
+  y: number;
+
+  // Normal signature with defaults
+  constructor(x = 0, y = 0) {
+    this.x = x;
+    this.y = y;
+  }
+}
+```
+
+```ts
+class Point {
+  x = 0;
+  y = 0;
+  s = "";
+
+  // Overloads
+  constructor(x: number, y: number);
+  constructor(s: string);
+  constructor(xs: number | string, y?: number) {
+    if (typeof xs === "number") {
+      this.x = xs;
+      this.y = y || 0;
+    } else {
+      this.s = xs;
+    }
+  }
+}
+
+let obj1 = new Point(1, 2);
+let obj2 = new Point("1");
+```
+
+There are just a few differences between class constructor signatures and function signatures:
+
+- Constructors can't have type parameters - these belong on the outer class declaration
+- Constructors can't have return type annotations - the class instance type is always what's returned
+
+## In TypeScript, methods can use all the same type annotations as functions and constructors.
+
+A function property on a class is called a method. Other than the standard type annotations, TypeScript doesn’t add
+anything else new to methods:
+
+```ts
+class Point {
+  x = 10;
+  y = 10;
+
+  scale(n: number): void {
+    this.x *= n;
+    this.y *= n;
+  }
+}
+```
+
+Note that inside a method body, it is still mandatory to access fields and other methods via `this.`. An unqualified
+name in a method body will always refer to something in the enclosing scope:
+
+```ts
+let x: number = 0;
+
+class C {
+  x: string = "hello";
+
+  m() {
+    // This is trying to modify 'x' declared outside the class, not the class property
+    x = "world"; // Error: Type 'string' is not assignable to type 'number'
+  }
+}
+```
+
+## TypeScript has some special inference rules for accessors i.e. getters and setters.
+
+Classes can also have accessors:
+
+```ts
+class C {
+  _length = 0;
+
+  get length() {
+    return this._length;
+  }
+
+  set length(value) {
+    this._length = value;
+  }
+}
+
+const myInstance = new C();
+console.log(myInstance.length); // 0
+imyInstancens.length = 20;
+console.log(myInstance.length); // 20
+```
+
+TypeScript has some special inference rules for accessors:
+
+- If `get` exists but no `set`, the property is automatically `readonly`
+- If the type of the setter parameter is not specified, it is inferred from the return type of the getter
+- Getters and setters must have the same Member Visibility
+
+Note that a field-backed `get`/`set` pair with no extra logic is rarely useful in JavaScript. It’s fine to expose public
+fields if you don’t need to add additional logic during the get/set operations.
+
+Since TypeScript 4.3, it is possible to have accessors with different types for getting and setting:
+
+```ts
+class Thing {
+  _size = 0;
+
+  get size(): number {
+    return this._size;
+  }
+
+  set size(value: string | number | boolean) {
+    let num = Number(value);
+
+    // Don't allow NaN, Infinity, etc
+    if (!Number.isFinite(num)) {
+      this._size = 0;
+      return;
+    }
+
+    this._size = num;
+  }
+}
+
+const myInstance = new Thing();
+console.log(myInstance.size); // 0
+myInstance.size = true;
+console.log(myInstance.size); // 1
+```
+
+## In TypeScript, classes can declare index signatures; these work the same as index signatures for other object types.
+
+```ts
+class MyClass {
+  [s: string]: boolean | ((s: string) => boolean);
+
+  check(s: string) {
+    return this[s] as boolean;
+  }
+}
+
+const myInstance = new MyClass();
+
+myInstance["foo"] = true;
+myInstance["bar"] = (s: string) => s.length > 3;
+
+console.log(myInstance.check("foo")); // true
+console.log(myInstance.check("bar")); // [Function (anonymous)]
+console.log(myInstance.check("baz")); // undefined
+```
+
+Because the index signature type needs to capture the types of methods, it's not easy to use these types. Generally,
+it's better to store indexed data in another place, instead of on the class instance itself.
+
+## In TypeScript, you can use an `implements` clause to check that a class satisfies a particular `interface`.
+
+An error will be issued if a class fails to implement an `interface` correctly:
+
+```ts
+interface Pingable {
+  ping(): void;
+}
+```
+
+```ts
+// Correct
+class Sonar implements Pingable {
+  ping() {
+    console.log("ping!");
+  }
+}
+```
+
+```ts
+// Wrong
+class Ball implements Pingable {
+  // Error: Class 'Ball' incorrectly implements interface 'Pingable'.
+  pong() {
+    console.log("pong!");
+  }
+}
+```
+
+```ts
+// Correct
+class Ball implements Pingable {
+  ping() {
+    console.log("ping!");
+  }
+
+  pong() {
+    console.log("pong!");
+  }
+}
+```
+
+Classes may also implement multiple interfaces, e.g. `class C implements A, B {`.
+
+## In TypeScript, an `implements` clause is only a check that the class can be treated as the `interface` type, it doesn’t change the class's type or its methods.
+
+A common source of error is to assume that an `implements` clause will change the class type - it doesn't!
+
+```ts
+interface Checkable {
+  check(name: string): boolean;
+}
+
+class NameChecker implements Checkable {
+  // With `"noImplicitAny": false` in `tsconfig.json`
+  check(s) {
+    // Notice no error here
+    return s.toLowerCase() === "ok";
+  }
+}
+```
+
+In the above example, we perhaps expected that `s`'s type would be influenced by the `name: string` parameter of
+`check`; It didn't. `implements` clauses don't change how the class body is checked or its type inferred.
+
+## In TypeScript, implementing an interface with an optional property doesn't create that property.
+
+```ts
+interface A {
+  x: number;
+  y?: number;
+}
+
+class C implements A {
+  x = 0;
+}
+
+const c = new C();
+c.y = 10; // Error: Property 'y' does not exist on type 'C'.
+```
+
+## TypeScript, unlike JavaScript, enforces that a derived class is always a subtype of its base class.
+
+For example, here's a legal way to override a method:
+
+```ts
+class Base {
+  greet() {
+    console.log("Hello, world!");
+  }
+}
+
+class Derived extends Base {
+  greet(name?: string) {
+    if (name === undefined) {
+      super.greet();
+    } else {
+      console.log(`Hello, ${name.toUpperCase()}`);
+    }
+  }
+}
+
+const d = new Derived();
+d.greet(); // Hello, world!
+d.greet("reader"); // Hello, READER
+```
+
+It's important that a derived class follow its base class contract. Remember that it's very common (and always legal!)
+to refer to a derived class instance through a base class reference:
+
+```ts
+// Alias the derived instance through a base class reference
+const b: Base = d;
+// No problem
+b.greet();
+```
+
+What if `Derived` didn't follow Base's contract?
+
+```ts
+// This would work in JavaScript but fails in TypeScript
+class Base {
+  greet() {
+    console.log("Hello, world!");
+  }
+}
+
+class Derived extends Base {
+  // Make this parameter required
+  greet(name: string) {
+    // Error: Property 'greet' in type 'Derived' is not assignable to the same property in base type 'Base'.
+    console.log(`Hello, ${name.toUpperCase()}`);
+  }
+}
+```
+
+If we compiled this code despite the error, this sample would then crash:
+
+```ts
+const b: Base = new Derived();
+// Crashes because "name" will be undefined
+b.greet();
+```
+
+## Conclusion
+
+Remember, **"hackers hack, crackers crack, and whiners whine. Be a hacker."** Take care.
