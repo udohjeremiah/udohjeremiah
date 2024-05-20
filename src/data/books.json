@@ -1,7 +1,13 @@
 [
   {
     "category": "Spirituality",
-    "items": []
+    "items": [
+      {
+        "cover": "https://covers.openlibrary.org/b/olid/OL18337770M-M.jpg",
+        "title": "The Sabbath",
+        "author": "Abraham Joshua Heschel"
+      }
+    ]
   },
   {
     "category": "Philosophy",
