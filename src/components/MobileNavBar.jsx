@@ -3,7 +3,6 @@ import Link from "next/link";
 
 // Components
 import MobileNav from "@/components/MobileNav";
-import Search from "@/components/Search";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 // Lib
@@ -23,10 +22,7 @@ export default function MobileNavBar() {
           <AvatarFallback>UJ</AvatarFallback>
         </Avatar>
       </Link>
-      <div className="flex gap-2">
-        <Search />
-        <MobileNav />
-      </div>
+      <MobileNav />
     </div>
   );
 }

@@ -42,9 +42,9 @@ export default function ThemeToggler() {
     <>
       {isMounted && (
         <Select value={theme} onValueChange={setTheme}>
-          <SelectTrigger className="border-border">
+          <SelectTrigger className="border-border lg:max-w-max">
             <SelectValue placeholder="Theme">
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-2.5 lg:px-1">
                 <Icon className="h-4 w-4 shrink-0" />
                 <span className="capitalize">{theme}</span>
               </div>
