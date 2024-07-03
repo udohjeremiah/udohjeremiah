@@ -45,10 +45,10 @@ export default function RootLayout({ children }) {
           disableTransitionOnChange
         >
           <TooltipProvider delayDuration={0}>
-            <Header />
             <div className="flex flex-1">
               <DesktopNav />
-              <div className="flex w-full flex-col">
+              <div className="flex w-full flex-col lg:ml-14">
+                <Header />
                 <main className="flex-1">{children}</main>
                 <Footer />
               </div>

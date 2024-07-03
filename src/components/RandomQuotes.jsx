@@ -93,7 +93,7 @@ export default function RandomQuotes({
   }, [index, animateCount, setAnimateCount, animateStop]);
 
   return (
-    <blockquote className={cn("w-full text-pretty text-xs", "lg:w-[60ch]")}>
+    <blockquote className="w-full text-pretty text-xs">
       <p className="inline">&quot;{quoteText}&quot;</p>
       <footer className="inline whitespace-nowrap">{authorText}</footer>
     </blockquote>
