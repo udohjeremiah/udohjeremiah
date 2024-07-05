@@ -1,5 +1,14 @@
 [
   {
+    "title": "Safe",
+    "description": "A cutting-edge investment platform with a sleek and modern design.",
+    "link": "https://safe-green.vercel.app",
+    "image": "/projects/safe-green.webp",
+    "name": "safe",
+    "openSource": false,
+    "repositoryLink": "https://github.com/udohjeremiah/safe-investment"
+  },
+  {
     "title": "E-Commerce Store",
     "description": "An open-source online store that coexists with its E-commerce CMS project.",
     "link": "https://ecommerce-store-olive-gamma.vercel.app",
