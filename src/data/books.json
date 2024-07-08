@@ -29,6 +29,12 @@
     "category": "Productivity",
     "books": [
       {
+        "href": "https://www.amazon.com/No-More-Mr-Nice-Guy/dp/0762415339",
+        "image": "https://covers.openlibrary.org/b/olid/OL9492038M-M.jpg",
+        "name": "No More Mr. Nice Guy!",
+        "author": "Robert A. Glover"
+      },
+      {
         "href": "https://www.amazon.com/Good-They-Cant-Ignore-You/dp/1455509124",
         "image": "https://covers.openlibrary.org/b/olid/OL40423376M-M.jpg",
         "name": "So Good They Can't Ignore You",
