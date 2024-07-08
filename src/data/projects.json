@@ -1,55 +1,48 @@
 [
   {
-    "title": "Safe",
-    "description": "A cutting-edge investment platform with a sleek and modern design.",
-    "link": "https://safe-green.vercel.app",
+    "href": "https://safe-green.vercel.app",
     "image": "/projects/safe-green.webp",
-    "name": "safe",
-    "openSource": false,
-    "repositoryLink": "https://github.com/udohjeremiah/safe-investment"
-  },
-  {
-    "title": "E-Commerce Store",
-    "description": "An open-source online store that coexists with its E-commerce CMS project.",
-    "link": "https://ecommerce-store-olive-gamma.vercel.app",
-    "image": "/projects/ecommerce-store.webp",
-    "name": "ecommerce-store",
-    "openSource": true,
-    "repositoryLink": "https://github.com/udohjeremiah/ecommerce-store"
-  },
-  {
-    "title": "E-Commerce Content Management System",
-    "description": "An open-source comprehensive content management system (CMS) platform for managing online stores and content.",
-    "link": "https://ecommerce-cms-mu.vercel.app",
-    "image": "/projects/ecommerce-cms.webp",
-    "name": "ecommerce-cms",
-    "openSource": true,
-    "repositoryLink": "https://github.com/udohjeremiah/ecommerce-cms"
-  },
-  {
-    "title": "Photo Album",
-    "description": "An open-source web application for seamlessly organizing and sharing your visual stories.",
-    "link": "https://photo-album-blond.vercel.app",
-    "image": "/projects/photo-album.webp",
-    "name": "photo-album",
-    "openSource": true,
-    "repositoryLink": "https://github.com/udohjeremiah/photo-album"
-  },
-  {
-    "title": "Eleotrade",
-    "description": "A cutting-edge cryptocurrency brokerage investment platform.",
-    "link": "https://eleotrade.vercel.app",
-    "image": "/projects/eleotrade.webp",
-    "name": "eleotrade",
+    "name": "Safe",
+    "description": "A cutting-edge investment platform with a sleek and modern design.",
     "openSource": false
   },
   {
-    "title": "Examshare",
-    "description": "An open-source project for sharing past examination questions in higher education.",
-    "link": "https://examshare.vercel.app",
-    "image": "/projects/examshare.webp",
-    "name": "examshare",
+    "href": "https://ecommerce-store-olive-gamma.vercel.app",
+    "image": "/projects/ecommerce-store.webp",
+    "name": "E-Commerce Store",
+    "description": "An open-source online store that coexists with its E-commerce CMS project.",
     "openSource": true,
-    "repositoryLink": "https://github.com/udohjeremiah/examshare"
+    "repositoryHref": "https://github.com/udohjeremiah/ecommerce-store"
+  },
+  {
+    "href": "https://ecommerce-cms-mu.vercel.app",
+    "image": "/projects/ecommerce-cms.webp",
+    "name": "E-Commerce CMS",
+    "description": "An open-source comprehensive content management system (CMS) platform for managing online stores and content.",
+    "openSource": true,
+    "repositoryHref": "https://github.com/udohjeremiah/ecommerce-cms"
+  },
+  {
+    "href": "https://photo-album-blond.vercel.app",
+    "image": "/projects/photo-album.webp",
+    "name": "Photo Album",
+    "description": "An open-source web application for seamlessly organizing and sharing your visual stories.",
+    "openSource": true,
+    "repositoryHref": "https://github.com/udohjeremiah/photo-album"
+  },
+  {
+    "href": "https://eleotrade.vercel.app",
+    "image": "/projects/eleotrade.webp",
+    "name": "Eleotrade",
+    "description": "A cutting-edge cryptocurrency brokerage investment platform.",
+    "openSource": false
+  },
+  {
+    "href": "https://examshare.vercel.app",
+    "image": "/projects/examshare.webp",
+    "name": "Examshare",
+    "description": "An open-source project for sharing past examination questions in higher education.",
+    "openSource": true,
+    "repositoryHref": "https://github.com/udohjeremiah/examshare"
   }
 ]

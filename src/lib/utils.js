@@ -1,4 +1,3 @@
-// Dependencies
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -6,26 +5,18 @@ export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
-export function formatDate(date) {
-  return new Intl.DateTimeFormat("en-GB", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    timeZone: "Africa/Lagos",
-  }).format(new Date(date));
-}
+export function parseError(error) {
+  if (error instanceof Error) {
+    return error.message;
+  }
 
-export function formatBlogDate(date) {
-  return new Intl.DateTimeFormat("en-GB", {
-    month: "short",
-    day: "numeric",
-    timeZone: "Africa/Lagos",
-  }).format(new Date(date));
+  if (typeof error === "string") {
+    return error;
+  }
+
+  return "An unknown error occurred";
 }
 
 export function sortBlogPostByDate(blogPostA, blogPostB) {
-  return new Date(blogPostB.publishedOn).getTime() >
-    new Date(blogPostA.publishedOn).getTime()
-    ? 1
-    : -1;
+  return blogPostB.publishedOn > blogPostA.publishedOn ? 1 : -1;
 }

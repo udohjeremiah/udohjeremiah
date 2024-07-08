@@ -1,6 +1,5 @@
-// Dependencies
-import { defineDocumentType, makeSource } from "contentlayer/source-files";
-import lqip from "lqip-modern";
+import { defineDocumentType, makeSource } from "contentlayer2/source-files";
+import { extractTocHeadings } from "pliny/mdx-plugins/remark-toc-headings.js";
 import readingTime from "reading-time";
 import { rehypeAccessibleEmojis } from "rehype-accessible-emojis";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
@@ -8,6 +7,9 @@ import rehypePresetMinify from "rehype-preset-minify";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
+import { sqip } from "sqip";
+
+import moonlightTheme from "./public/moonlight-ii.json";
 
 export const computeFields = ({
   openGraphEndpoint = "/api/og",
@@ -27,6 +29,11 @@ export const computeFields = ({
     type: "string",
     description: "The estimated time to read the document, in minutes",
     resolve: (doc) => readingTime(doc.body.raw).text,
+  },
+  toc: {
+    type: "list",
+    description: "The table of contents of the document",
+    resolve: async (doc) => extractTocHeadings(doc.body.raw),
   },
   image: {
     type: "string",
@@ -60,14 +67,25 @@ export const computeFields = ({
       const folderBase = imagesFolder.endsWith("/")
         ? imagesFolder.slice(0, -1)
         : imagesFolder;
-      const blur = await lqip(`${folderBase}${doc.image}`);
 
-      return blur.content.toString("base64");
+      const blur = await sqip({
+        input: `${folderBase}${doc.image}`,
+        plugins: [
+          "sqip-plugin-primitive",
+          "sqip-plugin-svgo",
+          "sqip-plugin-data-uri",
+        ],
+      });
+
+      const result = Array.isArray(blur) ? blur[0] : blur;
+
+      return result.metadata.dataURIBase64;
     },
   },
 });
 
 const rehypePrettyCodeOptions = {
+  theme: moonlightTheme,
   keepBackground: false,
   onVisitLine(node) {
     if (node.children.length === 0) {
@@ -80,7 +98,7 @@ const rehypeAutolinkHeadingsOptions = {
   properties: {
     className: [
       "relative",
-      "lg:before:content-['#']",
+      'lg:before:content-["#"]',
       "before:block",
       "before:absolute",
       "before:left-[-1.5rem]",
@@ -93,19 +111,9 @@ const rehypeAutolinkHeadingsOptions = {
   },
 };
 
-export const remarkPlugins = () => [remarkGfm];
-
-export const rehypePlugins = ({ theme = "one-dark-pro" }) => [
-  rehypeAccessibleEmojis,
-  rehypeSlug,
-  [rehypePrettyCode, { ...rehypePrettyCodeOptions, theme }],
-  [rehypeAutolinkHeadings, rehypeAutolinkHeadingsOptions],
-  rehypePresetMinify,
-];
-
 export const Blog = defineDocumentType(() => ({
   name: "Blog",
-  filePathPattern: `blog/**/*.mdx`,
+  filePathPattern: `blog/*.mdx`,
   contentType: "mdx",
   fields: {
     title: {
@@ -137,11 +145,19 @@ export const Blog = defineDocumentType(() => ({
   computedFields: computeFields("Blog", {}),
 }));
 
-export default makeSource({
+const source = makeSource({
   contentDirPath: "./src/content",
   documentTypes: [Blog],
   mdx: {
-    remarkPlugins: remarkPlugins(),
-    rehypePlugins: rehypePlugins({ theme: "monokai" }),
+    remarkPlugins: [remarkGfm],
+    rehypePlugins: [
+      rehypeAccessibleEmojis,
+      rehypeSlug,
+      [rehypePrettyCode, rehypePrettyCodeOptions],
+      [rehypeAutolinkHeadings, rehypeAutolinkHeadingsOptions],
+      rehypePresetMinify,
+    ],
   },
 });
+
+export default source;

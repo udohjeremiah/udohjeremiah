@@ -1,15 +1,7 @@
 [
   {
-    "author": "Computer Programming",
-    "quote": "Hello, World!"
-  },
-  {
     "author": "Abhijit Naskar",
     "quote": "In a world run by algorithms of greed write a code that helps 'n heals."
-  },
-  {
-    "author": "Ada Lovelace",
-    "quote": "The Analytical Engine weaves algebraic patterns just as the Jacquard loom weaves flowers and leaves."
   },
   {
     "author": "Alan Kay",
@@ -17,19 +9,15 @@
   },
   {
     "author": "Alan Perlis",
-    "quote": "A language that doesn't affect the way you think about programming is not worth knowing."
+    "quote": "There are two ways to write error-free programs; only the third one works."
   },
   {
     "author": "Alan Perlis",
-    "quote": "There are two ways to write error-free programs; only the third one works."
+    "quote": "A language that doesn't affect the way you think about programming is not worth knowing."
   },
   {
     "author": "Andy Harris",
     "quote": "Code is there to explain the comments to the computer."
-  },
-  {
-    "author": "Anonymous",
-    "quote": "It's not a bug, it's a feature."
   },
   {
     "author": "Bill Gates",
@@ -44,20 +32,16 @@
     "quote": "The most important property of a program is whether it accomplishes the intention of its user."
   },
   {
-    "author": "Charles Babbage",
-    "quote": "The whole of the developments and operations of analysis are now capable of being executed by machinery."
-  },
-  {
     "author": "Charles Wetherell",
     "quote": "If you don't know what you want to achieve and why, any code you write is, by definition, incorrect."
   },
   {
-    "author": "Chris Pine",
-    "quote": "Programming isn't about what you know; it's about what you can figure out."
-  },
-  {
     "author": "Chris Heilmann",
     "quote": "Java is to JavaScript what car is to carpet."
+  },
+  {
+    "author": "Chris Pine",
+    "quote": "Programming isn't about what you know; it's about what you can figure out."
   },
   {
     "author": "Cory House",
@@ -85,10 +69,6 @@
   },
   {
     "author": "Donald Knuth",
-    "quote": "If you optimize everything, you will always be unhappy."
-  },
-  {
-    "author": "Donald Knuth",
     "quote": "Premature optimization is the root of all evil."
   },
   {
@@ -96,11 +76,15 @@
     "quote": "Programming is the art of telling another human what one wants the computer to do."
   },
   {
+    "author": "Donald Knuth",
+    "quote": "If you optimize everything, you will always be unhappy."
+  },
+  {
     "author": "Douglas Crockford",
     "quote": "The good thing about reinventing the wheel is that you can get a round one."
   },
   {
-    "author": "Edward V. Berard",
+    "author": "Edward Berard",
     "quote": "Walking on water and developing software from a specification are easy if both are frozen."
   },
   {
@@ -200,11 +184,11 @@
     "quote": "Programming is not about typing, it's about thinking."
   },
   {
-    "author": "Robert S. Barton",
+    "author": "Robert Barton",
     "quote": "System programmers are the high priests of a low cult."
   },
   {
-    "author": "Robert C. Martin",
+    "author": "Robert Martin",
     "quote": "Truth can only be found in one place: the code."
   },
   {
@@ -224,7 +208,7 @@
     "quote": "A user interface should be so simple that a beginner in an emergency can understand it within ten seconds."
   },
   {
-    "author": "Thomas F. Murphy",
+    "author": "Thomas Murphy",
     "quote": "The best error message is the one that never shows up."
   },
   {

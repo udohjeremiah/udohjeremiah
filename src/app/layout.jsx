@@ -1,61 +1,51 @@
-// Styles
-import "@/styles/globals.css";
-
-// Fonts
-import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
 
-// Dependencies
-import { Toaster } from "@/components/ui/sonner";
+import Navbar from "@/components/NavBar";
 
-// Components
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import DesktopNav from "@/components/DesktopNav";
-import ThemeProvider from "@/providers/ThemeProvider";
-
-// Lib
 import { cn } from "@/lib/utils";
 
-export const viewport = {
-  colorScheme: "dark light",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+import "./globals.css";
+
+const name = "Udoh Jeremiah";
+
+export const metadata = {
+  applicationName: name,
+  authors: [
+    {
+      name,
+      url: process.env.NEXT_PUBLIC_SITE_URL,
+    },
   ],
+  creator: name,
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
+  formatDetection: {
+    telephone: false,
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+  },
+  openGraph: {
+    type: "website",
+    siteName: name,
+    locale: "en_GB",
+  },
+  publisher: name,
 };
 
-export default function RootLayout({ children }) {
+export default function Layout({ children }) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={cn(
-        GeistSans.variable,
-        GeistMono.variable,
-        "touch-manipulation scroll-pt-20 font-sans antialiased [text-rendering:optimizelegibility]",
-      )}
-    >
-      <body className="flex min-h-[100dvh] max-w-[100dvw] flex-col overflow-x-hidden bg-background text-foreground">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <TooltipProvider delayDuration={0}>
-            <div className="flex flex-1">
-              <DesktopNav />
-              <div className="flex w-full flex-col lg:ml-14">
-                <Header />
-                <main className="flex-1">{children}</main>
-                <Footer />
-              </div>
-            </div>
-          </TooltipProvider>
-        </ThemeProvider>
-        <Toaster />
+    <html lang="en">
+      <body
+        className={cn(
+          GeistSans.variable,
+          GeistMono.variable,
+          "bg-white font-sans dark:bg-neutral-950",
+        )}
+      >
+        {children}
+        <Navbar />
       </body>
     </html>
   );

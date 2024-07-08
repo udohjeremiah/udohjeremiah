@@ -1,67 +1,79 @@
 [
   {
     "category": "Spirituality",
-    "items": [
+    "books": [
       {
-        "cover": "https://covers.openlibrary.org/b/olid/OL18337770M-M.jpg",
-        "title": "The Sabbath",
+        "href": "https://www.amazon.com/Sabbath-Classics-Abraham-Joshua-Heschel/dp/0374529752",
+        "image": "https://covers.openlibrary.org/b/olid/OL18337770M-M.jpg",
+        "name": "The Sabbath",
         "author": "Abraham Joshua Heschel"
       }
     ]
   },
   {
     "category": "Philosophy",
-    "items": [
+    "books": [
       {
-        "cover": "https://covers.openlibrary.org/b/olid/OL37044614M-M.jpg",
-        "title": "Meditations",
+        "href": "https://www.amazon.com/Meditations-Marcus-Aurelius/dp/1503280462",
+        "image": "https://covers.openlibrary.org/b/olid/OL37044614M-M.jpg",
+        "name": "Meditations",
         "author": "Marcus Aurelius"
       }
     ]
   },
   {
     "category": "Psychology",
-    "items": []
+    "books": []
   },
   {
     "category": "Productivity",
-    "items": [
+    "books": [
       {
-        "cover": "https://covers.openlibrary.org/b/olid/OL40423376M-M.jpg",
-        "title": "So Good They Can't Ignore You",
+        "href": "https://www.amazon.com/Good-They-Cant-Ignore-You/dp/1455509124",
+        "image": "https://covers.openlibrary.org/b/olid/OL40423376M-M.jpg",
+        "name": "So Good They Can't Ignore You",
         "author": "Cal Newport"
       },
       {
-        "cover": "https://covers.openlibrary.org/b/olid/OL35354845M-M.jpg",
-        "title": "The Way of the Superior Man",
+        "href": "https://www.amazon.com/Way-Men-Jack-Donovan/dp/0985452307",
+        "image": "https://covers.openlibrary.org/b/olid/OL26977636M-M.jpg",
+        "name": "The Way of Men",
+        "author": "Jack Donovan"
+      },
+      {
+        "href": "https://www.amazon.com/Way-Superior-Man-Challenges-Anniversary/dp/1622038320",
+        "image": "https://covers.openlibrary.org/b/olid/OL35354845M-M.jpg",
+        "name": "The Way of the Superior Man",
         "author": "David Deida"
       }
     ]
   },
   {
     "category": "Programming",
-    "items": []
+    "books": []
   },
   {
     "category": "Design",
-    "items": [
+    "books": [
       {
-        "cover": "https://covers.openlibrary.org/b/olid/OL31679681M-M.jpg",
-        "title": "Refactoring UI",
+        "href": "https://www.refactoringui.com/#get-refactoring-ui",
+        "image": "https://covers.openlibrary.org/b/olid/OL31679681M-M.jpg",
+        "name": "Refactoring UI",
         "author": "Adam Wathan, Steve Schoger"
       }
     ]
   },
   {
     "category": "Public Speaking",
-    "items": []
+    "books": []
   },
   {
     "category": "Others",
-    "items": [
+    "books": [
       {
-        "cover": "https://covers.openlibrary.org/b/olid/OL30870669M-M.jpg",
-        "title": "Simple Genius",
+        "href": "https://www.amazon.com/Simple-Genius-Maxwell-David-Baldacci/dp/044661873X",
+        "image": "https://covers.openlibrary.org/b/olid/OL30870669M-M.jpg",
+        "name": "Simple Genius",
         "author": "David Baldacci"
       }
     ]

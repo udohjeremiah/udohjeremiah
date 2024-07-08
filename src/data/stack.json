@@ -3,40 +3,40 @@
     "type": "Coding",
     "items": [
       {
-        "name": "GitHub Desktop",
-        "href": "https://desktop.github.com/",
-        "description": "The free and open source app that lets you manage your Git repositories from your desktop.",
-        "image": "/logos/githubdesktop.svg"
+        "href": "https://developer.android.com/studio",
+        "image": "/logos/android-studio.svg",
+        "name": "Android Studio",
+        "description": "Official Android IDE for app dev."
       },
       {
-        "name": "Icons8",
-        "href": "https://icons8.com/",
-        "description": "The curated collection of over 1,328,300 free icons that match each other.",
-        "image": "/logos/icons8.svg"
-      },
-      {
-        "name": "MongoDB Compass",
         "href": "https://www.mongodb.com/products/tools/compass",
-        "description": "The GUI for MongoDB.",
-        "image": "/logos/mongodb.svg"
+        "image": "/logos/mongodb.svg",
+        "name": "MongoDB Compass",
+        "description": "GUI for MongoDB."
       },
       {
+        "href": "https://www.postman.com",
+        "image": "/logos/postman.svg",
         "name": "Postman",
-        "href": "https://www.postman.com/",
-        "description": "The API platform for building, testing, debuging, documenting, monitoring, and publishing APIs together.",
-        "image": "/logos/postman.svg"
+        "description": "Build, test, & debug APIs."
       },
       {
+        "href": "https://jakearchibald.github.io/svgomg",
+        "image": "/logos/svgomg.svg",
         "name": "SVGOMG",
-        "href": "https://jakearchibald.github.io/svgomg/",
-        "description": "The web GUI for SVGO.",
-        "image": "/logos/svgomg.svg"
+        "description": "Web GUI for SVGO."
       },
       {
+        "href": "https://code.visualstudio.com",
+        "image": "/logos/vscode.svg",
         "name": "VS Code",
-        "href": "https://code.visualstudio.com/",
-        "description": "The free, open source, and cross-platform code editor that supports many languages and features.",
-        "image": "/logos/vscode.svg"
+        "description": "Cross-platform code editor."
+      },
+      {
+        "href": "https://developer.apple.com/xcode",
+        "image": "/logos/xcode.svg",
+        "name": "XCode",
+        "description": "Official Apple IDE for app dev."
       }
     ]
   },
@@ -44,34 +44,40 @@
     "type": "Design",
     "items": [
       {
-        "name": "Dribble",
-        "href": "https://dribbble.com/",
-        "description": "The world's destination for design, where you get inspired by the work of millions of top-rated designers & agencies around the world.",
-        "image": "/logos/dribble.svg"
-      },
-      {
+        "href": "https://www.figma.com",
+        "image": "/logos/figma.svg",
         "name": "Figma",
-        "href": "https://www.figma.com/",
-        "description": "The platform for teams to design, prototype, develop, and collect feedback on products in one space.",
-        "image": "/logos/figma.svg"
+        "description": "Prototype, design, & develop."
       },
       {
-        "name": "Framer",
-        "href": "https://www.framer.com/",
-        "description": "The web design tool that lets you create and publish websites with powerful and familiar tools.",
-        "image": "/logos/framer.svg"
-      },
-      {
+        "href": "https://www.freeconvert.com",
+        "image": "/logos/freeconvert.svg",
         "name": "FreeConvert",
-        "href": "https://www.freeconvert.com/",
-        "description": "The platform that lets you convert files from one format to another, online, for free.",
-        "image": "/logos/freeconvert.svg"
+        "description": "Convert files between various formats."
       },
       {
+        "name": "Freepik",
+        "image": "/logos/freepik.webp",
+        "href": "https://www.freepik.com",
+        "description": "Free photos, videos, vectors, PSD, etc."
+      },
+      {
+        "href": "https://icons8.com",
+        "image": "/logos/icons8.svg",
+        "name": "Icons8",
+        "description": "Collection of 1.3M matching icons."
+      },
+      {
+        "href": "https://logotyp.us",
+        "image": "/logos/logotypus.svg",
+        "name": "Logotyp.us",
+        "description": "Find vector logos of top global brands."
+      },
+      {
+        "href": "https://unsplash.com",
+        "image": "/logos/unsplash.svg",
         "name": "Unsplash",
-        "href": "https://unsplash.com/",
-        "description": "The platform where you can find and download beautiful, free images and photos from various categories and creators.",
-        "image": "/logos/unsplash.svg"
+        "description": "Find & download free images online."
       }
     ]
   },
@@ -79,16 +85,28 @@
     "type": "Finance",
     "items": [
       {
+        "href": "https://chippercash.com",
+        "image": "/logos/chippercash.svg",
         "name": "Chipper Cash",
-        "href": "https://chippercash.com/",
-        "description": "Send Money Directly to Bank and Mobile Money Accounts in 21+ African Countries.",
-        "image": "/logos/chippercash.svg"
+        "description": "Send money to banks in Africa."
       },
       {
+        "href": "https://www.exodus.com",
+        "image": "/logos/exodus.svg",
+        "name": "Exodus",
+        "description": "Exodus bitcoin & crypto wallet."
+      },
+      {
+        "href": "https://kuda.com",
+        "image": "/logos/kuda.svg",
+        "name": "Kuda",
+        "description": "The money app for Africans."
+      },
+      {
+        "href": "https://www.metatrader5.com",
+        "image": "/logos/metatrader5.webp",
         "name": "MetaTrader 5",
-        "href": "https://www.metatrader5.com/",
-        "description": "The free application for traders that allows one to perform technical analysis and trading operations in the Forex and exchange markets.",
-        "image": "/logos/metatrader5.webp"
+        "description": "Free app for Forex trading & analysis."
       }
     ]
   },
@@ -96,22 +114,22 @@
     "type": "Social",
     "items": [
       {
+        "href": "https://discord.com",
+        "image": "/logos/discord.svg",
         "name": "Discord",
-        "href": "https://discordapp.com/",
-        "description": "Instant messaging and VoIP social platform which allows communication through voice calls, video calls, text messaging, and media and files.",
-        "image": "/logos/discord.svg"
+        "description": "VoIP app for calls, texts, & media."
       },
       {
-        "name": "LinkedIn",
         "href": "https://www.linkedin.com",
-        "description": "Business and employment-focused social media platform, primarily used for professional networking and career development.",
-        "image": "/logos/linkedin.svg"
+        "image": "/logos/linkedin.svg",
+        "name": "LinkedIn",
+        "description": "Social media for networking & careers."
       },
       {
+        "href": "https://www.whatsapp.com",
+        "image": "/logos/whatsapp.svg",
         "name": "WhatsApp",
-        "href": "https://www.whatsapp.com/",
-        "description": "Simple, reliable, private messaging and calling for free, available all over the world.",
-        "image": "/logos/whatsapp.svg"
+        "description": "Simple, reliable, free messaging & calls."
       }
     ]
   },
@@ -119,22 +137,22 @@
     "type": "Productivity",
     "items": [
       {
+        "href": "https://www.apple.com/apple-podcasts",
+        "image": "/logos/applepodcasts.svg",
         "name": "Apple Podcasts",
-        "href": "https://www.apple.com/apple-podcasts/",
-        "description": "The best app for discovering and enjoying millions of the world's most popular podcasts on your iPhone, iPad, Mac, and other Apple devices.",
-        "image": "/logos/applepodcasts.svg"
+        "description": "Discover podcasts on iPhone, iPad, & Mac."
       },
       {
-        "name": "Grammarly",
         "href": "https://apps.apple.com/us/app/flow-focus-pomodoro-timer/id1423210932",
-        "description": "The cloud-based typing assistant checks spelling, grammar, punctuation, clarity, and detects plagiarism, suggesting replacements for errors.",
-        "image": "/logos/grammarly.svg"
+        "image": "/logos/grammarly.svg",
+        "name": "Grammarly",
+        "description": "Typing assistant for spelling & grammar."
       },
       {
-        "name": "Home Workout - No Equipments",
         "href": "https://apps.apple.com/us/app/home-workout-no-equipments/id1313192037",
-        "description": "Body weight fitness & training",
-        "image": "/logos/homeworkout.webp"
+        "image": "/logos/homeworkout.webp",
+        "name": "Home Workout - No Equipments",
+        "description": "Body weight fitness & training."
       }
     ]
   },
@@ -142,16 +160,28 @@
     "type": "Other",
     "items": [
       {
-        "name": "NetNewsWire",
         "href": "https://netnewswire.com",
-        "description": "The free and open source RSS reader for Mac, iPhone, and iPad.",
-        "image": "/logos/netnewswire.webp"
+        "image": "/logos/netnewswire.webp",
+        "name": "NetNewsWire",
+        "description": "RSS reader for Mac, iPhone, & iPad."
       },
       {
+        "href": "https://protonvpn.com",
+        "image": "/logos/proton-vpn.svg",
+        "name": "ProtonVPN",
+        "description": "VPN for speed & security."
+      },
+      {
+        "href": "https://techcabal.com",
+        "image": "/logos/techcabal.webp",
         "name": "TechCabal",
-        "href": "https://techcabal.com/",
-        "description": "The platform for African tech news, features, and startups.",
-        "image": "/logos/techcabal.webp"
+        "description": "African tech news."
+      },
+      {
+        "href": "https://tripmode.ch",
+        "image": "/logos/tripmode.webp",
+        "name": "TripMode",
+        "description": "Save data & money. Browse faster."
       }
     ]
   }

@@ -1,0 +1,92 @@
+[
+  {
+    "href": "https://julialang.org",
+    "image": "/logos/julia.svg",
+    "name": "Julia"
+  },
+  {
+    "href": "https://html.spec.whatwg.org",
+    "image": "/logos/html5.svg",
+    "name": "HTML5"
+  },
+  {
+    "href": "https://www.w3.org/TR/CSS",
+    "image": "/logos/css3.svg",
+    "name": "CSS3"
+  },
+  {
+    "href": "https://ecma-international.org/publications-and-standards/standards/ecma-262",
+    "image": "/logos/javascript.svg",
+    "name": "JavaScript"
+  },
+  {
+    "href": "https://typescriptlang.org",
+    "image": "/logos/typescript.svg",
+    "name": "TypeScript"
+  },
+  {
+    "href": "https://tailwindcss.com",
+    "image": "/logos/tailwindcss.svg",
+    "name": "TailwindCSS"
+  },
+  {
+    "href": "https://nodejs.org",
+    "image": "/logos/nodejs.svg",
+    "name": "Node.js"
+  },
+  {
+    "href": "https://expressjs.com",
+    "image": "/logos/expressjs.svg",
+    "name": "Express.js"
+  },
+  {
+    "href": "https://react.dev",
+    "image": "/logos/reactjs.svg",
+    "name": "React.js"
+  },
+  {
+    "href": "https://nextjs.org",
+    "image": "/logos/nextjs.svg",
+    "name": "Next.js"
+  },
+  {
+    "href": "https://expo.dev",
+    "image": "/logos/expo.svg",
+    "name": "Expo"
+  },
+  {
+    "href": "https://www.framer.com/motion",
+    "image": "/logos/framer-motion.svg",
+    "name": "Framer Motion"
+  },
+  {
+    "href": "https://gsap.com",
+    "image": "/logos/gsap.svg",
+    "name": "GSAP"
+  },
+  {
+    "href": "https://www.mongodb.com",
+    "image": "/logos/mongodb.svg",
+    "name": "MongoDB"
+  },
+  {
+    "href": "https://redis.io",
+    "image": "/logos/redisio.svg",
+    "name": "Redis.io"
+  },
+  {
+    "href": "https://git-scm.com",
+    "image": "/logos/git.svg",
+    "name": "Git"
+  },
+  {
+    "href": "https://github.com",
+    "image": "/logos/github.svg",
+    "name": "GitHub"
+  },
+  {
+    "href": "https://restfulapi.net",
+    "image": "/logos/restfulapi.svg",
+    "name": "REST API"
+  }
+]
