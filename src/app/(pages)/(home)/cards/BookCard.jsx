@@ -26,7 +26,10 @@ export default function BookCard() {
         className="h-auto w-12 shrink-0 rounded"
       />
       <p className="text-sm text-neutral-500 dark:text-neutral-400">
-        <Link href={book.href}>{book.name}</Link> by {book.author}
+        <Link href={book.href} label={book.name}>
+          {book.name}
+        </Link>{" "}
+        by {book.author}
       </p>
     </Card>
   );

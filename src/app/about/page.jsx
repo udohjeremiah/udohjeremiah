@@ -51,26 +51,34 @@ export default function About() {
               </p>
               <p>
                 In the past, I was heavily involved with the{" "}
-                <Link href="https://julialang.org">
+                <Link href="https://julialang.org" label="Julia">
                   Julia Programming Language
                 </Link>
                 , making significant contributions to its{" "}
-                <Link href="https://docs.julialang.org">
+                <Link href="https://docs.julialang.org" label="Julia Docs">
                   open-source documentation
                 </Link>{" "}
                 to make it more accessible to all users. As a result of my
                 contributions, I was granted membership in the development team.
                 I also developed packages like{" "}
-                <Link href="https://github.com/udohjeremiah/REPLference.jl">
+                <Link
+                  href="https://github.com/udohjeremiah/REPLference.jl"
+                  label="Github"
+                >
                   REPLference.jl
                 </Link>
                 , aimed at teaching Julia to beginners within the REPL, and{" "}
-                <Link href="https://github.com/udohjeremiah/ProjectEuler.jl">
+                <Link
+                  href="https://github.com/udohjeremiah/ProjectEuler.jl"
+                  label="Github"
+                >
                   ProjectEuler.jl,
                 </Link>
                 which provides offline access to challenging mathematical
                 problems from{" "}
-                <Link href="https://projecteuler.net">Project Euler</Link>{" "}
+                <Link href="https://projecteuler.net" label="Project Euler">
+                  Project Euler
+                </Link>{" "}
                 through Julia&apos;s REPL. At that time, I was more into Machine
                 Learning (ML) and Artificial Intelligence (AI). However, my
                 interests have since changed.
@@ -83,7 +91,10 @@ export default function About() {
               </p>
               <p>
                 I interned at{" "}
-                <Link href="http://www.sapelepower.com">
+                <Link
+                  href="http://www.sapelepower.com"
+                  label="Sapele Power Plc"
+                >
                   Sapele Power Plc (SPP)
                 </Link>
                 , a leading Nigerian integrated energy company specializing in

@@ -57,6 +57,7 @@ function Project({ data }) {
         <div className="mt-4 flex gap-8">
           <Link
             href={data.href}
+            label={data.name}
             className="text-green-500 underline transition-colors duration-200  hover:text-green-600"
           >
             Live site
@@ -64,6 +65,7 @@ function Project({ data }) {
           {data.openSource && (
             <Link
               href={data.repositoryHref}
+              label={data.name}
               className="text-green-500 underline transition-colors duration-200 hover:text-green-600"
             >
               View code

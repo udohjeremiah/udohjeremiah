@@ -21,6 +21,7 @@ function Book({ data }) {
     <Link
       key={data.href}
       href={data.href}
+      label={data.name}
       className={cn(
         "flex flex-col gap-4 rounded-lg p-4 no-underline transition-colors",
         "hover:bg-neutral-100",

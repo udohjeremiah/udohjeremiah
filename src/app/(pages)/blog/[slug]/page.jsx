@@ -102,6 +102,7 @@ export default function BlogPostPage({ params }) {
         <ArrowLeftToLineIcon className="h-4 w-4 text-inherit" />
         <Link
           href="/blog"
+          label="Back to blog"
           className="text-sm text-inherit no-underline hover:text-inherit"
         >
           Back to blog
