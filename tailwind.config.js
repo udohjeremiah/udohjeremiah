@@ -32,6 +32,10 @@ const config = {
               borderColor: theme("colors.neutral.800"),
               borderRadius: theme("borderRadius.lg"),
             },
+            table: {
+              display: "block",
+              overflowX: "auto",
+            },
           },
         },
         invert: {
