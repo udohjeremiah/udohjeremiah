@@ -26,7 +26,7 @@
     "contentlayer2": "^0.4.6",
     "geist": "^1.3.0",
     "lucide-react": "^0.400.0",
-    "next": "14.0.4",
+    "next": "14.2.4",
     "next-contentlayer2": "^0.4.6",
     "pliny": "^0.2.2",
     "react": "^18",
