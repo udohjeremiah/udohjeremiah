@@ -1,9 +1,7 @@
 "use client";
 
-// Next
 import dynamic from "next/dynamic";
 
-// Lib
 import { cn } from "@/lib/utils";
 
 const ReactPlayer = dynamic(
@@ -15,13 +13,13 @@ const ReactPlayer = dynamic(
   { ssr: false },
 );
 
-export default function Video({ className, ...props }) {
+export default function Video({ className, ...properties }) {
   return (
     <div
       className={cn("relative aspect-video overflow-hidden rounded", className)}
     >
       <ReactPlayer
-        {...props}
+        {...properties}
         width="100%"
         height="100%"
         style={{ position: "absolute", inset: 0 }}

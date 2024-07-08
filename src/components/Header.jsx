@@ -1,18 +1,8 @@
-"use client";
-
-// Components
-import DesktopNavBar from "@/components/DesktopNavBar";
-import MobileNavBar from "@/components/MobileNavBar";
-
-// Hooks
-import { useMediaQuery } from "@/hooks/use-media-query";
-
-export default function Header() {
-  const isDesktop = useMediaQuery("(min-width: 1024px)");
-
+export default function Header({ title, description }) {
   return (
-    <header className="sticky top-0 z-50 border-b backdrop-blur-sm">
-      {isDesktop ? <DesktopNavBar /> : <MobileNavBar />}
+    <header className="space-y-2">
+      <h1 className="m-0 text-3xl">{title}</h1>
+      <p className="m-0 text-lg">{description}</p>
     </header>
   );
 }

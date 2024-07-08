@@ -22,30 +22,36 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node_version }}
+          cache: "pnpm"
 
       - name: Cache node_modules
         uses: actions/cache@v4
         with:
-          path: ~/.npm
+          path: ~/.pnpm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Restore next build
+      - name: Restore Next.js build
         uses: actions/cache@v4
         with:
           path: |
             .next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock', '**/pnpm-lock.yaml') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock', '**/pnpm-lock.yaml') }}-
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
 
       - name: Prettier
         run: npm run format
@@ -56,8 +62,6 @@ jobs:
       - name: Build with Next.js
         run: npm run build
         env:
-          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RESEND_TOKEN: ${{ secrets.RESEND_TOKEN }}
           RESEND_FROM: ${{ secrets.RESEND_FROM }}
           RESEND_TO: ${{ secrets.RESEND_TO }}

@@ -1,4 +1,3 @@
-// Dependencies
 import { Resend } from "resend";
 
 if (!process.env.RESEND_TOKEN) {

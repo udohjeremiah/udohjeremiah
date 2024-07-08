@@ -698,6 +698,9 @@ fn(fn);
 Types can be exported and imported using the same syntax as JavaScript values:
 
 ```ts
+// @filename: app.ts
+import { Cat, Dog } from "./animal.js";
+
 // @filename: animal.ts
 export type Cat = {
   breed: string;
@@ -709,8 +712,6 @@ export interface Dog {
   yearOfBirth: number;
 }
 
-// @filename: app.ts
-import { Cat, Dog } from "./animal.js";
 type Animals = Cat | Dog;
 ```
 
@@ -748,7 +749,7 @@ indicate that the imported reference is a type:
 
 ```ts
 // @filename: app.ts
-import { createCatName, type Cat, type Dog } from "./animal.js";
+import { type Cat, type Dog, createCatName } from "./animal.js";
 
 export type Animals = Cat | Dog;
 

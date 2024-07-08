@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  min-width: 0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizelegibility;
+}
+
+body {
+  min-height: 100dvh;
+}
+
+::selection {
+  @apply bg-green-100 dark:bg-green-900;
+}
+
+[data-rehype-pretty-code-title] {
+  @apply rounded-t-lg px-6 py-3 text-sm font-medium;
+  @apply bg-neutral-900 font-mono text-white;
+}
+
+[data-rehype-pretty-code-title] + pre {
+  @apply mt-0 rounded-t-none;
+}
+
+code {
+  counter-reset: line;
+}
+
+code > [data-line]::before {
+  @apply mr-8 inline-block w-4 text-right text-neutral-500;
+
+  content: counter(line);
+  counter-increment: line;
+}
+
+code[data-line-numbers-max-digits="2"] > [data-line]::before {
+  @apply w-6;
+}
+
+code[data-line-numbers-max-digits="3"] > [data-line]::before {
+  @apply w-8;
+}
+
+[data-rehype-pretty-code-fragment] ::selection {
+  @apply bg-green-900;
+}

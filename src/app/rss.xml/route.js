@@ -1,17 +1,12 @@
-// Dependencies
+import { allBlogs } from "@contentlayer/generated";
 import RSS from "rss";
 
-// Dependencies
-import { allBlogs } from "contentlayer/generated";
-
-// Lib
 import { sortBlogPostByDate } from "@/lib/utils";
 
 export async function GET() {
   const feed = new RSS({
     title: "Udoh Jeremiah",
-    description:
-      "A self-taught software developer standing at the intersection of technology and humanity.",
+    description: `I'm a Nigerian Software Developer and Technical Writer based in ${process.env.NEXT_PUBLIC_LOCATION}.`,
     feed_url: `${process.env.NEXT_PUBLIC_SITE_URL}/rss.xml`,
     site_url: process.env.NEXT_PUBLIC_SITE_URL,
     copyright: `© 2024 - ${new Date().getFullYear()} Udoh Jeremiah. All rights reserved.`,
