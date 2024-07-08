@@ -1,6 +1,6 @@
 import BookCard from "./cards/BookCard";
 import DevWisdomCard from "./cards/DevWisdomCard";
-import GitHubCard from "./cards/GitHubCard";
+import GitHubContributionsCard from "./cards/GitHubContributionsCard";
 import SkillSetCard from "./cards/SkillSetCard";
 import Avatar from "./components/Avatar";
 import Location from "./components/Location";
@@ -23,7 +23,7 @@ export default function HomePage() {
       <Newsletter />
       <div className="grid gap-3 prose-p:m-0 prose-img:m-0 md:grid-cols-3">
         <div className="md:col-span-2">
-          <GitHubCard />
+          <GitHubContributionsCard />
         </div>
         <DevWisdomCard />
         <BookCard />
