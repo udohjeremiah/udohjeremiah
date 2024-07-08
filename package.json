@@ -42,6 +42,7 @@
     "remark-gfm": "^4.0.0",
     "resend": "^3.4.0",
     "rss": "^1.2.2",
+    "shikiji": "^0.10.2",
     "sqip": "1.0.0-alpha.51",
     "sqip-plugin-data-uri": "1.0.0-alpha.52",
     "sqip-plugin-primitive": "1.0.0-alpha.53",
