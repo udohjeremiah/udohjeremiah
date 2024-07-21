@@ -32,7 +32,7 @@ export async function subscribe(previousState, formData) {
     await new Promise((resolve) => setTimeout(resolve, 2000));
     return {
       message:
-        "Thank you for your interest. Our newsletter feature is coming soon!",
+        "Thank you for your interest. The newsletter feature is coming soon!",
     };
   } catch (error) {
     const message = parseError(error);

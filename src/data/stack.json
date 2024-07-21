@@ -3,12 +3,6 @@
     "type": "Coding",
     "items": [
       {
-        "href": "https://developer.android.com/studio",
-        "image": "/logos/android-studio.svg",
-        "name": "Android Studio",
-        "description": "Official Android IDE for app dev."
-      },
-      {
         "href": "https://www.mongodb.com/products/tools/compass",
         "image": "/logos/mongodb.svg",
         "name": "MongoDB Compass",
@@ -31,12 +25,23 @@
         "image": "/logos/vscode.svg",
         "name": "VS Code",
         "description": "Cross-platform code editor."
+      }
+    ]
+  },
+  {
+    "type": "Writing",
+    "items": [
+      {
+        "href": "https://grammarly.com",
+        "image": "/logos/grammarly.svg",
+        "name": "Grammarly",
+        "description": "Typing assistant for spelling & grammar."
       },
       {
-        "href": "https://developer.apple.com/xcode",
-        "image": "/logos/xcode.svg",
-        "name": "XCode",
-        "description": "Official Apple IDE for app dev."
+        "href": "https://obsidian.md",
+        "image": "/logos/obsidian.svg",
+        "name": "Obsidian",
+        "description": "Private & flexible writing app."
       }
     ]
   },
@@ -143,13 +148,7 @@
         "description": "Discover podcasts on iPhone, iPad, & Mac."
       },
       {
-        "href": "https://apps.apple.com/us/app/flow-focus-pomodoro-timer/id1423210932",
-        "image": "/logos/grammarly.svg",
-        "name": "Grammarly",
-        "description": "Typing assistant for spelling & grammar."
-      },
-      {
-        "href": "https://apps.apple.com/us/app/home-workout-no-equipments/id1313192037",
+        "href": "https://apps.apple.com/us/app/home-workout-no-equipments",
         "image": "/logos/homeworkout.webp",
         "name": "Home Workout - No Equipments",
         "description": "Body weight fitness & training."
