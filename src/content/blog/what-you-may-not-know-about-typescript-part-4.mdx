@@ -10,7 +10,7 @@ This is the fourth article (part 4) in my series about **"What You May Not Know 
 start reading from [part 1](https://www.udohjeremiah.com/blog/what-you-may-not-know-about-typescript-part-1) to get an
 introduction to what led me to write this. With that said, let's get started.
 
-## In TypeSscript, when `target >= ES2022` or `useDefineForClassFields` is `true` in your `tsconfig.json`, class fields are initialized after the parent class constructor completes, overwriting any value set by the parent class.
+## In TypeSscript, when `target >= ES2022{:ts}` or `useDefineForClassFields{:ts}` is `true{:ts}` in your `tsconfig.json{:ts}`, class fields are initialized after the parent class constructor completes, overwriting any value set by the parent class.
 
 This can be a problem when you only want to re-declare a more accurate type for an inherited field:
 
@@ -46,16 +46,20 @@ class DogHouse extends AnimalHouse {
 }
 
 const animalHouse = new AnimalHouse({ dateOfBirth: "2019-03-15" });
-AnimalHouse.saySomething(animalHouse.resident); // My date of birth is 2019-03-15
+AnimalHouse.saySomething(animalHouse.resident);
+// [!not-code] My date of birth is 2019-03-15
 
 const dogHouse = new DogHouse({
   dateOfBirth: "2019-03-15",
   breed: "Labrador Retriever",
 });
-DogHouse.saySomething(dogHouse.resident); // Error: Argument of type 'Animal' is not assignable to parameter of type 'Dog'...
+// [!code error:3]
+DogHouse.saySomething(dogHouse.resident);
+// [!not-code] Argument of type 'Animal' is not assignable to parameter of type 'Dog'...
 ```
 
-To handle these cases, you can write `declare` to indicate to TypeScript that there should be no runtime effect for this field declaration:
+To handle these cases, you can write `declare{:ts}` to indicate to TypeScript that there should be no runtime effect for
+this field declaration:
 
 ```ts
 class DogHouse extends AnimalHouse {
@@ -74,12 +78,13 @@ const dogHouse = new DogHouse({
   dateOfBirth: "2019-03-15",
   breed: "Labrador Retriever",
 });
-DogHouse.saySomething(dogHouse.resident); // My breed is Labrador Retriever
+DogHouse.saySomething(dogHouse.resident);
+// [!not-code] My breed is Labrador Retriever
 ```
 
-## In TypeScript, you can control whether certain properties or methods are visible to code outside the class using the `public`, `protected`, and `private` visibility modifiers.
+## In TypeScript, you can control whether certain properties or methods are visible to code outside the class using the `public{:ts}`, `protected{:ts}`, and `private{:ts}` visibility modifiers.
 
-The default visibility of class members is `public`. A `public` member can be accessed anywhere:
+The default visibility of class members is `public{:ts}`. A `public{:ts}` member can be accessed anywhere:
 
 ```ts
 class Greeter {
@@ -89,13 +94,14 @@ class Greeter {
 }
 
 const g = new Greeter();
-g.greet(); // hi
+g.greet();
+// [!not-code] hi
 ```
 
-Because `public` is already the default visibility modifier, you don't need to write it on a class member, but might
-choose to do so for style/readability reasons.
+Because `public{:ts}` is already the default visibility modifier, you don't need to write it on a class member, but
+might choose to do so for style/readability reasons.
 
-`protected` members are only visible to subclasses of the class they’re declared in:
+`protected{:ts}` members are only visible to subclasses of the class they’re declared in:
 
 ```ts
 class Greeter {
@@ -116,12 +122,18 @@ class SpecialGreeter extends Greeter {
 }
 
 const g = new SpecialGreeter();
-g.greet(); // Hello, hi
-g.howdy(); // Howdy, hi
-g.getName(); // Error: Property 'getName' is protected and only accessible withing class 'Greeter' and its subclasses.
+g.greet();
+// [!not-code] Hello, hi
+
+g.howdy();
+// [!not-code] Howdy, hi
+
+// [!code error:3]
+g.getName();
+// [!not-code] Property 'getName' is protected and only accessible withing class 'Greeter' and its subclasses.
 ```
 
-`private` is like protected, but doesn't allow access to the member even from subclasses:
+`private{:ts}` is like protected, but doesn't allow access to the member even from subclasses:
 
 ```ts
 class Base {
@@ -131,7 +143,9 @@ class Base {
 const b = new Base();
 
 // Can't access from outside the class
-console.log(b.x); // Error: Property 'x' is prviate and only accessible within the class 'Base'.
+// [!code error:3]
+console.log(b.x);
+// [!not-code] Property 'x' is prviate and only accessible within the class 'Base'.
 ```
 
 ```ts
@@ -142,19 +156,23 @@ class Base {
 class Derived extends Base {
   showX() {
     // Can't access in subclasses
-    console.log(this.x); // Error: Property 'x' is private and only accessible within class 'Base'.
+    // [!code error:3]
+    console.log(this.x);
+    // [!not-code] Property 'x' is private and only accessible within class 'Base'.
   }
 }
 ```
 
-Static members can also use the same `public`, `protected`, and `private` visibility modifiers:
+Static members can also use the same `public{:ts}`, `protected{:ts}`, and `private{:ts}` visibility modifiers:
 
 ```ts
 class MyClass {
   private static x = 0;
 }
 
-console.log(MyClass.x); // Error: Property 'x' is private and only accessible with class 'MyClass'
+// [!code error:3]
+console.log(MyClass.x);
+// [!not-code] Property 'x' is private and only accessible with class 'MyClass'
 ```
 
 Static members are also inherited:
@@ -173,9 +191,10 @@ class Derived extends Base {
 
 ## In TypeScript, though derived classes need to follow their base class contracts, they may increase (but not decrease) the visibility of inherited members
 
-In general, derived classes need to follow their base class contracts, but may expose a subtype of base class with more capabilities.
+In general, derived classes need to follow their base class contracts, but may expose a subtype of base class with more
+capabilities.
 
-For example, making `protected` members `public`:
+For example, making `protected{:ts}` members `public{:ts}`:
 
 ```ts
 class Base {
@@ -188,14 +207,15 @@ class Derived extends Base {
 }
 
 const d = new Derived();
-console.log(d.m); // 15
+console.log(d.m);
+// [!not-code] 15
 ```
 
-Note that `Derived` was already able to read and write `m`, so this doesn't meaningfully alter the "security" of this
-situation. The main thing to note here is that in the derived class, we need to be careful to repeat the `protected`
-modifier if this exposure isn't intentional.
+Note that `Derived{:ts}` was already able to read and write `m{:ts}`, so this doesn't meaningfully alter the "security"
+of this situation. The main thing to note here is that in the derived class, we need to be careful to repeat the
+`protected{:ts}` modifier if this exposure isn't intentional.
 
-Because `private` members aren't visible to derived classes, a derived class can't increase or decrease their
+Because `private{:ts}` members aren't visible to derived classes, a derived class can't increase or decrease their
 visibility:
 
 ```ts
@@ -205,7 +225,9 @@ class Base {
 
 class Derived extends Base {
   // No modifier, so default is 'public'
-  x = 1; // Error: Class 'Derived' incorrectly extends base class 'Base'. Property 'x' is private in type 'Base' but not in type 'Derived'.
+  // [!code error:3]
+  x = 1;
+  // [!not-code] Class 'Derived' incorrectly extends base class 'Base'. Property 'x' is private in type 'Base' but not in type 'Derived'.
 }
 ```
 
@@ -214,16 +236,19 @@ class Base {
   protected m = 10;
 }
 
+// [!code error:3]
 class Derived extends Base {
-  // Error: Class 'Derived' incorrectly extends base class 'Base'. Property 'm' is private in type 'Derived' but not in type 'Base'.
+  // [!not-code] Class 'Derived' incorrectly extends base class 'Base'. Property 'm' is private in type 'Derived' but not in type 'Base'.
   private m = 15;
 }
 
 const d = new Derived();
-console.log(d.m); // Error: Property 'm' is private and only accessible within class 'Derived'.
+// [!code error:3]
+console.log(d.m);
+// [!not-code] Property 'm' is private and only accessible within class 'Derived'.
 ```
 
-## In TypeScript, it's illegal to access a `protected` member through a base class reference.
+## In TypeScript, it's illegal to access a `protected{:ts}` member through a base class reference.
 
 ```ts
 class Base {
@@ -240,21 +265,23 @@ class Derived2 extends Base {
   }
 
   f2(other: Derived1) {
-    other.x = 10; // Erorr: Property 'x' is protected and only accessible within class 'Derived1' and its subclasses.
+    // [!code error:3]
+    other.x = 10;
+    // [!not-code] Property 'x' is protected and only accessible within class 'Derived1' and its subclasses.
   }
 }
 ```
 
-This is because accessing `x` in `Derived2` should only be legal from `Derived2`’s subclasses, and `Derived1` isn't one
-of them. Moreover, if accessing `x` through a `Derived1` reference is illegal (which it certainly should be!), then
-accessing it through a base class reference should never improve the situation.
+This is because accessing `x{:ts}` in `Derived2{:ts}` should only be legal from `Derived2{:ts}`’s subclasses, and
+`Derived1{:ts}` isn't one of them. Moreover, if accessing `x{:ts}` through a `Derived1{:ts}` reference is illegal
+(which it certainly should be!), then accessing it through a base class reference should never improve the situation.
 
-## TypeScript allows cross-instance `private` access.
+## TypeScript allows cross-instance `private{:ts}` access.
 
 Different OOP languages disagree about whether different instances of the same class may access each others' private
 members. While languages like Java, C#, C++, Swift, and PHP allow this, Ruby does not.
 
-TypeScript does allow cross-instance `private` access:
+TypeScript does allow cross-instance `private{:ts}` access:
 
 ```ts
 class A {
@@ -267,10 +294,10 @@ class A {
 }
 ```
 
-## In TypeScript, like other aspects of its type system, `private` and `protected` are only enforced during type checking.
+## In TypeScript, like other aspects of its type system, `private{:ts}` and `protected{:ts}` are only enforced during type checking.
 
-This means that JavaScript runtime constructs like `in` or simple property lookup can still access a `private` or
-`protected` member:
+This means that JavaScript runtime constructs like `in` or simple property lookup can still access a `private{:ts}` or
+`protected{:ts}` member:
 
 ```ts
 class MySafe {
@@ -281,10 +308,11 @@ class MySafe {
 ```ts
 // In a JavaScript file...
 const s = new MySafe();
-console.log(s.secretKey); // 12345
+console.log(s.secretKey);
+// [!not-code] 12345
 ```
 
-`private` also allows access using bracket notation during type checking. This makes `private`-declared fields
+`private{:ts}` also allows access using bracket notation during type checking. This makes `private{:ts}`-declared fields
 potentially easier to access for things like unit tests, with the drawback that these fields are soft private and don't
 strictly enforce privacy.
 
@@ -296,16 +324,19 @@ class MySafe {
 const s = new MySafe();
 
 // OK
-console.log(s["secretKey"]); // 12345
+console.log(s["secretKey"]);
+// [!not-code] 12345
 
 // Not allowed during type checking
-console.log(s.secretKey); // Error: Property 'secretKey' is private and only accessible within class 'MySafe'.
+// [!code error:3]
+console.log(s.secretKey);
+// [!not-code] Property 'secretKey' is private and only accessible within class 'MySafe'.
 ```
 
-## In TypeScript, unlike JavaScript, `private` fields are soft private, whereas JavaScript private(`#`) fields are hard private.
+## In TypeScript, unlike JavaScript, `private{:ts}` fields are soft private, whereas JavaScript private(`#{:ts}`) fields are hard private.
 
-Unlike TypeScripts's `private`, JavaScript’s private fields (`#`) remain private after compilation and do not provide
-the previously mentioned escape hatches like bracket notation access, making them hard private.
+Unlike TypeScripts's `private{:ts}`, JavaScript’s private fields (`#{:ts}`) remain private after compilation and do not
+provide the previously mentioned escape hatches like bracket notation access, making them hard private.
 
 ```ts
 class Dog {
@@ -379,9 +410,11 @@ privacy, such as closures, WeakMaps, or private fields. Note that these added pr
 performance:
 
 ```ts
-// class Cat declares private fields using TypeScript's "private" keyword.
-// TypeScript's private is soft private. It's not strictly enforced and has escape hatches.
-// TypeScript strips "private" during compilation, meaning the fields are no longer private during runtime.
+/**
+ * class Cat declares private fields using TypeScript's "private" keyword.
+ * TypeScript's private is soft private. It's not strictly enforced and has escape hatches.
+ * TypeScript strips "private" during compilation, meaning the fields are no longer private during runtime.
+ */
 class Cat {
   private meowAmount = 0;
   personality = "angry";
@@ -393,9 +426,12 @@ class Cat {
   }
 }
 
-// class Dog declares private fields using JavaScript's # prefix
-// JavaScript's private is hard private. It's strictly enforced.
-// TypeScript does not strip # during compilation.
+
+/**
+ *  class Dog declares private fields using JavaScript's # prefix
+ * JavaScript's private is hard private. It's strictly enforced.
+ * TypeScript does not strip # during compilation.
+ */
 class Dog {
   #barkAmount = 0;
   personality = "happy";
@@ -408,23 +444,34 @@ class Dog {
 }
 
 const garfield = new Cat();
-garfield["meowAmount"]; // OK because "private" allows access with bracket notation as an escape hatch.
-garfield.meowAmount; // Error: Property 'meowAmount' is private and only accessible within class 'Cat'.
+// OK because "private" allows access with bracket notation as an escape hatch.
+garfield["meowAmount"];
+
+// [!code error:3]
+garfield.meowAmount;
+// [!not-code] Property 'meowAmount' is private and only accessible within class 'Cat'.
 
 const fido = new Dog();
-fido["#barkAmount"]; // Error: Element implicitly has 'any' type because expresson of type '#barkAmout' can't be used to index type 'Dog'.
-fido.#barkAmount; // Error: Property '#barkAmount' is not accessible outside class 'Dog' because it has a private identifier.
+// [!code error:3]
+fido["#barkAmount"];
+// [!not-code] Element implicitly has 'any' type because expresson of type '#barkAmout' can't be used to index type 'Dog'.
+
+// [!code error:3]
+fido.#barkAmount;
+// [!not-code] Property '#barkAmount' is not accessible outside class 'Dog' because it has a private identifier.
 ```
 
-## In TypeScript, unlike JavaScript, certain `static` names that conflicts with `Function` properties can’t be used.
+## In TypeScript, unlike JavaScript, certain `static{:ts}` names that conflicts with `Function{:ts}` properties can’t be used.
 
-It's generally not safe/possible to overwrite properties from the `Function` prototype. Because classes are themselves
-functions that can be invoked with `new`, certain `static` names can't be used. Function properties like `name`,
-`length`, and `call` aren't valid to define as static members:
+It's generally not safe/possible to overwrite properties from the `Function{:ts}` prototype. Because classes are
+themselves functions that can be invoked with `new{:ts}`, certain `static{:ts}` names can't be used. Function properties
+like `name{:ts}`, `length{:ts}`, and `call{:ts}` aren't valid to define as static members:
 
 ```ts
 class S {
-  static name = "S!"; // Error: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'S'.
+  // [!code error:3]
+  static name = "S!";
+  // [!not-code] Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'S'.
 }
 ```
 
@@ -434,17 +481,20 @@ This code isn't legal, and it may not be obvious why:
 
 ```ts
 class Box<Type> {
-  static defaultValue: Type; // Error: Static members cannot reference class type parameters.
+  // [!code error:3]
+  static defaultValue: Type;
+  // [!not-code] Static members cannot reference class type parameters.
 }
 ```
 
-Remember that types are always fully erased! At runtime, there's only one `Box.defaultValue` property slot. This means
-that setting `Box<string>.defaultValue` (if that were possible) would also change `Box<number>.defaultValue` - not good.
+Remember that types are always fully erased! At runtime, there's only one `Box.defaultValue{:ts}` property slot. This
+means that setting `Box<string>.defaultValue{:ts}` (if that were possible) would also change
+`Box<number>.defaultValue{:ts}` - not good.
 
-## In TypeScript, you can use `this is Type` in the return position for methods in classes and interfaces.
+## In TypeScript, you can use `this is Type{:ts}` in the return position for methods in classes and interfaces.
 
-When mixed with a type narrowing (e.g. `if` statements) the type of the target object would be narrowed to the specified
-`Type`. For example:
+When mixed with a type narrowing (e.g. `if{:ts}` statements) the type of the target object would be narrowed to the
+specified `Type{:ts}`. For example:
 
 ```ts
 class FileSystemObject {
@@ -495,7 +545,8 @@ if (fso.isFile()) {
 ```
 
 A common use-case for a this-based type guard is to allow for lazy validation of a particular field. For example, this
-case removes an `undefined` from the value held inside `box` when `hasValue` has been verified to be true:
+case removes an `undefined{:ts}` from the value held inside `box{:ts}` when `hasValue{:ts}` has been verified to be
+true:
 
 ```ts
 class Box<T> {
@@ -509,11 +560,11 @@ class Box<T> {
 const box = new Box<string>();
 box.value = "Gameboy";
 
-// Hovering over `box.value` in your TypeScript-compatible editor will show this: (property) Box<string>.value?: string
+// (property) Box<string>.value?: string
 box.value;
 
 if (box.hasValue()) {
-  // Hovering over `box.value` in your TypeScript-compatible editor will show this: (property) value: string
+  // (property) value: string
   box.value;
 }
 ```
@@ -521,7 +572,8 @@ if (box.hasValue()) {
 ## TypeScript offers a special syntax for turning a constructor parameter into a class property with the same name and value.
 
 These are called parameter properties and are created by prefixing a constructor argument with one of the visibility
-modifiers `public`, `private`, `protected`, or `readonly`. The resulting field gets those modifier(s):
+modifiers `public{:ts}`, `private{:ts}`, `protected{:ts}`, or `readonly{:ts}`. The resulting field gets those
+modifier(s):
 
 ```ts
 class Params {
@@ -535,12 +587,19 @@ class Params {
 }
 
 const a = new Params(1, 2, 3);
-console.log(a.x); // 1
-console.log(a.y); // Error: Property 'y' is protected and only accessible within class 'Params' and its subclasses.
-console.log(a.z); // Error: Property 'z' is private and only accessible within class 'Params'.
+console.log(a.x);
+// 1
+
+// [!code error:3]
+console.log(a.y);
+// [!not-code] Property 'y' is protected and only accessible within class 'Params' and its subclasses.
+
+// [!code error:3]
+console.log(a.z);
+// [!not-code] Property 'z' is private and only accessible within class 'Params'.
 ```
 
-## In TypeScript, classes, methods, and fields may be `abstract`.
+## In TypeScript, classes, methods, and fields may be `abstract{:ts}`.
 
 An abstract method or abstract field is one that hasn’t had an implementation provided. These members must exist inside
 an abstract class, which cannot be directly instantiated.
@@ -556,11 +615,13 @@ abstract class Base {
   }
 }
 
-const b = new Base(); // Error: Cannot create an instance of an abstract class.
+// [!code error:3]
+const b = new Base();
+// [!not-code] Cannot create an instance of an abstract class.
 ```
 
-We can't instantiate `Base` with `new` because it's abstract. Instead, we need to make a derived class and implement the
-abstract members:
+We can't instantiate `Base{:ts}` with `new{:ts}` because it's abstract. Instead, we need to make a derived class and
+implement the abstract members:
 
 ```ts
 class Derived extends Base {
@@ -570,14 +631,16 @@ class Derived extends Base {
 }
 
 const d = new Derived();
-d.printName(); // Hello, world
+d.printName();
+// [!not-code] Hello, world
 ```
 
 Notice that if we forget to implement the base class's abstract members, we'll get an error:
 
 ```ts
+// [!code error:3]
 class Derived extends Base {
-  // Erorr: Non-abstract class 'Derived' does not implement inherited abstract member getName from class 'Base'.
+  // [!not-code] Non-abstract class 'Derived' does not implement inherited abstract member getName from class 'Base'.
 }
 ```
 
@@ -595,17 +658,20 @@ abstract class Base {
 }
 
 function greet(ctor: typeof Base) {
-  const instance = new ctor(); // Error: Cannot create an instance of an abstract class.
+  // [!code error:3]
+  const instance = new ctor();
+  // [!not-code] Cannot create an instance of an abstract class.
   instance.printName();
 }
 ```
 
 TypeScript is telling you that you're trying to instantiate an abstract class. After all, given the definition of
-`greet`, it's perfectly legal to write this code, which would end up constructing an abstract class:
+`greet{:ts}`, it's perfectly legal to write this code, which would end up constructing an abstract class:
 
 ```ts
-// Bad, but doesn't error
+// [!code warning:3]
 greet(Base);
+// [!not-code] Bad, but doesn't error
 ```
 
 Instead, you want to write a function that accepts something with a construct signature:
@@ -630,12 +696,16 @@ function greet(ctor: new () => Base) {
   instance.printName();
 }
 
-greet(Derived); // Hello, world
-greet(Base); // Error: Argument of type 'typeof Base' is not assignable to parameter of type 'new () => Base'. Cannot assign an abstract constructor type to a non-abstract constructor type.
+greet(Derived);
+// [!not-code] Hello, world
+
+// [!code error:3]
+greet(Base);
+// [!not-code] Argument of type 'typeof Base' is not assignable to parameter of type 'new () => Base'. Cannot assign an abstract constructor type to a non-abstract constructor type.
 ```
 
-Now TypeScript correctly tells you about which class constructor functions can be invoked - `Derived` can because it's
-concrete, but `Base` cannot.
+Now TypeScript correctly tells you about which class constructor functions can be invoked - `Derived{:ts}` can because
+it's concrete, but `Base{:ts}` cannot.
 
 ## In TypeScript, subtype relationships exist between classes considered the same when compared structurally, even if there is no explicit inheritance.
 
@@ -653,8 +723,7 @@ class Point2 {
   y = 0;
 }
 
-// OK
-const p: Point1 = new Point2();
+const p: Point1 = new Point2(); // OK
 ```
 
 Similarly, subtype relationships between classes exist even if there's no explicit inheritance:
@@ -671,8 +740,7 @@ class Employee {
   salary = 0;
 }
 
-// OK
-const p: Person = new Employee();
+const p: Person = new Employee(); // OK
 ```
 
 This sounds straightforward, but there are a few cases that seem stranger than others. Empty classes have no members. In
@@ -688,20 +756,25 @@ function fn(x: Empty) {
 }
 
 // All OK!
-fn(window);
+fn("window");
+// [!not-code] window
+
 fn({});
+// [!not-code] {}
+
 fn(fn);
+// [!not-code] [Function: fn]
 ```
 
 ## TypeScript has a specific ES Module Syntax for working with types.
 
 Types can be exported and imported using the same syntax as JavaScript values:
 
-```ts
-// @filename: app.ts
+```ts title="app.ts"
 import { Cat, Dog } from "./animal.js";
+```
 
-// @filename: animal.ts
+```ts title="animal.ts"
 export type Cat = {
   breed: string;
   yearOfBirth: number;
@@ -715,12 +788,11 @@ export interface Dog {
 type Animals = Cat | Dog;
 ```
 
-However, TypeScript has extended the `import` syntax with two concepts for declaring an import of a type.
+However, TypeScript has extended the `import{:ts}` syntax with two concepts for declaring an import of a type.
 
-The first is `import type`, which is an import statement which can only import types:
+The first is `import type{:ts}`, which is an import statement which can only import types:
 
-```ts
-// @filename: animal.ts
+```ts title="animal.ts"
 export type Cat = {
   breed: string;
   yearOfBirth: number;
@@ -732,23 +804,26 @@ export type Dog = {
 };
 
 export const createCatName = () => "fluffy";
+```
 
-// @filename: valid.ts
+```ts title="valid.ts"
 import type { Cat, Dog } from "./animal.js";
+```
+
+```ts title="app.ts"
+import type { createCatName } from "./animal.js";
 
 export type Animals = Cat | Dog;
 
-// @filename: app.ts
-import type { createCatName } from "./animal.js";
-
-const name = createCatName(); // Error: 'createCatName' cannot be used as a value because it was imported using 'import type'.
+// [!code error:3]
+const name = createCatName();
+// [!not-code] 'createCatName' cannot be used as a value because it was imported using 'import type'.
 ```
 
-The second is an inline type import. TypeScript 4.5 also allows for individual imports to be prefixed with `type` to
-indicate that the imported reference is a type:
+The second is an inline type import. TypeScript 4.5 also allows for individual imports to be prefixed with `type{:ts}`
+to indicate that the imported reference is a type:
 
-```ts
-// @filename: app.ts
+```ts title="app.ts"
 import { type Cat, type Dog, createCatName } from "./animal.js";
 
 export type Animals = Cat | Dog;
@@ -758,11 +833,11 @@ const name = createCatName();
 
 Together these allow a non-TypeScript transpiler like Babel, swc, or esbuild to know what imports can be safely removed.
 
-## TypeScript has its module format called `namespaces` which pre-dates the ES Modules standard.
+## TypeScript has its module format called `namespaces{:ts}` which pre-dates the ES Modules standard.
 
 This syntax has a lot of useful features for creating complex definition files and still sees active use in
 [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped). While not deprecated, the majority of the
-features in `namespaces` exist in ES Modules and TypeScript recommends you use that to align with JavaScript’s
+features in `namespaces{:ts}` exist in ES Modules and TypeScript recommends you use that to align with JavaScript’s
 direction. You can learn more about modules in
 [the modules reference page](https://www.typescriptlang.org/docs/handbook/modules/introduction.html) and namespaces in
 [the namespaces reference page](https://www.typescriptlang.org/docs/handbook/namespaces.html).
@@ -807,14 +882,16 @@ interface Box {
 }
 
 interface Box {
-  width: string; // Error: Subsequent property declarations must have the same type. Property 'width' must be of type 'number', but here has type 'string'.
+  // [!code error:3]
+  width: string;
+  // [!not-code] Subsequent property declarations must have the same type. Property 'width' must be of type 'number', but here has type 'string'.
 }
 ```
 
 ## In TypeScript, declaration merging for interfaces treats each function member of the same name as describing an overload of the same function.
 
-Of note, too, is that in the case of interface `A` merging with later interface `A`, the second interface will have a
-higher precedence than the first.
+Of note, too, is that in the case of interface `A{:ts}` merging with later interface `A{:ts}`, the second interface will
+have a higher precedence than the first.
 
 That is, in the example:
 
@@ -873,7 +950,7 @@ interface Document {
 }
 ```
 
-The resulting merged declaration of `Document` will be the following:
+The resulting merged declaration of `Document{:ts}` will be the following:
 
 ```ts
 interface Document {

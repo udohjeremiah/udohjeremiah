@@ -47,7 +47,7 @@ export default function BlogPage() {
   return (
     <>
       <Header title={title} description={description} />
-      <div className="mt-8 divide-y">
+      <div className="mt-8 divide-y divide-neutral-200 dark:divide-neutral-700">
         {Object.entries(blogPostsByYear)
           .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
           .map(([year, posts]) => (

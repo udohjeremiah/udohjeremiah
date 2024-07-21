@@ -1,3 +1,8 @@
+import {
+  transformerNotationDiff,
+  transformerNotationErrorLevel,
+  transformerNotationFocus,
+} from "@shikijs/transformers";
 import { defineDocumentType, makeSource } from "contentlayer2/source-files";
 import { extractTocHeadings } from "pliny/mdx-plugins/remark-toc-headings.js";
 import readingTime from "reading-time";
@@ -84,33 +89,6 @@ export const computeFields = ({
   },
 });
 
-const rehypePrettyCodeOptions = {
-  theme: moonlightTheme,
-  keepBackground: false,
-  onVisitLine(node) {
-    if (node.children.length === 0) {
-      node.children = [{ type: "text", value: " " }];
-    }
-  },
-};
-
-const rehypeAutolinkHeadingsOptions = {
-  properties: {
-    className: [
-      "relative",
-      'lg:before:content-["#"]',
-      "before:block",
-      "before:absolute",
-      "before:left-[-1.5rem]",
-      "before:text-neutral-500",
-      "focus:outline-none",
-      "focus:before:text-neutral-600",
-      "before:transition-colors",
-    ],
-    ariaLabel: "Link to section",
-  },
-};
-
 export const Blog = defineDocumentType(() => ({
   name: "Blog",
   filePathPattern: `blog/*.mdx`,
@@ -145,16 +123,78 @@ export const Blog = defineDocumentType(() => ({
   computedFields: computeFields("Blog", {}),
 }));
 
+const transformerNotCode = () => ({
+  line(node, line) {
+    if (node.children.length === 1) {
+      const type = node.children[0].children[0].type;
+      const value = node.children[0].children[0].value.trim();
+      const match = value.match(/\/\/ \[(.*?)\]/)?.[1];
+
+      if (match) {
+        const flags = match
+          .split(" ")
+          .map((flag) => flag.trim())
+          .filter((flag) => flag);
+
+        if (type === "text" && flags[0] === "!not-code") {
+          node.properties = { "data-not-line": "" };
+          flags.slice(1).forEach((flag) => this.addClassToHast(node, flag));
+
+          const searchString = `// [${match}] `;
+          node.children[0].children[0].value = value
+            .replace(searchString, "")
+            .trim();
+        }
+      }
+    }
+  },
+});
+
+const rehypePrettyCodeOptions = {
+  theme: moonlightTheme,
+  keepBackground: false,
+  transformers: [
+    transformerNotCode(),
+    transformerNotationDiff(),
+    transformerNotationErrorLevel(),
+    transformerNotationFocus(),
+  ],
+  onVisitLine(node) {
+    // Prevent lines from collapsing in `display: grid` mode, and
+    // allow empty lines to be copy/pasted
+    if (node.children.length === 0) {
+      node.children = [{ type: "text", value: " " }];
+    }
+  },
+  onVisitHighlightedLine(node) {
+    if (!node.properties.className) {
+      node.properties.className = [];
+    }
+
+    node.properties.className.push("highlighted");
+  },
+  onVisitHighlightedChars(node) {
+    node.properties.className = ["highlighted"];
+  },
+};
+
+const rehypeAutolinkHeadingsOptions = {
+  behavior: "wrap",
+  properties: {
+    ariaLabel: "Link to section",
+  },
+};
+
 const source = makeSource({
   contentDirPath: "./src/content",
   documentTypes: [Blog],
   mdx: {
     remarkPlugins: [remarkGfm],
     rehypePlugins: [
-      rehypeAccessibleEmojis,
       rehypeSlug,
-      [rehypePrettyCode, rehypePrettyCodeOptions],
       [rehypeAutolinkHeadings, rehypeAutolinkHeadingsOptions],
+      rehypeAccessibleEmojis,
+      [rehypePrettyCode, rehypePrettyCodeOptions],
       rehypePresetMinify,
     ],
   },

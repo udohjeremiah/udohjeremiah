@@ -19,6 +19,7 @@ body {
   @apply bg-green-100 dark:bg-green-900;
 }
 
+/* rehpye pretty code */
 [data-rehype-pretty-code-title] {
   @apply rounded-t-lg px-6 py-3 text-sm font-medium;
   @apply bg-neutral-900 font-mono text-white;
@@ -28,15 +29,17 @@ body {
   @apply mt-0 rounded-t-none;
 }
 
-code {
+pre > code {
   counter-reset: line;
+
+  @apply min-w-max;
 }
 
-code > [data-line]::before {
-  @apply mr-8 inline-block w-4 text-right text-neutral-500;
-
+pre > code > [data-line]::before {
   content: counter(line);
   counter-increment: line;
+
+  @apply mr-8 inline-block w-4 text-right text-neutral-500;
 }
 
 code[data-line-numbers-max-digits="2"] > [data-line]::before {
@@ -49,4 +52,55 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
 
 [data-rehype-pretty-code-fragment] ::selection {
   @apply bg-green-900;
+}
+
+[data-highlighted-line] {
+  @apply bg-neutral-700;
+}
+
+mark[data-highlighted-chars] {
+  @apply m-0 rounded bg-white/30 px-1;
+}
+
+/* shiki transformers */
+.diff,
+.highlighted {
+  @apply relative -mx-6 inline-block px-6;
+}
+
+.highlighted {
+  @apply bg-white/30;
+}
+
+.highlighted.error {
+  @apply bg-red-500/30;
+}
+
+.highlighted.warning {
+  @apply bg-yellow-500/30;
+}
+
+.diff.remove,
+.diff.add {
+  @apply before:absolute before:left-2.5 before:-translate-x-1/2;
+}
+
+.diff.remove {
+  @apply !bg-red-600/20 opacity-70 before:text-red-400 before:content-['-'];
+}
+
+.diff.add {
+  @apply !bg-green-500/30 before:text-green-400 before:content-['+'];
+}
+
+.has-focused span[data-line]:not(.focused) {
+  @apply transition-[filter];
+}
+
+.has-focused:not(:hover) span[data-line]:not(.focused) {
+  @apply opacity-70 blur-[2px];
+}
+
+[data-not-line] {
+  @apply -mx-6 select-none px-[70px];
 }
