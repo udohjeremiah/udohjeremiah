@@ -50,16 +50,6 @@
     "name": "Next.js"
   },
   {
-    "href": "https://expo.dev",
-    "image": "/logos/expo.svg",
-    "name": "Expo"
-  },
-  {
-    "href": "https://www.framer.com/motion",
-    "image": "/logos/framer-motion.svg",
-    "name": "Framer Motion"
-  },
-  {
     "href": "https://gsap.com",
     "image": "/logos/gsap.svg",
     "name": "GSAP"
