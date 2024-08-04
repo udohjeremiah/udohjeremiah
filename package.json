@@ -13,11 +13,9 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*.{js,ts,md,jsx,tsx,mdx,css}": [
-      "npm run format",
-      "npm run lint .",
-      "npm run build ."
-    ]
+    "*.{js,ts,md,jsx,tsx,css}": "npm run format",
+    "*.{js,ts,jsx,tsx}": "npm run lint .",
+    "*.{html,css,js,ts,md,jsx,tsx,mdx}": "npm run build ."
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.0",
