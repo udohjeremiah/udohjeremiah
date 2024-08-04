@@ -143,6 +143,7 @@ this:
   "author": "",
   "license": "ISC"
 }
+
 ```
 
 The `npm init -y{:bash}` command initializes a new npm package by creating a
@@ -161,6 +162,7 @@ follows:
     "node": ">=20.0.0"
   }
 }
+
 ```
 
 Your `setup-web-project{:.constant.language.undefined}` directory structure should now look like this:
@@ -256,7 +258,7 @@ import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  plugins: [remix()],
+  plugins: [remix()]
 });
 ```
 
@@ -272,6 +274,7 @@ Add the following scripts to the `"scripts"{:json}` property in the `package.jso
   }
   // ...existing configurations
 }
+
 ```
 
 - `npm run dev{:bash}`: is used to start the development server.
@@ -383,12 +386,10 @@ Update your `vite.config.ts{:.constant.language.undefined}` file to add the `vit
 ```ts title="vite.config.ts"
 import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig } from "vite";
-import tsconfigPaths from "vite-tsconfig-paths";
-
-// [!code ++]
+import tsconfigPaths from "vite-tsconfig-paths"; // [!code ++]
 
 export default defineConfig({
-  plugins: [remix(), tsconfigPaths()], // [!code ++]
+  plugins: [remix(), tsconfigPaths()] // [!code ++]
 });
 ```
 
@@ -406,6 +407,7 @@ Add the `typecheck{:json}` script to the `"scripts"{:json}` property in the
   }
   // ...existing configurations
 }
+
 ```
 
 - `npm run typecheck{:bash}`: is used to check the type safety of the program, ensuring it's free of type-related
@@ -587,9 +589,7 @@ export default function Home() {
         </h2>
 
         <p className="text-center text-lg leading-6 text-gray-200">
-          Setting up and customizing my new web project, integrating tools, and
-          applying best practices for a smooth development process. Stay tuned
-          for more updates!
+          Setting up and customizing my new web project, integrating tools, and applying best practices for a smooth development process. Stay tuned for more updates!
         </p>
       </div>
     </div>
@@ -752,7 +752,7 @@ module.exports = {
 
 Add the following scripts to the `"scripts"{:json}` property in the `package.json{:.constant.language.undefined}` file:
 
-```json
+```json title="package.json"
 {
   // ...existing configurations
   "scripts": {
@@ -765,6 +765,7 @@ Add the following scripts to the `"scripts"{:json}` property in the `package.jso
   }
   // ...existing configurations
 }
+
 ```
 
 - `npm run lint{:bash}`: is used to check the program for linting errors, ensuring it adheres to ESLint's style.
@@ -872,6 +873,7 @@ Add the following scripts to the `"scripts"{:json}` property in the `package.jso
   }
   // ...existing configurations
 }
+
 ```
 
 - `npm run format{:bash}`: is used to check the code format of the program, ensuring it adheres to Prettier's style.
@@ -967,6 +969,7 @@ After running the command successfully, a `.husky{:.constant.language.undefined}
   }
   // ...existing configurations
 }
+
 ```
 
 Update the `.husky/pre-commit{:.constant.language.undefined}` file to:
@@ -1154,6 +1157,7 @@ jobs:
 
       - name: Build with Vite
         run: npm run build
+
 ```
 
 Dependabot creates pull requests to keep your dependencies secure and up-to-date. To configure Dependabot to maintain
@@ -1198,6 +1202,7 @@ updates:
       include: "scope"
     # Allow up to 10 open pull requests for npm dependencies
     open-pull-requests-limit: 10
+
 ```
 
 Your `setup-web-project{:.constant.language.undefined}` directory structure should now look like this:
@@ -1364,6 +1369,7 @@ export default function Home() {
     </div>
   );
 }
+
 ```
 
 And that's it! Our (simplistic) feature to complete the homepage is done.
