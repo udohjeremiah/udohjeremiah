@@ -878,7 +878,7 @@ function fn(x: boolean) {
 function fn(x: string): string;
 // [!code error:3]
 function fn(x: number): boolean;
-// [!no-code] This overload signature is not compatible with its implementation signature.
+// [!not-code] This overload signature is not compatible with its implementation signature.
 
 // Should be `fn(x: string | number): string | boolean `
 function fn(x: string | number) {

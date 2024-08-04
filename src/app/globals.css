@@ -82,7 +82,7 @@ mark[data-highlighted-chars] {
 
 .diff.remove,
 .diff.add {
-  @apply before:absolute before:left-2.5 before:-translate-x-1/2;
+  @apply before:mr-8 before:inline-block before:w-4 before:text-right;
 }
 
 .diff.remove {
