@@ -30,7 +30,7 @@ export default function Newsletter() {
 
   return (
     <div className="space-y-2">
-      <p className="mb-0">
+      <p className="mb-0 text-neutral-500 dark:text-neutral-400">
         Join an exclusive community of avid readers and receive occasional
         updates on new projects.
       </p>

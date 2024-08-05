@@ -1,6 +1,7 @@
 ## Hello 👋 I'm Udoh Jeremiah. I'm a Nigerian 🇳🇬 Software Developer 👨🏼‍💻 and Technical Writer ✍🏼.
 
-- Tech Stack: TypeScript, Node.js, Express.js, React.js, Next.js, MongoDB, Redis.io, ReactNative, Expo, etc.
+- Tech Stack: JavaScript, TypeScript, Node.js, Express.js, React.js, Remix, Next.js, MongoDB, Redis.io, Nest.js,
+  Tailwind CSS, GSAP, etc.
 - Portfolio: [udohjeremiah.com](https://udohjeremiah.com)
 - Blog: [udohjeremiah.com/blog](https://udohjeremiah.com/blog)
 - Linkedin: [Udoh Jeremiah](https://www.linkedin.com/in/udoh-jeremiah-02a640304)

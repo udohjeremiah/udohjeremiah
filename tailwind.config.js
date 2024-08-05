@@ -74,7 +74,7 @@ const config = {
         },
         invert: {
           css: {
-            color: theme("colors.neutral.400"),
+            color: theme("colors.neutral.300"),
           },
         },
       }),

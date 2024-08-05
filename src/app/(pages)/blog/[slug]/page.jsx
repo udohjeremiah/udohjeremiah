@@ -52,35 +52,45 @@ export default function BlogPostPage({ params }) {
 
   return (
     <>
-      <Header title={post.title} description={post.description} />
+      <div className="flex items-center gap-2 text-neutral-500 hover:text-green-500 dark:text-neutral-400 dark:hover:text-green-400">
+        <ArrowLeftToLineIcon className="h-4 w-4 text-inherit" />
+        <Link
+          href="/blog"
+          label="Back to blog"
+          className="text-sm text-inherit no-underline hover:text-inherit"
+        >
+          Back to blog
+        </Link>
+      </div>
       <div>
-        <p className="text-sm">
-          Tags:{" "}
+        <div className="flex gap-2">
           {post.tags
             .sort((tagA, tagB) => tagA.localeCompare(tagB))
             .map((tag, index) => (
-              <span key={index}>
+              <span
+                key={index}
+                className="rounded-full bg-green-500 px-2.5 py-0.5 text-sm text-neutral-900 dark:text-white"
+              >
                 {tag}
-                {index + 1 < post.tags.length && " • "}
               </span>
             ))}
-        </p>
-        <p className="text-sm">
+        </div>
+        <p className="text-sm text-neutral-500 dark:text-neutral-400">
           Published on{" "}
-          {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(
+          {new Intl.DateTimeFormat("en-GB", { dateStyle: "full" }).format(
             new Date(post.publishedOn),
-          )}{" "}
-          • {post.readingTime}
+          )}
         </p>
         {post.updatedOn && (
-          <p className="text-sm">
+          <p className="text-sm text-neutral-500 dark:text-neutral-400">
             Updated on{" "}
-            {new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(
+            {new Intl.DateTimeFormat("en-GB", { dateStyle: "full" }).format(
               new Date(post.publishedOn),
             )}
           </p>
         )}
       </div>
+      <Header title={post.title} description={post.description} />
       {post.image && post.imageBlur && (
         <Image
           src={post.image}
@@ -96,17 +106,6 @@ export default function BlogPostPage({ params }) {
       )}
       <div>
         <Mdx code={post.body.code} />
-      </div>
-      <hr />
-      <div className="flex items-center gap-2 text-neutral-500 hover:text-green-500 dark:text-neutral-400 dark:hover:text-green-400">
-        <ArrowLeftToLineIcon className="h-4 w-4 text-inherit" />
-        <Link
-          href="/blog"
-          label="Back to blog"
-          className="text-sm text-inherit no-underline hover:text-inherit"
-        >
-          Back to blog
-        </Link>
       </div>
     </>
   );
