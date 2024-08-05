@@ -4,8 +4,6 @@ import {
   transformerNotationFocus,
 } from "@shikijs/transformers";
 import { defineDocumentType, makeSource } from "contentlayer2/source-files";
-import { extractTocHeadings } from "pliny/mdx-plugins/remark-toc-headings.js";
-import readingTime from "reading-time";
 import { rehypeAccessibleEmojis } from "rehype-accessible-emojis";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypePresetMinify from "rehype-preset-minify";
@@ -29,16 +27,6 @@ export const computeFields = ({
     type: "string",
     description: "The slug as a path segment",
     resolve: (doc) => doc._raw.flattenedPath.split("/").slice(1).join("/"),
-  },
-  readingTime: {
-    type: "string",
-    description: "The estimated time to read the document, in minutes",
-    resolve: (doc) => readingTime(doc.body.raw).text,
-  },
-  toc: {
-    type: "list",
-    description: "The table of contents of the document",
-    resolve: async (doc) => extractTocHeadings(doc.body.raw),
   },
   image: {
     type: "string",
