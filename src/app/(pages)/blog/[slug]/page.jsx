@@ -1,5 +1,6 @@
 import { allBlogs } from "@contentlayer/generated";
 import { ArrowLeftToLineIcon } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -62,35 +63,16 @@ export default function BlogPostPage({ params }) {
           Back to blog
         </Link>
       </div>
-      <div>
-        <div className="flex gap-2">
-          {post.tags
-            .sort((tagA, tagB) => tagA.localeCompare(tagB))
-            .map((tag, index) => (
-              <span
-                key={index}
-                className="rounded-full bg-green-500 px-2.5 py-0.5 text-sm text-neutral-900 dark:text-white"
-              >
-                {tag}
-              </span>
-            ))}
-        </div>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
-          Published on{" "}
+      <div className="space-y-2">
+        <Header title={post.title} description={post.description} />
+        <div className="flex items-center text-sm text-neutral-500 dark:text-neutral-400">
+          <span className="sr-only">Published on: </span>
+          <CalendarIcon className="mr-2 h-4 w-4" />
           {new Intl.DateTimeFormat("en-GB", { dateStyle: "full" }).format(
             new Date(post.publishedOn),
           )}
-        </p>
-        {post.updatedOn && (
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            Updated on{" "}
-            {new Intl.DateTimeFormat("en-GB", { dateStyle: "full" }).format(
-              new Date(post.publishedOn),
-            )}
-          </p>
-        )}
+        </div>
       </div>
-      <Header title={post.title} description={post.description} />
       {post.image && post.imageBlur && (
         <Image
           src={post.image}
