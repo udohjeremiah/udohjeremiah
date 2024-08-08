@@ -90,18 +90,9 @@ export const Blog = defineDocumentType(() => ({
       type: "string",
       required: true,
     },
-    tags: {
-      type: "list",
-      of: { type: "string" },
-      required: true,
-    },
     publishedOn: {
       type: "date",
       required: true,
-    },
-    updatedOn: {
-      type: "date",
-      required: false,
     },
     image: {
       type: "string",
