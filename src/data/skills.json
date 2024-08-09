@@ -45,6 +45,11 @@
     "name": "React.js"
   },
   {
+    "href": "https://remix.run",
+    "image": "/logos/remix.svg",
+    "name": "Remix"
+  },
+  {
     "href": "https://nextjs.org",
     "image": "/logos/nextjs.svg",
     "name": "Next.js"
