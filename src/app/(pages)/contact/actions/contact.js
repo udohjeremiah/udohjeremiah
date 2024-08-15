@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
 
 import { resend } from "@/lib/resend";
 import { parseError } from "@/lib/utils";
@@ -13,14 +12,7 @@ if (!process.env.RESEND_FROM || !process.env.RESEND_TO) {
 }
 
 export async function contact(previousState, formData) {
-  const schema = z.object({
-    name: z.string().min(1).max(255),
-    email: z.string().email(),
-    message: z.string().min(1).max(1000),
-    type: z.enum(["general", "contract", "advisory", "agency"]),
-  });
-
-  const data = schema.parse(Object.fromEntries(formData));
+  const data = Object.fromEntries(formData);
 
   try {
     const response = await resend.emails.send({

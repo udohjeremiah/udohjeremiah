@@ -22,6 +22,17 @@
     ]
   },
   {
+    "category": "History",
+    "books": [
+      {
+        "href": "https://www.amazon.com/Pagans-Traditional-Religion-Rise-Christianity-ebook/dp/B00L7X6ZU8",
+        "image": "https://covers.openlibrary.org/b/olid/OL25671995M-M.jpg",
+        "name": "Pagans: The End of Traditional Religion and the Rise of Christianity",
+        "author": "James J. O'Donnell"
+      }
+    ]
+  },
+  {
     "category": "Psychology",
     "books": []
   },
