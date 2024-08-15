@@ -1,6 +1,5 @@
 import { allBlogs } from "@contentlayer/generated";
 import { ArrowLeftToLineIcon } from "lucide-react";
-import { CalendarIcon } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -65,9 +64,8 @@ export default function BlogPostPage({ params }) {
       </div>
       <div className="space-y-2">
         <Header title={post.title} description={post.description} />
-        <div className="flex items-center text-sm text-neutral-500 dark:text-neutral-400">
+        <div className="text-sm text-neutral-500 dark:text-neutral-400">
           <span className="sr-only">Published on: </span>
-          <CalendarIcon className="mr-2 h-4 w-4" />
           {new Intl.DateTimeFormat("en-GB", { dateStyle: "full" }).format(
             new Date(post.publishedOn),
           )}

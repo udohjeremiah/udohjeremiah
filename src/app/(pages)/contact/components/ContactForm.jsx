@@ -69,6 +69,7 @@ export default function ContactForm() {
           type="email"
           name="email"
           placeholder="oghenekevwe@example.com"
+          pattern=".+@.+\..+"
           required
           maxLength={180}
         />

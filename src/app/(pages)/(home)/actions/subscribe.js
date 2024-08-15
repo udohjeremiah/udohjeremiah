@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
 
 import { resend } from "@/lib/resend";
 import { parseError } from "@/lib/utils";
@@ -11,11 +10,7 @@ if (!process.env.RESEND_AUDIENCE_ID) {
 }
 
 export async function subscribe(previousState, formData) {
-  const schema = z.object({
-    email: z.string().email(),
-  });
-
-  const data = schema.parse(Object.fromEntries(formData));
+  const data = Object.fromEntries(formData);
 
   try {
     // const response = await resend.contacts.create({
