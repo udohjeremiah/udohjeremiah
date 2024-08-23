@@ -1,11 +1,13 @@
 import { allBlogs } from "@contentlayer/generated";
-import { ArrowLeftToLineIcon } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import Header from "@/components/Header";
 import Link from "@/components/Link";
 import Mdx from "@/components/Mdx";
+import ArrowLeftToLineIcon from "@/components/icons/ArrowLeftToLineIcon";
+
+import { tw } from "@/lib/utils";
 
 export const generateMetadata = ({ params }) => {
   const currentPath = params.slug;
@@ -52,19 +54,31 @@ export default function BlogPostPage({ params }) {
 
   return (
     <>
-      <div className="flex items-center gap-2 text-neutral-500 hover:text-green-500 dark:text-neutral-400 dark:hover:text-green-400">
+      <div
+        className={tw(
+          "flex items-center gap-2",
+          "text-neutral-500",
+          "hover:text-green-500",
+          "dark:text-neutral-400 dark:hover:text-green-400",
+        )}
+      >
         <ArrowLeftToLineIcon className="h-4 w-4 text-inherit" />
         <Link
           href="/blog"
           label="Back to blog"
-          className="text-sm text-inherit no-underline hover:text-inherit"
+          className={tw(
+            "text-sm text-inherit no-underline",
+            "hover:text-inherit",
+          )}
         >
           Back to blog
         </Link>
       </div>
       <div className="space-y-2">
         <Header title={post.title} description={post.description} />
-        <div className="text-sm text-neutral-500 dark:text-neutral-400">
+        <div
+          className={tw("text-sm", "text-neutral-500", "dark:text-neutral-400")}
+        >
           <span className="sr-only">Published on: </span>
           {new Intl.DateTimeFormat("en-GB", { dateStyle: "full" }).format(
             new Date(post.publishedOn),

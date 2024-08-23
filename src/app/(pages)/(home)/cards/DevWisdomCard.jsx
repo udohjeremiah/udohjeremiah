@@ -8,6 +8,8 @@ import quotes from "@/data/quotes.json";
 
 import { useMounted } from "@/hooks/useMounted";
 
+import { tw } from "@/lib/utils";
+
 const getToday = () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -55,10 +57,17 @@ export default function DevWisdomCard() {
       title="Dev Wisdom"
       className="flex flex-col justify-between gap-4 p-4"
     >
-      <p className='text-sm text-neutral-500 before:content-["\""] after:content-["\""] dark:text-neutral-400'>
+      <p
+        className={tw(
+          "text-sm",
+          "text-neutral-500",
+          'before:content-["""] after:content-["""]',
+          "dark:text-neutral-400",
+        )}
+      >
         {wisdom.quote}
       </p>
-      <p className="text-sm text-neutral-900 dark:text-neutral-100">
+      <p className={tw("text-sm", "text-neutral-900", "dark:text-neutral-100")}>
         — {wisdom.author}
       </p>
     </Card>

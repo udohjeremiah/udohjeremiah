@@ -6,8 +6,24 @@ const config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-geist-sans)"],
-        mono: ["var(--font-geist-mono)"],
+        system: [
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Roboto",
+          "Oxygen-Sans",
+          "Ubuntu",
+          "Cantarell",
+          "Helvetica Neue",
+          "sans-serif",
+          "Apple Color Emoji",
+          "Twemoji Mozilla",
+          "Segoe UI Emoji",
+          "Segoe UI Symbol",
+          "Noto Color Emoji",
+          "EmojiOne Color",
+          "Android Emoji",
+        ],
       },
       typography: (theme) => ({
         DEFAULT: {
@@ -78,21 +94,6 @@ const config = {
           },
         },
       }),
-      animation: {
-        wave: "wave-animation 2.5s infinite",
-      },
-      keyframes: {
-        "wave-animation": {
-          "0%": { transform: "rotate(0.0deg)" },
-          "10%": { transform: "rotate(14.0deg)" },
-          "20%": { transform: "rotate(-8.0deg)" },
-          "30%": { transform: "rotate(14.0deg)" },
-          "40%": { transform: "rotate(-4.0deg)" },
-          "50%": { transform: "rotate(10.0deg)" },
-          "60%": { transform: "rotate(0.0deg)" },
-          "100%": { transform: "rotate(0.0deg)" },
-        },
-      },
     },
   },
   plugins: [typography],

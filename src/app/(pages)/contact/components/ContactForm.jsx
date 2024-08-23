@@ -5,7 +5,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import Card from "@/components/Card";
 import { Input, Select, Textarea } from "@/components/Form";
 
-import { cn } from "@/lib/utils";
+import { tw } from "@/lib/utils";
 
 import { contact } from "../actions/contact";
 
@@ -16,8 +16,9 @@ const SubmitButton = () => {
     <button
       disabled={pending}
       type="submit"
-      className={cn(
-        "rounded-lg bg-green-500 px-6 py-2 text-sm font-medium text-white",
+      className={tw(
+        "rounded-lg px-6 py-2 text-sm font-medium",
+        "bg-green-500 text-white",
         "disabled:cursor-not-allowed disabled:opacity-50",
       )}
     >
@@ -80,7 +81,7 @@ export default function ContactForm() {
           required
           maxLength={1000}
         />
-        <Select label="Type" name="type" data={typeOptions} />
+        <Select label="Type" name="type" required data={typeOptions} />
         <SubmitButton />
         {state.message && (
           <output aria-live="polite" className="block text-sm">

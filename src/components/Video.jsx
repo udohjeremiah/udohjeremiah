@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 
-import { cn } from "@/lib/utils";
+import { tw } from "@/lib/utils";
 
 const ReactPlayer = dynamic(
   async () =>
@@ -16,7 +16,7 @@ const ReactPlayer = dynamic(
 export default function Video({ className, ...properties }) {
   return (
     <div
-      className={cn("relative aspect-video overflow-hidden rounded", className)}
+      className={tw("relative aspect-video overflow-hidden rounded", className)}
     >
       <ReactPlayer
         {...properties}
