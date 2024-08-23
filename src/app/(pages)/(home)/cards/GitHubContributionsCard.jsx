@@ -1,9 +1,23 @@
-"use client";
-
-import { useState } from "react";
-import GitHubCalendar from "react-github-calendar";
+import { unstable_cache } from "next/cache";
+import ActivityCalendar from "rsc-activity-calendar";
 
 import Card from "@/components/Card";
+
+import { tw } from "@/lib/utils";
+
+const getCachedContributions = unstable_cache(
+  async () => {
+    const response = await fetch(
+      "https://github-contributions-api.jogruber.de/v4/udohjeremiah",
+    );
+    const data = await response.json();
+    const total = data.total[new Date().getFullYear()];
+
+    return { contributions: data.contributions, total };
+  },
+  ["github-contributions"],
+  { revalidate: 60 * 60 * 24 },
+);
 
 const getContributions = (contributions, offset = 0) => {
   const today = new Date();
@@ -35,33 +49,35 @@ const getContributions = (contributions, offset = 0) => {
   });
 };
 
-export default function GitHubContributionsCard() {
-  const [total, setTotal] = useState(0);
+export default async function GitHubCard() {
+  const { contributions } = await getCachedContributions();
+  const data = getContributions(contributions, 0);
+
+  const today = new Date();
+  const oneYearAgo = new Date(today);
+  oneYearAgo.setFullYear(today.getFullYear() - 1);
+
+  const total = contributions
+    .filter((activity) => new Date(activity.date) >= oneYearAgo)
+    .reduce((newTotal, { count }) => newTotal + count, 0);
 
   return (
     <Card title="GitHub Activity" className="p-4">
       <div className="flex flex-col gap-4">
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
+        <p
+          className={tw("text-sm", "text-neutral-500", "dark:text-neutral-400")}
+        >
           {total} contributions in the last year
         </p>
         <div className="flex flex-col gap-[3px]">
-          <GitHubCalendar
-            username="udohjeremiah"
+          <ActivityCalendar
             hideMonthLabels
             hideColorLegend
             hideTotalCount
-            showWeekdayLabels={false}
-            colorScheme="light"
-            transformData={(data) => {
-              if (!total) {
-                const commits = data.reduce(
-                  (newTotal, { count }) => newTotal + count,
-                  0,
-                );
-                setTotal(commits);
-              }
-
-              return getContributions(data, 0);
+            data={data}
+            theme={{
+              light: ["#e5e5e5", "#bbf7d0", "#4ade80", "#16a34a", "#166534"],
+              dark: ["#404040", "#bbf7d0", "#4ade80", "#16a34a", "#166534"],
             }}
           />
         </div>

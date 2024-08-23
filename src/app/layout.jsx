@@ -1,9 +1,6 @@
-import { GeistMono } from "geist/font/mono";
-import { GeistSans } from "geist/font/sans";
-
 import Navbar from "@/components/NavBar";
 
-import { cn } from "@/lib/utils";
+import { tw } from "@/lib/utils";
 
 import "./globals.css";
 
@@ -37,13 +34,7 @@ export const metadata = {
 export default function Layout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={cn(
-          GeistSans.variable,
-          GeistMono.variable,
-          "bg-white font-sans dark:bg-neutral-950",
-        )}
-      >
+      <body className={tw("font-system", "bg-white", "dark:bg-neutral-950")}>
         {children}
         <Navbar />
       </body>

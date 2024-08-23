@@ -15,7 +15,7 @@ export default async function SkillSetCard() {
             alt={skill.name}
             width={32}
             height={32}
-            quality={100}
+            unoptimized
             className="rounded-md"
           />
         </Link>

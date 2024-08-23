@@ -6,7 +6,7 @@ import Link from "@/components/Link";
 
 import books from "@/data/books.json";
 
-import { cn } from "@/lib/utils";
+import { tw } from "@/lib/utils";
 
 const title = "Books";
 const description = "Materials I've read since launching this site.";
@@ -22,7 +22,7 @@ function Book({ data }) {
       key={data.href}
       href={data.href}
       label={data.name}
-      className={cn(
+      className={tw(
         "flex flex-col gap-4 rounded-lg p-4 no-underline transition-colors",
         "hover:bg-neutral-100",
         "dark:hover:bg-neutral-800",
@@ -38,7 +38,7 @@ function Book({ data }) {
       />
       <div>
         <p
-          className={cn(
+          className={tw(
             "text-sm font-medium",
             "text-neutral-900",
             "dark:text-neutral-100",
@@ -46,7 +46,9 @@ function Book({ data }) {
         >
           {data.name}
         </p>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
+        <p
+          className={tw("text-sm", "text-neutral-500", "dark:text-neutral-400")}
+        >
           {data.author}
         </p>
       </div>
@@ -63,7 +65,10 @@ export default function BooksPage() {
           <Card
             key={category}
             title={category}
-            className="grid grid-cols-2 gap-2 p-2 md:grid-cols-3 lg:grid-cols-4"
+            className={tw(
+              "grid grid-cols-2 gap-2 p-2",
+              "md:grid-cols-3 lg:grid-cols-4",
+            )}
           >
             {books.map((book) => (
               <Book data={book} key={book.name} />

@@ -6,7 +6,7 @@ import Link from "@/components/Link";
 
 import stack from "@/data/stack.json";
 
-import { cn } from "@/lib/utils";
+import { tw } from "@/lib/utils";
 
 const title = "Stack";
 const description = "Tools and technologies I use.";
@@ -24,7 +24,7 @@ function Tool({ data }) {
       key={data.href}
       href={data.href}
       label={data.name}
-      className={cn(
+      className={tw(
         "flex items-center gap-4 rounded-lg p-4 no-underline transition-colors",
         "hover:bg-neutral-100",
         "dark:hover:bg-neutral-800",
@@ -41,7 +41,7 @@ function Tool({ data }) {
       <div>
         <div className="flex items-center gap-2">
           <p
-            className={cn(
+            className={tw(
               "text-sm font-medium",
               "text-neutral-900",
               "dark:text-neutral-100",
@@ -51,7 +51,7 @@ function Tool({ data }) {
           </p>
           {data.featured && (
             <span
-              className={cn(
+              className={tw(
                 "rounded-full px-2 text-xs font-medium",
                 "bg-neutral-100 text-neutral-700",
                 "dark:bg-neutral-800 dark:text-neutral-300",
@@ -61,7 +61,9 @@ function Tool({ data }) {
             </span>
           )}
         </div>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
+        <p
+          className={tw("text-sm", "text-neutral-500", "dark:text-neutral-400")}
+        >
           {data.description}
         </p>
       </div>
@@ -78,7 +80,7 @@ export default function Stack() {
           <Card
             key={type}
             title={type}
-            className="grid gap-x-2 p-2 sm:grid-cols-2"
+            className={tw("grid gap-x-2 p-2", "sm:grid-cols-2")}
           >
             {items.map((item) => (
               <Tool data={item} key={item.name} />

@@ -6,7 +6,7 @@ import Link from "@/components/Link";
 
 import projects from "@/data/projects.json";
 
-import { cn } from "@/lib/utils";
+import { tw } from "@/lib/utils";
 
 const title = "Projects";
 const description = "Things I have brought to life and currently working on.";
@@ -31,7 +31,7 @@ function Project({ data }) {
       <div>
         <div className="flex items-center gap-2">
           <p
-            className={cn(
+            className={tw(
               "text-sm font-medium",
               "text-neutral-900",
               "dark:text-neutral-100",
@@ -41,7 +41,7 @@ function Project({ data }) {
           </p>
           {data.openSource && (
             <span
-              className={cn(
+              className={tw(
                 "rounded-full px-2 text-xs font-medium",
                 "bg-neutral-100 text-neutral-700",
                 "dark:bg-neutral-800 dark:text-neutral-300",
@@ -51,14 +51,20 @@ function Project({ data }) {
             </span>
           )}
         </div>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
+        <p
+          className={tw("text-sm", "text-neutral-500", "dark:text-neutral-400")}
+        >
           {data.description}
         </p>
         <div className="mt-4 flex gap-8">
           <Link
             href={data.href}
             label={data.name}
-            className="text-green-500 underline transition-colors duration-200  hover:text-green-600"
+            className={tw(
+              "underline transition-colors duration-200",
+              "text-green-500",
+              "hover:text-green-600",
+            )}
           >
             Live site
           </Link>
@@ -66,7 +72,11 @@ function Project({ data }) {
             <Link
               href={data.repositoryHref}
               label={data.name}
-              className="text-green-500 underline transition-colors duration-200 hover:text-green-600"
+              className={tw(
+                "underline transition-colors duration-200",
+                "text-green-500",
+                "hover:text-green-600",
+              )}
             >
               View code
             </Link>
@@ -81,7 +91,7 @@ export default function ProjectsPage() {
   return (
     <>
       <Header title={title} description={description} />
-      <div className="not-prose mt-8 grid gap-8 sm:grid-cols-2">
+      <div className={tw("not-prose mt-8 grid gap-8", "sm:grid-cols-2")}>
         {projects.map((project, index) => (
           <Card key={index} title={project.name} className="grid gap-x-2 p-2">
             <Project data={project} />

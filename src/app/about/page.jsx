@@ -5,7 +5,7 @@ import PagesLayout from "@/app/(pages)/layout";
 import Header from "@/components/Header";
 import Link from "@/components/Link";
 
-import { cn } from "@/lib/utils";
+import { tw } from "@/lib/utils";
 
 export const metadata = {
   title: "About",
@@ -23,9 +23,9 @@ export default function About() {
               alt="Udoh Jeremiah"
               width={64}
               height={96}
-              className={cn(
-                "m-0 block xl:hidden",
-                "h-12 w-12 rounded-full object-cover",
+              className={tw(
+                "m-0 block h-12 w-12 rounded-full object-cover",
+                "xl:hidden",
               )}
               quality={100}
               loading="eager"
@@ -137,9 +137,9 @@ export default function About() {
         quality={100}
         loading="eager"
         priority
-        className={cn(
-          "hidden xl:block",
-          "flex-0 sticky bottom-0 top-0 aspect-[720/1080] h-screen w-auto max-w-[50vw] select-none object-cover",
+        className={tw(
+          "flex-0 sticky bottom-0 top-0 hidden aspect-[720/1080] h-screen w-auto max-w-[50vw] select-none object-cover",
+          "xl:block",
         )}
       />
     </div>
