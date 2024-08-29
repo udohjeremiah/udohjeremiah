@@ -9,7 +9,7 @@ import { tw } from "@/lib/utils";
 
 export const metadata = {
   title: "About",
-  description: `I'm Udoh Jeremiah — a Nigerian Software Developer and Technical Writer currently based in ${process.env.NEXT_PUBLIC_LOCATION}.`,
+  description: `I'm Udoh Jeremiah — a Software Developer and Technical Writer currently based in ${process.env.NEXT_PUBLIC_LOCATION}.`,
 };
 
 export default function About() {
@@ -33,7 +33,7 @@ export default function About() {
             />
             <Header
               title="About"
-              description={`I'm Udoh Jeremiah — a Nigerian Software Developer and Technical Writer currently based in ${process.env.NEXT_PUBLIC_LOCATION}.`}
+              description={`I'm Udoh Jeremiah — a Software Developer and Technical Writer currently based in ${process.env.NEXT_PUBLIC_LOCATION}.`}
             />
             <main>
               <p>
@@ -84,10 +84,10 @@ export default function About() {
                 interests have since changed.
               </p>
               <p>
-                Currently, my focus is on web and mobile development. Utilizing
-                tools like TypeScript, React.js, Next.js, React Native, Expo,
-                and MongoDB, I develop interactive web and mobile applications
-                that address and enhance users&apos; needs.
+                Currently, my focus is on web development. Utilizing tools like
+                TypeScript, React.js, Remix, Next.js, MongoDB and Redis.io, I
+                develop interactive web applications that address and enhance
+                users&apos; needs.
               </p>
               <p>
                 I interned at{" "}
