@@ -1,4 +1,4 @@
-## Hello 👋 I'm Udoh Jeremiah. I'm a Nigerian 🇳🇬 Software Developer 👨🏼‍💻 and Technical Writer ✍🏼.
+## Hello, I'm Udoh Jeremiah. I'm a Software Developer and Technical Writer.
 
 - Tech Stack: JavaScript, TypeScript, Node.js, Express.js, React.js, Remix, Next.js, MongoDB, Redis.io, Nest.js,
   Tailwind CSS, GSAP, etc.
