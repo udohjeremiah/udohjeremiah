@@ -32,8 +32,8 @@ export default function Newsletter() {
   return (
     <div className="space-y-2">
       <p className={tw("mb-0", "text-neutral-500", "dark:text-neutral-400")}>
-        Join an exclusive community of avid readers and receive occasional
-        updates on new projects.
+        Join a community of readers and receive occasional updates on new
+        developments. No spam, I promise!
       </p>
       <form action={formAction} className="relative max-w-96">
         <label htmlFor="email" className="sr-only">

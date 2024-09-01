@@ -1,7 +1,108 @@
 [
   {
-    "type": "Coding",
+    "category": "Coding",
     "items": [
+      {
+        "href": "https://html.spec.whatwg.org",
+        "image": "/logos/html5.svg",
+        "name": "HTML5",
+        "description": "Markup language for the web."
+      },
+      {
+        "href": "https://www.w3.org/TR/CSS",
+        "image": "/logos/css3.svg",
+        "name": "CSS3",
+        "description": "Stylesheet language for the web."
+      },
+      {
+        "href": "https://ecma-international.org/publications-and-standards/standards/ecma-262",
+        "image": "/logos/javascript.svg",
+        "name": "JavaScript",
+        "description": "Dynamic language for web dev."
+      },
+      {
+        "href": "https://typescriptlang.org",
+        "image": "/logos/typescript.svg",
+        "name": "TypeScript",
+        "description": "Typed superset of JavaScript."
+      },
+      {
+        "href": "https://www.rust-lang.org",
+        "image": "/logos/rust.svg",
+        "name": "Rust",
+        "description": "Fast, memory-safe language for reliable software."
+      },
+      {
+        "href": "https://tailwindcss.com",
+        "image": "/logos/tailwindcss.svg",
+        "name": "TailwindCSS",
+        "description": "Utility-first CSS framework."
+      },
+      {
+        "href": "https://nodejs.org",
+        "image": "/logos/nodejs.svg",
+        "name": "Node.js",
+        "description": "JavaScript runtime for server-side dev."
+      },
+      {
+        "href": "https://expressjs.com",
+        "image": "/logos/expressjs.svg",
+        "name": "Express.js",
+        "description": "Minimalist web framework for Node.js."
+      },
+      {
+        "href": "https://react.dev",
+        "image": "/logos/reactjs.svg",
+        "name": "React.js",
+        "description": "Library for building user interfaces."
+      },
+      {
+        "href": "https://remix.run",
+        "image": "/logos/remix.svg",
+        "name": "Remix",
+        "description": "Full-stack framework for modern web app UX."
+      },
+      {
+        "href": "https://nextjs.org",
+        "image": "/logos/nextjs.svg",
+        "name": "Next.js",
+        "description": "Full-stack framework for high-quality web apps."
+      },
+      {
+        "href": "https://gsap.com",
+        "image": "/logos/gsap.svg",
+        "name": "GSAP",
+        "description": "JavaScript animation library."
+      },
+      {
+        "href": "https://www.mongodb.com",
+        "image": "/logos/mongodb.svg",
+        "name": "MongoDB",
+        "description": "NoSQL database for web apps."
+      },
+      {
+        "href": "https://redis.io",
+        "image": "/logos/redis.svg",
+        "name": "Redis",
+        "description": "In-memory data structure store."
+      }
+    ]
+  },
+  {
+    "category": "Development",
+    "items": [
+      {
+        "href": "https://git-scm.com",
+        "image": "/logos/git.svg",
+        "name": "Git",
+        "description": "Version control system."
+      },
+      {
+        "href": "https://github.com",
+        "image": "/logos/github.svg",
+        "name": "GitHub",
+        "description": "Code hosting platform."
+      },
       {
         "href": "https://www.mongodb.com/products/tools/compass",
         "image": "/logos/mongodb.svg",
@@ -13,6 +114,12 @@
         "image": "/logos/postman.svg",
         "name": "Postman",
         "description": "Build, test, & debug APIs."
+      },
+      {
+        "href": "https://redis.io/insight/",
+        "image": "/logos/redis-insight.svg",
+        "name": "Redis Insight",
+        "description": "The best Redis GUI."
       },
       {
         "href": "https://jakearchibald.github.io/svgomg",
@@ -29,7 +136,7 @@
     ]
   },
   {
-    "type": "Writing",
+    "category": "Writing",
     "items": [
       {
         "href": "https://grammarly.com",
@@ -46,7 +153,7 @@
     ]
   },
   {
-    "type": "Design",
+    "category": "Design",
     "items": [
       {
         "href": "https://www.figma.com",
@@ -87,7 +194,7 @@
     ]
   },
   {
-    "type": "Finance",
+    "category": "Finance",
     "items": [
       {
         "href": "https://chippercash.com",
@@ -110,7 +217,7 @@
     ]
   },
   {
-    "type": "Social",
+    "category": "Social",
     "items": [
       {
         "href": "https://discord.com",
@@ -133,7 +240,7 @@
     ]
   },
   {
-    "type": "Productivity",
+    "category": "Productivity",
     "items": [
       {
         "href": "https://www.apple.com/apple-podcasts",
@@ -150,7 +257,7 @@
     ]
   },
   {
-    "type": "Other",
+    "category": "Other",
     "items": [
       {
         "href": "https://netnewswire.com",

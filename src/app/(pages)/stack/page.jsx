@@ -76,10 +76,10 @@ export default function Stack() {
     <>
       <Header title={title} description={description} />
       <div className="not-prose mt-8 grid gap-8">
-        {Object.values(stack).map(({ items, type }) => (
+        {Object.values(stack).map(({ category, items }) => (
           <Card
-            key={type}
-            title={type}
+            key={category}
+            title={category}
             className={tw("grid gap-x-2 p-2", "sm:grid-cols-2")}
           >
             {items.map((item) => (

@@ -3,7 +3,7 @@ import { tw } from "@/lib/utils";
 import BookCard from "./cards/BookCard";
 import DevWisdomCard from "./cards/DevWisdomCard";
 import GitHubContributionsCard from "./cards/GitHubContributionsCard";
-import SkillSetCard from "./cards/SkillSetCard";
+import RecentPostsCard from "./cards/RecentPostsCard";
 import Newsletter from "./components/Newsletter";
 
 export const metadata = {
@@ -34,7 +34,7 @@ export default function HomePage() {
         <DevWisdomCard />
         <BookCard />
         <div className="md:col-span-2">
-          <SkillSetCard />
+          <RecentPostsCard />
         </div>
       </div>
     </>
