@@ -61,7 +61,7 @@ export default function BooksPage() {
     <>
       <Header title={title} description={description} />
       <div className="not-prose mt-8 grid gap-8">
-        {Object.values(books).map(({ books, category }) => (
+        {Object.values(books).map(({ category, books }) => (
           <Card
             key={category}
             title={category}
