@@ -39,6 +39,12 @@
         "description": "Utility-first CSS framework."
       },
       {
+        "href": "https://gsap.com",
+        "image": "/logos/gsap.svg",
+        "name": "GSAP",
+        "description": "JavaScript animation library."
+      },
+      {
         "href": "https://nodejs.org",
         "image": "/logos/nodejs.svg",
         "name": "Node.js",
@@ -67,12 +73,6 @@
         "image": "/logos/nextjs.svg",
         "name": "Next.js",
         "description": "Full-stack framework for high-quality web apps."
-      },
-      {
-        "href": "https://gsap.com",
-        "image": "/logos/gsap.svg",
-        "name": "GSAP",
-        "description": "JavaScript animation library."
       },
       {
         "href": "https://www.mongodb.com",
