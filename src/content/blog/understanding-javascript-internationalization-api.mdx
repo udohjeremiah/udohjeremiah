@@ -152,23 +152,21 @@ The exceptions to this rule are `Intl.Collator{:js}`, `Intl.DateTimeFormat{:js}`
 these constructs and returns a new object when called as a function. But, why? For backward compatibility with past
 editions of the i18n API. Remember, *you don't break the Web*.
 
-## The `locales{:.constant.other.color}` and `options{:.constant.other.color}` arguments
+## The `locales` and `options` arguments
 
 A distinctive feature of the language-sensitive functionality provided in the i18n API as well as the respecified
 language-sensitive methods of ECMA-262, is that it allows apps to specify languages, assist with language negotiation,
-and control details of the behavior. This is possible because they all accept `locales{:.constant.other.color}` and
-`options{:.constant.other.color}` arguments, which gives them the room to tailor the functionality to their needs.
+and control details of the behavior. This is possible because they all accept `locales` and `options` arguments, which
+gives them the room to tailor the functionality to their needs.
 
-The `locales{:.constant.other.color}` argument, which can be a string or an array of strings, is used to specify the
-**locale** to be used in a given operation. The JavaScript implementation (e.g., the browser or Node.js) examines
-`locales{:.constant.other.color}` and then computes a locale it understands that comes closest to satisfying the
-expressed preference.
+The `locales` argument, which can be a string or an array of strings, is used to specify the **locale** to be used in a
+given operation. The JavaScript implementation (e.g., the browser or Node.js) examines `locales` and then computes a
+locale it understands that comes closest to satisfying the expressed preference.
 
-The `options{:.constant.other.color}` argument, which must be an object, is used to specify other parameters that let
-the app control the behavior of the constructed object. The properties that can be specified in the
-`options{:.constant.other.color}` argument vary between constructors and functions, and if the
-`options{:.constant.other.color}` argument is not provided or is `undefined{:js}`, default values will be used for all
-properties.
+The `options` argument, which must be an object, is used to specify other parameters that let the app control the
+behavior of the constructed object. The properties that can be specified in the `options` argument vary between
+constructors and functions, and if the `options` argument is not provided or is `undefined{:js}`, default values will be
+used for all properties.
 
 ### What is a locale?
 
@@ -194,13 +192,12 @@ collation types, and calendar types using the IETF Best Current Practice (BCP) 4
 
 The [IANA Language Subtag Registry](https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry)
 defines and maintains the list of language tags. A language tag consists of a language code, an optional script code,
-and an optional regional code, all separated by hyphens (-). For example, `sr{:.constant.other.color}` for Serbian,
-`sr-Cyrl{:.constant.other.color}` for Serbian in Cyrillic script, `sr-Cyrl-BA{:.constant.other.color}` for Serbian in
-Cyrillic script as used in Bosnia-Herzegovina.
+and an optional regional code, all separated by hyphens (-). For example, `sr` for Serbian, `sr-Cyrl` for Serbian in
+Cyrillic script, `sr-Cyrl-BA` for Serbian in Cyrillic script as used in Bosnia-Herzegovina.
 
 But, BCP 47 allows for **extensions**, and with the `"u"{:js}` ( Unicode) extension, you can specify additional
 parameters for currency, date and time formatting, number formatting, etc., as part of a language tag. For example,
-`en-GB-u-nu-thai{:.constant.other.color}`, which means use British English with Thai digits
+`en-GB-u-nu-thai`, which means use British English with Thai digits
 (๐, ๑, ๒, ๓, ๔, ๕, ๖, ๗, ๘, ๙) in number formatting:
 
 ```js
@@ -208,10 +205,10 @@ let nf = new Intl.NumberFormat("th-Th-u-nu-thai");
 console.log(nf.format(10335497)); // ๑๐,๓๓๕,๔๙๗
 ```
 
-BCP 47 extension subtags (e.g., `cf{:.constant.other.color}` for currency, `nu{:.constant.other.color}` for numbering
-systems) are defined in the [Unicode CLDR Project](https://github.com/unicode-org/cldr/tree/main/common/bcp47). And, you
-can use the `Intl.supportedValuesOf(){:js}` static method to see the supported currency, time zone, measurement unit,
-numbering system, collation, or calendar values supported by an implementation:
+BCP 47 extension subtags (e.g., `cf` for currency, `nu` for numbering systems) are defined in the
+[Unicode CLDR Project](https://github.com/unicode-org/cldr/tree/main/common/bcp47). And, you can use the
+`Intl.supportedValuesOf(){:js}` static method to see the supported currency, time zone, measurement unit, numbering
+system, collation, or calendar values supported by an implementation:
 
 ```js
 console.log(Intl.supportedValuesOf("currency")) // ['AED', 'AFN', …]
@@ -219,7 +216,7 @@ console.log(Intl.supportedValuesOf("unit")) // ['acre', 'bit', …]
 console.log(Intl.supportedValuesOf("calendar")) // ['buddhist', 'chinese', …]
 ```
 
-### What does the JavaScript Internationalization API accept as a valid `locales{:.constant.other.color}`?
+### What does the JavaScript Internationalization API accept as a valid `locales`?
 
 The string defining a locale is often referred to as a *locale identifier*. A locale identifier is a case-insensitive
 ASCII string. As we learned earlier, each section contained in the locale must be separated by a hyphen (-) and it must
@@ -233,7 +230,7 @@ follow this format:
 5. One or more BCP 47 extension sequences (optional)
 6. A private-use extension sequence (optional)
 
-The `locales{:.constant.other.color}` argument may be:
+The `locales` argument may be:
 
 - `undefined{:js}` (or omitted): The implementation's default locale will be used:
 
@@ -301,22 +298,21 @@ new Intl.DateTimeFormat(["my-locale", "our-locale"]) // falls back to system's l
 ### How does the JavaScript Internationalization API resolve locales?
 
 The process of resolving a locale is referred to as **locale (or language) negotiation**. Knowing the internals of how
-this process works isn't important for you to write correct code, inasmuch as you specify well-formed valid
-`locales{:.constant.other.color}`. But, in some rare instances, it might help.
+this process works isn't important for you to write correct code, inasmuch as you specify well-formed valid `locales`.
+But, in some rare instances, it might help.
 
 As we now know, the constructors from the i18n API, as well as the updated language-sensitive functions in
-`String{:js}`, `Number{:js}`, and `Date{:js}` each take a `locales{:.constant.other.color}` and
-`options{:.constant.other.color}` argument. Together, these arguments form a request. The constructors then compare this
-request against the actual capabilities of their implementation to determine the actual locale to be used.
+`String{:js}`, `Number{:js}`, and `Date{:js}` each take a `locales` and `options` argument. Together, these arguments
+form a request. The constructors then compare this request against the actual capabilities of their implementation to
+determine the actual locale to be used.
 
-Two matching algorithms exist from which implementations can use to compare the request represented by the
-`locales{:.constant.other.color}` and `options{:.constant.other.color}` argument against the locales it has available to
-pick the best one: the `"lookup"{:.constant.other.color}` matcher which follows the
-[Lookup algorithm specified in BCP 47](https://datatracker.ietf.org/doc/html/rfc4647#section-3.4),  and the
-`"best fit"{:.constant.other.color}` matcher, which is the default algorithm, lets the implementation provide a locale.
+Two matching algorithms exist from which implementations can use to compare the request represented by the `locales` and
+`options` argument against the locales it has available to pick the best one: the `"lookup"` matcher which follows the
+[Lookup algorithm specified in BCP 47](https://datatracker.ietf.org/doc/html/rfc4647#section-3.4),  and the `"best fit"`
+matcher, which is the default algorithm, lets the implementation provide a locale.
 
-You can specify a matching algorithm from the existing ones using the `localeMatcher{:js}` property in the
-`options{:.constant.other.color}` argument:
+You can specify a matching algorithm from the existing ones using the `localeMatcher{:js}` property in the `options`
+argument:
 
 ```js
 new Intl.DateTimeFormat("en-GB", { localeMatcher: "best fit" }); // the default
@@ -378,8 +374,8 @@ console.log(
 ); // ['apple', 'Apricot', 'Banana', 'blueberry']
 ```
 
-For a list of the Unicode extension keys allowed in `locales{:.constant.other.color}`, and the properties supported in
-`options{:.constant.other.color}`, when using the `Intl.Collator(){:js}` constructor, see
+For a list of the Unicode extension keys allowed in `locales`, and the properties supported in `options`, when using the
+`Intl.Collator(){:js}` constructor, see
 [Parameters for Intl.Collator() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Collator/Collator#parameters).
 
 #### `Intl.DateTimeFormat{:js}`
@@ -422,8 +418,8 @@ console.log(
 ); // Friday 6 September 2024 at 05:24:16 GMT+1
 ```
 
-For a list of the Unicode extension keys allowed in `locales{:.constant.other.color}`, and the properties supported in
-`options{:.constant.other.color}`, when using the `Intl.DateTimeFormat(){:js}` constructor, see
+For a list of the Unicode extension keys allowed in `locales`, and the properties supported in `options`, when using the
+`Intl.DateTimeFormat(){:js}` constructor, see
 [Parameters for Intl.DateTimeFormat() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat#parameters).
 
 #### `Intl.NumberFormat{:js}`
@@ -476,8 +472,8 @@ console.log(
 ); // 67%
 ```
 
-For a list of the Unicode extension keys allowed in `locales{:.constant.other.color}`, and the properties supported in
-`options{:.constant.other.color}`, when using the `Intl.NumberFormat(){:js}` constructor, see
+For a list of the Unicode extension keys allowed in `locales`, and the properties supported in `options`, when using the
+`Intl.NumberFormat(){:js}` constructor, see
 [Parameters for Intl.NumberFormat() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#parameters).
 
 #### `Intl.RelativeTimeFormat{:js}`
@@ -510,8 +506,8 @@ console.log(rtf4.formatToParts(14, "day"));
 // ]
 ```
 
-For a list of the Unicode extension keys allowed in `locales{:.constant.other.color}`, and the properties supported in
-`options{:.constant.other.color}`, when using the `Intl.RelativeTimeFormat(){:js}` constructor, see
+For a list of the Unicode extension keys allowed in `locales`, and the properties supported in `options`, when using the
+`Intl.RelativeTimeFormat(){:js}` constructor, see
 [Parameters for Intl.RelativeTimeFormat() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/RelativeTimeFormat#parameters).
 
 #### `Intl.ListFormat{:js}`
@@ -548,8 +544,8 @@ console.log(
 // ];
 ```
 
-For a list of the Unicode extension keys allowed in `locales{:.constant.other.color}`, and the properties supported in
-`options{:.constant.other.color}`, when using the `Intl.ListFormat(){:js}` constructor, see
+For a list of the Unicode extension keys allowed in `locales`, and the properties supported in `options`, when using the
+`Intl.ListFormat(){:js}` constructor, see
 [Parameters for Intl.ListFormat() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/ListFormat#parameters).
 
 #### `Intl.Segmenter{:js}`
@@ -580,8 +576,8 @@ segmentedText = Array.from(segmenter.segment(str2), ({ segment }) => segment);
 console.log(segmentedText); // ['吾輩', 'は', '猫', 'で', 'ある', '。', '名前', 'は', 'たぬき', '。']
 ```
 
-For a list of the Unicode extension keys allowed in `locales{:.constant.other.color}`, and the properties supported in
-`options{:.constant.other.color}`, when using the `Intl.Segmenter(){:js}` constructor, see
+For a list of the Unicode extension keys allowed in `locales`, and the properties supported in `options`, when using the
+`Intl.Segmenter(){:js}` constructor, see
 [Parameters for Intl.Segmenter() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/Segmenter#parameters).
 
 #### `Intl.PluralRules{:js}`
@@ -638,8 +634,8 @@ formatOrdinals(42); // '42nd'
 formatOrdinals(103); // '103rd'
 ```
 
-For a list of the Unicode extension keys allowed in `locales{:.constant.other.color}`, and the properties supported in
-`options{:.constant.other.color}`, when using the `Intl.PluralRules(){:js}` constructor, see
+For a list of the Unicode extension keys allowed in `locales`, and the properties supported in `options`, when using the
+`Intl.PluralRules(){:js}` constructor, see
 [Parameters for Intl.PluralRules() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules/PluralRules#parameters).
 
 #### `Intl.DisplayNames{:js}`
@@ -676,17 +672,16 @@ console.log(dateTimeNames.of("hour")); // uur
 console.log(dateTimeNames.of("minute")); // minuut
 ```
 
-For a list of the Unicode extension keys allowed in `locales{:.constant.other.color}`, and the properties supported in
-`options{:.constant.other.color}`, when using the `Intl.DisplayNames(){:js}` constructor, see
+For a list of the Unicode extension keys allowed in `locales`, and the properties supported in `options`, when using the
+`Intl.DisplayNames(){:js}` constructor, see
 [Parameters for Intl.DisplayNames() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/DisplayNames#parameters).
 
 ### Using the i18n API indirectly
 
 JavaScript apps can also use the i18n API indirectly by using the respecified language-sensitive functions in
-`String{:js}`, `Number{:js}`, and `Date{:js}`, with the new `locales{:.constant.other.color}` and
-`options{:.constant.other.color}` parameters. This enables the updated collation and formatting methods to produce the
-same result as the `compare{:js}` and `format{:js}` methods of the `Intl.Collator{:js}`, `Intl.NumberFormat{:js}`, and
-`Intl.DateTimeFormat{:js}` constructors.
+`String{:js}`, `Number{:js}`, and `Date{:js}`, with the new `locales` and `options` parameters. This enables the updated
+collation and formatting methods to produce the same result as the `compare{:js}` and `format{:js}` methods of the
+`Intl.Collator{:js}`, `Intl.NumberFormat{:js}`, and `Intl.DateTimeFormat{:js}` constructors.
 
 #### `String{:js}`
 

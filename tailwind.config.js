@@ -71,18 +71,6 @@ const config = {
               borderColor: theme("colors.neutral.800"),
               borderRadius: theme("borderRadius.lg"),
             },
-            code: {
-              paddingInline: theme("spacing.2"),
-              paddingBlock: theme("spacing.1"),
-              backgroundColor: theme("colors.neutral.800"),
-              borderRadius: theme("borderRadius.lg"),
-              "&::before": {
-                content: "unset !important",
-              },
-              "&::after": {
-                content: "unset !important",
-              },
-            },
             table: {
               display: "block",
               overflowX: "auto",

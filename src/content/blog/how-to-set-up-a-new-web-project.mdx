@@ -47,7 +47,7 @@ git -v
 
 If the output indicates that `git{:bash}` is an unknown command, refer to this
 [GitHub article on how to install Git](https://github.com/git-guides/install-git). Otherwise, run the following commands
-to create a new directory, replacing `setup-web-project{:.constant.other.color}` with your project's name, and
+to create a new directory, replacing `setup-web-project` with your project's name, and
 initialize it as a Git repository:
 
 ```bash
@@ -64,7 +64,7 @@ git add README.md
 git commit -m "First commit"
 ```
 
-Your `setup-web-project{:.constant.other.color}` directory structure should now look like this:
+Your `setup-web-project` directory structure should now look like this:
 
 ```
 .
@@ -74,7 +74,7 @@ Your `setup-web-project{:.constant.other.color}` directory structure should no
 ### Step 2: Create a GitHub repository and connect it to your local repository
 
 To create a repository on GitHub, you need a GitHub account. [Create a GitHub account](https://github.com/signup) if you
-don't have one yet. Now, create a new GitHub repository named `setup-web-project{:.constant.other.color}`. Refer to this
+don't have one yet. Now, create a new GitHub repository named `setup-web-project`. Refer to this
 [GitHub article on creating a new repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository)
 if you need help.
 
@@ -83,7 +83,7 @@ After creating your new repository, your GitHub repository page should show a qu
 ![Repository quick setup screen](/blog/how-to-set-up-a-new-web-project/image-1.webp)
 
 Copy and run the command under **...or push an existing repository from the command line**. The code should look like
-this, replacing `udohjeremiah{:.constant.other.color}` with your GitHub username:
+this, replacing `udohjeremiah` with your GitHub username:
 
 ```bash
 git remote add origin https://github.com/udohjeremiah/setup-web-project.git
@@ -124,8 +124,8 @@ Otherwise, run the following command to initialize your Git repository as a new 
 npm init -y
 ```
 
-After running the command successfully, a new file named `package.json{:.constant.other.color}` will be created in your
-`setup-web-project{:.constant.other.color}` directory. The default content of the file will look like this:
+After running the command successfully, a new file named `package.json` will be created in your `setup-web-project`
+directory. The default content of the file will look like this:
 
 ```json title="package.json"
 {
@@ -143,9 +143,9 @@ After running the command successfully, a new file named `package.json{:.constan
 
 ```
 
-The `npm init -y{:bash}` command initializes a new npm package by creating a `package.json{:.constant.other.color}` file
-with default values. Since this is a web project rather than a typical npm package for others to install, you should
-edit the `package.json{:.constant.other.color}` file as follows:
+The `npm init -y{:bash}` command initializes a new npm package by creating a `package.json` file with default values.
+Since this is a web project rather than a typical npm package for others to install, you should edit the `package.json`
+file as follows:
 
 ```json title="package.json"
 {
@@ -161,7 +161,7 @@ edit the `package.json{:.constant.other.color}` file as follows:
 
 ```
 
-Your `setup-web-project{:.constant.other.color}` directory structure should now look like this:
+Your `setup-web-project` directory structure should now look like this:
 
 ```
 .
@@ -181,10 +181,10 @@ git push origin
 
 Dependencies are packages that a project needs to run in production. These are essential for the project to function
 properly when it's deployed. They are installed with the command `npm install <package-name>{:bash}` and listed under
-the `"dependencies"{:json}` section in the `package.json{:.constant.other.color}` file. Development dependencies are
+the `"dependencies"{:json}` section in the `package.json` file. Development dependencies are
 packages only needed during the development phase, as they are not required for the application to run in production.
 They are installed with the command `npm install -D <package-name>{:bash}` and listed under the
-`"devDependencies"{:json}` section in the `package.json{:.constant.other.color}` file.
+`"devDependencies"{:json}` section in the `package.json` file.
 
 ### Step 4: Install the runtime dependencies for a Remix app
 
@@ -194,23 +194,21 @@ Run the following command to install the dependencies for a Remix app:
 npm install @remix-run/node @remix-run/react @remix-run/serve isbot@4 react react-dom
 ```
 
-Did you notice that your `setup-web-project{:.constant.other.color}` directory now contains a
-`package-lock.json{:.constant.other.color}` file and a `node_modules{:.constant.other.color}` directory you did not
-create? The `package-lock.json{:.constant.other.color}` file is automatically generated to lock the versions of
-installed packages, ensuring consistent installs. The `node_modules{:.constant.other.color}` directory, also
-automatically added by npm, contains all project dependencies and can become very large. Therefore, it is unnecessary to
-include it in the GitHub repository. Dependencies can be reinstalled using the project's
-`package.json{:.constant.other.color}` file with `npm install{:bash}`.
+Did you notice that your `setup-web-project` directory now contains a `package-lock.json` file and a `node_modules`
+directory you did not create? The `package-lock.json` file is automatically generated to lock the versions of installed
+packages, ensuring consistent installs. The `node_modules` directory, also automatically added by npm, contains all
+project dependencies and can become very large. Therefore, it is unnecessary to include it in the GitHub repository.
+Dependencies can be reinstalled using the project's `package.json` file with `npm install{:bash}`.
 
 To prevent a file or directory from being tracked by Git and pushed to GitHub from your local repository, you can ignore
-it by adding it to a `.gitignore{:.constant.other.color}` file. Run the following command to create a
-`.gitignore{:.constant.other.color}` file and ignore the `node_modules{:.constant.other.color}` directory:
+it by adding it to a `.gitignore` file. Run the following command to create a `.gitignore` file and ignore the
+`node_modules` directory:
 
 ```bash
 echo "node_modules" >> .gitignore
 ```
 
-Your `setup-web-project{:.constant.other.color}` directory structure should now look like this:
+Your `setup-web-project` directory structure should now look like this:
 
 ```
 .
@@ -241,13 +239,13 @@ npm install -D @remix-run/dev vite
 Since Remix uses [Vite](https://vitejs.dev) to compile your application, providing a
 [Vite config](https://vitejs.dev/config) file with the Remix Vite plugin from `@remix-run/dev{:ts}` is necessary.
 
-Run the following command to create a `vite.config.ts{:.constant.other.color}` file:
+Run the following command to create a `vite.config.ts` file:
 
 ```bash
 touch vite.config.ts
 ```
 
-Copy the following code into the `vite.config.ts{:.constant.other.color}` file:
+Copy the following code into the `vite.config.ts` file:
 
 ```ts title="vite.config.ts"
 import { vitePlugin as remix } from "@remix-run/dev";
@@ -258,7 +256,7 @@ export default defineConfig({
 });
 ```
 
-Add the following scripts to the `"scripts"{:json}` property in the `package.json{:.constant.other.color}` file:
+Add the following scripts to the `"scripts"{:json}` property in the `package.json` file:
 
 ```json title="package.json"
 {
@@ -277,9 +275,9 @@ Add the following scripts to the `"scripts"{:json}` property in the `package.jso
 - `npm run build{:bash}`: is used to build the app for production.
 - `npm run start{:bash}`: is used to start a production server.
 
-Update your `.gitignore{:.constant.other.color}` file to ignore the `build{:.constant.other.color}` directory created
-whenever you run the command `npm run build{:bash}`. This directory contains the highly optimized production build for
-deployment and should not be included in your GitHub repository:
+Update your `.gitignore` file to ignore the `build` directory created whenever you run the command
+`npm run build{:bash}`. This directory contains the highly optimized production build for deployment and should not be
+included in your GitHub repository:
 
 ```.gitignore title=".gitignore"
 node_modules
@@ -288,7 +286,7 @@ node_modules
 
 ```
 
-Your `setup-web-project{:.constant.other.color}` directory structure should now look like this:
+Your `setup-web-project` directory structure should now look like this:
 
 ```
 .
@@ -317,8 +315,8 @@ Run the following command to install [TypeScript](https://www.typescriptlang.org
 npm install -D typescript
 ```
 
-Run the following command to create a `tsconfig.json{:.constant.other.color}` file to indicate that
-`setup-web-project{:.constant.other.color}` is the root of a TypeScript project:
+Run the following command to create a `tsconfig.json` file to indicate that `setup-web-project` is the root of a
+TypeScript project:
 
 ```bash
 touch tsconfig.json
@@ -326,8 +324,8 @@ touch tsconfig.json
 
 Copy the code from
 [Remix's `tsconfig.json` template](https://github.com/remix-run/remix/blob/main/templates/remix/tsconfig.json) to the
-`tsconfig.json{:.constant.other.color}` file to specify the files to be included in the compilation and the compiler
-options required to compile the project:
+`tsconfig.json` file to specify the files to be included in the compilation and the compiler options required to compile
+the project:
 
 ```json title="tsconfig.json"
 {
@@ -370,14 +368,13 @@ Install the type definitions for `react{:ts}` and `react-dom{:ts}`:
 npm install -D @types/react @types/react-dom
 ```
 
-Install the `vite-tsconfig-paths{:.constant.other.color}` package to give Vite the ability to resolve imports using
-TypeScript's path mapping:
+Install the `vite-tsconfig-paths` package to give Vite the ability to resolve imports using TypeScript's path mapping:
 
 ```bash
 npm install -D vite-tsconfig-paths
 ```
 
-Update your `vite.config.ts{:.constant.other.color}` file to add the `vite-tsconfig-paths{:ts}` plugin:
+Update your `vite.config.ts` file to add the `vite-tsconfig-paths{:ts}` plugin:
 
 ```ts title="vite.config.ts"
 import { vitePlugin as remix } from "@remix-run/dev";
@@ -389,7 +386,7 @@ export default defineConfig({
 });
 ```
 
-Add the `typecheck{:json}` script to the `"scripts"{:json}` property in the `package.json{:.constant.other.color}` file:
+Add the `typecheck{:json}` script to the `"scripts"{:json}` property in the `package.json` file:
 
 ```json title="package.json"
 {
@@ -408,7 +405,7 @@ Add the `typecheck{:json}` script to the `"scripts"{:json}` property in the `pac
 - `npm run typecheck{:bash}`: is used to check the type safety of the program, ensuring it's free of type-related
   errors.
 
-Your `setup-web-project{:.constant.other.color}` directory structure should now look like this:
+Your `setup-web-project` directory structure should now look like this:
 
 ```
 .
@@ -438,8 +435,7 @@ Run the following command to install [Tailwind CSS](https://tailwindcss.com) and
 npm install -D tailwindcss postcss autoprefixer
 ```
 
-Run the following command to generate `tailwind.config.ts{:.constant.other.color}` and
-`postcss.config.js{:.constant.other.color}` files:
+Run the following command to generate `tailwind.config.ts` and `postcss.config.js` files:
 
 ```bash
 npx tailwindcss init --ts -p
@@ -447,7 +443,7 @@ npx tailwindcss init --ts -p
 
 Copy the code from
 [Remix's `tailwind.config.ts` template](https://github.com/remix-run/remix/blob/main/templates/remix/tailwind.config.ts)
-into the `tailwind.config.ts{:.constant.other.color}` file to add the paths to all of your template files:
+into the `tailwind.config.ts` file to add the paths to all of your template files:
 
 ```ts title="tailwind.config.ts"
 import type { Config } from "tailwindcss";
@@ -461,7 +457,7 @@ export default {
 } satisfies Config;
 ```
 
-Your `setup-web-project{:.constant.other.color}` directory should now look like this:
+Your `setup-web-project` directory should now look like this:
 
 ```
 .
@@ -487,8 +483,8 @@ git push origin
 
 ### Step 8: Create the root and index routes
 
-In Remix, `app/root.tsx{:.constant.other.color}` is the root layout of your entire app and is called the "Root Route."
-It is the first component in the UI that renders, so it typically contains the global layout for the page.
+In Remix, `app/root.tsx` is the root layout of your entire app and is called the "Root Route." It is the first component
+in the UI that renders, so it typically contains the global layout for the page.
 
 Run the following commands to create the Root Route:
 
@@ -497,17 +493,16 @@ mkdir app
 touch app/root.tsx
 ```
 
-You need a `tailwind.css{:.constant.other.color}` file inside the `app{:.constant.other.color}` directory. This file
-will include the `@tailwind{:css}` directives for each of Tailwind's layers.
+You need a `tailwind.css` file inside the `app` directory. This file will include the `@tailwind{:css}` directives for
+each of Tailwind's layers.
 
-Run the following command to create a `tailwind.css{:.constant.other.color}` file inside
-`app{:.constant.other.color}`:
+Run the following command to create a `tailwind.css` file inside `app`:
 
 ```bash
 touch app/tailwind.css
 ```
 
-Copy the following code into the `app/tailwind.css{:.constant.other.color}` file:
+Copy the following code into the `app/tailwind.css` file:
 
 ```css title="app/tailwind.css"
 @tailwind base;
@@ -515,8 +510,7 @@ Copy the following code into the `app/tailwind.css{:.constant.other.color}` fi
 @tailwind utilities;
 ```
 
-Copy the following code into the `app/root.tsx{:.constant.other.color}` file so that all other routes will render inside
-the `<Outlet />{:tsx}`:
+Copy the following code into the `app/root.tsx` file so that all other routes will render inside the `<Outlet />{:tsx}`:
 
 ```tsx title="app/root.tsx"
 import {
@@ -552,11 +546,10 @@ export default function App() {
 }
 ```
 
-In Remix, any JavaScript or TypeScript files in the `app/routes{:.constant.other.color}` directory will become routes in
-your app. The filename maps to the route's URL pathname (`app/routes/about.tsx{:.constant.other.color}` matches the
-route `/about{:.constant.other.color}`, `app/routes/contact.tsx{:.constant.other.color}` matches the route
-`/contact{:.constant.other.color}`), except for `_index.tsx{:.constant.other.color}`, which serves as the
-**index route** for the root route, matching the route `/{:.constant.other.color}`.
+In Remix, any JavaScript or TypeScript files in the `app/routes` directory will become routes in your app. The filename
+maps to the route's URL pathname (`app/routes/about.tsx` matches the route `/about`, `app/routes/contact.tsx` matches
+the route `/contact`), except for `_index.tsx`, which serves as the **index route** for the root route, matching the
+route `/`.
 
 Run the following commands to create the index route for the root route:
 
@@ -565,7 +558,7 @@ mkdir app/routes
 touch app/routes/_index.tsx
 ```
 
-Copy the following code into the `app/routes/_index.tsx{:.constant.other.color}` file:
+Copy the following code into the `app/routes/_index.tsx` file:
 
 ```tsx title="app/routes/_index.tsx"
 export default function Home() {
@@ -606,7 +599,7 @@ Open [http://localhost:5173](http://localhost:5173/) in your browser, and you 
 
 ![Localhost](/blog/how-to-set-up-a-new-web-project/image-3.webp)
 
-Your `setup-web-project{:.constant.other.color}` directory structure should now look like this:
+Your `setup-web-project` directory structure should now look like this:
 
 ```
 .
@@ -652,7 +645,7 @@ Run the following command to install TypeScript-specific plugins:
 npm install -D eslint-import-resolver-typescript @typescript-eslint/eslint-plugin @typescript-eslint/parser
 ```
 
-Run the following command to create a `.eslintrc.cjs{:.constant.other.color}` file for your ESLint configuration:
+Run the following command to create a `.eslintrc.cjs` file for your ESLint configuration:
 
 ```bash
 touch .eslintrc.cjs
@@ -660,7 +653,7 @@ touch .eslintrc.cjs
 
 Copy the code from
 [Remix's `.eslintrc.cjs` template](https://github.com/remix-run/remix/blob/main/templates/remix/.eslintrc.cjs) into the
-`eslintrc.cjs{:.constant.other.color}` file:
+`eslintrc.cjs` file:
 
 ```js
 /**
@@ -749,7 +742,7 @@ module.exports = {
 };
 ```
 
-Add the following scripts to the `"scripts"{:json}` property in the `package.json{:.constant.other.color}` file:
+Add the following scripts to the `"scripts"{:json}` property in the `package.json` file:
 
 ```json title="package.json"
 {
@@ -770,7 +763,7 @@ Add the following scripts to the `"scripts"{:json}` property in the `package.jso
 - `npm run lint{:bash}`: is used to check the program for linting errors, ensuring it adheres to ESLint's style.
 - `npm run lint:fix{:bash}`: is used to automatically fix linting errors in the program that ESLint can resolve.
 
-Your `setup-web-project{:.constant.other.color}` directory structure should now look like this:
+Your `setup-web-project` directory structure should now look like this:
 
 ```
 .
@@ -824,13 +817,13 @@ and [Trivago's plugin](https://github.com/trivago/prettier-plugin-sort-imports#r
 npm install -D prettier-plugin-tailwindcss @trivago/prettier-plugin-sort-imports
 ```
 
-Run the following command to create a `prettier.config.js{:.constant.other.color}` file for your Prettier configuration:
+Run the following command to create a `prettier.config.js` file for your Prettier configuration:
 
 ```bash
 touch prettier.config.js
 ```
 
-Copy the following code into the `prettier.config.js{:.constant.other.color}` file:
+Copy the following code into the `prettier.config.js` file:
 
 ```json title="prettier.config.js"
 /** @type {import('prettier').Options} */
@@ -854,7 +847,7 @@ export default {
 };
 ```
 
-Add the following scripts to the `"scripts"{:json}` property in the `package.json{:.constant.other.color}` file:
+Add the following scripts to the `"scripts"{:json}` property in the `package.json` file:
 
 ```json title="package.json"
 {
@@ -877,7 +870,7 @@ Add the following scripts to the `"scripts"{:json}` property in the `package.jso
 - `npm run format{:bash}`: is used to check the code format of the program, ensuring it adheres to Prettier's style.
 - `npm run format:fix{:bash}`: is used to automatically fix code formatting errors in the program.
 
-Your `setup-web-project{:.constant.other.color}` directory structure should now look like this:
+Your `setup-web-project` directory structure should now look like this:
 
 ```
 .
@@ -923,7 +916,7 @@ Run the following command to install husky and lint-staged:
 npm i -D husky lint-staged
 ```
 
-Update the `package.json{:.constant.other.color}` file to include the `"lint-staged"{:json}` configuration as follows:
+Update the `package.json` file to include the `"lint-staged"{:json}` configuration as follows:
 
 ```json title="package.json"
 {
@@ -946,9 +939,8 @@ Now, run the following command to set up husky in the project:
 npx husky init
 ```
 
-After running the command successfully, a `.husky{:.constant.other.color}` directory with a
-`pre-commit{:.constant.other.color}` file will be created, and the `prepare{:json}` script will be added to the
-`"scripts"{:json}` property in the `package.json{:.constant.other.color}` file:
+After running the command successfully, a `.husky` directory with a `pre-commit` file will be created, and the
+`prepare{:json}` script will be added to the `"scripts"{:json}` property in the `package.json` file:
 
 ```json title="package.json"
 {
@@ -969,13 +961,13 @@ After running the command successfully, a `.husky{:.constant.other.color}` direc
 
 ```
 
-Update the `.husky/pre-commit{:.constant.other.color}` file to:
+Update the `.husky/pre-commit` file to:
 
 ```.husky/pre-commit
 npx lint-staged
 ```
 
-Your `setup-web-project{:.constant.other.color}` directory structure should now look like this:
+Your `setup-web-project` directory structure should now look like this:
 
 ```
 .
@@ -1017,7 +1009,7 @@ commit process. The specified tests in the Git hook failed, leading to the inter
 ![Terminal error screen](/blog/how-to-set-up-a-new-web-project/image-4.webp)
 
 As indicated in the error message (see photo above), we can use the `--write{:bash}` flag with Prettier to fix the code
-style issues automatically. We've already configured a script for this in our `package.json{:.constant.other.color}`.
+style issues automatically. We've already configured a script for this in our `package.json`.
 
 Run the following command to format the codebase to adhere to Prettier's style:
 
@@ -1038,9 +1030,9 @@ found a problem with our code:
 
 ![Terminal error screen](/blog/how-to-set-up-a-new-web-project/image-5.webp)
 
-Again, the error message tells us how to fix the issues. Go into the `app/routes/_index.tsx{:.constant.other.color}`
-file and change all occurrences of `'{:tsx}` with `&apos;{:tsx}`. Also remember, to run `npm run format:fix{:bash}`
-after making these changes, to make sure the codebase adheres to Prettier's style.
+Again, the error message tells us how to fix the issues. Go into the `app/routes/_index.tsx` file and change all
+occurrences of `'{:tsx}` with `&apos;{:tsx}`. Also remember, to run `npm run format:fix{:bash}` after making these
+changes, to make sure the codebase adheres to Prettier's style.
 
 Run the following commands to stage the changes and attempt to commit again:
 
@@ -1068,10 +1060,9 @@ necessary components to function correctly. GitHub provides built-in CI and depe
 ### Step 12: Setup CI and dependency management with GitHub
 
 For GitHub to discover any GitHub Actions workflows in your repository, you must save the workflow files in a directory
-called `.github/workflows{:.constant.other.color}`. You can name the workflow file anything, but it must have a
-`.yml{:.constant.other.color}` or `.yaml{:.constant.other.color}` extension.
+called `.github/workflows`. You can name the workflow file anything, but it must have a `.yml` or `.yaml` extension.
 
-Run the following commands to create the `.github/workflows{:.constant.other.color}` directory:
+Run the following commands to create the `.github/workflows` directory:
 
 ```bash
 mkdir .github
@@ -1080,20 +1071,18 @@ mkdir .github/workflows
 
 Previously, you added a pre-commit Git hook to your repository to ensure that your code is correctly formatted, free of
 linting or type-related errors and that the build process completes successfully before committing any staged files.
-Additionally, you can ensure these tests run whenever a pull request is opened or code is pushed to the
-`main{:.constant.other.color}` branch on your hosted GitHub repository using CI. GitHub will run the CI tests and
-provide the results in the pull request, so you can see whether the changes in your branch introduce any errors. When
-all CI tests in a workflow pass, the changes you pushed are ready to be merged. If a test fails, one of your changes may
-have caused the failure.
+Additionally, you can ensure these tests run whenever a pull request is opened or code is pushed to the `main` branch on
+your hosted GitHub repository using CI. GitHub will run the CI tests and provide the results in the pull request, so you
+can see whether the changes in your branch introduce any errors. When all CI tests in a workflow pass, the changes you
+pushed are ready to be merged. If a test fails, one of your changes may have caused the failure.
 
-Run the following command to create a `ci.yml{:.constant.other.color}` file in the
-`.github/workflows{:.constant.other.color}` directory:
+Run the following command to create a `ci.yml` file in the `.github/workflows` directory:
 
 ```bash
 touch .github/workflows/ci.yml
 ```
 
-Copy the following code into the `.github/workflows/ci.yml{:.constant.other.color}` file:
+Copy the following code into the `.github/workflows/ci.yml` file:
 
 ```yaml title=".github/workflows/ci.yml"
 # The name of the workflow
@@ -1156,16 +1145,15 @@ jobs:
 ```
 
 Dependabot creates pull requests to keep your dependencies secure and up-to-date. To configure Dependabot to maintain
-your repository, you need a Dependabot configuration file, `dependabot.yml{:.constant.other.color}`, stored in the
-`.github{:.constant.other.color}` directory.
+your repository, you need a Dependabot configuration file, `dependabot.yml`, stored in the `.github` directory.
 
-Run the following command to create the `.github/dependabot.yml{:.constant.other.color}` file:
+Run the following command to create the `.github/dependabot.yml` file:
 
 ```bash
 touch .github/dependabot.yml
 ```
 
-Copy the following code into the `.github/dependabot.yml{:.constant.other.color}` file:
+Copy the following code into the `.github/dependabot.yml` file:
 
 ```yaml title=".github/dependabot.yml"
 version: 2
@@ -1200,7 +1188,7 @@ updates:
 
 ```
 
-Your `setup-web-project{:.constant.other.color}` directory structure should now look like this:
+Your `setup-web-project` directory structure should now look like this:
 
 ```
 .
@@ -1245,12 +1233,11 @@ A Git workflow is a structured method for managing changes to a project's source
 are proposed, reviewed, and integrated into the project, ensuring work is done consistently and efficiently. Various Git
 workflows exist, each tailored to different types of projects and teams. A popular workflow for continuously deployed
 software, such as web applications, is the [GitHub Flow](https://scottchacon.com/2011/08/31/github-flow/). GitHub Flow
-is a simplified workflow that uses only feature branches and the `main{:.constant.other.color}` branch. All changes are
-merged into the `main{:.constant.other.color}` branch via [pull requests](https://docs.github.com/en/pull-requests), and
-the `main{:.constant.other.color}` branch is continuously deployed in small, incremental updates as changes are merged
-into it.
+is a simplified workflow that uses only feature branches and the `main` branch. All changes are merged into the `main`
+branch via [pull requests](https://docs.github.com/en/pull-requests), and the `main` branch is continuously deployed in
+small, incremental updates as changes are merged into it.
 
-### Step 13: Add a ruleset to the `main{:.constant.other.color}` branch
+### Step 13: Add a ruleset to the `main` branch
 
 To require a pull request and status checks to pass before merging, follow these steps:
 
@@ -1282,17 +1269,17 @@ After clicking on **Require status checks to pass**, an additional settings will
 ## Testing it all
 
 Congratulations 🎉! Your project configuration is complete, and you can now start developing your app. To get started,
-create a feature branch from the `main{:.constant.other.color}` branch for your specific feature, and push this new
-branch to the remote repository. Switch to the feature branch, make your changes, and push them to the remote
-repository. Then, open a pull request on the `main{:.constant.other.color}` branch to propose your changes. Once your
-pull request passes all CI tests, merge your changes into the `main{:.constant.other.color}` branch and delete your
-feature branch (if it's no longer needed). To see this process in action, let's work on a feature together.
+create a feature branch from the `main` branch for your specific feature, and push this new branch to the remote
+repository. Switch to the feature branch, make your changes, and push them to the remote repository. Then, open a pull
+request on the `main` branch to propose your changes. Once your pull request passes all CI tests, merge your changes
+into the `main` branch and delete your feature branch (if it's no longer needed). To see this process in action, let's
+work on a feature together.
 
-### Create and push a feature branch from the `main{:.constant.other.color}` branch
+### Create and push a feature branch from the `main` branch
 
-Run the following commands to switch to your `main{:.constant.other.color}` branch, pull from the remote tracking
-branch to ensure `main{:.constant.other.color}` is up-to-date with the latest changes in the remote repository,
-and create the `complete-homepage{:.constant.other.color}` feature branch from it:
+Run the following commands to switch to your `main` branch, pull from the remote tracking
+branch to ensure `main` is up-to-date with the latest changes in the remote repository,
+and create the `complete-homepage` feature branch from it:
 
 ```bash
 git checkout main
@@ -1300,12 +1287,11 @@ git pull origin
 git branch complete-homepage
 ```
 
-The `complete-homepage{:.constant.other.color}` branch is now created
-(run the command `git branch{:bash}` to see it). But, the remote repository still does not have a copy of it. As a best
-practice, even before you start working on a feature, it's important to push this branch to the remote repository so
-that it has a copy. This informs other developers (if you're working on a team or your project is open-source) about the
-new feature you're working on, potentially avoiding conflicts with other developers unknowingly working on the same
-thing.
+The `complete-homepage` branch is now created (run the command `git branch{:bash}` to see it). But, the remote
+repository still does not have a copy of it. As a best practice, even before you start working on a feature, it's
+important to push this branch to the remote repository so that it has a copy. This informs other developers
+(if you're working on a team or your project is open-source) about the new feature you're working on, potentially
+avoiding conflicts with other developers unknowingly working on the same thing.
 
 Run the following command to push the new branch to the remote repository:
 
@@ -1321,14 +1307,13 @@ the branches in the repository:
 
 ### Make and push your changes
 
-Run the following command to switch to the `complete-homepage{:.constant.other.color}` branch so you can start working
-on your feature:
+Run the following command to switch to the `complete-homepage` branch so you can start working on your feature:
 
 ```bash
 git checkout complete-homepage
 ```
 
-Next, update the `app/routes/_index.tsx{:.constant.other.color}` file with these changes:
+Next, update the `app/routes/_index.tsx` file with these changes:
 
 ```tsx title="app/routes/_index.tsx"
 export default function Home() {
@@ -1369,8 +1354,8 @@ export default function Home() {
 
 And that's it! Our (simplistic) feature to complete the homepage is done.
 
-Run the following commands to stage, commit, and push your local changes to the
-`complete-homepage{:.constant.other.color}` branch on the remote repository:
+Run the following commands to stage, commit, and push your local changes to the `complete-homepage` branch on the remote
+repository:
 
 ```bash
 git add -A
@@ -1382,20 +1367,19 @@ Before pushing new changes to a remote branch, it's important to run `git pull{:
 local branch is updated with any new changes that may have been pushed to the remote branch by others, especially if
 you're working on a team or if your project is open source.
 
-### Open a pull request on the `main{:.constant.other.color}` branch
+### Open a pull request on the `main` branch
 
 Go to your repository, click on the button displaying **main** with a dropdown icon, and on the displayed list of
-branches, click the `complete-homepage{:.constant.other.color}` branch. On the
-`complete-homepage{:.constant.other.color}` branch, your screen should look like this:
+branches, click the `complete-homepage` branch. On the `complete-homepage` branch, your screen should look like this:
 
 ![Repository home page screen](/blog/how-to-set-up-a-new-web-project/image-9.webp)
 
 To open a pull request, click on the **Compare & pull request** button or click on the button displaying **Contribute**
 with a dropdown icon, and click **Open pull request** from the displayed dropdown. On the next page, you're taken to,
 enter a description explaining the changes you've made. Finally, click the **Create pull request** button to open a pull
-request on the `main{:.constant.other.color}` branch.
+request on the `main` branch.
 
-### Merge your changes into the `main{:.constant.other.color}` branch and delete your feature branch
+### Merge your changes into the `main` branch and delete your feature branch
 
 After clicking the **Create pull request** button, you should be taken to a pull request page. Wait for your CI tests to
 complete. After your CI tests are completed, your screen should look like this:
@@ -1405,8 +1389,7 @@ complete. After your CI tests are completed, your screen should look like this:
 Click on the **Merge pull request** button and then click **Confirm merge**. Once the merging is complete, you can
 delete your branch by clicking the **Delete branch** button if it's no longer useful.
 
-If you delete your branch on GitHub, then run the following command to delete the
-`complete-homepage{:.constant.other.color}` branch locally:
+If you delete your branch on GitHub, then run the following command to delete the `complete-homepage` branch locally:
 
 ```bash
 git checkout main
