@@ -1,6 +1,7 @@
 import { getMDXComponent } from "next-contentlayer2/hooks";
 import Image from "next/image";
 
+import Pre from "@/components/Pre";
 import Video from "@/components/Video";
 
 function a({ href, ...properties }) {
@@ -67,6 +68,7 @@ export default function Mdx({ code }) {
       components={{
         a,
         img,
+        pre: Pre,
         Video,
         Instagram,
         Callout,

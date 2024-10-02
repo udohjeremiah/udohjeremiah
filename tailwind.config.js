@@ -64,12 +64,25 @@ const config = {
                 },
               },
             },
-            pre: {
-              padding: theme("spacing.6"),
-              backgroundColor: theme("colors.neutral.900"),
+            "figure[data-rehype-pretty-code-figure]": {
               borderWidth: 1,
               borderColor: theme("colors.neutral.800"),
               borderRadius: theme("borderRadius.lg"),
+              position: "relative",
+            },
+            "figcaption[data-rehype-pretty-code-title]": {
+              marginTop: "0",
+              borderBottomWidth: 1,
+              borderColor: theme("colors.neutral.800"),
+            },
+            "pre:not(figure[data-rehype-pretty-code-figure] > pre)": {
+              borderWidth: 1,
+              borderColor: theme("colors.neutral.800"),
+              borderRadius: theme("borderRadius.lg"),
+            },
+            pre: {
+              padding: theme("spacing.6"),
+              backgroundColor: theme("colors.neutral.900"),
             },
             table: {
               display: "block",
@@ -79,7 +92,7 @@ const config = {
         },
         invert: {
           css: {
-            color: theme("colors.neutral.300"),
+            color: theme("colors.neutral.400"),
           },
         },
       }),
