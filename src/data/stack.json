@@ -140,9 +140,9 @@
       },
       {
         "href": "https://hemingwayapp.com",
-        "image": "",
+        "image": "/logos/hemingwayapp.webp",
         "name": "Hemingway Editor",
-        "description": ""
+        "description": "Make your writing concise & correct."
       }
     ]
   },
