@@ -55,21 +55,14 @@ export default function DevWisdomCard() {
   return (
     <Card
       title="Dev Wisdom"
-      className="flex flex-col justify-between gap-4 p-4"
+      className={tw(
+        "flex flex-col justify-between gap-4 p-4 text-sm",
+        "text-neutral-500",
+        "dark:text-neutral-400",
+      )}
     >
-      <p
-        className={tw(
-          "text-sm",
-          "text-neutral-500",
-          'before:content-["""] after:content-["""]',
-          "dark:text-neutral-400",
-        )}
-      >
-        {wisdom.quote}
-      </p>
-      <p className={tw("text-sm", "text-neutral-900", "dark:text-neutral-100")}>
-        — {wisdom.author}
-      </p>
+      <p className='before:content-["""] after:content-["""]'>{wisdom.quote}</p>
+      <p>— {wisdom.author}</p>
     </Card>
   );
 }

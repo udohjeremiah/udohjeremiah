@@ -4,11 +4,11 @@ import Card from "@/components/Card";
 import Header from "@/components/Header";
 import Link from "@/components/Link";
 
-import books from "@/data/books.json";
+import readings from "@/data/readings.json";
 
 import { tw } from "@/lib/utils";
 
-const title = "Books";
+const title = "Readings";
 const description = "Materials I've read since launching this site.";
 
 export const metadata = {
@@ -56,12 +56,12 @@ function Book({ data }) {
   );
 }
 
-export default function BooksPage() {
+export default function ReadingsPage() {
   return (
     <>
       <Header title={title} description={description} />
       <div className="not-prose mt-8 grid gap-8">
-        {Object.values(books).map(({ category, books }) => (
+        {Object.values(readings).map(({ category, books }) => (
           <Card
             key={category}
             title={category}
