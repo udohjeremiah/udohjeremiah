@@ -40,7 +40,7 @@ Web apps can be Multipage Applications (MPAs) or Single-Page Applications (SPAs)
 _router_ have different meanings based on the type of web app.
 
 | **Aspect**          | **Multipage Applications (MPAs)**                                                                        | **Single Page Applications (SPAs)**                                                                                |
-| :-------------------| :--------------------------------------------------------------------------------------------------------| :------------------------------------------------------------------------------------------------------------------|
+| :------------------ | :------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------- |
 | **Routing**         | The browser sends a request to the server for each new page, causing a full page reload.                 | Handled by JavaScript in the browser, updating content without a full reload.                                      |
 | **Route**           | Each route corresponds to a specific file or resource on the server (e.g., `/about` loads `about.html`). | Routes trigger specific content to be rendered without reloading the entire page.                                  |
 | **Router**          | Server-side router matches the URL and serves the appropriate content.                                   | Client-side router listens to URL changes and renders content dynamically.                                         |
@@ -174,7 +174,7 @@ app
 ### Nested routes
 
 How do you create routes with paths such as `concerts/trending`, `concerts/lagos`etc,.? These kind of routes are created
-with _dot delimiters_ and are **called nested routes**.
+with _dot delimiters_ and are called **nested routes**.
 
 By dot delimiters, I mean `.` are used to separate the different parts of a route as it creates a `/` in the URL. So,
 `app/routes/concerts.trending.tsx` matches the route `concerts/trending`.
