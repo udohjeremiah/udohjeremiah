@@ -16,10 +16,10 @@ import { tw } from "@/lib/utils";
 const pages = [
   { name: "Home", path: "/", icon: HouseIcon },
   { name: "About", path: "/about", icon: CircleUserIcon },
-  { name: "Projects", path: "/projects", icon: BriefcaseBusinessIcon },
   { name: "Blog", path: "/blog", icon: NotebookPenIcon },
+  { name: "Projects", path: "/projects", icon: BriefcaseBusinessIcon },
   { name: "Stack", path: "/stack", icon: LayersIcon },
-  { name: "Books", path: "/books", icon: LibraryIcon },
+  { name: "Readings", path: "/readings", icon: LibraryIcon },
   { name: "Contact", path: "/contact", icon: MessagesSquareIcon },
 ];
 

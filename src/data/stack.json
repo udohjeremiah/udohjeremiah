@@ -104,19 +104,13 @@
         "description": "Code hosting platform."
       },
       {
-        "href": "https://www.mongodb.com/products/tools/compass",
-        "image": "/logos/mongodb.svg",
-        "name": "MongoDB Compass",
-        "description": "GUI for MongoDB."
-      },
-      {
         "href": "https://www.postman.com",
         "image": "/logos/postman.svg",
         "name": "Postman",
         "description": "Build, test, & debug APIs."
       },
       {
-        "href": "https://redis.io/insight/",
+        "href": "https://redis.io/insight",
         "image": "/logos/redis-insight.svg",
         "name": "Redis Insight",
         "description": "The best Redis GUI."
@@ -145,10 +139,10 @@
         "description": "Typing assistant for spelling & grammar."
       },
       {
-        "href": "https://obsidian.md",
-        "image": "/logos/obsidian.svg",
-        "name": "Obsidian",
-        "description": "Private & flexible writing app."
+        "href": "https://hemingwayapp.com",
+        "image": "",
+        "name": "Hemingway Editor",
+        "description": ""
       }
     ]
   },
@@ -184,12 +178,6 @@
         "image": "/logos/logotypus.svg",
         "name": "Logotyp.us",
         "description": "Find vector logos of top global brands."
-      },
-      {
-        "href": "https://unsplash.com",
-        "image": "/logos/unsplash.svg",
-        "name": "Unsplash",
-        "description": "Find & download free images online."
       }
     ]
   },
@@ -242,12 +230,6 @@
   {
     "category": "Productivity",
     "items": [
-      {
-        "href": "https://www.apple.com/apple-podcasts",
-        "image": "/logos/applepodcasts.svg",
-        "name": "Apple Podcasts",
-        "description": "Discover podcasts on iPhone, iPad, & Mac."
-      },
       {
         "href": "https://apps.apple.com/us/app/home-workout-no-equipments",
         "image": "/logos/homeworkout.webp",

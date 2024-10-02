@@ -9,7 +9,7 @@ import { tw } from "@/lib/utils";
 
 export const metadata = {
   title: "About",
-  description: `I'm Udoh Jeremiah — a Software Developer and Technical Writer currently based in ${process.env.NEXT_PUBLIC_LOCATION}.`,
+  description: `I'm Udoh Jeremiah — a Software Developer currently based in ${process.env.NEXT_PUBLIC_LOCATION}.`,
 };
 
 export default function About() {
@@ -33,21 +33,20 @@ export default function About() {
             />
             <Header
               title="About"
-              description={`I'm Udoh Jeremiah — a Software Developer and Technical Writer currently based in ${process.env.NEXT_PUBLIC_LOCATION}.`}
+              description={`I'm Udoh — a Software Developer currently based in ${process.env.NEXT_PUBLIC_LOCATION}.`}
             />
             <main>
               <p>
-                I&apos;m currently a Freelance Software Developer and Technical
-                Writer. I&apos;ve had the pleasure of collaborating with
-                numerous clients from diverse fields, crafting innovative and
-                engaging projects that meet their unique needs. Each project is
-                an opportunity to blend creativity and technical expertise,
-                delivering solutions that make a real impact. My passion for
-                simplifying complex tools and processes for other developers
-                shines through in my writing, as showcased in my blog. I
-                frequently produce content that demystifies the challenging
-                aspects of software development, making them easy to understand
-                for everyone.
+                I&apos;m currently a Freelance Software Developer. I&apos;ve had
+                the pleasure of collaborating with numerous clients from diverse
+                fields, crafting innovative and engaging projects that meet
+                their unique needs. Each project is an opportunity to blend
+                creativity and technical expertise, delivering solutions that
+                make a real impact. My passion for simplifying complex tools and
+                processes for other developers shines through in my writing, as
+                showcased in my blog. I frequently produce content that
+                demystifies the challenging aspects of software development,
+                making them easy to understand for everyone.
               </p>
               <p>
                 In the past, I was heavily involved with the{" "}

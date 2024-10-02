@@ -34,11 +34,24 @@
   },
   {
     "category": "Psychology",
-    "books": []
+    "books": [
+      {
+        "href": "https://www.amazon.com/Thinking-Fast-and-Slow-audiobook/dp/B005Z9GAJG",
+        "image": "https://covers.openlibrary.org/b/olid/OL36689110M-M.jpg",
+        "name": "Thinking, Fast and Slow",
+        "author": "Daniel Kahneman"
+      }
+    ]
   },
   {
     "category": "Productivity",
     "books": [
+      {
+        "href": "https://www.amazon.com/Digital-Minimalism-Choosing-Focused-Noisy/dp/0525536515",
+        "image": "https://covers.openlibrary.org/b/olid/OL26879249M-M.jpg",
+        "name": "Digital Minimalism",
+        "author": "Cal Newport"
+      },
       {
         "href": "https://www.amazon.com/No-More-Mr-Nice-Guy/dp/0762415339",
         "image": "https://covers.openlibrary.org/b/olid/OL9492038M-M.jpg",
@@ -68,6 +81,12 @@
         "image": "https://covers.openlibrary.org/b/olid/OL35354845M-M.jpg",
         "name": "The Way of the Superior Man",
         "author": "David Deida"
+      },
+      {
+        "href": "https://www.amazon.com/Where-Good-Ideas-Come-Innovation/dp/1594485380",
+        "image": "https://covers.openlibrary.org/b/olid/OL45327859M-M.jpg",
+        "name": "Where Good Ideas Come From",
+        "author": "Steven Johnson"
       }
     ]
   },

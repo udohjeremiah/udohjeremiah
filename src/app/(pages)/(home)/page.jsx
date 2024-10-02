@@ -8,7 +8,7 @@ import Newsletter from "./components/Newsletter";
 
 export const metadata = {
   title: "Udoh Jeremiah",
-  description: `I'm a Software Developer and Technical Writer based in ${process.env.NEXT_PUBLIC_LOCATION}. I'm a student at Western Delta University, Oghara, and a Freelance Developer and Writer taking up gigs as they present themselves.`,
+  description: `I'm a Software Developer based in ${process.env.NEXT_PUBLIC_LOCATION}. I'm a student at Western Delta University, Oghara, and a Freelance Software Developer taking up gigs as they present themselves.`,
 };
 
 export default function HomePage() {
@@ -17,8 +17,8 @@ export default function HomePage() {
       <h1
         className={tw("text-3xl leading-tight tracking-tight", "sm:text-4xl")}
       >
-        Hello, I&apos;m Udoh Jeremiah. I&apos;m a Software Developer and
-        Technical Writer currently based in {process.env.NEXT_PUBLIC_LOCATION}.
+        Hi there! I&apos;m Udoh. I&apos;m a software developer currently based
+        in {process.env.NEXT_PUBLIC_LOCATION}.
       </h1>
       <Newsletter />
       <div

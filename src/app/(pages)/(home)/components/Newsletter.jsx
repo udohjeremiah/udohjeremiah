@@ -31,14 +31,10 @@ export default function Newsletter() {
 
   return (
     <div className="space-y-2">
-      <p className={tw("mb-0", "text-neutral-500", "dark:text-neutral-400")}>
-        Join a community of readers and receive occasional updates on new
-        developments. No spam, I promise!
+      <p className="mb-0">
+        Join my reader community for occasional updates. No spam, I promise!
       </p>
       <form action={formAction} className="relative max-w-96">
-        <label htmlFor="email" className="sr-only">
-          Email
-        </label>
         <input
           aria-label="Email"
           id="email"

@@ -7,7 +7,7 @@ import { sortBlogPostByDate, tw } from "@/lib/utils";
 
 const formatBlogDate = (date) =>
   new Intl.DateTimeFormat("en-GB", {
-    dateStyle: "long",
+    dateStyle: "medium",
     timeZone: "Africa/Lagos",
   }).format(new Date(date));
 
@@ -15,7 +15,11 @@ export default async function RecentPostsCard() {
   return (
     <Card
       title="Recent Posts"
-      className="flex flex-wrap items-center gap-4 p-4"
+      className={tw(
+        "flex flex-wrap items-center gap-4 p-4",
+        "text-neutral-500",
+        "dark:text-neutral-400",
+      )}
     >
       {allBlogs
         .sort(sortBlogPostByDate)
@@ -28,17 +32,11 @@ export default async function RecentPostsCard() {
             className="group text-sm font-normal text-inherit no-underline"
           >
             <p
-              className={tw(
-                "text-neutral-950 transition-colors",
-                "group-hover:text-green-500",
-                "dark:text-white",
-              )}
+              className={tw("transition-colors", "group-hover:text-green-500")}
             >
               {title}
             </p>
-            <p className={tw("text-neutral-500", "dark:text-neutral-400")}>
-              {formatBlogDate(publishedOn)}
-            </p>
+            <time dateTime={publishedOn}>{formatBlogDate(publishedOn)}</time>
           </Link>
         ))}
     </Card>
