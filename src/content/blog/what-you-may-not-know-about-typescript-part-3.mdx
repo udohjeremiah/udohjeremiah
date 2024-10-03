@@ -14,7 +14,7 @@ introduction to what led me to write this. With that said, let's get started.
 Properties can also be marked as `readonly` for TypeScript. While it won't change any behaviour at runtime, a property
 marked as `readonly` can’t be written to during type-checking:
 
-```ts
+```ts {10}#error
 interface SomeType {
   readonly prop: string;
 }
@@ -24,16 +24,14 @@ function doSomething(obj: SomeType) {
   console.log(`prop has the value '${obj.prop}'.`);
 
   // But we can't re-assign it.
-  // [!code error:3]
-  obj.prop = "hello";
-  // [!not-code] Cannot assign to 'prop' because it is a read-only property.
+  obj.prop = "hello"; // Cannot assign to 'prop' because it is a read-only property.
 }
 ```
 
 Using the `readonly` modifier doesn't necessarily imply that a value is immutable or that its internal contents can't be
 changed. It just means the property itself can't be re-written to:
 
-```ts
+```ts {13-14}#error
 interface Home {
   readonly resident: { name: string; age: number };
 }
@@ -46,9 +44,8 @@ function visitForBirthday(home: Home) {
 
 function evict(home: Home) {
   // But we can't write to the 'resident' property itself on a 'Home'.
-  // [!code error:3]
+  // Cannot assign to 'resident' because it is a read-only property.
   home.resident = {
-    // [!not-code] Cannot assign to 'resident' because it is a read-only property.
     name: "Victor the Evictor",
     age: 42,
   };
@@ -79,16 +76,13 @@ let writablePerson: Person = {
 
 // works
 let readonlyPerson: ReadonlyPerson = writablePerson;
-console.log(readonlyPerson.age);
-// [!not-code] 42
+console.log(readonlyPerson.age); // 42
 
 writablePerson.age++;
-console.log(readonlyPerson.age);
-// [!not-code] 43
+console.log(readonlyPerson.age); // 43
 
 writablePerson.age = 10;
-console.log(readonlyPerson.age);
-// [!not-code] 10
+console.log(readonlyPerson.age); // 10
 ```
 
 ## In TypeScript, you can use an index signature to describe the types of possible values.
@@ -98,7 +92,7 @@ those cases, you can use an index signature to describe the types of possible va
 index signature properties: `string`, `number`, `symbol`, template string patterns, and union types consisting only of
 these:
 
-```ts
+```ts {10}#error
 interface StringArray {
   [index: number]: string;
 }
@@ -106,12 +100,9 @@ interface StringArray {
 const myArray: StringArray = ["a", "b", "c"];
 
 const secondItem = myArray[1];
-console.log(typeof secondItem);
-// [!not-code] string
+console.log(typeof secondItem); // string
 
-// [!code error:3]
-const thirdItem = myArray["b"];
-// [!not-code] Element implicitly has an 'any' type because index expression is not of type 'number'.
+const thirdItem = myArray["b"]; // Element implicitly has an 'any' type because index expression is not of type 'number'.
 ```
 
 Above, we have a `StringArray` interface which has an index signature. This index signature states that when a
@@ -119,16 +110,14 @@ Above, we have a `StringArray` interface which has an index signature. This inde
 
 You can make index signatures `readonly` to prevent assignment to their indices:
 
-```ts
+```ts {7}#error
 interface StringArray {
   readonly [index: number]: string;
 }
 
 const myArray: StringArray = ["a", "b", "b"];
 
-// [!code error:3]
-myArray[2] = "c";
-// [!not-code] Index signature in type 'StringArray' only permits reading.
+myArray[2] = "c"; // Index signature in type 'StringArray' only permits reading.
 ```
 
 You can’t set `myArray[2]` because the index signature is `readonly`.
@@ -140,13 +129,11 @@ properties match their return type. This is because a string index declares that
 as `obj["property"]`. In the following example, `name`'s type does not match the string index's type, and the type
 checker gives an error:
 
-```ts
+```ts {4}#error
 interface NumberDictionary {
   [index: string]: number;
   length: number; // ok
-  // [!code error:3]
-  name: string;
-  // [!not-code] Property 'name' of type 'string' is not assignable to 'string' index type 'number'.
+  name: string; // Property 'name' of type 'string' is not assignable to 'string' index type 'number'.
 }
 ```
 
@@ -168,7 +155,7 @@ type during creation.
 
 Consider the code below:
 
-```ts
+```ts {13}#error
 interface SquareConfig {
   color?: string;
   width?: number;
@@ -181,9 +168,7 @@ function createSquare(config: SquareConfig): { color: string; area: number } {
   };
 }
 
-// [!code error:3]
-let mySquare = createSquare({ colour: "red", width: 100 });
-// [!not-code] Object literal may only specify known properties, but 'colour' does not exist in type 'SquareConfig'. Did you mean to write 'color'?
+let mySquare = createSquare({ colour: "red", width: 100 }); // Object literal may only specify known properties, but 'colour' does not exist in type 'SquareConfig'. Did you mean to write 'color'?
 ```
 
 Notice the given argument to `createSquare` is spelled `colour` instead of `color`. In plain JavaScript, this sort of
@@ -228,11 +213,9 @@ example, it was the property `width`. It will however, fail if the variable does
 
 For example:
 
-```ts
+```ts {2}#error
 let squareOptions = { colour: "red" };
-// [!code error:3]
-let mySquare = createSquare(squareOptions);
-// [!not-code] Type '{colour: string; }` has no properties in common with 'SquareConfig'.
+let mySquare = createSquare(squareOptions); // Type '{colour: string; }` has no properties in common with 'SquareConfig'.
 ```
 
 Keep in mind that for simple code like the above, you probably shouldn't be trying to "get around" these checks. For
@@ -245,16 +228,14 @@ property to `createSquare`, you should fix up the definition of `SquareConfig` t
 
 ## TypeScript provides a `ReadonlyArray` special type that describes arrays that shouldn’t be changed.
 
-```ts
+```ts {7}#error
 function doStuff(values: ReadonlyArray<string>) {
   // We can read from 'values'
   const copy = values.slice();
   console.log(`The copied array is ${copy}`);
 
   // ...but we can't mutate 'values'.
-  // [!code error:3]
-  values.push("hello!");
-  // [!not-code] Property 'push' does not exist on type 'readonly string[]'.
+  values.push("hello!"); // Property 'push' does not exist on type 'readonly string[]'.
 }
 ```
 
@@ -265,10 +246,8 @@ change its contents.
 
 Unlike `Array`, there isn't a `ReadonlyArray` constructor that we can use.
 
-```ts
-// [!code error:3]
-new ReadonlyArray("red", "green", "blue");
-// [!not-code] 'ReadOnlyArray' only refers to a type, but is being used as a value here.
+```ts {1}#error
+new ReadonlyArray("red", "green", "blue"); // 'ReadOnlyArray' only refers to a type, but is being used as a value here.
 ```
 
 Instead, we can assign regular `Array`s to `ReadonlyArray`s.
@@ -280,30 +259,26 @@ const roArray: ReadonlyArray<string> = ["red", "green", "blue"];
 Just as TypeScript provides a shorthand syntax for `Array<Type>` with `Type[]`, it also provides a shorthand syntax for
 `ReadonlyArray<Type>` with `readonly Type[]`.
 
-```ts
+```ts {7}#error
 function doStuff(values: readonly string[]) {
   // We can read from 'values'...
   const copy = values.slice();
   console.log(`The copied array is ${copy}`);
 
   // ...but we can't mutate 'values'.
-  // [!code error:3]
-  values.push("hello!");
-  // [!not-code] Property 'push' does not exist on type 'readonly string[]'.
+  values.push("hello!"); // Property 'push' does not exist on type 'readonly string[]'.
 }
 ```
 
 One last thing to note is that, unlike the `readonly` property modifier, assignability isn't bidirectional between
 regular `Array`s and `ReadonlyArray`s.
 
-```ts
+```ts {5}#error
 let x: readonly string[] = [];
 let y: string[] = [];
 
 x = y;
-// [!code error:3]
-y = x;
-// [!not-code] The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+y = x; // The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
 ```
 
 ## TypeScript provides a `readonly` tuple type
@@ -320,11 +295,9 @@ function doSomething(pair: readonly [string, number]) {
 
 As you might expect, writing to any property of a `readonly` tuple isn't allowed in TypeScript.
 
-```ts
+```ts {2}#error
 function doSomething(pair: readonly [string, number]) {
-  // [!code error:3]
-  pair[0] = "hello!";
-  // [!not-code] Cannot assign to '0' because it is a read-only property.
+  pair[0] = "hello!";   // Cannot assign to '0' because it is a read-only property.
 }
 ```
 
@@ -332,16 +305,14 @@ Tuples tend to be created and left un-modified in most code, so annotating types
 good default. This is also important given that array literal with `const` assertions will be inferred with`readonly`
 tuple types.
 
-```ts
+```ts {7}#error
 let point = [3, 4] as const;
 
 function distanceFromOrigin([x, y]: [number, number]) {
   return Math.sqrt(x ** 2 + y ** 2);
 }
 
-// [!code error:3]
-distanceFromOrigin(point);
-// [!not-code] Argument of type 'readonly [3, 4]' is not assignable to parameter of type '[number, number]' ...
+distanceFromOrigin(point); // Argument of type 'readonly [3, 4]' is not assignable to parameter of type '[number, number]' ...
 ```
 
 Here, `distanceFromOrigin` never modifies its elements but expects a mutable tuple. Since `point`'s type was inferred as
@@ -376,7 +347,7 @@ I'll just link to them since the TypeScript docs explains them very well:
 Normally, fields in a class can have initializers, and these will run automatically when the class is instantiated; and
 just like with `const`, `let`, and `var`, the initializer of a class property will be used to infer its type:
 
-```ts
+```ts {10}#error
 class Point {
   // No need to annotate `x` and `y` with the type `number` as it will be inferred
   x = 0;
@@ -384,23 +355,18 @@ class Point {
 }
 
 const pt = new Point();
-console.log(`${pt.x}, ${pt.y}`);
-// [!not-code] 0, 0
+console.log(`${pt.x}, ${pt.y}`); // 0, 0
 
-// [!code error:3]
-pt.x = "0";
-// [!not-code] Type 'string' is not assignable to type 'number'
+pt.x = "0"; // Type 'string' is not assignable to type 'number'
 ```
 
 However, the `strictPropertyInitialization` setting can be turned on to make TypeScript check for class properties that
 are declared but not set in the constructor. When this is done, for a class field declared but not initialized,
 TypeScript will issue an error, requesting it is initialized in the class constructor:
 
-```ts
+```ts {2}#error
 class BadGreeter {
-  // [!code error:3]
-  name: string;
-  // [!not-code] Property 'name' has no initializer and is not definitely assigned in the constructor.
+  name: string; // Property 'name' has no initializer and is not definitely assigned in the constructor.
 }
 
 class GoodGreeter {
@@ -416,12 +382,10 @@ However, note that this initialization must be done explicitly in the constructo
 doesn't analyze methods you invoke from a class constructor to detect initializations. This is because a derived class
 might override those methods and fail to initialize the members:
 
-```ts
+```ts {3}#error
 // This would work in JavaScript but fails in TypeScript
 class BadGreeter {
-  // [!code error:3]
-  name: string;
-  // [!not-code] Property 'name' has no initializer and is not definitely assigned in the constructor
+  name: string; // Property 'name' has no initializer and is not definitely assigned in the constructor
 
   constructor() {
     this.greet();
@@ -447,7 +411,7 @@ class OKGreeter {
 
 ## In TypeScript, class fields may be prefixed with the `readonly` modifier. This prevents assignments to the field outside of the constructor.
 
-```ts
+```ts {11,16}#error
 class Greeter {
   readonly name: string = "world";
 
@@ -458,16 +422,12 @@ class Greeter {
   }
 
   err() {
-    // [!code error:3]
-    this.name = "not ok";
-    // [!not-code] Cannot assign to 'name' because it is a read-only property.
+    this.name = "not ok"; // Cannot assign to 'name' because it is a read-only property.
   }
 }
 
 const g = new Greeter();
-// [!code error:3]
-g.name = "also not ok";
-// [!not-code] Cannot asign to 'name' because it is a read-only property.
+g.name = "also not ok"; // Cannot asign to 'name' because it is a read-only property.
 ```
 
 ## TypeScript treats class constructors as very similar to functions: you can add parameters with type annotations, default values, and overloads.
@@ -533,7 +493,7 @@ class Point {
 Note that inside a method body, it is still mandatory to access fields and other methods via `this.`. An unqualified
 name in a method body will always refer to something in the enclosing scope:
 
-```ts
+```ts {8}#error
 let x: number = 0;
 
 class C {
@@ -541,9 +501,7 @@ class C {
 
   m() {
     // This is trying to modify 'x' declared outside the class, not the class property
-    // [!code error:3]
-    x = "world";
-    // [!not-code] Type 'string' is not assignable to type 'number'
+    x = "world"; // Type 'string' is not assignable to type 'number'
   }
 }
 ```
@@ -566,12 +524,10 @@ class C {
 }
 
 const myInstance = new C();
-console.log(myInstance.length);
-// [!not-code] 0
+console.log(myInstance.length); // 0
 
 imyInstancens.length = 20;
-console.log(myInstance.length);
-// [!not-code] 20
+console.log(myInstance.length); // 20
 ```
 
 TypeScript has some special inference rules for accessors:
@@ -607,12 +563,10 @@ class Thing {
 }
 
 const myInstance = new Thing();
-console.log(myInstance.size);
-// [!not-code] 0
+console.log(myInstance.size); // 0
 
 myInstance.size = true;
-console.log(myInstance.size);
-// [!not-code] 1
+console.log(myInstance.size); // 1
 ```
 
 ## In TypeScript, classes can declare index signatures; these work the same as index signatures for other object types.
@@ -631,14 +585,9 @@ const myInstance = new MyClass();
 myInstance["foo"] = true;
 myInstance["bar"] = (s: string) => s.length > 3;
 
-console.log(myInstance.check("foo"));
-// [!not-code] true
-
-console.log(myInstance.check("bar"));
-// [!not-code] [Function (anonymous)]
-
-console.log(myInstance.check("baz"));
-// [!not-code] undefined
+console.log(myInstance.check("foo")); // true
+console.log(myInstance.check("bar")); // [Function (anonymous)]
+console.log(myInstance.check("baz")); // undefined
 ```
 
 Because the index signature type needs to capture the types of methods, it's not easy to use these types. Generally,
@@ -663,11 +612,10 @@ class Sonar implements Pingable {
 }
 ```
 
-```ts
+```ts {2-3}#error
 // Wrong
-// [!code error:3]
+// Class 'Ball' incorrectly implements interface 'Pingable'.
 class Ball implements Pingable {
-  // [!not-code] Class 'Ball' incorrectly implements interface 'Pingable'.
   pong() {
     console.log("pong!");
   }
@@ -712,7 +660,7 @@ In the above example, we perhaps expected that `s`'s type would be influenced by
 
 ## In TypeScript, implementing an interface with an optional property doesn't create that property.
 
-```ts
+```ts {11}#error
 interface A {
   x: number;
   y?: number;
@@ -723,9 +671,7 @@ class C implements A {
 }
 
 const c = new C();
-// [!code error:3]
-c.y = 10;
-// [!not-code] Property 'y' does not exist on type 'C'.
+c.y = 10; // Property 'y' does not exist on type 'C'.
 ```
 
 ## TypeScript, unlike JavaScript, enforces that a derived class is always a subtype of its base class.
@@ -750,11 +696,9 @@ class Derived extends Base {
 }
 
 const d = new Derived();
-d.greet();
-// Hello, world!
+d.greet(); // Hello, world!
 
-d.greet("reader");
-// Hello, READER
+d.greet("reader"); // Hello, READER
 ```
 
 It's important that a derived class follow its base class contract. Remember that it's very common (and always legal!)
@@ -769,7 +713,7 @@ b.greet();
 
 What if `Derived` didn't follow Base's contract?
 
-```ts
+```ts {10-11}#error
 // This would work in JavaScript but fails in TypeScript
 class Base {
   greet() {
@@ -779,9 +723,8 @@ class Base {
 
 class Derived extends Base {
   // Make this parameter required
-  // [!code error:3]
+  // Property 'greet' in type 'Derived' is not assignable to the same property in base type 'Base'.
   greet(name: string) {
-    // [!not-code] Property 'greet' in type 'Derived' is not assignable to the same property in base type 'Base'.
     console.log(`Hello, ${name.toUpperCase()}`);
   }
 }
@@ -789,11 +732,9 @@ class Derived extends Base {
 
 If we compiled this code despite the error, this sample would then crash:
 
-```ts
+```ts {2}#warning
 const b: Base = new Derived();
-// [!code warning:3]
-b.greet();
-// [!not-code] Crashes because "name" will be undefined
+b.greet(); // Crashes because "name" will be undefined
 ```
 
 ## Conclusion

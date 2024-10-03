@@ -15,7 +15,7 @@ This means that after merging, merged members that came from other declarations 
 
 We can see this more clearly in this example:
 
-```ts
+```ts {11}#error
 namespace Animal {
   let haveMuscles = true;
 
@@ -26,9 +26,7 @@ namespace Animal {
 
 namespace Animal {
   export function doAnimalsHaveMuscles() {
-    // [!code error:3]
-    return haveMuscles;
-    // [!not-code] Cannot find name 'haveMuscles'.
+    return haveMuscles; // Cannot find name 'haveMuscles'.
   }
 }
 ```
@@ -73,8 +71,7 @@ namespace buildLabel {
   export let prefix = "Hello, ";
 }
 
-console.log(buildLabel("Sam Smith"));
-// [!not-code] Hello, Sam Smith
+console.log(buildLabel("Sam Smith")); // Hello, Sam Smith
 ```
 
 Similarly, namespaces can be used to extend enums with static members:
@@ -105,18 +102,16 @@ namespace Color {
 
 ## In TypeScript, classes can not merge with other classes or with variables.
 
-```ts
-// [!code error:3]
+```ts {1-2,8-9}#error
+// Duplicate identifier 'A'.
 class A {
-  // [!not-code] Duplicate identifier 'A'.
   x = 0;
   y = 0;
   z = 0;
 }
 
-// [!code error:3]
+// Duplicate identifier 'A'.
 class A {
-  // [!not-code] Duplicate identifier 'A'.
   z = 0;
 }
 ```
@@ -212,15 +207,13 @@ constant if:
 
 - It is the first member in the enum and it has no initializer, in which case it's assigned the value `0`:
 
-  ```ts
-  // E.X is constant:
+  ```ts {6}#error
+  // E.X is constant
   enum E {
     X,
   }
 
-  // [!code error:3]
-  E.X = 2;
-  // [!not-code] Cannot assign to 'X' because it is a read-only property.
+  E.X = 2; // Cannot assign to 'X' because it is a read-only property.
   ```
 
 - It does not have an initializer and the preceding enum member was a numeric constant. In this case, the value of the
@@ -272,12 +265,10 @@ enum FileAccess {
 
 In other words, the following isn't allowed:
 
-```ts
+```ts {3}#error
 enum E {
   A = Math.round(Math.random()),
-  // [!code error:3]
-  B,
-  // [!not-code] Enum member must have initializer.
+  B, // Enum member must have initializer.
 }
 ```
 
@@ -310,7 +301,7 @@ When all members in an enum have literal enum values, some special semantics com
 The first is that enum members also become types as well! For example, we can say that certain members can only have the
 value of an enum member:
 
-```ts
+```ts {17}#error
 enum ShapeKind {
   Circle,
   Square,
@@ -327,9 +318,7 @@ interface Square {
 }
 
 let c: Circle = {
-  // [!code error:3]
-  kind: ShapeKind.Square,
-  // [!not-code] Type 'ShapeKind.Square' is not assignable to type 'ShapeKind.Circle'.
+  kind: ShapeKind.Square, // Type 'ShapeKind.Square' is not assignable to type 'ShapeKind.Circle'.
   radius: 100,
 };
 ```
@@ -338,16 +327,15 @@ The other change is that enum types themselves effectively become a union of eac
 type system is able to leverage the fact that it knows the exact set of values that exist in the enum itself. Because of
 that, TypeScript can catch bugs where we might be comparing values incorrectly. For example:
 
-```ts
+```ts {7-8}#error
 enum E {
   Foo,
   Bar,
 }
 
 function f(x: E) {
-  // [!code error:3]
+  // This comparison appears to be unintentional because the types 'E.Foo' and 'E.Bar' have no overlap.
   if (x !== E.Foo || x !== E.Bar) {
-    // [!not-code] This comparison appears to be unintentional because the types 'E.Foo' and 'E.Bar' have no overlap.
     // ...
   }
 }
@@ -416,9 +404,9 @@ function printImportant(key: LogLevelStrings, message: string) {
 }
 
 printImportant("ERROR", "This is a message");
-// [!not-code] Log level key is: ERROR
-// [!not-code] Log level value is: 0
-// [!not-code] Log level message is: This is a message
+// Log level key is: ERROR
+// Log level value is: 0
+// Log level message is: This is a message
 ```
 
 ## In TypeScript, numeric enums members also get a reverse mapping from enum values to enum names.
@@ -433,8 +421,7 @@ enum Enum {
 
 let a = Enum.A;
 let nameOfA = Enum[a];
-console.log(nameOfA);
-// [!not-code] "A"
+console.log(nameOfA); // "A"
 ```
 
 TypeScript compiles this down to the following JavaScript:
@@ -580,9 +567,9 @@ let someArray = [1, "string", false];
 for (let entry of someArray) {
   console.log(entry);
 }
-// [!not-code] 1
-// [!not-code] string
-// [!not-code] false
+// 1
+// string
+// false
 ```
 
 Both `for..of` and `for..in` statements iterate over lists; the values iterated on are different though, `for..in`
@@ -595,16 +582,16 @@ let list = ["a", "b", "c"];
 for (let i in list) {
   console.log(i);
 }
-// [!not-code] 0
-// [!not-code] 1
-// [!not-code] 2
+// 0
+// 1
+// 2
 
 for (let i of list) {
   console.log(i);
 }
-// [!not-code] a
-// [!not-code] b
-// [!not-code] c
+// a
+// b
+// c
 ```
 
 Another distinction is that `for..in` operates on any object; it serves as a way to inspect properties on this object.
@@ -619,17 +606,16 @@ pets["species"] = "mammals";
 for (let pet in pets) {
   console.log(pet);
 }
-// [!not-code] species
+// species
 
 for (let pet of pets) {
   console.log(pet);
 }
-// [!not-code] Cat
-// [!not-code] Dog
-// [!not-code] Hamster
+// Cat
+// Dog
+// Hamster
 
-console.log(pets);
-// [!not-code] Set(3) { 'Cat', 'Dog', 'Hamster', species: 'mammals' }
+console.log(pets); // Set(3) { 'Cat', 'Dog', 'Hamster', species: 'mammals' }
 ```
 
 ## In TypeScript, when targeting an ES5 or ES3-compliant engine, iterators are only allowed on values of `Array` type.
@@ -645,9 +631,9 @@ let numbers = [1, 2, 3];
 for (let num of numbers) {
   console.log(num);
 }
-// [!not-code] 1
-// [!not-code] 2
-// [!not-code] 3
+// 1
+// 2
+// 3
 ```
 
 will be generated as:
@@ -670,13 +656,11 @@ explicit type annotations. This type is only allowed on `const` declarations and
 reference a specific unique symbol, you'll have to use the `typeof` operator. Each reference to a unique symbol implies
 a unique identity that's tied to a given declaration:
 
-```ts
+```ts {4}#error
 declare const sym1: unique symbol;
 
 // sym2 can only be a constant reference.
-// [!code error:3]
-let sym2: unique symbol = Symbol();
-// [!not-code] A variable whose type is a 'unique symbol' type must be 'const'.
+let sym2: unique symbol = Symbol(); // A variable whose type is a 'unique symbol' type must be 'const'.
 
 // Works - refers to a unique symbol, but its identity is tied to 'sym1'.
 let sym3: typeof sym1 = sym1;
@@ -690,14 +674,12 @@ class C {
 Because each `unique symbol` has a completely separate identity, no two `unique symbol` types are assignable or
 comparable to each other:
 
-```ts
+```ts {4-5}#error
 const sym2 = Symbol();
-
 const sym3 = Symbol();
 
-// [!code error:3]
+// This comparison appears to be unintentional because the types 'typeof sym2' and 'typeof sym3' have no overlap.
 if (sym2 === sym3) {
-  // [!not-code] This comparison appears to be unintentional because the types 'typeof sym2' and 'typeof sym3' have no overlap.
   // ...
 }
 ```

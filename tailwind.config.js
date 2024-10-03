@@ -64,22 +64,6 @@ const config = {
                 },
               },
             },
-            "figure[data-rehype-pretty-code-figure]": {
-              borderWidth: 1,
-              borderColor: theme("colors.neutral.800"),
-              borderRadius: theme("borderRadius.lg"),
-              position: "relative",
-            },
-            "figcaption[data-rehype-pretty-code-title]": {
-              marginTop: "0",
-              borderBottomWidth: 1,
-              borderColor: theme("colors.neutral.800"),
-            },
-            "pre:not(figure[data-rehype-pretty-code-figure] > pre)": {
-              borderWidth: 1,
-              borderColor: theme("colors.neutral.800"),
-              borderRadius: theme("borderRadius.lg"),
-            },
             pre: {
               padding: theme("spacing.6"),
               backgroundColor: theme("colors.neutral.900"),

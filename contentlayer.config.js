@@ -1,8 +1,3 @@
-import {
-  transformerNotationDiff,
-  transformerNotationErrorLevel,
-  transformerNotationFocus,
-} from "@shikijs/transformers";
 import { defineDocumentType, makeSource } from "contentlayer2/source-files";
 import { rehypeAccessibleEmojis } from "rehype-accessible-emojis";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
@@ -100,58 +95,15 @@ export const Blog = defineDocumentType(() => ({
   computedFields: computeFields("Blog", {}),
 }));
 
-const transformerNotCode = () => ({
-  line(node, line) {
-    if (node.children.length === 1) {
-      const type = node.children[0].children[0].type;
-      const value = node.children[0].children[0].value.trim();
-      const match = value.match(/\/\/ \[(.*?)\]/)?.[1];
-
-      if (match) {
-        const flags = match
-          .split(" ")
-          .map((flag) => flag.trim())
-          .filter((flag) => flag);
-
-        if (type === "text" && flags[0] === "!not-code") {
-          node.properties = { "data-not-line": "" };
-          flags.slice(1).forEach((flag) => this.addClassToHast(node, flag));
-
-          const searchString = `// [${match}] `;
-          node.children[0].children[0].value = value
-            .replace(searchString, "")
-            .trim();
-        }
-      }
-    }
-  },
-});
-
 const rehypePrettyCodeOptions = {
   theme: "dark-plus",
   keepBackground: false,
-  transformers: [
-    transformerNotCode(),
-    transformerNotationDiff(),
-    transformerNotationErrorLevel(),
-    transformerNotationFocus(),
-  ],
   onVisitLine(node) {
     // Prevent lines from collapsing in `display: grid` mode, and
     // allow empty lines to be copy/pasted
     if (node.children.length === 0) {
       node.children = [{ type: "text", value: " " }];
     }
-  },
-  onVisitHighlightedLine(node) {
-    if (!node.properties.className) {
-      node.properties.className = [];
-    }
-
-    node.properties.className.push("highlighted");
-  },
-  onVisitHighlightedChars(node) {
-    node.properties.className = ["highlighted"];
   },
 };
 
