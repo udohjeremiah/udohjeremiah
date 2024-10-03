@@ -33,9 +33,9 @@ namespace Animal {
 }
 ```
 
-Because `haveMuscles{:ts}` is not exported, only the `animalsHaveMuscles{:ts}` function that shares the same un-merged
-namespace can see the symbol. The `doAnimalsHaveMuscles{:ts}` function, even though it's part of the merged
-`Animal{:ts}` namespace can not see this un-exported member.
+Because `haveMuscles` is not exported, only the `animalsHaveMuscles` function that shares the same un-merged namespace
+can see the symbol. The `doAnimalsHaveMuscles` function, even though it's part of the merged `Animal` namespace can not
+see this un-exported member.
 
 ## In TypeScript, namespaces are flexible enough to merge with other declarations.
 
@@ -55,7 +55,7 @@ namespace Album {
 }
 ```
 
-The visibility rules for merged members are the same as when merging namespaces, so we must export the `AlbumLabel{:ts}`
+The visibility rules for merged members are the same as when merging namespaces, so we must export the `AlbumLabel`
 class for the merged class to see it. The result is a class managed inside of another class. You can also use namespaces
 to add more static members to an existing class.
 
@@ -128,7 +128,7 @@ For information on mimicking class merging, see the
 
 Although JavaScript modules do not support merging, you can patch existing objects by importing and updating them.
 
-Let's look at a toy `Observable{:ts}` example:
+Let's look at a toy `Observable` example:
 
 ```ts title="observable.ts"
 export class Observable<T> {
@@ -144,7 +144,7 @@ Observable.prototype.map = function (f) {
 };
 ```
 
-This works in TypeScript too, but the compiler doesn't know about `Observable.prototype.map{:ts}`. You can use
+This works in TypeScript too, but the compiler doesn't know about `Observable.prototype.map`. You can use
 **module augmentation** to tell the compiler about it:
 
 ```ts title="observable.ts"
@@ -175,8 +175,8 @@ let o: Observable<number>;
 o.map((x) => x.toFixed());
 ```
 
-The module name is resolved the same way as module specifiers in `import{:ts}`/`export{:ts}`. Then the declarations in
-an augmentation are merged as if they were declared in the same file as the original.
+The module name is resolved the same way as module specifiers in `import`/`export`. Then the declarations in an
+augmentation are merged as if they were declared in the same file as the original.
 
 However, there are two limitations to keep in mind:
 
@@ -210,7 +210,7 @@ Global augmentations have the same behaviour and limits as module augmentations.
 Each enum member has a value associated with it which can be either constant or computed. An enum member is considered
 constant if:
 
-- It is the first member in the enum and it has no initializer, in which case it's assigned the value `0{:ts}`:
+- It is the first member in the enum and it has no initializer, in which case it's assigned the value `0`:
 
   ```ts
   // E.X is constant:
@@ -247,11 +247,11 @@ constant if:
   1. a literal enum expression (basically a string literal or a numeric literal)
   2. a reference to a previously defined constant enum member (which can originate from a different enum)
   3. a parenthesized constant enum expression
-  4. one of the `+{:ts}`, `-{:ts}`, `~{:ts}` unary operators applied to constant enum expression
-  5. `+{:ts}`, `-{:ts}`, `*{:ts}`, `/{:ts}`, `%{:ts}`, `<<{:ts}`, `>>{:ts}`, `>>>{:ts}`, `&{:ts}`, `|{:ts}`, `^{:ts}`
+  4. one of the `+`, `-`, `~` unary operators applied to constant enum expression
+  5. `+`, `-`, `*`, `/`, `%`, `<<`, `>>`, `>>>`, `&`, `|`, `^`
      binary operators with constant enum expressions as operands
 
-It is a compile time error for constant enum expressions to be evaluated to `NaN{:ts}` or `Infinity{:ts}`.
+It is a compile time error for constant enum expressions to be evaluated to `NaN` or `Infinity`.
 
 In all other cases, enum member is considered computed.
 
@@ -301,9 +301,9 @@ this.
 There is a special subset of constant enum members that aren't calculated: literal enum members. A literal enum member
 is a constant enum member with no initialized value, or with values that are initialized to
 
-- any string literal (e.g. `"foo"{:ts}`, `"bar"{:ts}`, `"baz"{:ts}`)
-- any numeric literal (e.g. `1{:ts}`, `100{:ts}`)
-- a unary minus applied to any numeric literal (e.g. `-1{:ts}`, `-100{:ts}`)
+- any string literal (e.g. `"foo"`, `"bar"`, `"baz"`)
+- any numeric literal (e.g. `1`, `100`)
+- a unary minus applied to any numeric literal (e.g. `-1`, `-100`)
 
 When all members in an enum have literal enum values, some special semantics come into play.
 
@@ -353,9 +353,9 @@ function f(x: E) {
 }
 ```
 
-In that example, we first checked whether `x{:ts}` was not `E.Foo{:ts}`. If that check succeeds, then our `||{:ts}` will
-short-circuit, and the body of the `if{:ts}` will run. However, if the check didn't succeed, then `x{:ts}` can only be
-`E.Foo{:ts}`, so it doesn't make sense to see whether it's not equal to `E.Bar{:ts}`.
+In that example, we first checked whether `x` was not `E.Foo`. If that check succeeds, then our `||` will short-circuit,
+and the body of the `if` will run. However, if the check didn't succeed, then `x` can only be `E.Foo`, so it doesn't
+make sense to see whether it's not equal to `E.Bar`.
 
 ## In TypeScript, enums are real objects that exist at runtime.
 
@@ -386,10 +386,10 @@ function f(obj: { X: number }) {
 f(E);
 ```
 
-## In TypeScript, use `keyof typeof{:ts}` to get a type that represents all enum keys as strings
+## In TypeScript, use `keyof typeof` to get a type that represents all enum keys as strings
 
-Even though enums are real objects that exist at runtime, the `keyof{:ts}` keyword works differently than you might
-expect for typical objects. Instead, use `keyof typeof{:ts}` to get a type representing all enum keys as strings:
+Even though enums are real objects that exist at runtime, the `keyof` keyword works differently than you might expect
+for typical objects. Instead, use `keyof typeof` to get a type representing all enum keys as strings:
 
 ```ts
 enum LogLevel {
@@ -450,9 +450,9 @@ let nameOfA = Enum[a];
 console.log(nameOfA);
 ```
 
-In this generated code, an enum is compiled into an object that stores both forward (`name{:ts}` -> `value{:ts}`) and
-reverse (`value{:ts}` -> `name{:ts}`) mappings. References to other enum members are always emitted as property accesses
-and never inlined.
+In this generated code, an enum is compiled into an object that stores both forward (`name` -> `value`) and reverse
+(`value` -> `name`) mappings. References to other enum members are always emitted as property accesses and never
+inlined.
 
 Keep in mind that string enum members do not get a reverse mapping generated at all.
 
@@ -470,11 +470,11 @@ One important difference between ambient and non-ambient enums is that, in regul
 initializer will be considered constant if their preceding enum member is considered constant. By contrast, an ambient
 (and non-const) enum member that does not have an initializer is always considered computed.
 
-## In TypeScript, it's possible to use `const{:ts}` enums.
+## In TypeScript, it's possible to use `const` enums.
 
 In most cases, enums are a perfectly valid solution. However sometimes requirements are tighter. To avoid paying the
-cost of extra generated code and additional indirection when accessing enum values, it's possible to use `const{:ts}`
-enums. Const enums are defined using the `const{:ts}` modifier on our enums:
+cost of extra generated code and additional indirection when accessing enum values, it's possible to use `const` enums.
+Const enums are defined using the `const` modifier on our enums:
 
 ```ts
 const enum Enum {
@@ -514,10 +514,10 @@ let directions = [
 ```
 
 Inlining enum values is straightforward at first, but comes with subtle implications. These pitfalls pertain to ambient
-const enums only (basically const enums in `.d.ts{:ts}` files) and sharing them between projects, but if you are
-publishing or consuming `.d.ts{:ts}` files, these pitfalls likely apply to you, because `tsc --declaration{:ts}`
-transforms `.ts{:ts}` files into `.d.ts{:ts}` files. If this affects you, then do read about the
-[`const{:ts}` enum pitfalls from TypeScript's documentation](https://www.typescriptlang.org/docs/handbook/enums.html#const-enum-pitfalls).
+const enums only (basically const enums in `.d.ts` files) and sharing them between projects, but if you are publishing
+or consuming `.d.ts` files, these pitfalls likely apply to you, because `tsc --declaration` transforms `.ts` files into
+`.d.ts` files. If this affects you, then do read about the
+[`const` enum pitfalls from TypeScript's documentation](https://www.typescriptlang.org/docs/handbook/enums.html#const-enum-pitfalls).
 
 ## In modern TypeScript, you may not need an enum when an object with `as const` could suffice.
 
@@ -557,12 +557,11 @@ The biggest argument in favour of this format over TypeScript's `enum` is that i
 state of JavaScript, and [when/if](https://github.com/rbuckton/proposal-enum) enums are added to JavaScript then you can
 move to the additional syntax.
 
-## In TypeScript, `Iterable{:ts}` is a type we can use if we want to take in types which are iterable.
+## In TypeScript, `Iterable` is a type we can use if we want to take in types which are iterable.
 
-An object is deemed iterable if it has an implementation for the `Symbol.iterator{:ts}` property. Some built-in types
-like `Array{:ts}`, `Map{:ts}`, `Set{:ts}`, `String{:ts}`, `Int32Array{:ts}`, `Uint32Array{:ts}`, etc. have their
-`Symbol.iterator{:ts}` property already implemented. `Symbol.iterator{:ts}` function on an object is responsible for
-returning the list of values to iterate on.
+An object is deemed iterable if it has an implementation for the `Symbol.iterator` property. Some built-in types
+like `Array`, `Map`, `Set`, `String`, `Int32Array`, `Uint32Array`, etc. have their `Symbol.iterator` property already
+implemented. `Symbol.iterator` function on an object is responsible for returning the list of values to iterate on.
 
 Here is an example:
 
@@ -572,8 +571,8 @@ function toArray<X>(xs: Iterable<X>): X[] {
 }
 ```
 
-`for..of{:ts}` loops over an iterable object, invoking the `Symbol.iterator{:ts}` property on the object. Here is a
-simple `for..of{:ts}` loop on an array:
+`for..of` loops over an iterable object, invoking the `Symbol.iterator` property on the object. Here is a simple
+`for..of` loop on an array:
 
 ```ts
 let someArray = [1, "string", false];
@@ -586,9 +585,9 @@ for (let entry of someArray) {
 // [!not-code] false
 ```
 
-Both `for..of{:ts}` and `for..in{:ts}` statements iterate over lists; the values iterated on are different though,
-`for..in{:ts}` returns a list of keys on the object being iterated, whereas `for..of{:ts}` returns a list of values of
-the numeric properties of the object being iterated:
+Both `for..of` and `for..in` statements iterate over lists; the values iterated on are different though, `for..in`
+returns a list of keys on the object being iterated, whereas `for..of` returns a list of values of the numeric
+properties of the object being iterated:
 
 ```ts
 let list = ["a", "b", "c"];
@@ -608,9 +607,9 @@ for (let i of list) {
 // [!not-code] c
 ```
 
-Another distinction is that `for..in{:ts}` operates on any object; it serves as a way to inspect properties on this
-object. `for..of{:ts}` on the other hand, is mainly interested in values of iterable objects. Built-in objects like
-`Map{:ts}` and `Set{:ts}` implement `Symbol.iterator{:ts}` property allowing access to stored values:
+Another distinction is that `for..in` operates on any object; it serves as a way to inspect properties on this object.
+`for..of` on the other hand, is mainly interested in values of iterable objects. Built-in objects like `Map` and `Set`
+implement `Symbol.iterator` property allowing access to stored values:
 
 ```ts
 let pets: any = new Set(["Cat", "Dog", "Hamster"]);
@@ -633,12 +632,12 @@ console.log(pets);
 // [!not-code] Set(3) { 'Cat', 'Dog', 'Hamster', species: 'mammals' }
 ```
 
-## In TypeScript, when targeting an ES5 or ES3-compliant engine, iterators are only allowed on values of `Array{:ts}` type.
+## In TypeScript, when targeting an ES5 or ES3-compliant engine, iterators are only allowed on values of `Array` type.
 
-It is an error to use `for..of{:ts}` loops on non-Array values, even if these non-Array values implement the
-`Symbol.iterator{:ts}` property.
+It is an error to use `for..of` loops on non-Array values, even if these non-Array values implement the
+`Symbol.iterator` property.
 
-The compiler will generate a simple `for{:ts}` loop for a `for..of{:ts}` loop, for instance:
+The compiler will generate a simple `for` loop for a `for..of` loop, for instance:
 
 ```ts
 let numbers = [1, 2, 3];
@@ -661,15 +660,15 @@ for (let num of numbers) {
 }
 ```
 
-When targeting an ECMAScript 2015-compliant engine, the compiler will generate `for..of{:ts}` loops to target the
+When targeting an ECMAScript 2015-compliant engine, the compiler will generate `for..of` loops to target the
 built-in iterator implementation in the engine.
 
-## TypeScript provides a special type `unique symbol{:ts}` to enable treating symbols as unique literals.
+## TypeScript provides a special type `unique symbol` to enable treating symbols as unique literals.
 
-`unique symbol{:ts}` is a subtype of `symbol{:ts}`, and is produced only from calling `Symbol(){:ts}` or
-`Symbol.for(){:ts}`, or from explicit type annotations. This type is only allowed on `const{:ts}` declarations and
-`readonly static{:ts}` properties, and to reference a specific unique symbol, you'll have to use the `typeof{:ts}`
-operator. Each reference to a unique symbol implies a unique identity that's tied to a given declaration:
+`unique symbol` is a subtype of `symbol`, and is produced only from calling `Symbol()` or `Symbol.for()`, or from
+explicit type annotations. This type is only allowed on `const` declarations and `readonly static` properties, and to
+reference a specific unique symbol, you'll have to use the `typeof` operator. Each reference to a unique symbol implies
+a unique identity that's tied to a given declaration:
 
 ```ts
 declare const sym1: unique symbol;
@@ -688,8 +687,8 @@ class C {
 }
 ```
 
-Because each `unique symbol{:ts}` has a completely separate identity, no two `unique symbol{:ts}` types are assignable
-or comparable to each other:
+Because each `unique symbol` has a completely separate identity, no two `unique symbol` types are assignable or
+comparable to each other:
 
 ```ts
 const sym2 = Symbol();

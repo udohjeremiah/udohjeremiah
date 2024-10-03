@@ -55,13 +55,13 @@ is the standard that defines the JavaScript programming language from which all 
 engines. In this standard, strings are based on Unicode (making text in all writing systems supported), and a few
 language-sensitive methods are provided:
 
-- `String.prototype.localeCompare{:js}`
-- `String.toLocaleLowerCase{:js}`
-- `String.prototype.toLocaleUpperCase{:js}`
-- `Number.prototype.toLocaleString{:js}`
-- `Date.prototype.toLocaleString{:js}`
-- `Date.prototype.toLocaleDaxteString{:js}`
-- `Date.prototype.toLocaleTimeString{:js}`
+- `String.prototype.localeCompare`
+- `String.toLocaleLowerCase`
+- `String.prototype.toLocaleUpperCase`
+- `Number.prototype.toLocaleString`
+- `Date.prototype.toLocaleString`
+- `Date.prototype.toLocaleDaxteString`
+- `Date.prototype.toLocaleTimeString`
 
 But, none of these language-sensitive methods allow apps to specify the language or control details of their behavior.
 This limitation creates a barrier if you want to build apps that many people around the world use.
@@ -90,32 +90,31 @@ negotiation, and control details of the behavior.
 
 Listed below are the customizable language-sensitive constructors currently provided by the i18n API:
 
-- String comparison (`Intl.Collator{:js}`)
-- Date and time formatting (`Intl.DateTimeFormat{:js}`)
-- Number formatting (`Intl.NumberFormat{:js}`)
-- Relative time formatting (`Intl.RelativeTimeFormat{:js}`)
-- Duration formatting (`Intl.DurationFormat{:js}`)
-- List formatting (`Intl.ListFormat{:js}`)
-- Text segmentation (`Intl.Segmenter{:js}`)
-- Pluralization rules (`Intl.PluralRules{:js}`)
-- Display names (`Intl.DisplayNames{:js}`)
+- String comparison (`Intl.Collator`)
+- Date and time formatting (`Intl.DateTimeFormat`)
+- Number formatting (`Intl.NumberFormat`)
+- Relative time formatting (`Intl.RelativeTimeFormat`)
+- Duration formatting (`Intl.DurationFormat`)
+- List formatting (`Intl.ListFormat`)
+- Text segmentation (`Intl.Segmenter`)
+- Pluralization rules (`Intl.PluralRules`)
+- Display names (`Intl.DisplayNames`)
 
-Also, in the i18n API, the existing language-sensitive methods defined on `String{:js}`, `Number{:js}`, and `Date{:js}`
-in ECMA-262 were **respecified** to accept locale and other parameters and interpret them in the same way as the new
-API introduced by the i18n API.
+Also, in the i18n API, the existing language-sensitive methods defined on `String`, `Number`, and `Date` in ECMA-262
+were **respecified** to accept locale and other parameters and interpret them in the same way as the new API introduced
+by the i18n API.
 
 ## What is the Intl object?
 
-The `Intl{:js}` object is a standard built-in object in JavaScript used to package **all** functionality, from
-constructors to other language-sensitive functions, defined in the i18n API. It provides a namespace for the
-constructors of the i18n API, minimizing the risk of *name collisions* as more constructors are added to the API over
-time.
+The `Intl` object is a standard built-in object in JavaScript used to package **all** functionality, from constructors
+to other language-sensitive functions, defined in the i18n API. It provides a namespace for the constructors of the i18n
+API, minimizing the risk of *name collisions* as more constructors are added to the API over time.
 
-Unlike most objects in the global scope (e.g., `Date{:js}`, `Number{:js}`, `Error{:js}`), `Intl{:js}` has some different
-behavior that is worth paying attention to:
+Unlike most objects in the global scope (e.g., `Date`, `Number`, `Error`), `Intl` has some different behavior that is
+worth paying attention to:
 
-- The `Intl{:js}` object does not have a construct internal method, so you cannot use it as a constructor with the
-  `new{:js}` operator:
+- The `Intl` object does not have a construct internal method, so you cannot use it as a constructor with the `new`
+  operator:
 
   ```js
   // [!code error:3]
@@ -123,7 +122,7 @@ behavior that is worth paying attention to:
   // [!not-code] TypeError: Intl is not a constructor
   ```
 
-- The `Intl{:js}` object does not have a call internal method, so you cannot invoke it as a function:
+- The `Intl` object does not have a call internal method, so you cannot invoke it as a function:
 
   ```js
   // [!code error:3]
@@ -131,14 +130,14 @@ behavior that is worth paying attention to:
   // [!not-code] TypeError: Intl is not a function
   ```
 
-- All properties and methods of the `Intl{:js}` object are **static**, just like the `Math{:js}` object:
+- All properties and methods of the `Intl` object are **static**, just like the `Math` object:
 
   ```js
   Intl.Collator(); // Collator {compare: ƒ}
   Intl.getCanonicalLocales("EN-GB") // ['en-GB']
   ```
 
-Note that all `Intl{:js}` constructors cannot be invoked as a function and must be called with the `new{:js}` operator:
+Note that all `Intl` constructors cannot be invoked as a function and must be called with the `new` operator:
 
 ```js
 new Intl.RelativeTimeFormat(); // RelativeTimeFormat {}
@@ -148,9 +147,9 @@ Intl.RelativeTimeFormat();
 // [!not-code] TypeError: Constructor Intl.RelativeTimeFormat requires 'new'
 ```
 
-The exceptions to this rule are `Intl.Collator{:js}`, `Intl.DateTimeFormat{:js}`, and `Intl.NumberFormat{:js}`. Each of
-these constructs and returns a new object when called as a function. But, why? For backward compatibility with past
-editions of the i18n API. Remember, *you don't break the Web*.
+The exceptions to this rule are `Intl.Collator`, `Intl.DateTimeFormat`, and `Intl.NumberFormat`. Each of these
+constructs and returns a new object when called as a function. But, why? For backward compatibility with past editions
+of the i18n API. Remember, *you don't break the Web*.
 
 ## The `locales` and `options` arguments
 
@@ -165,8 +164,8 @@ locale it understands that comes closest to satisfying the expressed preference.
 
 The `options` argument, which must be an object, is used to specify other parameters that let the app control the
 behavior of the constructed object. The properties that can be specified in the `options` argument vary between
-constructors and functions, and if the `options` argument is not provided or is `undefined{:js}`, default values will be
-used for all properties.
+constructors and functions, and if the `options` argument is not provided or is `undefined`, default values will be used
+for all properties.
 
 ### What is a locale?
 
@@ -195,8 +194,8 @@ defines and maintains the list of language tags. A language tag consists of a la
 and an optional regional code, all separated by hyphens (-). For example, `sr` for Serbian, `sr-Cyrl` for Serbian in
 Cyrillic script, `sr-Cyrl-BA` for Serbian in Cyrillic script as used in Bosnia-Herzegovina.
 
-But, BCP 47 allows for **extensions**, and with the `"u"{:js}` ( Unicode) extension, you can specify additional
-parameters for currency, date and time formatting, number formatting, etc., as part of a language tag. For example,
+But, BCP 47 allows for **extensions**, and with the `"u"` ( Unicode) extension, you can specify additional parameters
+for currency, date and time formatting, number formatting, etc., as part of a language tag. For example,
 `en-GB-u-nu-thai`, which means use British English with Thai digits
 (๐, ๑, ๒, ๓, ๔, ๕, ๖, ๗, ๘, ๙) in number formatting:
 
@@ -207,8 +206,8 @@ console.log(nf.format(10335497)); // ๑๐,๓๓๕,๔๙๗
 
 BCP 47 extension subtags (e.g., `cf` for currency, `nu` for numbering systems) are defined in the
 [Unicode CLDR Project](https://github.com/unicode-org/cldr/tree/main/common/bcp47). And, you can use the
-`Intl.supportedValuesOf(){:js}` static method to see the supported currency, time zone, measurement unit, numbering
-system, collation, or calendar values supported by an implementation:
+`Intl.supportedValuesOf()` static method to see the supported currency, time zone, measurement unit, numbering system,
+collation, or calendar values supported by an implementation:
 
 ```js
 console.log(Intl.supportedValuesOf("currency")) // ['AED', 'AFN', …]
@@ -232,14 +231,14 @@ follow this format:
 
 The `locales` argument may be:
 
-- `undefined{:js}` (or omitted): The implementation's default locale will be used:
+- `undefined` (or omitted): The implementation's default locale will be used:
 
   ```js
   new Intl.DateTimeFormat(undefined) // `locales` is undefined
   new Intl.DateTimeFormat() // `locales` is omitted
   ```
 
-- A locale: A locale identifier or an `Intl.Locale{:js}` object that wraps a locale identifier:
+- A locale: A locale identifier or an `Intl.Locale` object that wraps a locale identifier:
 
   ```js
   new Intl.DateTimeFormat("en-GB") // `locales` is a locale identifier
@@ -254,7 +253,7 @@ The `locales` argument may be:
   new Intl.DateTimeFormat(["de-CH", "en-GB"]) // `locales` is a list of locales
   ```
 
-A `TypeError{:js}` is thrown if the locale identifier isn't a string or an array of strings:
+A `TypeError` is thrown if the locale identifier isn't a string or an array of strings:
 
 ```js
 // [!code error:3]
@@ -266,7 +265,7 @@ new Intl.DateTimeFormat({locale: "en-GB"});
 // [!not-code] TypeError
 ```
 
-A `RangeError{:js}` is thrown if the locale identifier is a syntactically invalid string:
+A `RangeError` is thrown if the locale identifier is a syntactically invalid string:
 
 ```js
 // [!code error:3]
@@ -274,8 +273,8 @@ new Intl.DateTimeFormat("12-GB")
 // [!not-code] RangeError: Incorrect locale information provided
 ```
 
-To be safe and sure, you can use the `Intl.getCanonicalLocales{:js}` static method to validate locale identifiers if
-they are structurally valid language tags, before using them:
+To be safe and sure, you can use the `Intl.getCanonicalLocales` static method to validate locale identifiers if they are
+structurally valid language tags, before using them:
 
 ```js
 try {
@@ -301,17 +300,17 @@ The process of resolving a locale is referred to as **locale (or language) negot
 this process works isn't important for you to write correct code, inasmuch as you specify well-formed valid `locales`.
 But, in some rare instances, it might help.
 
-As we now know, the constructors from the i18n API, as well as the updated language-sensitive functions in
-`String{:js}`, `Number{:js}`, and `Date{:js}` each take a `locales` and `options` argument. Together, these arguments
-form a request. The constructors then compare this request against the actual capabilities of their implementation to
-determine the actual locale to be used.
+As we now know, the constructors from the i18n API, as well as the updated language-sensitive functions in `String`,
+`Number`, and `Date` each take a `locales` and `options` argument. Together, these arguments form a request. The
+constructors then compare this request against the actual capabilities of their implementation to determine the actual
+locale to be used.
 
 Two matching algorithms exist from which implementations can use to compare the request represented by the `locales` and
 `options` argument against the locales it has available to pick the best one: the `"lookup"` matcher which follows the
 [Lookup algorithm specified in BCP 47](https://datatracker.ietf.org/doc/html/rfc4647#section-3.4),  and the `"best fit"`
 matcher, which is the default algorithm, lets the implementation provide a locale.
 
-You can specify a matching algorithm from the existing ones using the `localeMatcher{:js}` property in the `options`
+You can specify a matching algorithm from the existing ones using the `localeMatcher` property in the `options`
 argument:
 
 ```js
@@ -319,7 +318,7 @@ new Intl.DateTimeFormat("en-GB", { localeMatcher: "best fit" }); // the default
 new Intl.DateTimeFormat("en-GB", { localeMatcher: "lookup" });
 ```
 
-And, you can find out the result of the negotiation for a constructed object using the `resolvedOptions{:js}` method. It
+And, you can find out the result of the negotiation for a constructed object using the `resolvedOptions` method. It
 returns an object with properties for all parameters except the matcher parameters:
 
 ```js
@@ -342,7 +341,7 @@ The JavaScript i18n API can be used in two ways: *directly* or *indirectly*.
 JavaScript apps can use the i18n API directly by using the new language-sensitive constructors, specifying a list of
 preferred locales and options to configure its behavior.
 
-#### `Intl.Collator{:js}`
+#### `Intl.Collator`
 
 This object enables language-sensitive string comparison.
 
@@ -375,10 +374,10 @@ console.log(
 ```
 
 For a list of the Unicode extension keys allowed in `locales`, and the properties supported in `options`, when using the
-`Intl.Collator(){:js}` constructor, see
+`Intl.Collator()` constructor, see
 [Parameters for Intl.Collator() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Collator/Collator#parameters).
 
-#### `Intl.DateTimeFormat{:js}`
+#### `Intl.DateTimeFormat`
 
 This object enables language-sensitive date and time formatting.
 
@@ -419,10 +418,10 @@ console.log(
 ```
 
 For a list of the Unicode extension keys allowed in `locales`, and the properties supported in `options`, when using the
-`Intl.DateTimeFormat(){:js}` constructor, see
+`Intl.DateTimeFormat()` constructor, see
 [Parameters for Intl.DateTimeFormat() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat#parameters).
 
-#### `Intl.NumberFormat{:js}`
+#### `Intl.NumberFormat`
 
 This object enables language-sensitive number formatting.
 
@@ -473,10 +472,10 @@ console.log(
 ```
 
 For a list of the Unicode extension keys allowed in `locales`, and the properties supported in `options`, when using the
-`Intl.NumberFormat(){:js}` constructor, see
+`Intl.NumberFormat()` constructor, see
 [Parameters for Intl.NumberFormat() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#parameters).
 
-#### `Intl.RelativeTimeFormat{:js}`
+#### `Intl.RelativeTimeFormat`
 
 This object enables language-sensitive relative time formatting.
 
@@ -507,10 +506,10 @@ console.log(rtf4.formatToParts(14, "day"));
 ```
 
 For a list of the Unicode extension keys allowed in `locales`, and the properties supported in `options`, when using the
-`Intl.RelativeTimeFormat(){:js}` constructor, see
+`Intl.RelativeTimeFormat()` constructor, see
 [Parameters for Intl.RelativeTimeFormat() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/RelativeTimeFormat#parameters).
 
-#### `Intl.ListFormat{:js}`
+#### `Intl.ListFormat`
 
 This object enables language-sensitive list formatting.
 
@@ -545,10 +544,10 @@ console.log(
 ```
 
 For a list of the Unicode extension keys allowed in `locales`, and the properties supported in `options`, when using the
-`Intl.ListFormat(){:js}` constructor, see
+`Intl.ListFormat()` constructor, see
 [Parameters for Intl.ListFormat() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/ListFormat#parameters).
 
-#### `Intl.Segmenter{:js}`
+#### `Intl.Segmenter`
 
 This object enables language-sensitive text segmentation, enabling you to get meaningful items
 (graphemes, words, or sentences) from a string.
@@ -577,10 +576,10 @@ console.log(segmentedText); // ['吾輩', 'は', '猫', 'で', 'ある', '。', 
 ```
 
 For a list of the Unicode extension keys allowed in `locales`, and the properties supported in `options`, when using the
-`Intl.Segmenter(){:js}` constructor, see
+`Intl.Segmenter()` constructor, see
 [Parameters for Intl.Segmenter() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/Segmenter#parameters).
 
-#### `Intl.PluralRules{:js}`
+#### `Intl.PluralRules`
 
 This object enables plural-sensitive formatting and plural-related language rules.
 
@@ -635,10 +634,10 @@ formatOrdinals(103); // '103rd'
 ```
 
 For a list of the Unicode extension keys allowed in `locales`, and the properties supported in `options`, when using the
-`Intl.PluralRules(){:js}` constructor, see
+`Intl.PluralRules()` constructor, see
 [Parameters for Intl.PluralRules() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules/PluralRules#parameters).
 
-#### `Intl.DisplayNames{:js}`
+#### `Intl.DisplayNames`
 
 This object enables the consistent translation of language, region, and script display names.
 
@@ -673,17 +672,17 @@ console.log(dateTimeNames.of("minute")); // minuut
 ```
 
 For a list of the Unicode extension keys allowed in `locales`, and the properties supported in `options`, when using the
-`Intl.DisplayNames(){:js}` constructor, see
+`Intl.DisplayNames()` constructor, see
 [Parameters for Intl.DisplayNames() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/DisplayNames#parameters).
 
 ### Using the i18n API indirectly
 
-JavaScript apps can also use the i18n API indirectly by using the respecified language-sensitive functions in
-`String{:js}`, `Number{:js}`, and `Date{:js}`, with the new `locales` and `options` parameters. This enables the updated
-collation and formatting methods to produce the same result as the `compare{:js}` and `format{:js}` methods of the
-`Intl.Collator{:js}`, `Intl.NumberFormat{:js}`, and `Intl.DateTimeFormat{:js}` constructors.
+JavaScript apps can also use the i18n API indirectly by using the respecified language-sensitive functions in `String`,
+`Number`, and `Date`, with the new `locales` and `options` parameters. This enables the updated collation and formatting
+methods to produce the same result as the `compare` and `format` methods of the `Intl.Collator`,
+`Intl.NumberFormat`, and `Intl.DateTimeFormat` constructors.
 
-#### `String{:js}`
+#### `String`
 
 ```js
 const str1 = "a";
@@ -697,7 +696,7 @@ const result2 = new Intl.Collator("en-US").compare(str1, str2);
 console.log(result1 === result2); // true
 ```
 
-#### `Number{:js}`
+#### `Number`
 
 ```js
 const number = 1234560.789
@@ -710,7 +709,7 @@ const result2 = new Intl.NumberFormat("en-IN").format(number);
 console.log(result1 === result2); // true
 ```
 
-#### `Date{:js}`
+#### `Date`
 
 ```js
 const date = new Date(Date.UTC(2024, 8, 6, 4, 24, 16, 500));
