@@ -2,31 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  min-width: 0;
+[data-rehype-pretty-code-figure] {
+  @apply relative rounded-lg border border-neutral-800;
 }
 
-html {
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizelegibility;
+pre:not([data-rehype-pretty-code-figure] > pre) {
+  @apply rounded-lg border border-neutral-800;
 }
 
-body {
-  min-height: 100dvh;
-}
-
-::selection {
-  @apply bg-green-100 dark:bg-green-900;
-}
-
-/* rehpye pretty code */
 [data-rehype-pretty-code-title] {
-  @apply rounded-t-lg px-6 py-3 text-sm font-medium;
-  @apply bg-neutral-900 font-mono text-white;
+  @apply mt-0 rounded-t-lg border-b border-neutral-800 bg-inherit bg-neutral-900 px-6 py-3 font-mono text-sm font-medium text-white;
 }
 
 [data-rehype-pretty-code-title] + pre {
-  @apply mt-0 rounded-t-none;
+  @apply rounded-t-none;
 }
 
 pre > code {
@@ -50,57 +39,33 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
   @apply w-8;
 }
 
-[data-rehype-pretty-code-fragment] ::selection {
-  @apply bg-green-900;
-}
-
-[data-highlighted-line] {
-  @apply bg-neutral-700;
-}
-
-mark[data-highlighted-chars] {
+[data-highlighted-chars] {
   @apply m-0 rounded bg-white/30 px-1;
 }
 
-/* shiki transformers */
-.diff,
-.highlighted {
-  @apply relative -mx-6 inline-block px-6;
+[data-highlighted-line] {
+  @apply relative -mx-6 inline-block bg-neutral-700 px-6;
 }
 
-.highlighted {
-  @apply bg-white/30;
-}
-
-.highlighted.error {
-  @apply bg-red-500/30;
-}
-
-.highlighted.warning {
-  @apply bg-yellow-500/30;
-}
-
-.diff.remove,
-.diff.add {
+pre > code[data-language] > [data-highlighted-line-id="warning"],
+[data-highlighted-line-id="error"],
+[data-highlighted-line-id="remove"],
+[data-highlighted-line-id="add"] {
   @apply before:mr-8 before:inline-block before:w-4 before:text-right;
 }
 
-.diff.remove {
+pre > code[data-language] > [data-highlighted-line-id="warning"] {
+  @apply bg-yellow-500/30 before:text-yellow-400 before:content-['!!'];
+}
+
+pre > code[data-language] > [data-highlighted-line-id="error"] {
+  @apply bg-red-500/30 before:text-red-400 before:content-['❌'];
+}
+
+pre > code[data-language] > [data-highlighted-line-id="remove"] {
   @apply !bg-red-600/20 opacity-70 before:text-red-400 before:content-['-'];
 }
 
-.diff.add {
+pre > code[data-language] > [data-highlighted-line-id="add"] {
   @apply !bg-green-500/30 before:text-green-400 before:content-['+'];
-}
-
-.has-focused span[data-line]:not(.focused) {
-  @apply transition-[filter];
-}
-
-.has-focused:not(:hover) span[data-line]:not(.focused) {
-  @apply opacity-70 blur-[2px];
-}
-
-[data-not-line] {
-  @apply -mx-6 select-none px-[70px];
 }

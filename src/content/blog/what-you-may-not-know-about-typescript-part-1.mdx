@@ -97,20 +97,18 @@ thinks the code has type errors.
 
 Consider the example below:
 
-```ts
+```ts {4-5}#error
 // let a: any
 let a;
 
-// [!code error:3]
+// The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 if (4 / []) {
-  // [!not-code] The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
   a = Infinity;
 } else {
   a = 1;
 }
 
-console.log(a);
-// [!not-code] Infinity
+console.log(a); // Infinity
 ```
 
 The expression `4 / []` in TypeScript would throw an error, however, if you configure your TypeScript settings,
@@ -167,8 +165,7 @@ anys.push(1);
 anys.push("oh no");
 anys.push({ anything: "goes" });
 
-console.log(anys);
-// [!not-code] [ 1, 'oh no', { anything: 'goes' } ]
+console.log(anys); // [ 1, 'oh no', { anything: 'goes' } ]
 ```
 
 And you can use an expression of type `any` anywhere:
@@ -214,16 +211,14 @@ have any type information to determine which function to call at runtime. That i
 reified. Therefore, there's nothing at runtime that can tell us whether `num` is of type `number` or `string`, as the
 type annotation is not present in any form at runtime.
 
-```ts
-// [!code error:3]
+```ts {1-2,6-7}#error
+// Duplicate function implementation.
 function addHundred(num: number) {
-  // [!not-code] Duplicate function implementation.
   return num + 100;
 }
 
-// [!code error:3]
+// Duplicate function implementation.
 function addHundred(num: string) {
-  // [!not-code] Duplicate function implementation.
   return num + "-hundred";
 }
 ```
@@ -268,14 +263,12 @@ your code is going to do while you're writing it.
 This means you can take any working JavaScript code and put it in a TypeScript file without worrying about how it is
 written.
 
-```ts
+```ts {5}#error
 // Works in TS just as it would have in JS
 let a = Number("3.1425").toExponential(2);
 
 // Fails in TS just as it would have in JS
-// [!code error:3]
-let a = (4
-// [!not-code] ')' expected.
+let a = (4 // ')' expected.
 ```
 
 ## TypeScript might consider a JavaScript code to be an error because of how a value is used.
@@ -287,21 +280,16 @@ TypeScript during its compile-time type-checking.
 Using the code below as an example, in JavaScript, the variable `area` would be assigned `NaN`, the result from the
 operation `obj.width * obj.height`; in TypeScript, this results in an error:
 
-```ts
+```ts {2}#error
 const obj = { width: 10, height: 15 };
-
-// [!code error:3]
-const area = obj.width * obj.heigth;
-// [!not-code] Property 'heigth' does not exist on type '{ width: number; height: number; }'. Did you mean 'height'?
+const area = obj.width * obj.heigth; // Property 'heigth' does not exist on type '{ width: number; height: number; }'. Did you mean 'height'?
 ```
 
 As another example from the code below, in JavaScript, `Infinity` would be logged to the console; in TypeScript, this
 results in an error:
 
-```ts
-// [!code error:3]
-console.log(4 / []);
-// [!not-code] The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint', or an enum type.
+```ts {1}#error
+console.log(4 / []); // The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint', or an enum type.
 ```
 
 ## In TypeScript, there are only two syntaxes for building types: Interfaces and Types.
@@ -384,8 +372,7 @@ function logPoint(p: Point) {
 
 const point = { x: 12, y: 26 };
 
-logPoint(point);
-// [!not-code] 12, 26
+logPoint(point); // 12, 26
 ```
 
 The `point` variable is never declared to be of type `Point`. However, TypeScript compares the shape of `point` to the
@@ -415,23 +402,19 @@ function logPoint(p: Point) {
 
 // Object's shape matches type exactly
 const point1 = { x: 12, y: 26, z: 40 };
-logPoint(point1);
-// [!not-code] x=12, y=26, z=40
+logPoint(point1); // x=12, y=26, z=40
 
 // Object's shape matches type regardless of having a different order of fields
 const point2 = { z: 40, x: 12, y: 26 };
-logPoint(point2);
-// [!not-code] x=12, y=26, z=40
+logPoint(point2); // x=12, y=26, z=40
 
 // Object's shape matches type regardless of having fewer properties (i.e., only the required)
 const point3 = { x: 12, y: 26 };
-logPoint(point3);
-// [!not-code] x=12, y=26
+logPoint(point3); // x=12, y=26
 
 // Object's shape matches type regardless of having more than required properties
 const point4 = { w: 8, x: 12, y: 26 };
-logPoint(point4);
-// [!not-code] x=12, y=26
+logPoint(point4); // x=12, y=26
 
 class VirtualPoint {
   x: number;
@@ -444,8 +427,7 @@ class VirtualPoint {
 }
 
 const newVPoint = new VirtualPoint(13, 56);
-logPoint(newVPoint);
-// [!not-code] x=13, y=56
+logPoint(newVPoint); // x=13, y=56
 ```
 
 Taking `point4` as an example, the object literal `{ w: 8, x: 12, y: 26 }` has a matching literal type

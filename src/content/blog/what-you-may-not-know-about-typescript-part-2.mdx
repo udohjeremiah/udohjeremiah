@@ -11,22 +11,15 @@ introduction to what led me to write this. With that said, let's get started.
 
 ## TypeScript checks that you passed the right number of arguments to a function, regardless of using type annotations on parameters or not.
 
-```ts
+```ts {7-8}#error
 // With `"noImplicitAny": false` in `tsconfig.json`
 function fn(x, y) {
   console.log(x, y);
 }
 
-fn(1, 2);
-// [!not-code] 1 2
-
-// [!code error:3]
-fn(1);
-// [!not-code] Expected 2 arguments, but got 1.
-
-// [!code error:3]
-fn(1, 2, 3);
-// [!not-code] Expected 2 arguments, but got 3.
+fn(1, 2); // 1 2
+fn(1); // Expected 2 arguments, but got 1.
+fn(1, 2, 3); // Expected 2 arguments, but got 3.
 ```
 
 In JavaScript, if you call a function with more arguments than there are parameters, the extra arguments are simply
@@ -37,8 +30,7 @@ of functions with more parameters:
 const arr = [1, 2, 3, 4, 5];
 const arrDoubled = arr.map((num) => num * 2); // `(value: number)` => number is assignable to `(value: number, index: number, array: number[]) => number`
 
-console.log(arrDoubled);
-// [!not-code] [ 2, 4, 6, 8, 10 ]
+console.log(arrDoubled); // [ 2, 4, 6, 8, 10 ]
 ```
 
 When writing a function type for a callback, never write an optional parameter unless you intend to call the function
@@ -49,28 +41,24 @@ without passing that argument.
 The `unknown` type represents any value. This is similar to the `any` type, but is safer because it’s not legal to do
 anything with an `unknown` value:
 
-```ts
+```ts {6}#error
 function f1(a: any) {
   a.b(); // OK
 }
 
 function f2(a: unknown) {
-  // [!code error:3]
-  a.b();
-  // [!not-code] 'a' is of type 'unknown'.
+  a.b(); // 'a' is of type 'unknown'.
 }
 ```
 
 Conversely, you can describe a function that returns a value of `unknown` type:
 
-```ts
+```ts {5}#warning
 function safeParse(s: string): unknown {
   return JSON.parse(s);
 }
 
-// [!code warning:3]
-const obj = safeParse("someRandomString");
-// [!not-code] Need to be careful with 'obj'!
+const obj = safeParse("someRandomString"); // Need to be careful with 'obj'!
 ```
 
 ## In TypeScript, you can use the `never` type to describe functions that never return a value.
@@ -147,7 +135,7 @@ function noop() {
 Thus, the following implementations of the type `() => void` are valid, and when the return value of one of these
 functions is assigned to another variable, it will retain the type of `void`:
 
-```ts
+```ts {17-19}#error
 type voidFunc = () => void;
 
 const f1: voidFunc = () => {
@@ -164,17 +152,9 @@ const v1 = f1();
 const v2 = f2();
 const v3 = f3();
 
-// [!code error:3]
-console.log(!!v1);
-// [!not-code] An expression of type 'void' cannot be tested for truthiness
-
-// [!code error:3]
-console.log(!!v2);
-// [!not-code] An expression of type 'void' cannot be tested for truthiness
-
-// [!code error:3]
-console.log(!!v3);
-// [!not-code] An expression of type 'void' cannot be tested for truthiness
+console.log(!!v1); // An expression of type 'void' cannot be tested for truthiness
+console.log(!!v2); // An expression of type 'void' cannot be tested for truthiness
+console.log(!!v3); // An expression of type 'void' cannot be tested for truthiness
 ```
 
 This behavior exists so that the following code is valid even though `Array.prototype.push` returns a number and the
@@ -186,24 +166,19 @@ const src = [1, 2, 3];
 const dst = [0];
 src.forEach((el) => dst.push(el));
 
-console.log(dst);
-// [!not-code] [ 0, 1, 2, 3 ]
+console.log(dst); // [ 0, 1, 2, 3 ]
 ```
 
 There is one other special case to be aware of when a literal function definition has a `void` return type, that
 function must not return anything:
 
-```ts
+```ts {2,6}#error
 function f2(): void {
-  // [!code error:3]
-  return true;
-  // [!not-code] Type 'boolean' is not assignable to type 'void'.
+  return true; // Type 'boolean' is not assignable to type 'void'.
 }
 
 const f3 = function (): void {
-  // [!code error:3]
-  return true;
-  // [!not-code] Type 'boolean' is not assignable to type 'void'.
+  return true; // Type 'boolean' is not assignable to type 'void'.
 };
 ```
 
@@ -212,13 +187,11 @@ const f3 = function (): void {
 In JavaScript, if you access a property that doesn't exist, you'll get the value `undefined` rather than a runtime
 error. Because of this, when you read from an optional property, you'll have to check for `undefined` before using it.
 
-```ts
+```ts {4}#error
 // Function
 function printName(first: string, last?: string) {
   // Might crash if 'last' wasn't provided!
-  // [!code error:3]
-  console.log(last.toUpperCase());
-  // [!not-code] 'last' is possibly 'undefined'.
+  console.log(last.toUpperCase()); // 'last' is possibly 'undefined'.
 
   if (last !== undefined) {
     console.log(last.toUpperCase()); // OK
@@ -229,13 +202,11 @@ function printName(first: string, last?: string) {
 }
 ```
 
-```ts
+```ts {4}#error
 // Object
 function printName(obj: { first: string; last?: string }) {
-  // Might crash if 'obj.last' wasn't provided!
-  // [!code error:3]
-  console.log(obj.last.toUpperCase());
-  // [!not-code] 'obj.last' is possibly 'undefined'.
+  // 'obj.last' is possibly 'undefined'.
+  console.log(obj.last.toUpperCase()); // Might crash if 'obj.last' wasn't provided!
 
   if (obj.last !== undefined) {
     console.log(obj.last.toUpperCase()); // OK
@@ -267,11 +238,9 @@ refer to each of these types as the union's members.
 TypeScript will only allow an operation if it is valid for every member of the union. For example, if you have the union
 `string | number`, you can't use methods that are only available on `string`:
 
-```ts
+```ts {2}#error
 function printId(id: number | string) {
-  // [!code error:3]
-  console.log(id.toUpperCase());
-  // [!not-code] Property `toUpperCase` does not exist on type `string | number`. Property 'toUpperCase' does not exist on type 'number'.
+  console.log(id.toUpperCase()); // Property `toUpperCase` does not exist on type `string | number`. Property 'toUpperCase' does not exist on type 'number'.
 }
 ```
 
@@ -346,11 +315,8 @@ interface Person {
 }
 
 const p1: Person = { name: "John Doe", age: 45 };
-console.log(p1.name);
-// [!not-code] John Doe
-
-console.log(p1.age);
-// [!not-code] 45
+console.log(p1.name); // John Doe
+console.log(p1.age); // 45
 
 // Extending an interface via `extends`
 interface Animal {
@@ -366,38 +332,28 @@ interface SpecificBear extends Bear, Animal {
 }
 
 const bear: Bear = { name: "Grizzly", honey: true };
-console.log(bear.name);
-// [!not-code] Grizzly
-
-console.log(bear.honey);
-// [!not-code] true
+console.log(bear.name); // Grizzly
+console.log(bear.honey); // true
 
 const specificBear: SpecificBear = {
   name: "Polar",
   honey: false,
   specificAttribute: "Can swim in icy waters",
 };
-console.log(specificBear.name);
-// [!not-code] Polar
-
-console.log(specificBear.honey);
-// [!not-code] false
-
-console.log(specificBear.specificAttribute);
-// [!not-code] Can swim in icy waters
+console.log(specificBear.name); // Polar
+console.log(specificBear.honey); // false
+console.log(specificBear.specificAttribute); // Can swim in icy waters
 ```
 
-```ts
+```ts {2-3,7-8}#error
 // Cannot re-open, hence change, a type alias after being created
-// [!code error:3]
+// Duplicate identifier 'Animal'.
 type Animal = {
-  // [!not-code] Duplicate identifier 'Animal'.
   name: string;
 };
 
-// [!code error:3]
+// Duplicate identifier 'Animal'.
 type Animal = {
-  // [!not-code] Duplicate identifier 'Animal'.
   name: string;
   honey: boolean;
 };
@@ -414,11 +370,9 @@ type Bear = Animal & {
 };
 
 const bear: Bear = { name: "Grizzly", honey: true };
-console.log(bear.name);
-// [!not-code] Grizzly
+console.log(bear.name); // Grizzly
 
-console.log(bear.honey);
-// [!not-code] true
+console.log(bear.honey); // true
 ```
 
 ## TypeScript's `interface`s, unlike its `type`s, may only be used to declare the shapes of objects, not rename primitives.
@@ -432,10 +386,9 @@ type EvenNumber = number;
 
 This isn't feasible with interfaces, as they can only extend other named object types, not primitives:
 
-```ts
-// [!code error:3]
+```ts {1-2}#error
+// An interface cannot extend a primitive type like 'string'. It can only extend other named object types.
 interface SanitizedString extends string {}
-// [!not-code] An interface cannot extend a primitive type like 'string'. It can only extend other named object types.
 ```
 
 Which should you use? For the most part, you can choose based on personal preference, and TypeScript will tell you if it
@@ -470,10 +423,8 @@ assertion. There won't be an exception or `null` generated if the type assertion
 
 This rule prevents "impossible" coercions like:
 
-```ts
-// [!code error:3]
-const x = "hello" as number;
-// [!not-code] Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps the other...
+```ts {1}#error
+const x = "hello" as number; // Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps the other...
 ```
 
 Sometimes this rule can be too conservative and will disallow more complex coercions that might be valid. If this
@@ -486,25 +437,20 @@ const num = str as any as number;
 
 However, note that converting to a more specific or less specific version of a type won't change the `typeof` value:
 
-```ts
+```ts {13}#error
 function addOne(num: number) {
   console.log(num + 1);
 }
 
 const x = "10" as unknown as number;
-console.log(typeof x);
-// [!not-code] string
+console.log(typeof x); // string
 
-addOne(x);
-// [!not-code] 101
+addOne(x); // 101
 
 const y = "10";
-console.log(typeof x);
-// [!not-code] string
+console.log(typeof x); // string
 
-// [!code error:3]
-addOne(x);
-// [!not-code] Argument of type 'string' is not assignable to parameter of type 'number'.
+addOne(x); // Argument of type 'string' is not assignable to parameter of type 'number'.
 ```
 
 ## TypeScript creates types for literals.
@@ -531,7 +477,7 @@ By themselves, literal types aren't very valuable, since it's not much use to ha
 value! But by combining literals into unions, you can express a much more useful concept - for example, functions that
 only accept a certain set of known values:
 
-```ts
+```ts {19}#error
 function printText(s: string, alignment: "left" | "right" | "center") {
   switch (alignment) {
     case "left":
@@ -549,12 +495,8 @@ function printText(s: string, alignment: "left" | "right" | "center") {
   }
 }
 
-printText("Hello, World!", "left");
-// [!not-code] |Hello, World!      |
-
-// [!code error:3]
-printText("G'day, mate", "centre");
-// [!not-code] Argument of type '"centre"' is not assignable to parameter of type '"left" | "right" | "center"'.
+printText("Hello, World!", "left"); // |Hello, World!      |
+printText("G'day, mate", "centre"); // Argument of type '"centre"' is not assignable to parameter of type '"left" | "right" | "center"'.
 ```
 
 There's one more kind of literal type: boolean literals. There are only two boolean literal types, and as you might
@@ -568,8 +510,7 @@ function toggleSwitch(mode: true | false) {
 
 const m: boolean = true;
 
-console.log(toggleSwitch(m));
-// [!not-code] false
+console.log(toggleSwitch(m)); // false
 ```
 
 ## TypeScript only infers type literal as a type for a value if it cannot be changed.
@@ -592,15 +533,13 @@ writing behaviour.
 
 The same applies to strings:
 
-```ts
+```ts {6}#error
 // function handleRequest(url: string, method: "GET" | "POST"): void
 declare function handleRequest(url: string, method: "GET" | "POST"): void;
 
 const req = { url: "https://example.com", method: "GET" };
 
-// [!code error:3]
-handleRequest(req.url, req.method);
-// [!not-code] Argumnet of type 'string' is not assignable to parameter '"GET" | "POST"'.
+handleRequest(req.url, req.method); // Argumnet of type 'string' is not assignable to parameter '"GET" | "POST"'.
 ```
 
 In the above example `req.method` is inferred to be `string`, not `"GET"`. Because code can be evaluated between the
@@ -715,7 +654,7 @@ function getArea(shape: Shape) {
 
 Adding a new member to the `Shape` union will cause a TypeScript error:
 
-```ts
+```ts {17}#error
 interface Triangle {
   kind: "triangle";
   sideLength: number;
@@ -732,9 +671,7 @@ function getArea(shape: Shape) {
       return shape.sideLength ** 2;
     }
     default: {
-      // [!code error:3]
-      const _exhaustiveCheck: never = shape;
-      // [!not-code] `Type 'Triangle' is not assignable to type 'never'.
+      const _exhaustiveCheck: never = shape; // Type 'Triangle' is not assignable to type 'never'.
       return _exhaustiveCheck;
     }
   }
@@ -781,8 +718,8 @@ function fn(ctor: CallOrConstruct) {
 }
 
 fn(Date);
-// [!not-code] Wed May 01 2024 16:26:10 GMT+0100 (West Africa Standard Time)
-// [!not-code] 2001-09-30T23:00:00.000Z
+// Wed May 01 2024 16:26:10 GMT+0100 (West Africa Standard Time)
+// 2001-09-30T23:00:00.000Z
 ```
 
 ## In TypeScript, you can pass `undefined` when a parameter in a function is optional.
@@ -795,27 +732,21 @@ function f(x?: number) {
   console.log(x);
 }
 
-f();
-// [!not-code] undefined
+f(); // undefined
 
-f(10);
-// [!not-code] 10
+f(10); // 10
 
-f(undefined);
-// [!not-code] undefined
+f(undefined); // undefined
 
 function g(y = "a") {
   console.log(y);
 }
 
-g();
-// [!not-code] a
+g(); // a
 
-g("b");
-// [!not-code] b
+g("b"); // b
 
-g(undefined);
-// [!not-code] a
+g(undefined); // a
 ```
 
 This is because once a parameter is marked optional, the parameter will have a union type, where the union members are
@@ -829,7 +760,7 @@ function to produce a `Date` that takes either a timestamp (one argument) or a m
 (three arguments). To do this in TypeScript, write some number of function signatures (usually two or more), followed by
 the body of the function:
 
-```ts
+```ts {13}#error
 function makeDate(timestamp: number): Date;
 function makeDate(m: number, d: number, y: number): Date;
 function makeDate(mOrTimestamp: number, d?: number, y?: number): Date {
@@ -842,9 +773,7 @@ function makeDate(mOrTimestamp: number, d?: number, y?: number): Date {
 
 const d1 = makeDate(12345678);
 const d2 = makeDate(5, 5, 5);
-// [!code error:3]
-const d3 = makeDate(1, 3);
-// [!not-code] No overload expects 2 arguments, but overloads do exist that expect either 1 or 3 argument.
+const d3 = makeDate(1, 3); // No overload expects 2 arguments, but overloads do exist that expect either 1 or 3 argument.
 ```
 
 The function(s) without an implementation body are called the **overload signatures**. Then, the function with
@@ -857,11 +786,9 @@ When writing an overloaded function, you should always have two or more signatur
 The implementation signature must also be compatible with the overload signatures. For example, these functions have
 errors because the implementation signature doesn't correctly match the overloads:
 
-```ts
+```ts {2}#error
 function fn(x: boolean): void;
-// [!code error:3]
-function fn(x: string): void;
-// [!not-code] This overload signature is not compatible with its implementation signature.
+function fn(x: string): void; // This overload signature is not compatible with its implementation signature.
 
 // Should be `fn(x: boolean | string)`
 function fn(x: boolean) {
@@ -869,11 +796,10 @@ function fn(x: boolean) {
 }
 ```
 
-```ts
+```ts {2-3}#error
 function fn(x: string): string;
-// [!code error:3]
+// This overload signature is not compatible with its implementation signature.
 function fn(x: number): boolean;
-// [!not-code] This overload signature is not compatible with its implementation signature.
 
 // Should be `fn(x: string | number): string | boolean `
 function fn(x: string | number) {
@@ -899,13 +825,9 @@ const user = {
   },
 };
 
-console.log(user.admin);
-// [!not-code] false
-
+console.log(user.admin); // false
 user.becomeAdmin();
-
-console.log(user.admin);
-// [!not-code] true
+console.log(user.admin); // true
 ```
 
 Consider the cases where you need more control over what object `this` represents. This is where this feature comes in:
@@ -944,20 +866,18 @@ const admins = db.filterUsers(function (this: User) {
 });
 
 console.log(admins);
-// [!not-code] [
-// [!not-code] { id: 3, admin: true },
-// [!not-code] { id: 5, admin: true },
-// [!not-code] { id: 9, admin: true }
-// [!not-code] ]
+// [
+//   { id: 3, admin: true },
+//   { id: 5, admin: true },
+//   { id: 9, admin: true }
+// ]
 ```
 
 This pattern is common with callback-style APIs, where another object typically controls when your function is called.
 Note that you need to use `function` and not arrow functions to get this behaviour:
 
-```ts
-// [!code error:3]
-const admins = db.filterUsers(() => this.admin);
-// [!not-code] The containing arrow function captures the global value of 'this'.
+```ts {1}#error
+const admins = db.filterUsers(() => this.admin); // The containing arrow function captures the global value of 'this'.
 ```
 
 ## Conclusion

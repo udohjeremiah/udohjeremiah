@@ -97,16 +97,15 @@ Creating a JavaScript (`.js`/`jsx`) or TypeScript (`.ts`/`.tsx`) file in the `ap
 your app. The route's URL corresponds to the filename without the extension.
 
 | File                   | Matched route (URL) |
-| :----------------------| :-------------------|
+| :--------------------- | :------------------ |
 | `app/routes/about.tsx` | `/about`            |
 
 The exceptions to this are index routes:
 
 | File                             | Matched route (URL) |
-| :--------------------------------| :-------------------|
+| :------------------------------- | :------------------ |
 | `app/routes/_index.tsx`          | `/`                 |
 | `app/routes/concerts._index.tsx` | `/concerts`         |
-
 
 With an `app` directory like this:
 
@@ -144,7 +143,7 @@ These kinds of routes are generated from dynamic data that isn't known in advanc
 **dynamic routes**. You create them by using the `$` prefix.
 
 | File                   | Matched route (URL) |
-| :----------------------| :-------------------|
+| :--------------------- | :------------------ |
 | `app/routes/$user.tsx` | `/ayotunde`         |
 | `app/routes/$user.tsx` | `/adamba`           |
 | `app/routes/$user.tsx` | `/8rv71k0hvg8`      |
@@ -166,9 +165,9 @@ app
   hierarchy:
 
   ```tsx
-    <root>
-      <$user />
-    </root>
+  <root>
+    <$user />
+  </root>
   ```
 
 ### Nested routes
@@ -245,7 +244,7 @@ hierarchy rendering as:
     <concerts_.mine />
   </concerts>
 </root>
-````
+```
 
 It will render as:
 
@@ -273,7 +272,7 @@ To get the route `a/b/c` to use the root route as the only layout, you will have
 <root>
   <c />
 </root>
-````
+```
 
 ### Nested layouts without nested URLs
 
@@ -335,14 +334,14 @@ language. But, the user can also navigate to `example.com/en` to also view the l
 You can create these optional segments by wrapping the route segment in parentheses (`()`).
 
 | File                                | Matched route (URL) |
-| :-----------------------------------| :-------------------|
-| `app/routes/($lang)._index.tsx`     | `/`	                |
-| `app/routes/($lang).categories.tsx` | `/categories`	      |
+| :---------------------------------- | :------------------ |
+| `app/routes/($lang)._index.tsx`     | `/`                 |
+| `app/routes/($lang).categories.tsx` | `/categories`       |
 | `app/routes/($lang).categories.tsx` | `/en/categories`    |
 | `app/routes/($lang).categories.tsx` | `/fr/categories`    |
-| `app/routes/($lang)._index.tsx`     | `/bags`	            |
-| `app/routes/($lang).$productId.tsx` | `/en/bags`	        |
-| `app/routes/($lang).$productId.tsx` | `/fr/bags`	        |
+| `app/routes/($lang)._index.tsx`     | `/bags`             |
+| `app/routes/($lang).$productId.tsx` | `/en/bags`          |
+| `app/routes/($lang).$productId.tsx` | `/fr/bags`          |
 
 When using optional segments there are some stuff to watch out for:
 
@@ -377,7 +376,7 @@ routes that match all URLs for your app, including non-existing ones 🥶. These
 are created with the `$` character.
 
 | File                     | Matched route (URL)                     |
-| :------------------------| :---------------------------------------|
+| :----------------------- | :-------------------------------------- |
 | `app/routes/$.tsx`       | Matches virtually any URL for your app. |
 | `app/routes/files.$.tsx` | `/files`                                |
 | `app/routes/files.$.tsx` | `files/books`                           |
@@ -389,7 +388,7 @@ are created with the `$` character.
 I know I said earlier that in flat file-based routing, only files, and not folders, can create routes. Well, that isn't
 entirely true. Remix recognizes that most times you would want to organize your code closer to the routes that use them.
 For example, a `/projects` route using a `ProjectList.tsx`, `ProjectItem.tsx`, and `ProjectCard.tsx` component. With a
-*file-only* approach, we can't do any organization. Remix gives us folders as routes for this.
+_file-only_ approach, we can't do any organization. Remix gives us folders as routes for this.
 
 A route can also be a folder if it contains a `route.tsx` file. The `route.tsx` file inside the folder is the root
 module and the rest of the other files in the folder do not become routes. So, we can organize our `/projects` route
@@ -404,7 +403,7 @@ app
         ├── ProjectItem.tsx
         ├── ProjectList.tsx
         └── route.tsx
-````
+```
 
 There are few things to note when using a folder as a route:
 
@@ -423,11 +422,11 @@ How do you create a route that has one of the special characters Remix uses for 
 square brackets (`[]`).
 
 | File                                | Matched route (URL)              |
-| :-----------------------------------| :--------------------------------|
+| :---------------------------------- | :------------------------------- |
 | `app/routes/sitemap[.]xml.tsx`      | `/sitemap.xml`                   |
 | `app/routes/[sitemap.xml].tsx`      | `/sitemap.xml`                   |
 | `app/routes/weird-url.[_index].tsx` | `/weird-url/_index`              |
-| `app/routes/dolla-bills-[$].tsx`    | `app/routes/dolla-bills-[$].tsx` | 
+| `app/routes/dolla-bills-[$].tsx`    | `app/routes/dolla-bills-[$].tsx` |
 | `app/routes/[[so-weird]].tsx`       | `/[so-weird]`                    |
 
 ## Conclusion

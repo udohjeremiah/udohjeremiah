@@ -41,9 +41,9 @@ export default function Pre({ children, ...props }) {
           className="absolute right-4 top-2 h-6 w-6"
         >
           {isCopied ? (
-            <CheckIcon className="h-5 w-5 text-green-500" />
+            <CheckIcon className="h-4 w-4 text-green-500" />
           ) : (
-            <CopyIcon className="h-5 w-5" />
+            <CopyIcon className="h-4 w-4" />
           )}
         </button>
       )}

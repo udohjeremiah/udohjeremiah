@@ -256,13 +256,13 @@ export default defineConfig({
 
 Add the following scripts to the `"scripts"` property in the `package.json` file:
 
-```json title="package.json"
+```json title="package.json" {4-6}#add
 {
   // ...existing configurations
   "scripts": {
-    "build": "remix vite:build", // [!code ++]
-    "dev": "remix vite:dev", // [!code ++]
-    "start": "remix-serve ./build/server/index.js" // [!code ++]
+    "build": "remix vite:build",
+    "dev": "remix vite:dev",
+    "start": "remix-serve ./build/server/index.js"
   }
   // ...existing configurations
 }
@@ -277,10 +277,10 @@ Update your `.gitignore` file to ignore the `build` directory created whenever y
 directory contains the highly optimized production build for deployment and should not be included in your GitHub
 repository:
 
-```.gitignore title=".gitignore"
+```.gitignore title=".gitignore" {3}#add
 node_modules
 
-/build // [!code ++]
+/build
 
 ```
 
@@ -374,26 +374,26 @@ npm install -D vite-tsconfig-paths
 
 Update your `vite.config.ts` file to add the `vite-tsconfig-paths` plugin:
 
-```ts title="vite.config.ts"
+```ts title="vite.config.ts" {3,6}#add
 import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig } from "vite";
-import tsconfigPaths from "vite-tsconfig-paths"; // [!code ++]
+import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [remix(), tsconfigPaths()] // [!code ++]
+  plugins: [remix(), tsconfigPaths()]
 });
 ```
 
 Add the `typecheck` script to the `"scripts"` property in the `package.json` file:
 
-```json title="package.json"
+```json title="package.json" {7}#add
 {
   // ...existing configurations
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev",
     "start": "remix-serve ./build/server/index.js",
-    "typecheck": "bash -c \"tsc $* --noEmit\"" // [!code ++]
+    "typecheck": "bash -c \"tsc $* --noEmit\""
   }
   // ...existing configurations
 }
@@ -578,7 +578,9 @@ export default function Home() {
         </h2>
 
         <p className="text-center text-lg leading-6 text-gray-200">
-          Setting up and customizing my new web project, integrating tools, and applying best practices for a smooth development process. Stay tuned for more updates!
+          Setting up and customizing my new web project, integrating tools, and
+          applying best practices for a smooth development process. Stay tuned
+          for more updates!
         </p>
       </div>
     </div>
@@ -741,14 +743,14 @@ module.exports = {
 
 Add the following scripts to the `"scripts"` property in the `package.json` file:
 
-```json title="package.json"
+```json title="package.json" {6-7}#add
 {
   // ...existing configurations
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev",
-    "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .", // [!code ++]
-    "lint:fix": "eslint --fix --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .", // [!code ++]
+    "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
+    "lint:fix": "eslint --fix --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "bash -c \"tsc $* --noEmit\""
   }
@@ -846,14 +848,14 @@ export default {
 
 Add the following scripts to the `"scripts"` property in the `package.json` file:
 
-```json title="package.json"
+```json title="package.json" {6-7}#add
 {
   // ...existing configurations
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev",
-    "format": "prettier --check --ignore-path .gitignore .", // [!code ++]
-    "format:fix": "prettier --write --ignore-path .gitignore .", // [!code ++]
+    "format": "prettier --check --ignore-path .gitignore .",
+    "format:fix": "prettier --write --ignore-path .gitignore .",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "lint:fix": "eslint --fix --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/server/index.js",
@@ -915,17 +917,14 @@ npm i -D husky lint-staged
 
 Update the `package.json` file to include the `"lint-staged"` configuration as follows:
 
-```json title="package.json"
+```json title="package.json" {3-10}#add
 {
   // ...existing configurations
-  "lint-staged": { // [!code ++]
-    "*": "npm run format", // [!code ++]
-    "*.{js,ts,jsx,tsx}": [ // [!code ++]
-      "npm run lint", // [!code ++]
-      "npm run typecheck" // [!code ++]
-    ], // [!code ++]
-    "*.{html,css,js,ts,md,jsx,tsx,mdx}": "npm run build ." // [!code ++]
-  } // [!code ++]
+  "lint-staged": {
+    "*": "npm run format",
+    "*.{js,ts,jsx,tsx}": ["npm run lint", "npm run typecheck"],
+    "*.{html,css,js,ts,md,jsx,tsx,mdx}": "npm run build ."
+  }
 }
 
 ```
@@ -939,7 +938,7 @@ npx husky init
 After running the command successfully, a `.husky` directory with a `pre-commit` file will be created, and the `prepare`
 script will be added to the `"scripts"` property in the `package.json` file:
 
-```json title="package.json"
+```json title="package.json" {12}#add
 {
   // ...existing configurations
   "scripts": {
@@ -951,7 +950,7 @@ script will be added to the `"scripts"` property in the `package.json` file:
     "lint:fix": "eslint --fix --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "bash -c \"tsc $* --noEmit\"",
-    "prepare": "husky" // [!code ++]
+    "prepare": "husky"
   }
   // ...existing configurations
 }
@@ -1312,7 +1311,7 @@ git checkout complete-homepage
 
 Next, update the `app/routes/_index.tsx` file with these changes:
 
-```tsx title="app/routes/_index.tsx"
+```tsx title="app/routes/_index.tsx" {11,18}#remove {12,19}#add
 export default function Home() {
   return (
     <div className="flex h-screen w-screen items-center justify-center px-5 py-24">
@@ -1323,24 +1322,21 @@ export default function Home() {
           <span className="relative overflow-hidden rounded-full p-[1px]">
             <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#171717_0%,#737373_50%,#171717_100%)]" />
             <div className="select-none rounded-full bg-black px-3 py-1 text-xs font-medium leading-5 text-slate-200 backdrop-blur-xl">
-              I&apos;m almost there // [!code --]
-              It&apos;s done // [!code ++]
+              I&apos;m almost there
+              It&apos;s done
             </div>
           </span>
         </div>
 
         <h2 className="text-center text-3xl font-medium text-gray-50 sm:text-6xl">
-          New project loading... // [!code --]
-          New project&apos;s live! // [!code ++]
+          New project loading...
+          New project&apos;s live!
         </h2>
 
         <p className="text-center text-lg leading-6 text-gray-200">
-          Setting up and customizing my new web project, integrating tools, and // [!code --]
-          applying best practices for a smooth development process. Stay tuned // [!code --]
-          for more updates! // [!code --]
-          Setting up and customizing my new web project, integrating tools, and // [!code ++]
-          applying best practices for a smooth development process. Stay tuned // [!code ++]
-          for more updates! // [!code ++]
+          Setting up and customizing my new web project, integrating tools, and
+          applying best practices for a smooth development process. Stay tuned
+          for more updates!
         </p>
       </div>
     </div>

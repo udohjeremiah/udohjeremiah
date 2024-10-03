@@ -34,7 +34,14 @@ export const metadata = {
 export default function Layout({ children }) {
   return (
     <html lang="en">
-      <body className={tw("font-system", "bg-white", "dark:bg-neutral-950")}>
+      <body
+        className={tw(
+          "min-h-screen font-system antialiased",
+          "bg-white",
+          "selection:bg-green-100",
+          "dark:bg-neutral-950 dark:selection:bg-green-900",
+        )}
+      >
         {children}
         <Navbar />
       </body>
