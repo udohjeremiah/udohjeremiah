@@ -46,7 +46,7 @@
     "rehype-pretty-code": "^0.13.2",
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.0",
-    "shiki": "^1.10.3",
+    "shiki": "^1.21.0",
     "sqip": "1.0.0-alpha.51",
     "sqip-plugin-data-uri": "1.0.0-alpha.52",
     "sqip-plugin-primitive": "1.0.0-alpha.53",
