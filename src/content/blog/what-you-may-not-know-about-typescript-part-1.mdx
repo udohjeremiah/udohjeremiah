@@ -70,15 +70,15 @@ the documentation.
 ## TypeScript's core value among others is that much of the time, you will know better than TypeScript.
 
 TypeScript doesn't get in your way, hence by default types are optional, inference takes the most lenient types, there's
-no checking for potentially `null{:ts}`/`undefined{:ts}` values, and `tsc{:ts}`, the Typescript compiler, emits the
-compiled code in the face of errors. These defaults are put in place to stay out of your way. This is very useful when
-migrating JavaScript code over to TypeScript and introducing type-checking errors, as it allows you to clean things up
-for the type-checker, while your original JavaScript code is still working.
+no checking for potentially `null`/`undefined` values, and `tsc`, the Typescript compiler, emits the compiled code in
+the face of errors. These defaults are put in place to stay out of your way. This is very useful when migrating
+JavaScript code over to TypeScript and introducing type-checking errors, as it allows you to clean things up for the
+type-checker, while your original JavaScript code is still working.
 
 To be a bit more defensive against mistakes and make TypeScript act a bit more strictly, you can use the several
-type-checking strictness flags that can be turned on or off, from using the `--strict{:ts}` flag in the CLI, or
-`"strict": true{:ts}` in `tsconfig.json`, which toggles them all on simultaneously, but you can opt out of them
-individually. A new codebase should always turn these strictness checks on.
+type-checking strictness flags that can be turned on or off, from using the `--strict` flag in the CLI, or
+`"strict": true` in `tsconfig.json`, which toggles them all on simultaneously, but you can opt out of them individually.
+A new codebase should always turn these strictness checks on.
 
 ## TypeScript can rewrite code from newer versions of ECMAScript to older ones.
 
@@ -87,8 +87,8 @@ say ECMAScript 3 or ECMAScript 5 is sometimes called "downleveling." By default,
 version of ECMAScript.
 
 While the default target is ES3, most current browsers support ES2015. Developers can therefore safely specify ES2015,
-using the `--target es2015{:ts}` compiler option, or above as a target, unless compatibility with certain ancient
-browsers is important.
+using the `--target es2015` compiler option, or above as a target, unless compatibility with certain ancient browsers is
+important.
 
 ## TypeScript never changes the runtime behaviour of JavaScript code.
 
@@ -113,39 +113,38 @@ console.log(a);
 // [!not-code] Infinity
 ```
 
-The expression `4 / []{:ts}` in TypeScript would throw an error, however, if you configure your TypeScript settings,
-either using compiler flags or in `tsconfig.json`, to allow emitting JavaScript output despite errors, `a{:ts}` will
-have the value of `Infinity{:ts}` at runtime, even when TypeScript detects an error.
+The expression `4 / []` in TypeScript would throw an error, however, if you configure your TypeScript settings,
+either using compiler flags or in `tsconfig.json`, to allow emitting JavaScript output despite errors, `a` will
+have the value of `Infinity` at runtime, even when TypeScript detects an error.
 
 ## TypeScript has corresponding primitive types for the built-in types in JavaScript with a few added ones.
 
-| Type in JavaScript | Type in TypeScript | `typeof{:ts}` return value | Explanation                                    | Predicate                               |
-| :----------------- | :----------------- | -------------------------- | ---------------------------------------------- | --------------------------------------- |
-| `Null{:js}`        | `null{:ts}`        | `"object"{:ts}`            | Equivalent to the unit type.                   |                                         |
-| `Undefined{:js}`   | `undefined{:ts}`   | `"undefined"{:ts}`         | Equivalent to the unit type.                   | `typeof undefined === "undefined"{:ts}` |
-| `Boolean{:js}`     | `boolean{:ts}`     | `"boolean"{:ts}`           | `true{:ts}` and `false{:ts}`.                  | `typeof b === "boolean"{:ts}`           |
-| `Number{:js}`      | `number{:ts}`      | `"number"{:ts}`            | A double-precision IEEE 754 floating point.    | `typeof n === "number"{:ts}`            |
-| `BigInt{:js}`      | `bigint{:ts}`      | `"bigint"{:ts}`            | Integers in the arbitrary precision format.    | `typeof m === "bigint"{:ts}`            |
-| `String{:js}`      | `string{:ts}`      | `"string"{:ts}`            | `true{:ts}` and `false{:ts}`.                  | `typeof s === "string"{:ts}`            |
-| `Symbol{:js}`      | `symbol{:ts}`      | `"symbol"{:ts}`            | A unique value usually used as a key.          | `typeof g === "symbol"{:ts}`            |
-| `Object{:js}`      | `object{:ts}`      | `"object"{:ts}`            | Similar to records.                            |                                         |
-|                    | `unknown{:ts}`     | `"undefined"{:ts}`         | The top type.                                  |                                         |
-|                    | `never{:ts}`       |                            | The bottom type.                               |                                         |
-|                    | object literal     | `"object"{:ts}`            | e.g. `{ property: Type }{:ts}`.                |                                         |
-|                    | `void{:ts}`        | `"undefined"{:ts}`         | For functions with no documented return value. | `typeof o === "object"{:ts}`            |
-|                    | `T[]{:ts}`         | `"object"{:ts}`            | Mutable arrays, also written `Array<T>{:ts}`.  | `Array.isArray(a){:ts}`                 |
-|                    | `[T, T]{:ts}`      | `"object"{:ts}`            | Tuples, which are fixed-length but mutable.    | `Array.isArray(a){:ts}`                 |
-|                    | `(t: T) => U{:ts}` | `"function"{:ts}`          | functions                                      | `typeof f === "function"{:ts}`          |
+| Type in JavaScript | Type in TypeScript | `typeof` return value | Explanation                                    | Predicate                          |
+| :----------------- | :----------------- | --------------------- | ---------------------------------------------- | ---------------------------------- |
+| `Null`             | `null`             | `"object"`            | Equivalent to the unit type.                   |                                    |
+| `Undefined`        | `undefined`        | `"undefined"`         | Equivalent to the unit type.                   | `typeof undefined === "undefined"` |
+| `Boolean`          | `boolean`          | `"boolean"`           | `true` and `false`.                            | `typeof b === "boolean"`           |
+| `Number`           | `number`           | `"number"`            | A double-precision IEEE 754 floating point.    | `typeof n === "number"`            |
+| `BigInt`           | `bigint`           | `"bigint"`            | Integers in the arbitrary precision format.    | `typeof m === "bigint"`            |
+| `String`           | `string`           | `"string"`            | `true` and `false`.                            | `typeof s === "string"`            |
+| `Symbol`           | `symbol`           | `"symbol"`            | A unique value usually used as a key.          | `typeof g === "symbol"`            |
+| `Object`           | `object`           | `"object"`            | Similar to records.                            |                                    |
+|                    | `unknown`          | `"undefined"`         | The top type.                                  |                                    |
+|                    | `never`            |                       | The bottom type.                               |                                    |
+|                    | object literal     | `"object"`            | e.g. `{ property: Type }`.                     |                                    |
+|                    | `void`             | `"undefined"`         | For functions with no documented return value. | `typeof o === "object"`            |
+|                    | `T[]`              | `"object"`            | Mutable arrays, also written `Array<T>`.       | `Array.isArray(a)`                 |
+|                    | `[T, T]`           | `"object"`            | Tuples, which are fixed-length but mutable.    | `Array.isArray(a)`                 |
+|                    | `(t: T) => U`      | `"function"`          | functions                                      | `typeof f === "function"`          |
 
-## In TypeScript, you can use the `any{:ts}` type to turn off the type checker.
+## In TypeScript, you can use the `any` type to turn off the type checker.
 
-TypeScript uses the type `any{:ts}` whenever it can't tell what the type of an expression should be. It just turns off
-the type checker wherever it appears, making you access any properties of a value (which will in turn be of type
-`any{:ts}`), call it like a function, assign it to (or from) a value of any type, or pretty much anything else that's
-syntactically legal; so it's assumed you know the environment better than TypeScript.
+TypeScript uses the type `any` whenever it can't tell what the type of an expression should be. It just turns off the
+type checker wherever it appears, making you access any properties of a value (which will in turn be of type `any`),
+call it like a function, assign it to (or from) a value of any type, or pretty much anything else that's syntactically
+legal; so it's assumed you know the environment better than TypeScript.
 
-For example, none of the following lines of code will throw compiler errors, as `any{:ts}` disables further type
-checking:
+For example, none of the following lines of code will throw compiler errors, as `any` disables further type checking:
 
 ```ts
 let obj: any = {
@@ -159,7 +158,7 @@ obj = "hello";
 const n: number = obj;
 ```
 
-You can push any value into an array with type `any[]{:ts}` without marking the value in any way:
+You can push any value into an array with type `any[]` without marking the value in any way:
 
 ```ts
 const anys: any = [];
@@ -172,22 +171,22 @@ console.log(anys);
 // [!not-code] [ 1, 'oh no', { anything: 'goes' } ]
 ```
 
-And you can use an expression of type `any{:ts}` anywhere:
+And you can use an expression of type `any` anywhere:
 
 ```ts
 anys.map(anys[1]);
 ```
 
-`any{:ts}` is contagious, too — if you initialise a variable with an expression of type `any{:ts}`, the variable has
-type `any{:ts}` too:
+`any` is contagious, too — if you initialise a variable with an expression of type `any`, the variable has type `any`
+too:
 
 ```ts
 // let sepsis: any
 let sepsis = anys[0] + anys[1];
 ```
 
-The `any{:ts}` type is useful when you don't want to write out a long type just to convince TypeScript that a particular
-line of code is okay.
+The `any` type is useful when you don't want to write out a long type just to convince TypeScript that a particular line
+of code is okay.
 
 ## TypeScript knows the JavaScript language and will generate types for you in many cases.
 
@@ -212,8 +211,8 @@ JavaScript code contains no type information.
 
 For example, the TypeScript code below fails because it contains a duplicate implementation. The compiled code won't
 have any type information to determine which function to call at runtime. That is, TypeScript’s type system is not
-reified. Therefore, there's nothing at runtime that can tell us whether `num{:ts}` is of type `number{:ts}` or
-`string{:ts}`, as the type annotation is not present in any form at runtime.
+reified. Therefore, there's nothing at runtime that can tell us whether `num` is of type `number` or `string`, as the
+type annotation is not present in any form at runtime.
 
 ```ts
 // [!code error:3]
@@ -241,16 +240,16 @@ function addHundred(num) {
 }
 ```
 
-Suppose we push the above JavaScript code to production and call `addHundred(15){:ts}`. Which `addHundred{:ts}`
-implementation should be executed at runtime? If you're familiar with JavaScript, you would correctly answer **"It's the
-last one."** However, was that what you intended when you wrote the initial TypeScript code? Do you see the point?
-Therefore, we can agree that **"It's a bug!"**
+Suppose we push the above JavaScript code to production and call `addHundred(15)`. Which `addHundred` implementation
+should be executed at runtime? If you're familiar with JavaScript, you would correctly answer **"It's the last one."**
+However, was that what you intended when you wrote the initial TypeScript code? Do you see the point? Therefore, we can
+agree that **"It's a bug!"**
 
 ## TypeScript does not have a runtime mechanism for identifying the types of values other than primitives.
 
-For some values, such as the primitives `string{:ts}` and `number{:ts}`, we can identify their type at runtime using the
-`typeof{:ts}` operator. However, for other things like functions, there's no corresponding runtime mechanism to identify
-their types. For example, consider this function:
+For some values, such as the primitives `string` and `number`, we can identify their type at runtime using the `typeof`
+operator. However, for other things like functions, there's no corresponding runtime mechanism to identify their types.
+For example, consider this function:
 
 ```ts
 function fn(x) {
@@ -258,11 +257,11 @@ function fn(x) {
 }
 ```
 
-By reading the code, we can observe that this function will only work if given an object with a callable `flip{:ts}`
+By reading the code, we can observe that this function will only work if given an object with a callable `flip`
 property. However, JavaScript doesn't surface this information in a way that we can check while the code is running. The
-only way in pure JavaScript to determine what `fn{:ts}` does with a particular value is to call it and see what happens.
-This kind of behaviour makes it hard to predict what the code will do before it runs, which means it's harder to know
-what your code is going to do while you're writing it.
+only way in pure JavaScript to determine what `fn` does with a particular value is to call it and see what happens. This
+kind of behaviour makes it hard to predict what the code will do before it runs, which means it's harder to know what
+your code is going to do while you're writing it.
 
 ## TypeScript doesn't consider any JavaScript code to be an error because of its syntax.
 
@@ -285,8 +284,8 @@ TypeScript is a typed superset; hence, it adds rules about how different kinds o
 syntactically legal programs that would run without an error in JavaScript during runtime might issue an error in
 TypeScript during its compile-time type-checking.
 
-Using the code below as an example, in JavaScript, the variable `area{:ts}` would be assigned `NaN{:ts}`, the result
-from the operation `obj.width * obj.height{:ts}`; in TypeScript, this results in an error:
+Using the code below as an example, in JavaScript, the variable `area` would be assigned `NaN`, the result from the
+operation `obj.width * obj.height`; in TypeScript, this results in an error:
 
 ```ts
 const obj = { width: 10, height: 15 };
@@ -296,8 +295,8 @@ const area = obj.width * obj.heigth;
 // [!not-code] Property 'heigth' does not exist on type '{ width: number; height: number; }'. Did you mean 'height'?
 ```
 
-As another example from the code below, in JavaScript, `Infinity{:ts}` would be logged to the console; in TypeScript,
-this results in an error:
+As another example from the code below, in JavaScript, `Infinity` would be logged to the console; in TypeScript, this
+results in an error:
 
 ```ts
 // [!code error:3]
@@ -319,14 +318,14 @@ type Person = {
 };
 ```
 
-You should prefer `interface{:ts}` over `type{:ts}`. Use `type{:ts}` when you need specific features.
+You should prefer `interface` over `type`. Use `type` when you need specific features.
 
 ## TypeScript enables creating complex types by combining simple ones.
 
 There are two popular ways to do so: with unions and with generics.
 
-With a union, you can declare that a type could be one of many types. For example, you can describe a `boolean{:ts}`
-type as being either `true{:ts}` or `false{:ts}`:
+With a union, you can declare that a type could be one of many types. For example, you can describe a `boolean` type as
+being either `true` or `false`:
 
 ```ts
 type WindowStates = "open" | "closed" | "minimized";
@@ -346,7 +345,7 @@ type ObjectWithNameArray = Array<{ name: string }>;
 ## In TypeScript, for assignability purposes, there's no difference between a type alias and an interface type if they both have the same shape.
 
 Named types simply give a name to a type; for assignability purposes, there's no difference between the type alias
-`One{:ts}` and the interface type `Two{:ts}` below. They both have a property `p: string{:ts}`:
+`One` and the interface type `Two` below. They both have a property `p: string`:
 
 ```ts
 type One = {
@@ -389,8 +388,8 @@ logPoint(point);
 // [!not-code] 12, 26
 ```
 
-The `point{:ts}` variable is never declared to be of type `Point{:ts}`. However, TypeScript compares the shape of
-`point{:ts}` to the shape of `Point{:ts}` in the type-check. They have the same shape, so the code passes.
+The `point` variable is never declared to be of type `Point`. However, TypeScript compares the shape of `point` to the
+shape of `Point` in the type-check. They have the same shape, so the code passes.
 
 ## TypeScript considers objects or classes to match a type if and only if they have all the required properties, regardless of the implementation details.
 
@@ -449,10 +448,10 @@ logPoint(newVPoint);
 // [!not-code] x=13, y=56
 ```
 
-Taking `point4{:ts}` as an example, the object literal `{ w: 8, x: 12, y: 26 }{:ts}` has a matching literal type
-`{ w: number, x: number, y: number }{:ts}`. That type is assignable to `{x: number, y: number, z?: number}{:ts}` since
-it has all the required properties and those properties have assignable types. The extra property doesn't prevent
-assignment; it just makes it a subtype of `{ x: number, y: number, z?: number }{:ts}`. Read more about
+Taking `point4` as an example, the object literal `{ w: 8, x: 12, y: 26 }` has a matching literal type
+`{ w: number, x: number, y: number }`. That type is assignable to `{x: number, y: number, z?: number}` since it has all
+the required properties and those properties have assignable types. The extra property doesn't prevent assignment; it
+just makes it a subtype of `{ x: number, y: number, z?: number }`. Read more about
 [type compatibility in TypeScript from the language's documentation](https://www.typescriptlang.org/docs/handbook/type-compatibility.html).
 
 ## TypeScript requires the declaration of type parameters.
@@ -487,8 +486,8 @@ function length<T extends ArrayLike<unknown>>(t: T): number {}
 function length(t: ArrayLike<unknown>): number {}
 ```
 
-In the first `length{:ts}`, `T{:ts}` is not necessary; notice that it's only referenced once, so it's not being used to
-constrain the type of the return value or other parameters.
+In the first `length`, `T` is not necessary; notice that it's only referenced once, so it's not being used to constrain
+the type of the return value or other parameters.
 
 ## Conclusion
 

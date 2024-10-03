@@ -45,7 +45,7 @@ check if Git is installed:
 git -v
 ```
 
-If the output indicates that `git{:bash}` is an unknown command, refer to this
+If the output indicates that `git` is an unknown command, refer to this
 [GitHub article on how to install Git](https://github.com/git-guides/install-git). Otherwise, run the following commands
 to create a new directory, replacing `setup-web-project` with your project's name, and
 initialize it as a Git repository:
@@ -115,8 +115,7 @@ node -v
 npm -v
 ```
 
-If the output indicates that `node{:bash}` or `npm{:bash}` is an unknown
-command, refer to this
+If the output indicates that `node` or `npm` is an unknown command, refer to this
 [npm article on installing Node.js and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
 Otherwise, run the following command to initialize your Git repository as a new npm package:
 
@@ -143,9 +142,9 @@ directory. The default content of the file will look like this:
 
 ```
 
-The `npm init -y{:bash}` command initializes a new npm package by creating a `package.json` file with default values.
-Since this is a web project rather than a typical npm package for others to install, you should edit the `package.json`
-file as follows:
+The `npm init -y` command initializes a new npm package by creating a `package.json` file with default values. Since
+this is a web project rather than a typical npm package for others to install, you should edit the `package.json` file
+as follows:
 
 ```json title="package.json"
 {
@@ -180,11 +179,10 @@ git push origin
 ## Dependencies and development dependencies in npm
 
 Dependencies are packages that a project needs to run in production. These are essential for the project to function
-properly when it's deployed. They are installed with the command `npm install <package-name>{:bash}` and listed under
-the `"dependencies"{:json}` section in the `package.json` file. Development dependencies are
-packages only needed during the development phase, as they are not required for the application to run in production.
-They are installed with the command `npm install -D <package-name>{:bash}` and listed under the
-`"devDependencies"{:json}` section in the `package.json` file.
+properly when it's deployed. They are installed with the command `npm install <package-name>` and listed under the
+`"dependencies"` section in the `package.json` file. Development dependencies are packages only needed during the
+development phase, as they are not required for the application to run in production. They are installed with the
+command `npm install -D <package-name>` and listed under the `"devDependencies"` section in the `package.json` file.
 
 ### Step 4: Install the runtime dependencies for a Remix app
 
@@ -198,7 +196,7 @@ Did you notice that your `setup-web-project` directory now contains a `package-l
 directory you did not create? The `package-lock.json` file is automatically generated to lock the versions of installed
 packages, ensuring consistent installs. The `node_modules` directory, also automatically added by npm, contains all
 project dependencies and can become very large. Therefore, it is unnecessary to include it in the GitHub repository.
-Dependencies can be reinstalled using the project's `package.json` file with `npm install{:bash}`.
+Dependencies can be reinstalled using the project's `package.json` file with `npm install`.
 
 To prevent a file or directory from being tracked by Git and pushed to GitHub from your local repository, you can ignore
 it by adding it to a `.gitignore` file. Run the following command to create a `.gitignore` file and ignore the
@@ -237,7 +235,7 @@ npm install -D @remix-run/dev vite
 ```
 
 Since Remix uses [Vite](https://vitejs.dev) to compile your application, providing a
-[Vite config](https://vitejs.dev/config) file with the Remix Vite plugin from `@remix-run/dev{:ts}` is necessary.
+[Vite config](https://vitejs.dev/config) file with the Remix Vite plugin from `@remix-run/dev` is necessary.
 
 Run the following command to create a `vite.config.ts` file:
 
@@ -256,7 +254,7 @@ export default defineConfig({
 });
 ```
 
-Add the following scripts to the `"scripts"{:json}` property in the `package.json` file:
+Add the following scripts to the `"scripts"` property in the `package.json` file:
 
 ```json title="package.json"
 {
@@ -271,13 +269,13 @@ Add the following scripts to the `"scripts"{:json}` property in the `package.jso
 
 ```
 
-- `npm run dev{:bash}`: is used to start the development server.
-- `npm run build{:bash}`: is used to build the app for production.
-- `npm run start{:bash}`: is used to start a production server.
+- `npm run dev`: is used to start the development server.
+- `npm run build`: is used to build the app for production.
+- `npm run start`: is used to start a production server.
 
-Update your `.gitignore` file to ignore the `build` directory created whenever you run the command
-`npm run build{:bash}`. This directory contains the highly optimized production build for deployment and should not be
-included in your GitHub repository:
+Update your `.gitignore` file to ignore the `build` directory created whenever you run the command `npm run build`. This
+directory contains the highly optimized production build for deployment and should not be included in your GitHub
+repository:
 
 ```.gitignore title=".gitignore"
 node_modules
@@ -362,7 +360,7 @@ the project:
 }
 ```
 
-Install the type definitions for `react{:ts}` and `react-dom{:ts}`:
+Install the type definitions for `react` and `react-dom`:
 
 ```bash
 npm install -D @types/react @types/react-dom
@@ -374,7 +372,7 @@ Install the `vite-tsconfig-paths` package to give Vite the ability to resolve 
 npm install -D vite-tsconfig-paths
 ```
 
-Update your `vite.config.ts` file to add the `vite-tsconfig-paths{:ts}` plugin:
+Update your `vite.config.ts` file to add the `vite-tsconfig-paths` plugin:
 
 ```ts title="vite.config.ts"
 import { vitePlugin as remix } from "@remix-run/dev";
@@ -386,7 +384,7 @@ export default defineConfig({
 });
 ```
 
-Add the `typecheck{:json}` script to the `"scripts"{:json}` property in the `package.json` file:
+Add the `typecheck` script to the `"scripts"` property in the `package.json` file:
 
 ```json title="package.json"
 {
@@ -402,8 +400,7 @@ Add the `typecheck{:json}` script to the `"scripts"{:json}` property in the `pac
 
 ```
 
-- `npm run typecheck{:bash}`: is used to check the type safety of the program, ensuring it's free of type-related
-  errors.
+- `npm run typecheck`: is used to check the type safety of the program, ensuring it's free of type-related errors.
 
 Your `setup-web-project` directory structure should now look like this:
 
@@ -493,8 +490,8 @@ mkdir app
 touch app/root.tsx
 ```
 
-You need a `tailwind.css` file inside the `app` directory. This file will include the `@tailwind{:css}` directives for
-each of Tailwind's layers.
+You need a `tailwind.css` file inside the `app` directory. This file will include the `@tailwind` directives for each of
+Tailwind's layers.
 
 Run the following command to create a `tailwind.css` file inside `app`:
 
@@ -510,7 +507,7 @@ Copy the following code into the `app/tailwind.css` file:
 @tailwind utilities;
 ```
 
-Copy the following code into the `app/root.tsx` file so that all other routes will render inside the `<Outlet />{:tsx}`:
+Copy the following code into the `app/root.tsx` file so that all other routes will render inside the `<Outlet />`:
 
 ```tsx title="app/root.tsx"
 import {
@@ -742,7 +739,7 @@ module.exports = {
 };
 ```
 
-Add the following scripts to the `"scripts"{:json}` property in the `package.json` file:
+Add the following scripts to the `"scripts"` property in the `package.json` file:
 
 ```json title="package.json"
 {
@@ -760,8 +757,8 @@ Add the following scripts to the `"scripts"{:json}` property in the `package.jso
 
 ```
 
-- `npm run lint{:bash}`: is used to check the program for linting errors, ensuring it adheres to ESLint's style.
-- `npm run lint:fix{:bash}`: is used to automatically fix linting errors in the program that ESLint can resolve.
+- `npm run lint`: is used to check the program for linting errors, ensuring it adheres to ESLint's style.
+- `npm run lint:fix`: is used to automatically fix linting errors in the program that ESLint can resolve.
 
 Your `setup-web-project` directory structure should now look like this:
 
@@ -847,7 +844,7 @@ export default {
 };
 ```
 
-Add the following scripts to the `"scripts"{:json}` property in the `package.json` file:
+Add the following scripts to the `"scripts"` property in the `package.json` file:
 
 ```json title="package.json"
 {
@@ -867,8 +864,8 @@ Add the following scripts to the `"scripts"{:json}` property in the `package.jso
 
 ```
 
-- `npm run format{:bash}`: is used to check the code format of the program, ensuring it adheres to Prettier's style.
-- `npm run format:fix{:bash}`: is used to automatically fix code formatting errors in the program.
+- `npm run format`: is used to check the code format of the program, ensuring it adheres to Prettier's style.
+- `npm run format:fix`: is used to automatically fix code formatting errors in the program.
 
 Your `setup-web-project` directory structure should now look like this:
 
@@ -916,7 +913,7 @@ Run the following command to install husky and lint-staged:
 npm i -D husky lint-staged
 ```
 
-Update the `package.json` file to include the `"lint-staged"{:json}` configuration as follows:
+Update the `package.json` file to include the `"lint-staged"` configuration as follows:
 
 ```json title="package.json"
 {
@@ -939,8 +936,8 @@ Now, run the following command to set up husky in the project:
 npx husky init
 ```
 
-After running the command successfully, a `.husky` directory with a `pre-commit` file will be created, and the
-`prepare{:json}` script will be added to the `"scripts"{:json}` property in the `package.json` file:
+After running the command successfully, a `.husky` directory with a `pre-commit` file will be created, and the `prepare`
+script will be added to the `"scripts"` property in the `package.json` file:
 
 ```json title="package.json"
 {
@@ -1008,8 +1005,8 @@ commit process. The specified tests in the Git hook failed, leading to the inter
 
 ![Terminal error screen](/blog/how-to-set-up-a-new-web-project/image-4.webp)
 
-As indicated in the error message (see photo above), we can use the `--write{:bash}` flag with Prettier to fix the code
-style issues automatically. We've already configured a script for this in our `package.json`.
+As indicated in the error message (see photo above), we can use the `--write` flag with Prettier to fix the code style
+issues automatically. We've already configured a script for this in our `package.json`.
 
 Run the following command to format the codebase to adhere to Prettier's style:
 
@@ -1031,8 +1028,8 @@ found a problem with our code:
 ![Terminal error screen](/blog/how-to-set-up-a-new-web-project/image-5.webp)
 
 Again, the error message tells us how to fix the issues. Go into the `app/routes/_index.tsx` file and change all
-occurrences of `'{:tsx}` with `&apos;{:tsx}`. Also remember, to run `npm run format:fix{:bash}` after making these
-changes, to make sure the codebase adheres to Prettier's style.
+occurrences of `'` with `&apos;`. Also remember, to run `npm run format:fix` after making these changes, to make sure
+the codebase adheres to Prettier's style.
 
 Run the following commands to stage the changes and attempt to commit again:
 
@@ -1287,9 +1284,9 @@ git pull origin
 git branch complete-homepage
 ```
 
-The `complete-homepage` branch is now created (run the command `git branch{:bash}` to see it). But, the remote
-repository still does not have a copy of it. As a best practice, even before you start working on a feature, it's
-important to push this branch to the remote repository so that it has a copy. This informs other developers
+The `complete-homepage` branch is now created (run the command `git branch` to see it). But, the remote repository still
+does not have a copy of it. As a best practice, even before you start working on a feature, it's important to push this
+branch to the remote repository so that it has a copy. This informs other developers
 (if you're working on a team or your project is open-source) about the new feature you're working on, potentially
 avoiding conflicts with other developers unknowingly working on the same thing.
 
@@ -1363,9 +1360,9 @@ git commit -m "Finish homepage feature"
 git push origin complete-homepage
 ```
 
-Before pushing new changes to a remote branch, it's important to run `git pull{:bash}` first. This will ensure that your
-local branch is updated with any new changes that may have been pushed to the remote branch by others, especially if
-you're working on a team or if your project is open source.
+Before pushing new changes to a remote branch, it's important to run `git pull` first. This will ensure that your local
+branch is updated with any new changes that may have been pushed to the remote branch by others, especially if you're
+working on a team or if your project is open source.
 
 ### Open a pull request on the `main` branch
 

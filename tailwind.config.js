@@ -84,6 +84,16 @@ const config = {
               padding: theme("spacing.6"),
               backgroundColor: theme("colors.neutral.900"),
             },
+            ":not(pre) > code": {
+              padding: "0.1875rem 0.375rem",
+              borderRadius: "0.25rem",
+              backgroundColor: theme("colors.neutral.200"),
+              color: "inherit",
+              fontWeight: "inherit",
+              "&::before, &::after": {
+                content: '""',
+              },
+            },
             table: {
               display: "block",
               overflowX: "auto",
@@ -93,6 +103,9 @@ const config = {
         invert: {
           css: {
             color: theme("colors.neutral.400"),
+            ":not(pre) > code": {
+              backgroundColor: theme("colors.neutral.800"),
+            },
           },
         },
       }),

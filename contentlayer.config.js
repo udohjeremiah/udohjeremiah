@@ -12,8 +12,6 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import { sqip } from "sqip";
 
-import moonlightTheme from "./public/moonlight-ii.json";
-
 export const computeFields = ({
   openGraphEndpoint = "/api/og",
   imagesFolder = "./public",
@@ -130,7 +128,7 @@ const transformerNotCode = () => ({
 });
 
 const rehypePrettyCodeOptions = {
-  theme: moonlightTheme,
+  theme: "dark-plus",
   keepBackground: false,
   transformers: [
     transformerNotCode(),

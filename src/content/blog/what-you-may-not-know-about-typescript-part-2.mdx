@@ -44,10 +44,10 @@ console.log(arrDoubled);
 When writing a function type for a callback, never write an optional parameter unless you intend to call the function
 without passing that argument.
 
-## In TypeScript, you can use the `unknown{:ts}` type to describe functions that accept any value without having `any{:ts}` values in your function body.
+## In TypeScript, you can use the `unknown` type to describe functions that accept any value without having `any` values in your function body.
 
-The `unknown{:ts}` type represents any value. This is similar to the `any{:ts}` type, but is safer because it’s not
-legal to do anything with an `unknown{:ts}` value:
+The `unknown` type represents any value. This is similar to the `any` type, but is safer because it’s not legal to do
+anything with an `unknown` value:
 
 ```ts
 function f1(a: any) {
@@ -61,7 +61,7 @@ function f2(a: unknown) {
 }
 ```
 
-Conversely, you can describe a function that returns a value of `unknown{:ts}` type:
+Conversely, you can describe a function that returns a value of `unknown` type:
 
 ```ts
 function safeParse(s: string): unknown {
@@ -73,7 +73,7 @@ const obj = safeParse("someRandomString");
 // [!not-code] Need to be careful with 'obj'!
 ```
 
-## In TypeScript, you can use the `never{:ts}` type to describe functions that never return a value.
+## In TypeScript, you can use the `never` type to describe functions that never return a value.
 
 Some functions never return a value:
 
@@ -83,10 +83,10 @@ function fail(msg: string): never {
 }
 ```
 
-The `never{:ts}` type represents values which are never observed. In a return type, this means that the function throws
+The `never` type represents values which are never observed. In a return type, this means that the function throws
 an exception or terminates execution of the program.
 
-## TypeScript will infer a function's return type based on its `return{:ts}` statements, making return type annotation optional.
+## TypeScript will infer a function's return type based on its `return` statements, making return type annotation optional.
 
 Much like variable type annotations, you usually don't need a return type annotation because TypeScript will infer the
 function's return type based on its return statements.
@@ -123,14 +123,14 @@ names.forEach((s) => {
 });
 ```
 
-Even though the parameter `s{:ts}` didn't have a type annotation, TypeScript used the types of the `forEach{:ts}`
-function, along with the inferred type of the array, to determine the type `s{:ts}` will have. This process is called
-**"contextual typing"** because the context that the function occurred within informs what type it should have.
+Even though the parameter `s` didn't have a type annotation, TypeScript used the types of the `forEach` function, along
+with the inferred type of the array, to determine the type `s` will have. This process is called **"contextual typing"**
+because the context that the function occurred within informs what type it should have.
 
-## In TypeScript, unlike JavaScript, the inferred type of a function that doesn’t have any return statements, or doesn’t return any explicit value from those return statements is `void{:ts}`.
+## In TypeScript, unlike JavaScript, the inferred type of a function that doesn’t have any return statements, or doesn’t return any explicit value from those return statements is `void`.
 
-In JavaScript, a function that doesn't return any value will implicitly return the value `undefined{:ts}`; in
-TypeScript, it's inferred type is `void{:ts}`:
+In JavaScript, a function that doesn't return any value will implicitly return the value `undefined`; in TypeScript,
+it's inferred type is `void`:
 
 ```ts
 // function noop(): void
@@ -139,14 +139,13 @@ function noop() {
 }
 ```
 
-"But passing `void{:ts}` as an argument to `typeof{:ts}` returns `undefined{:ts}`", you may say. Yes, you're correct,
-but `void{:ts}` and `undefined{:ts}` are not the same thing in TypeScript. For example, contextual typing with a return
-type of `void{:ts}` does **not** force functions to not return something. Another way to say this is a contextual
-function type with a `void{:ts}` return type (`type voidFunc = () => void{:ts}`), when implemented, can return any other
-value, but it will be ignored.
+"But passing `void` as an argument to `typeof` returns `undefined`", you may say. Yes, you're correct, but `void` and
+`undefined` are not the same thing in TypeScript. For example, contextual typing with a return type of `void` does
+**not** force functions to not return something. Another way to say this is a contextual function type with a
+`void` return type (`type voidFunc = () => void`), when implemented, can return any other value, but it will be ignored.
 
-Thus, the following implementations of the type `() => void{:ts}` are valid, and when the return value of one of these
-functions is assigned to another variable, it will retain the type of `void{:ts}`:
+Thus, the following implementations of the type `() => void` are valid, and when the return value of one of these
+functions is assigned to another variable, it will retain the type of `void`:
 
 ```ts
 type voidFunc = () => void;
@@ -178,8 +177,8 @@ console.log(!!v3);
 // [!not-code] An expression of type 'void' cannot be tested for truthiness
 ```
 
-This behavior exists so that the following code is valid even though `Array.prototype.push{:ts}` returns a number and
-the `Array.prototype.forEach{:ts}` method expects a function with a return type of `void{:ts}`:
+This behavior exists so that the following code is valid even though `Array.prototype.push` returns a number and the
+`Array.prototype.forEach` method expects a function with a return type of `void`:
 
 ```ts
 const src = [1, 2, 3];
@@ -191,7 +190,7 @@ console.log(dst);
 // [!not-code] [ 0, 1, 2, 3 ]
 ```
 
-There is one other special case to be aware of when a literal function definition has a `void{:ts}` return type, that
+There is one other special case to be aware of when a literal function definition has a `void` return type, that
 function must not return anything:
 
 ```ts
@@ -208,11 +207,10 @@ const f3 = function (): void {
 };
 ```
 
-## TypeScript requires you to check for `undefined{:ts}` when you read from an optional value before using it.
+## TypeScript requires you to check for `undefined` when you read from an optional value before using it.
 
-In JavaScript, if you access a property that doesn't exist, you'll get the value `undefined{:ts}` rather than a runtime
-error. Because of this, when you read from an optional property, you'll have to check for `undefined{:ts}` before using
-it.
+In JavaScript, if you access a property that doesn't exist, you'll get the value `undefined` rather than a runtime
+error. Because of this, when you read from an optional property, you'll have to check for `undefined` before using it.
 
 ```ts
 // Function
@@ -248,10 +246,9 @@ function printName(obj: { first: string; last?: string }) {
 }
 ```
 
-## In TypeScript, you can use the non-null assertion operator (postfix`!{:ts}`) to remove `null{:ts}` and `undefined{:ts}` from a type without doing any explicit checking.
+## In TypeScript, you can use the non-null assertion operator (postfix`!`) to remove `null` and `undefined` from a type without doing any explicit checking.
 
-Writing `!{:ts}` after any expression is effectively a type assertion that the value isn't `null{:ts}` or
-`undefined{:ts}`:
+Writing `!` after any expression is effectively a type assertion that the value isn't `null` or `undefined`:
 
 ```ts
 function liveDangerously(x?: number | null) {
@@ -260,7 +257,7 @@ function liveDangerously(x?: number | null) {
 ```
 
 Just like other type assertions, this doesn't change the runtime behaviour of your code, so it's important to only use
-`!{:ts}` when you know that the value can't be `null{:ts}` or `undefined{:ts}`.
+`!` when you know that the value can't be `null` or `undefined`.
 
 ## TypeScript will only allow an operation if it is valid for every member of a union in a union type.
 
@@ -268,7 +265,7 @@ A union type is a type formed from two or more other types, representing values 
 refer to each of these types as the union's members.
 
 TypeScript will only allow an operation if it is valid for every member of the union. For example, if you have the union
-`string | number{:ts}`, you can't use methods that are only available on `string{:ts}`:
+`string | number`, you can't use methods that are only available on `string`:
 
 ```ts
 function printId(id: number | string) {
@@ -281,7 +278,7 @@ function printId(id: number | string) {
 The solution is to **"narrow"** the union with code, the same as you would in JavaScript without type annotations.
 Narrowing occurs when TypeScript can deduce a more specific type for a value based on the structure of the code.
 
-For example, TypeScript knows that only a string value will have a `typeof{:ts}` value `"string"{:ts}`:
+For example, TypeScript knows that only a string value will have a `typeof` value `"string"`:
 
 ```ts
 function printId(id: number | string) {
@@ -296,7 +293,7 @@ function printId(id: number | string) {
 ```
 
 Sometimes you'll have a union where all the members have something in common. For example, both arrays and strings have
-a `slice{:ts}` method. If every member in a union has a property in common, you can use that property without narrowing:
+a `slice` method. If every member in a union has a property in common, you can use that property without narrowing:
 
 ```ts
 // function getFirstThree(x: number[] | string): string | number[]
@@ -334,9 +331,9 @@ userInput = "new input";
 ## TypeScript's type alias cannot be re-opened to add new properties but an interface is always extendable.
 
 Type aliases and interfaces are very similar, and in many cases, you can choose between them freely. Almost all features
-of an `interface{:ts}` are available in `type{:ts}`, the key distinction is that a type cannot be re-opened to add new
-properties after it is created (though it can be extended via intersections) vs an interface which is always extendable
-either through declaration merging or the `extends{:ts}` keyword.
+of an `interface` are available in `type`, the key distinction is that a type cannot be re-opened to add new properties
+after it is created (though it can be extended via intersections) vs an interface which is always extendable either
+through declaration merging or the `extends` keyword.
 
 ```ts
 // Extending an interface via declaration merging
@@ -424,7 +421,7 @@ console.log(bear.honey);
 // [!not-code] true
 ```
 
-## TypeScript's `interface{:ts}`s, unlike its `type{:ts}`s, may only be used to declare the shapes of objects, not rename primitives.
+## TypeScript's `interface`s, unlike its `type`s, may only be used to declare the shapes of objects, not rename primitives.
 
 Using type we can create custom names for existing primitives:
 
@@ -442,15 +439,15 @@ interface SanitizedString extends string {}
 ```
 
 Which should you use? For the most part, you can choose based on personal preference, and TypeScript will tell you if it
-needs something to be the other kind of declaration. If you would like a heuristic, use `interface{:ts}` until you need
-to use features from `type{:ts}`.
+needs something to be the other kind of declaration. If you would like a heuristic, use `interface` until you need
+to use features from `type`.
 
 ## In TypeScript, you can use type assertion to specify a more specific type of a value that TypeScript doesn't know about.
 
 Sometimes you will have information about the type of a value that TypeScript can't know about.
 
-For example, if you're using `document.getElementById{:ts}`, TypeScript only knows that this will return some kind of
-`HTMLElement{:ts}`, but you might know that your page will always have an `HTMLCanvasElement{:ts}` with a given ID.
+For example, if you're using `document.getElementById`, TypeScript only knows that this will return some kind of
+`HTMLElement`, but you might know that your page will always have an `HTMLCanvasElement` with a given ID.
 
 In this situation, you can use a type assertion to specify a more specific type:
 
@@ -460,14 +457,14 @@ const myCanvas = document.getElementById("main_canvas") as HTMLCanvasElement;
 
 Like a type annotation, type assertions are removed by the compiler and won't affect the runtime behaviour of your code.
 
-You can also use the angle-bracket syntax (except if the code is in a `.tsx{:ts}` file), which is equivalent:
+You can also use the angle-bracket syntax (except if the code is in a `.tsx` file), which is equivalent:
 
 ```ts
 const myCanvas = <HTMLCanvasElement>document.getElementById("main_canvas");
 ```
 
 Reminder: Because type assertions are removed at compile-time, there is no runtime checking associated with a type
-assertion. There won't be an exception or `null{:ts}` generated if the type assertion is wrong.
+assertion. There won't be an exception or `null` generated if the type assertion is wrong.
 
 ## TypeScript only allows type assertions which convert to a more specific or less specific version of a type.
 
@@ -480,15 +477,14 @@ const x = "hello" as number;
 ```
 
 Sometimes this rule can be too conservative and will disallow more complex coercions that might be valid. If this
-happens, you can use two assertions, first to `any{:ts}` (or `unknown{:ts}`), then to the desired type:
+happens, you can use two assertions, first to `any` (or `unknown`), then to the desired type:
 
 ```ts
 const str = "123";
 const num = str as any as number;
 ```
 
-However, note that converting to a more specific or less specific version of a type won't change the `typeof{:ts}`
-value:
+However, note that converting to a more specific or less specific version of a type won't change the `typeof` value:
 
 ```ts
 function addOne(num: number) {
@@ -513,12 +509,12 @@ addOne(x);
 
 ## TypeScript creates types for literals.
 
-In addition to the general types `string{:ts}` and `number{:ts}`, we can refer to specific strings and numbers in type
+In addition to the general types `string` and `number`, we can refer to specific strings and numbers in type
 positions.
 
-One way to consider this is to consider how JavaScript comes with different ways to declare a variable. Both `var{:ts}`
-and `let` allow changing what is held inside the variable, and `const{:ts}` does not. This is reflected in how
-TypeScript creates types for literals.
+One way to consider this is to consider how JavaScript comes with different ways to declare a variable. Both `var` and
+`let` allow changing what is held inside the variable, and `const` does not. This is reflected in how TypeScript creates
+types for literals.
 
 ```ts
 // let changingString: string
@@ -562,8 +558,8 @@ printText("G'day, mate", "centre");
 ```
 
 There's one more kind of literal type: boolean literals. There are only two boolean literal types, and as you might
-guess, they are the types `true{:ts}` and `false{:ts}`. The type `boolean{:ts}` itself is actually just an alias for the
-union `true | false{:ts}`:
+guess, they are the types `true` and `false`. The type `boolean` itself is actually just an alias for the union
+`true | false`:
 
 ```ts
 function toggleSwitch(mode: true | false) {
@@ -590,9 +586,9 @@ if (!isNaN(obj.counter)) {
 }
 ```
 
-TypeScript doesn't assume the assignment of `1{:ts}` to a field that previously had `0{:ts}` is an error. Another way of
-saying this is that `obj.counter{:ts}` must have the type `number{:ts}`, not `0{:ts}`, because types are used to
-determine both reading and writing behaviour.
+TypeScript doesn't assume the assignment of `1` to a field that previously had `0` is an error. Another way of saying
+this is that `obj.counter` must have the type `number`, not `0`, because types are used to determine both reading and
+writing behaviour.
 
 The same applies to strings:
 
@@ -607,9 +603,9 @@ handleRequest(req.url, req.method);
 // [!not-code] Argumnet of type 'string' is not assignable to parameter '"GET" | "POST"'.
 ```
 
-In the above example `req.method{:ts}` is inferred to be `string{:ts}`, not `"GET"{:ts}`. Because code can be evaluated
-between the creation of `req{:ts}` and the call of `handleRequest{:ts}` which could assign a new string like
-`"GUESS"{:ts}` to `req.method{:ts}`, TypeScript considers this code to have an error.
+In the above example `req.method` is inferred to be `string`, not `"GET"`. Because code can be evaluated between the
+creation of `req` and the call of `handleRequest` which could assign a new string like `"GUESS"` to `req.method`,
+TypeScript considers this code to have an error.
 
 There are two ways to work around this.
 
@@ -623,11 +619,11 @@ const req = { url: "https://example.com", method: "GET" as "GET" };
 handleRequest(req.url, req.method as "GET");
 ```
 
-Change 1 means **"I intend for `req.method{:ts}` to always have the literal type`"GET"{:ts}`"**, preventing the possible
-assignment of `"GUESS"{:ts}`to that field after. Change 2 means **"I know for other reasons that `req.method{:ts}` has
-the value `"GET"{:ts}`."**
+Change 1 means **"I intend for `req.method` to always have the literal type`"GET"`"**, preventing the possible
+assignment of `"GUESS"`to that field after. Change 2 means **"I know for other reasons that `req.method` has the value
+`"GET"`."**
 
-2. You can use `as const{:ts}` to convert the entire object to be type literals:
+2. You can use `as const` to convert the entire object to be type literals:
 
 ```ts
 const req = { url: "https://example.com", method: "GET" } as const;
@@ -635,18 +631,18 @@ const req = { url: "https://example.com", method: "GET" } as const;
 handleRequest(req.url, req.method);
 ```
 
-The `as const{:ts}` suffix acts like `const{:ts}` but for the type system, ensuring that all properties are assigned the
-literal type instead of a more general version like `string{:ts}` or `number{:ts}`.
+The `as const` suffix acts like `const` but for the type system, ensuring that all properties are assigned the literal
+type instead of a more general version like `string` or `number`.
 
 ## In TypeScript, you can narrow types to more specific types than declared.
 
 Much like how TypeScript analyzes runtime values using static types, it overlays type analysis on JavaScript's runtime
-control flow constructs like `if{:ts}`/`else{:ts}`, conditional ternaries, loops, truthiness checks, etc., which can all
-affect those types.
+control flow constructs like `if`/`else`, conditional ternaries, loops, truthiness checks, etc., which can all affect
+those types.
 
-Say, within an `if{:ts}` check, TypeScript sees `typeof padding === "number"{:ts}` and understands that as a special
-form of code called a "type guard". TypeScript follows possible paths of execution that our programs can take to
-analyze the most specific possible type of a value at a given position. It looks at these special checks
+Say, within an `if` check, TypeScript sees `typeof padding === "number"` and understands that as a special form of code
+called a "type guard". TypeScript follows possible paths of execution that our programs can take to analyze the most
+specific possible type of a value at a given position. It looks at these special checks
 (called **type guards**) and assignments, and the process of refining types to more specific types than declared is
 called **narrowing**:
 
@@ -662,8 +658,8 @@ function padLeft(padding: number | string, input: string): string {
 }
 ```
 
-There are a couple of different constructs other than `typeof{:ts}` type guards that TypeScript understands for
-narrowing, to keep this article at a readable length I'll link to them since the TypeScript docs explain them very well:
+There are a couple of different constructs other than `typeof` type guards that TypeScript understands for narrowing, to
+keep this article at a readable length I'll link to them since the TypeScript docs explain them very well:
 
 - [Truthiness narrowing](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#truthiness-narrowing)
 - [Equality narrowing](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#equality-narrowing)
@@ -675,18 +671,18 @@ narrowing, to keep this article at a readable length I'll link to them since the
 - [Assertion funtions](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#assertion-functions)
 - [Discriminated Unions](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions)
 
-## TypeScript will use a `never{:ts}` type to represent a state that shouldn’t exist when narrowing.
+## TypeScript will use a `never` type to represent a state that shouldn’t exist when narrowing.
 
 When narrowing, you can reduce the options of a union to a point where you have removed all possibilities and have
-nothing left. In those cases, TypeScript will use a `never{:ts}` type to represent a state which shouldn’t exist, that
-is, `never{:ts}` appears when TypeScript determines there's nothing left in a union.
+nothing left. In those cases, TypeScript will use a `never` type to represent a state which shouldn’t exist, that is,
+`never` appears when TypeScript determines there's nothing left in a union.
 
-This is very useful in "exhaustiveness checking". The `never{:ts}` type is assignable to every type; however, no
-type is assignable to `never{:ts}` (except `never{:ts}` itself). This means you can use narrowing and rely on
-`never{:ts}` turning up to do exhaustive checking in a `switch{:ts}` statement.
+This is very useful in "exhaustiveness checking". The `never` type is assignable to every type; however, no type is
+assignable to `never` (except `never` itself). This means you can use narrowing and rely on `never` turning up to do
+exhaustive checking in a `switch` statement.
 
-For example, adding a `default{:ts}` to our `getArea{:ts}` function which tries to assign the shape to `never{:ts}` will
-not raise an error when every possible case has been handled:
+For example, adding a `default` to our `getArea` function which tries to assign the shape to `never` will not raise an
+error when every possible case has been handled:
 
 ```ts
 interface Circle {
@@ -717,7 +713,7 @@ function getArea(shape: Shape) {
 }
 ```
 
-Adding a new member to the `Shape{:ts}` union will cause a TypeScript error:
+Adding a new member to the `Shape` union will cause a TypeScript error:
 
 ```ts
 interface Triangle {
@@ -745,11 +741,11 @@ function getArea(shape: Shape) {
 }
 ```
 
-## In TypeScript, you can write a construct signature by adding the `new{:ts}` keyword in front of a call signature, creating a constructor that creates a new object.
+## In TypeScript, you can write a construct signature by adding the `new` keyword in front of a call signature, creating a constructor that creates a new object.
 
-JavaScript functions can also be invoked with the `new{:ts}` operator. TypeScript refers to these as **constructors**
-because they usually create a new object. You can write a construct signature by adding the `new{:ts}` keyword in front
-of a call signature:
+JavaScript functions can also be invoked with the `new` operator. TypeScript refers to these as **constructors**
+because they usually create a new object. You can write a construct signature by adding the `new` keyword in front of a
+call signature:
 
 ```ts
 type SomeConstructor = {
@@ -761,7 +757,7 @@ function fn(ctor: SomeConstructor, val: string) {
 }
 ```
 
-Some objects, like JavaScript's `Date{:ts}` object, can be called with or without `new{:ts}`. You can combine call and
+Some objects, like JavaScript's `Date` object, can be called with or without `new`. You can combine call and
 construct signatures in the same type arbitrarily:
 
 ```ts
@@ -789,10 +785,10 @@ fn(Date);
 // [!not-code] 2001-09-30T23:00:00.000Z
 ```
 
-## In TypeScript, you can pass `undefined{:ts}` when a parameter in a function is optional.
+## In TypeScript, you can pass `undefined` when a parameter in a function is optional.
 
-When a parameter is optional (i.e., either it was marked with `?{:ts}` or provided a default), callers can always pass
-`undefined{:ts}`, as this simulates a "missing" argument:
+When a parameter is optional (i.e., either it was marked with `?` or provided a default), callers can always pass
+`undefined`, as this simulates a "missing" argument:
 
 ```ts
 function f(x?: number) {
@@ -823,13 +819,13 @@ g(undefined);
 ```
 
 This is because once a parameter is marked optional, the parameter will have a union type, where the union members are
-the type specified, and `undefined{:ts}`. So, in our example above, `x{:ts}` will be annotated `number | undefined{:ts}`
-and `y{:ts}` will be `string | undefined{:ts}`.
+the type specified, and `undefined`. So, in our example above, `x` will be annotated `number | undefined` and `y` will
+be `string | undefined`.
 
 ## In TypeScript, unlike JavaScript, you can specify a function that can be called in different ways by writing overload signatures.
 
 Some JavaScript functions can be called in a variety of argument counts and types. For example, you might write a
-function to produce a `Date{:ts}` that takes either a timestamp (one argument) or a month/day/year specification
+function to produce a `Date` that takes either a timestamp (one argument) or a month/day/year specification
 (three arguments). To do this in TypeScript, write some number of function signatures (usually two or more), followed by
 the body of the function:
 
@@ -885,15 +881,14 @@ function fn(x: string | number) {
 }
 ```
 
-## In TypeScript, unlike JavaScript, you can have a parameter called `this{:ts}`.
+## In TypeScript, unlike JavaScript, you can have a parameter called `this`.
 
-The JavaScript specification states that you cannot have a parameter called `this{:ts}`, and so TypeScript uses that
-syntax space to let you declare the type for `this{:ts}` in a function body, where the resulting compiled code has
-`this{:ts}` removed from the function signature.
+The JavaScript specification states that you cannot have a parameter called `this`, and so TypeScript uses that syntax
+space to let you declare the type for `this` in a function body, where the resulting compiled code has `this` removed
+from the function signature.
 
-TypeScript will infer what the `this{:ts}` should be in a function via code flow analysis. For example, TypeScript
-understands that the function `user.becomeAdmin{:ts}` has a corresponding `this{:ts}` which is the outer object
-`user{:ts}`:
+TypeScript will infer what the `this` should be in a function via code flow analysis. For example, TypeScript
+understands that the function `user.becomeAdmin` has a corresponding `this` which is the outer object `user`:
 
 ```ts
 const user = {
@@ -913,8 +908,7 @@ console.log(user.admin);
 // [!not-code] true
 ```
 
-Consider the cases where you need more control over what object `this{:ts}` represents. This is where this feature comes
-in:
+Consider the cases where you need more control over what object `this` represents. This is where this feature comes in:
 
 ```ts
 interface User {
@@ -958,7 +952,7 @@ console.log(admins);
 ```
 
 This pattern is common with callback-style APIs, where another object typically controls when your function is called.
-Note that you need to use `function{:ts}` and not arrow functions to get this behaviour:
+Note that you need to use `function` and not arrow functions to get this behaviour:
 
 ```ts
 // [!code error:3]
