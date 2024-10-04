@@ -69,7 +69,7 @@ const config = {
               backgroundColor: theme("colors.neutral.900"),
             },
             ":not(pre) > code": {
-              padding: "0.1875rem 0.375rem",
+              padding: "0.125rem 0.375rem",
               borderRadius: "0.25rem",
               backgroundColor: theme("colors.neutral.200"),
               color: "inherit",
