@@ -63,9 +63,9 @@
         "description": "Library for building user interfaces."
       },
       {
-        "href": "https://remix.run",
-        "image": "/logos/remix.svg",
-        "name": "Remix",
+        "href": "https://reactrouter.com",
+        "image": "/logos/reactrouter.svg",
+        "name": "React Router",
         "description": "Full-stack framework for modern web app UX."
       },
       {
