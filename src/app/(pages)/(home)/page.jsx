@@ -28,7 +28,7 @@ export default function HomePage() {
           "md:grid-cols-3",
         )}
       >
-        <div className="md:col-span-2">
+        <div className="overflow-auto md:col-span-2">
           <GitHubContributionsCard />
         </div>
         <DevWisdomCard />
