@@ -1,0 +1,1139 @@
+---
+title: "Remix Todo App: Part 3 - Multiple Forms with Single Button and Concurrent Mutations"
+description: Learn how to implement multiple forms with a single button for mutations and handle concurrent mutations efficiently in Remix.
+publishedOn: 2024-10-17
+image: /blog/remix-todo-app/hero.webp
+---
+
+## Introduction
+
+This is part 3 of the
+[Remix Todo App series](/blog/remix-todo-app-part-1-building-the-app-layout-and-structure#series-roadmap), which aims to
+teach you everything about Remix that you'll use daily. In
+[part 2](/blog/remix-todo-app-part-2-loading-data-into-components-and-handling-mutations-with-form), we created a
+simulated database for the todo app, loaded tasks into the app, and added the ability to create new tasks by writing to
+the database.
+
+In this part, we'll cover how Remix handles multiple simultaneous requests. Remix is built on web standards and aligns
+with default browser behaviour. But browsers don't natively support handling multiple requests at once. This poses a
+limitation for modern apps, where users expect the ability to perform different actions simultaneously. This article
+shows how Remix manages this with practical application in our todo app.
+
+## Default browser behaviours
+
+Remix is built on web fundamentals: HTML, HTTP, and browser behaviour. Let's look at some default browser behaviours
+related to forms and how Remix handles them.
+
+### Browser form `action` and `method` attributes
+
+The `action` attribute of an HTML `<form>` specifies the submission URL, defaulting to the current URL. The `method`
+attribute defines the HTTP method, defaulting to `"get"`. Only `GET` and `POST` are allowed; unsupported methods default
+to `GET`.
+
+Remix's `<Form>` extends `<form>`, with `action` defaulting to the route it renders on, and supports additional HTTP
+methods like `PUT`, `PATCH`, and `DELETE`. But, to support
+[progressive enhancement](https://remix.run/docs/en/main/discussion/progressive-enhancement), it's best to stick with
+`GET` and `POST`.
+
+### Browser form submission
+
+If you submit a form and then submit another before the first completes, the browser cancels the initial submission and
+processes only the latest one.
+
+Remix follows this behaviour with forms. If a form is submitted and another submission happens before the first
+finishes, Remix cancels the initial fetch requests and waits for the latest submission to complete before revalidating
+the page.
+
+### Browser form resubmission
+
+When you click the back button in a browser after a form submission is completed, the browser may resubmit the form.
+This occurs because form submissions trigger a navigation event.
+
+When you use `<Form>` instead of the native HTML `<form>`, Remix prevents this behaviour of resubmitting forms during
+navigation events, such as clicking back, forward, or refreshing.
+
+## Multiple forms and requests
+
+As discussed above, Remix follows default browser behaviours and enhances them where necessary. But, two challenges
+arise:
+
+1. If you're to model all mutations with HTML forms, how do you handle multiple in-flight requests? Consider our todo
+   app, where a user deletes a task and then marks another as completed before the deletion finishes. Remix, like the
+   browser, prioritizes the latest form submission and cancels the deletion.
+
+2. If you stick to `GET` and `POST` requests for progressive enhancement, how do you handle different operations in your
+   `action`? In our todo app, we need to be able to create, edit, mark as completed, and delete tasks. If you only send
+   a `POST` request to your `action`, how do you manage these different operations?
+
+To solve the first issue, Remix provides the `useFetcher` hook. With `useFetcher`, you can interact with your server
+outside of navigation, allowing multiple requests to run simultaneously without canceling earlier ones.
+
+For the second, there are different approaches. You can create separate routes for each operation and post to their
+`action`s. Or, you can handle all forms in a single route using the **single button forms** technique.
+
+## Concurrent mutations with `useFetcher`
+
+In part 2 of this series, we learned how to use `<Form>` and `useSubmit` for mutations. But, these trigger navigation,
+limiting requests to one at a time. Remix improves this with the `useFetcher` hook, allowing multiple form submissions
+without triggering navigation.
+
+```tsx
+import { useFetcher } from "@remix-run/react";
+
+export function SomeComponent() {
+  const fetcher = useFetcher();
+  // ...
+}
+```
+
+Remix efficiently handles concurrent submissions, updating the UI as new data becomes available while avoiding stale
+data from race conditions. If multiple submissions are in progress, Remix updates the UI as each one completes, ensuring
+the latest data is displayed.
+
+The `useFetcher` API is similar to the navigation API:
+
+| Navigation/URL API      | Fetcher API          |
+| :---------------------- | :------------------- |
+| `<Form>`                | `<fetcher.Form>`     |
+| `useSubmit`             | `fetcher.submit`     |
+| `useActionData()`       | `fetcher.data`       |
+| `navigation.formAction` | `fetcher.formAction` |
+| `navigation.formMethod` | `fetcher.formMethod` |
+| `navigation.formData`   | `fetcher.formData`   |
+| `navigation.state`      | `fetcher.state`      |
+
+If JavaScript is disabled, `<fetcher.Form>` will fallback to a native HTML `<form>`.
+
+## Single button forms
+
+If we weren't supporting progressive enhancement and handled all forms in one route, the typical approach would be to
+use different request methods and branch in the `action` function based on `request.method`.
+
+```tsx {4,29,35,42}
+import type { ActionFunctionArgs } from "@remix-run/node";
+
+export async function action({ request }: ActionFunctionArgs) {
+  switch (request.method) {
+    case "POST": {
+      // ...
+      break;
+    }
+    case "PATCH": {
+      // ...
+      break;
+    }
+    case "DELETE": {
+      // ...
+      break;
+    }
+    default: {
+      // optionally throw a response for unsupported methods
+      throw new Response("Unsupported HTTP method", { status: 400 });
+    }
+  }
+}
+
+export default function Component() {
+  const fetcher = useFetcher();
+
+  return (
+    <div>
+      <fetcher.Form method="post">
+        <input name="firstName" />
+        <input name="lastName" />
+        <button">Submit</button>
+      </fetcher.Form>
+
+      <fetcher.Form method="patch">
+        <input name="id" value="1234" />
+        <input name="firstName" />
+        <input name="lastName" />
+        <button>Submit</button>
+      </fetcher.Form>
+
+      <fetcher.Form method="delete">
+        <input name="id" value="1234" />
+        <button>Submit</button>
+      </fetcher.Form>
+    </div>
+  );
+}
+```
+
+
+To support progressive enhancement, you can use the single button forms technique. This technique leverages the fact
+that HTML `<button>` elements, like other form controls, can have `name` and `value` attributes. Instead of using
+different request methods, all buttons submitting a form to the same route's action can share the same `name` but have
+different `value` attributes to represent the intent. In the `action` function, you branch based on this intent.
+
+```tsx {4,6,46,53,58}
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+
+  const { intent, ...values } = Object.fromEntries(formData);
+
+  switch (intent) {
+    case "create": {
+      /**
+       * handle the form submitted with this button:
+       * <button name="intent" value="create">...</button>
+       */
+      // ...
+      break;
+    }
+    case "update": {
+      /**
+       * handle the form submitted with this button:
+       * <button name="intent" value="update">...</button>
+       */
+      // ...
+      break;
+    }
+    case "delete": {
+      /**
+       * handle the form submitted with this button:
+       * <button name="intent" value="delete">...</button>
+       */
+      // ...
+      break;
+    }
+    default: {
+      // optionally throw a response for unsupported intents
+      throw new Response("Unknown intent", { status: 400 });
+    }
+  }
+}
+
+export default function Component() {
+  const fetcher = useFetcher();
+
+  return (
+    <div>
+      <fetcher.Form method="post">
+        <input name="firstName" />
+        <input name="lastName" />
+        <button name="intent" value="create">Submit</button>
+      </fetcher.Form>
+
+      <fetcher.Form method="post">
+        <input name="id" value="1234" />
+        <input name="firstName" />
+        <input name="lastName" />
+        <button name="intent" value="update">Submit</button>
+      </fetcher.Form>
+
+      <fetcher.Form method="post">
+        <input name="id" value="1234" />
+        <button name="intent" value="delete">Submit</button>
+      </fetcher.Form>
+    </div>
+  );
+}
+```
+
+This method focuses on intent, offering more flexibility than request methods, which are limited to `POST`, `PUT`,
+`PATCH`, and `DELETE`. Intent-based forms allow for unlimited operations within a route.
+
+## Putting theory into practice
+
+Now that we've covered the theory, let's apply what we've learned to our todo app. We'll build it in four phases:
+
+1. Modifying the add form to prevent navigation.
+2. Creating the `TodoList` and `TodoItem` components.
+3. Implementing functionality to clear completed tasks and delete all tasks.
+4. Implementing view buttons.
+
+### Modifying the add form to prevent navigation
+
+Did you notice the URL changes to `localhost:5173/?index` when you click the add button in the todo app? What's with the
+`?index`?
+
+Forms trigger navigation, and our add form is currently rendered with `<Form>`. Because of nested routing, index routes
+share the same URL as their parent. Since `<Form>` defaults to the route it's rendered in, Remix appends the `?index`
+parameter to forms without an `action` attribute in an index route to distinguish them from those in the parent route.
+
+That said, we don't want the add form to trigger navigation. Also, since we'll handle all forms in the index route, we
+want to switch to intent-based forms. Update `app/routes/_index.tsx` with the following changes:
+
+```tsx title="app/routes/_index.tsx" {2,40,61} {13-14,52}#remove {15-26,33,53-57}#add
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import { Form, Link, json, useFetcher, useLoaderData } from "@remix-run/react";
+
+import { todos } from "~/lib/db.server";
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+
+  const { description } = Object.fromEntries(formData);
+  await todos.create(description as string);
+  const { intent, ...values } = Object.fromEntries(formData);
+
+  switch (intent) {
+    case "create task": {
+      const { description } = values;
+      await todos.create(description as string);
+      break;
+    }
+    default: {
+      throw new Response("Unknown intent", { status: 400 });
+    }
+  }
+
+  return json({ ok: true });
+}
+
+export default function Home() {
+  const { tasks } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher();
+
+  return (
+    <div className="flex flex-1 flex-col md:mx-auto md:w-[720px]">
+      {/* ...existing code here remains the same */}
+
+      <main className="flex-1 space-y-8">
+        <fetcher.Form
+          method="post"
+          className="rounded-full border border-gray-200 bg-white/90 shadow-md dark:border-gray-700 dark:bg-gray-900"
+        >
+          <fieldset className="flex items-center gap-2 p-2 text-sm">
+            <input
+              type="text"
+              name="description"
+              placeholder="Create a new todo..."
+              required
+              className="flex-1 rounded-full border-2 border-gray-200 px-3 py-2 text-sm font-bold text-black dark:border-white/50"
+            />
+            <button className="rounded-full border-2 border-gray-200/50 bg-gradient-to-tl from-[#00fff0] to-[#0083fe] px-3 py-2 text-base font-black transition hover:scale-105 hover:border-gray-500 sm:px-6 dark:border-white/50 dark:from-[#8e0e00] dark:to-[#1f1c18] dark:hover:border-white">
+            <button
+              name="intent"
+              value="create task"
+              className="rounded-full border-2 border-gray-200/50 bg-gradient-to-tl from-[#00fff0] to-[#0083fe] px-3 py-2 text-base font-black transition hover:scale-105 hover:border-gray-500 sm:px-6 dark:border-white/50 dark:from-[#8e0e00] dark:to-[#1f1c18] dark:hover:border-white"
+            >
+              Add
+            </button>
+          </fieldset>
+        </fetcher.Form>
+
+        {/* ...existing code here remains the same */}
+
+        {/* ...existing code here remains the same */}
+
+        {/* ...existing code here remains the same */}
+      </main>
+
+      {/* ...existing code here remains the same */}
+    </div>
+  );
+}
+```
+
+You should now be able to add tasks as before but without any change to the URL.
+
+### Creating the `TodoList` and `TodoItem` components
+
+The structure of the todo item is simple: a button to toggle completion, the task description, timestamps for when it
+was added and completed, an edit/save button, and a delete button.
+
+First, let's bring in the icons for the buttons. Run the following commands to create the files for each icon:
+
+```bash
+mkdir -p app/components/icons && touch app/components/icons/{DeleteIcon.tsx,EditIcon.tsx,SaveIcon.tsx,SquareCheckIcon.tsx,SquareIcon.tsx}
+```
+
+Next, paste the code for each icon into its respective file:
+
+```tsx title="app/components/icons/DeleteIcon.tsx"
+export default function DeleteIcon({ ...props }: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M3 6h18" />
+      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+      <line x1="10" x2="10" y1="11" y2="17" />
+      <line x1="14" x2="14" y1="11" y2="17" />
+    </svg>
+  );
+}
+```
+
+```tsx title="app/components/icons/EditIcon.tsx"
+export default function EditIcon({ ...props }: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M11.5 15H7a4 4 0 0 0-4 4v2" />
+      <path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
+      <circle cx="10" cy="7" r="4" />
+    </svg>
+  );
+}
+```
+
+```tsx title="app/components/icons/SaveIcon.tsx"
+export default function SaveIcon({ ...props }: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M20 6 9 17l-5-5" />
+    </svg>
+  );
+}
+```
+
+```tsx title="app/components/icons/SquareCheckIcon.tsx"
+export default function SquareCheckIcon({
+  ...props
+}: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M21 10.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12.5" />
+      <path d="m9 11 3 3L22 4" />
+    </svg>
+  );
+}
+```
+
+```tsx title="app/components/icons/SquareIcon.tsx"
+export default function SquareIcon({ ...props }: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <rect width="18" height="18" x="3" y="3" rx="2" />
+    </svg>
+  );
+}
+```
+
+With that out of the way, let's focus on the `TodoList` and `TodoItem` components. Run the following command to create
+the files for both components:
+
+```bash
+touch app/components/{TodoList.tsx,TodoItem.tsx}
+```
+
+Copy the following code into `app/components/TodoItem.tsx`:
+
+```tsx title="app/components/TodoItem.tsx"
+import { useFetcher } from "@remix-run/react";
+import { useState } from "react";
+import type { Item } from "~/types";
+
+import DeleteIcon from "~/components/icons/DeleteIcon";
+import EditIcon from "~/components/icons/EditIcon";
+import SaveIcon from "~/components/icons/SaveIcon";
+import SquareCheckIcon from "~/components/icons/SquareCheckIcon";
+import SquareIcon from "~/components/icons/SquareIcon";
+
+const dateFormatter = new Intl.DateTimeFormat("en-GB", {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+  hour: "numeric",
+  minute: "numeric",
+  hour12: true,
+  timeZone: "UTC",
+});
+
+export default function TodoItem({ todo }: { todo: Item }) {
+  const fetcher = useFetcher();
+  const [isEditing, setIsEditing] = useState(false);
+
+  const editing = typeof document !== "undefined" ? isEditing : todo.editing;
+
+  return (
+    <li
+      className={`my-4 flex gap-4 border-b border-dashed border-gray-200 pb-4 last:border-none last:pb-0 dark:border-gray-700 ${editing ? "items-center" : "items-start"}`}
+    >
+      <fetcher.Form method="post">
+        <input type="hidden" name="id" value={todo.id} />
+        <input type="hidden" name="completed" value={`${todo.completed}`} />
+        <button
+          aria-label={`Mark task as ${todo.completed ? "incomplete" : "complete"}`}
+          disabled={editing}
+          name="intent"
+          value="toggle completion"
+          className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
+        >
+          {todo.completed ? (
+            <SquareCheckIcon className="h-4 w-4" />
+          ) : (
+            <SquareIcon className="h-4 w-4" />
+          )}
+        </button>
+      </fetcher.Form>
+
+      {!editing && (
+        <div
+          className={`flex-1 space-y-0.5 ${todo.completed ? "opacity-25" : ""}`}
+        >
+          <p>{todo.description}</p>
+          <div className="space-y-0.5 text-xs">
+            <p>
+              Created at{" "}
+              <time dateTime={`${new Date(todo.createdAt).toISOString()}`}>
+                {dateFormatter.format(new Date(todo.createdAt))}
+              </time>
+            </p>
+            {todo.completed && (
+              <p>
+                Completed at{" "}
+                <time dateTime={`${new Date(todo.completedAt!).toISOString()}`}>
+                  {dateFormatter.format(new Date(todo.completedAt!))}
+                </time>
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      <fetcher.Form
+        method="post"
+        className={`flex items-center gap-4 ${editing ? "flex-1" : ""}`}
+        onSubmit={(event) => {
+          const submitter = (event.nativeEvent as SubmitEvent)
+            .submitter as HTMLButtonElement;
+
+          if (submitter.value === "edit task") {
+            setIsEditing(true);
+            event.preventDefault();
+            return;
+          }
+
+          if (submitter.value === "save task") {
+            setIsEditing(false);
+            return;
+          }
+
+          if (
+            submitter.value === "delete task" &&
+            !confirm("Are you sure you want to delete this task?")
+          ) {
+            event.preventDefault();
+            return;
+          }
+        }}
+      >
+        <input type="hidden" name="id" value={todo.id} />
+        {editing ? (
+          <>
+            <input
+              name="description"
+              defaultValue={todo.description}
+              required
+              className="flex-1 rounded-full border-2 px-3 py-2 text-sm text-black"
+            />
+            <button
+              aria-label="Save task"
+              name="intent"
+              value="save task"
+              className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 dark:border-gray-700 dark:hover:bg-gray-700"
+            >
+              <SaveIcon className="h-4 w-4" />
+            </button>
+          </>
+        ) : (
+          <button
+            aria-label="Edit task"
+            disabled={todo.completed}
+            name="intent"
+            value="edit task"
+            className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
+          >
+            <EditIcon className="h-4 w-4" />
+          </button>
+        )}
+        <button
+          aria-label="Delete task"
+          disabled={todo.completed || editing}
+          name="intent"
+          value="delete task"
+          className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
+        >
+          <DeleteIcon className="h-4 w-4" />
+        </button>
+      </fetcher.Form>
+    </li>
+  );
+}
+```
+
+`<input type="hidden" />` allows developers to include data that users cannot see or change during form submission. In
+`TodoItem`, the first `fetcher.Form` handles task completion by submitting with the intent `"toggle completion"`. When
+not in edit mode, the task description and timestamps are shown. In edit mode, the description becomes an input field,
+and clicking the save button submits the second `fetcher.Form` with the intent `"save task"`. The delete button prompts
+a confirmation dialog and, if confirmed, submits the second `fetcher.Form` with the intent `"delete task"`.
+
+Copy the following code into `app/components/TodoList.tsx`:
+
+```tsx title="app/components/TodoList.tsx"
+import type { Item } from "~/types";
+
+import TodoItem from "~/components/TodoItem";
+
+export default function TodoList({ todos }: { todos: Item[] }) {
+  return (
+    <ul>
+      {todos.map((todo) => (
+        <TodoItem key={todo.id} todo={todo} />
+      ))}
+    </ul>
+  );
+}
+```
+
+With the `TodoList` and `TodoItem` components ready, import `TodoList` and handle the intents from `TodoItem` in
+`app/routes/_index.tsx`:
+
+```tsx title="app/routes/_index.tsx" {24-49} {71-75}#remove {3-5,76}#add
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import { Form, Link, json, useFetcher, useLoaderData } from "@remix-run/react";
+import type { Item } from "~/types";
+
+import TodoList from "~/components/TodoList";
+
+import { todos } from "~/lib/db.server";
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+
+  const { intent, ...values } = Object.fromEntries(formData);
+
+  switch (intent) {
+    case "create task": {
+      const { description } = values;
+      await todos.create(description as string);
+      break;
+    }
+    case "toggle completion": {
+      const { id, completed } = values;
+      await todos.update(id as string, {
+        completed: !JSON.parse(completed as string),
+        completedAt: !JSON.parse(completed as string) ? new Date() : undefined,
+      });
+      break;
+    }
+    case "edit task": {
+      const { id } = values;
+      await todos.update(id as string, { editing: true });
+      break;
+    }
+    case "save task": {
+      const { id, description } = values;
+      await todos.update(id as string, {
+        description: description as string,
+        editing: false,
+      });
+      break;
+    }
+    case "delete task": {
+      const { id } = values;
+      await todos.delete(id as string);
+      break;
+    }
+    default: {
+      throw new Response("Unknown intent", { status: 400 });
+    }
+  }
+
+  return json({ ok: true });
+}
+
+export default function Home() {
+  const { tasks } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher();
+
+  return (
+    <div className="flex flex-1 flex-col md:mx-auto md:w-[720px]">
+      {/* ...existing code here remains the same */}
+
+      <main className="flex-1 space-y-8">
+        {/* ...existing code here remains the same */}
+
+        <div className="rounded-3xl border border-gray-200 bg-white/90 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
+          {tasks.length > 0 ? (
+            <ul>
+              {tasks.map((task) => (
+                <li key={task.id}>{task.description}</li>
+              ))}
+            </ul>
+            <TodoList todos={tasks as unknown as Item[]} />
+          ) : (
+            <p className="text-center leading-7">No tasks available</p>
+          )}
+        </div>
+
+        {/* ...existing code here remains the same */}
+
+        {/* ...existing code here remains the same */}
+      </main>
+
+      {/* ...existing code here remains the same */}
+    </div>
+  );
+}
+```
+
+With everything in place, you should now be able to add tasks, mark them as completed, edit and save them, and delete
+them. To test concurrent updates, add many tasks, then click the completion buttons as quickly as possible. You'll see
+the UI update as each task is completed—that's the power of `useFetcher`.
+
+### Implementing functionality to clear completed tasks and delete all tasks
+
+The process of clearing completed tasks or deleting all tasks works similarly to deleting a single task, as seen in the
+`TodoItem` component. Both actions prompt a confirmation dialog, and if confirmed, the form is submitted; otherwise, no
+action is taken.
+
+To maintain clean and organized code, we will create a separate component for this functionality. Run the following
+command to create the `TodoActions` component:
+
+```bash
+touch app/components/TodoActions.tsx
+```
+
+Next, copy the following code into `app/components/TodoActions.tsx`:
+
+```tsx title="app/components/TodoActions.tsx"
+import { useFetcher } from "@remix-run/react";
+import { Item } from "~/types";
+
+export default function TodoActions({ tasks }: { tasks: Item[] }) {
+  const fetcher = useFetcher();
+
+  return (
+    <div className="flex items-center justify-between gap-4 text-sm">
+      <p className="text-center leading-7">
+        {tasks.length} {tasks.length === 1 ? "item" : "items"} left
+      </p>
+      <fetcher.Form
+        method="post"
+        className="flex items-center gap-4"
+        onSubmit={(event) => {
+          const submitter = (event.nativeEvent as SubmitEvent)
+            .submitter as HTMLButtonElement;
+
+          if (
+            submitter.value === "clear completed" &&
+            !confirm("Are you sure you want to clear all completed tasks?")
+          ) {
+            event.preventDefault();
+            return;
+          } else if (
+            submitter.value === "delete all" &&
+            !confirm("Are you sure you want to delete all tasks?")
+          ) {
+            event.preventDefault();
+            return;
+          }
+        }}
+      >
+        <button
+          disabled={!tasks.some((todo) => todo.completed)}
+          name="intent"
+          value="clear completed"
+          className="text-red-400 transition hover:text-red-600 disabled:pointer-events-none disabled:opacity-25"
+        >
+          Clear Completed
+        </button>
+        <button
+          disabled={tasks.length === 0}
+          name="intent"
+          value="delete all"
+          className="text-red-400 transition hover:text-red-600 disabled:pointer-events-none disabled:opacity-25"
+        >
+          Delete All
+        </button>
+      </fetcher.Form>
+    </div>
+  );
+}
+```
+
+Finally, update `app/routes/_index.tsx` with the following changes to implement the "clear completed" and "delete all"
+functionality:
+
+```tsx title="app/routes/_index.tsx" {45-52} {75-87}#remove {5,88}#add
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import { Form, Link, json, useFetcher, useLoaderData } from "@remix-run/react";
+import type { Item } from "~/types";
+
+import TodoActions from "~/components/TodoActions";
+import TodoList from "~/components/TodoList";
+
+import { todos } from "~/lib/db.server";
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+
+  const { intent, ...values } = Object.fromEntries(formData);
+
+  switch (intent) {
+    case "create task": {
+      const { description } = values;
+      await todos.create(description as string);
+      break;
+    }
+    case "toggle completion": {
+      const { id, completed } = values;
+      await todos.update(id as string, {
+        completed: !JSON.parse(completed as string),
+        completedAt: !JSON.parse(completed as string) ? new Date() : undefined,
+      });
+      break;
+    }
+    case "save task": {
+      const { id, description } = values;
+      await todos.update(id as string, {
+        description: description as string,
+      });
+      break;
+    }
+    case "delete task": {
+      const { id } = values;
+      await todos.delete(id as string);
+      break;
+    }
+    case "clear completed": {
+      await todos.clearCompleted();
+      break;
+    }
+    case "delete all": {
+      await todos.deleteAll();
+      break;
+    }
+    default: {
+      throw new Response("Unknown intent", { status: 400 });
+    }
+  }
+
+  return json({ ok: true });
+}
+
+export default function Home() {
+  const { tasks } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher();
+
+  return (
+    <div className="flex flex-1 flex-col md:mx-auto md:w-[720px]">
+      {/* ...existing code here remains the same */}
+
+      <main className="flex-1 space-y-8">
+        {/* ...existing code here remains the same */}
+
+        {/* ...existing code here remains the same */}
+
+       <div className="rounded-3xl border border-gray-200 bg-white/90 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
+          <div className="flex items-center justify-between gap-4 text-sm">
+            <p className="text-center leading-7">
+              {tasks.length} {tasks.length === 1 ? "item" : "items"} left
+            </p>
+            <div className="flex items-center gap-4">
+              <button className="text-red-400 transition hover:text-red-600">
+                Clear Completed
+              </button>
+              <button className="text-red-400 transition hover:text-red-600">
+                Delete All
+              </button>
+            </div>
+          </div>
+          <TodoActions tasks={tasks as unknown as Item[]} />
+        </div>
+
+        {/* ...existing code here remains the same */}
+      </main>
+
+      {/* ...existing code here remains the same */}
+    </div>
+  );
+}
+```
+
+With these changes made, you should be able to clear tasks marked as completed or delete all tasks.
+
+### Implementing view buttons
+
+We want users to customize their task view by showing all, active, or completed tasks. We can use React's `useState` to
+track the selected view and filter tasks accordingly. But, what if we want the URL to update when the user changes the
+view? To achieve this, we can use Remix's `useNavigate` alongside `useState` to set the view state and navigate to a URL
+that reflects the selected view. Here's how the code would look:
+
+```tsx {5-6,15-16,23-24,31-32}
+import { useNavigate, useSearchParams } from "@remix-run/react";
+
+export function List() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [view, setView] = React.useState(searchParams.get("view") || "all");
+
+  // use `view` to filter tasks
+  // ...
+
+  return (
+    <div>
+      <button
+        onClick={() => {
+          setView("all");
+          navigate(`?view=all`);
+        }}
+      >
+        All
+      </button>
+      <button
+        onClick={() => {
+          setView("actve");
+          navigate(`?view=active`);
+        }}
+      >
+        Active
+      </button>
+      <button
+        onClick={() => {
+          setView("completed");
+          navigate(`?view=completed`);
+        }}
+      >
+        Completed
+      </button>
+    </div>
+  );
+}
+```
+
+That approach works, but there's a better way. Remember from part 2, where we learned that forms with `method="get"`
+append the form data to the `action` value with a `?` separator and navigate to the resulting URL? This means we can
+read and set the state directly in the URL—no need to synchronize state.
+
+First, update `app/types.ts` to include the `View` type:
+
+```tsx title="app/types.ts" {3-10}#add
+// ...existing code here remains the same
+
+/**
+ * Represents the current view mode for displaying todo items.
+ *
+ * - "all": Displays all todo items.
+ * - "active": Displays only the active (incomplete) todo items.
+ * - "completed": Displays only the completed todo items.
+ */
+export type View = "all" | "active" | "completed";
+```
+
+Next, update `app/routes/_index.tsx` and `app/components/TodoList.tsx` with the following changes to read and set the
+state in the URL and filter tasks based on that state:
+
+```tsx title="app/routes/_index.tsx" {2-10,38,48,84} {37-41,53,64,75}#remove {26-27,42,51-52,54-56,62-63,65-67,73-74,76-80}#add
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import {
+  Form,
+  Link,
+  json,
+  useFetcher,
+  useLoaderData,
+  useSearchParams,
+} from "@remix-run/react";
+import type { Item, View } from "~/types";
+
+import TodoActions from "~/components/TodoActions";
+import TodoList from "~/components/TodoList";
+
+import { todos } from "~/lib/db.server";
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+export default function Home() {
+  const { tasks } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher();
+  const [searchParams] = useSearchParams();
+  const view = searchParams.get("view") || "all";
+
+  return (
+    <div className="flex flex-1 flex-col md:mx-auto md:w-[720px]">
+      {/* ...existing code here remains the same */}
+
+      <main className="flex-1 space-y-8">
+        {/* ...existing code here remains the same */}
+
+        <div className="rounded-3xl border border-gray-200 bg-white/90 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
+          {tasks.length > 0 ? (
+            <TodoList todos={tasks as unknown as Item[]} />
+          ) : (
+            <p className="text-center leading-7">No tasks available</p>
+          )}
+          <TodoList todos={tasks as unknown as Item[]} view={view as View} />
+        </div>
+
+        {/* ...existing code here remains the same */}
+
+        <div className="rounded-3xl border border-gray-200 bg-white/90 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
+          <Form className="flex items-center justify-center gap-12 text-sm">
+            <button
+              aria-label="View all tasks"
+              name="view"
+              value="all"
+              className="opacity-50 transition hover:opacity-100"
+              className={`transition ${
+                view === "all" ? "font-bold" : "opacity-50 hover:opacity-100"
+              }`}
+            >
+              All
+            </button>
+            <button
+              aria-label="View active tasks"
+              name="view"
+              value="active"
+              className="opacity-50 transition hover:opacity-100"
+              className={`transition ${
+                view === "active" ? "font-bold" : "opacity-50 hover:opacity-100"
+              }`}
+            >
+              Active
+            </button>
+            <button
+              aria-label="View completed"
+              name="view"
+              value="completed"
+              className="opacity-50 transition hover:opacity-100"
+              className={`transition ${
+                view === "completed"
+                  ? "font-bold"
+                  : "opacity-50 hover:opacity-100"
+              }`}
+            >
+              Completed
+            </button>
+          </Form>
+        </div>
+      </main>
+
+      {/* ...existing code here remains the same */}
+    </div>
+  );
+}
+```
+
+```tsx title="app/components/TodoList.tsx" {1-2,6-35,39}
+import { useMemo } from "react";
+import type { Item, View } from "~/types";
+
+import TodoItem from "~/components/TodoItem";
+
+export default function TodoList({
+  todos,
+  view,
+}: {
+  todos: Item[];
+  view: View;
+}) {
+  const visibleTodos = useMemo(
+    () =>
+      todos.filter((todo) =>
+        view === "active"
+          ? !todo.completed
+          : view === "completed"
+            ? todo.completed
+            : true,
+      ),
+    [todos, view],
+  );
+
+  if (visibleTodos.length === 0) {
+    return (
+      <p className="text-center leading-7">
+        {view === "all"
+          ? "No tasks available"
+          : view === "active"
+            ? "No active tasks"
+            : "No completed tasks"}
+      </p>
+    );
+  }
+
+  return (
+    <ul>
+      {visibleTodos.map((todo) => (
+        <TodoItem key={todo.id} todo={todo} />
+      ))}
+    </ul>
+  );
+}
+```
+
+`useMemo` was used to wrap the filtering operation in `TodoList`, caching the result between re-renders. Clicking each
+button should update the UI to show only tasks relevant to that view, with the URL updating as well. This concludes this
+part of the series. Booyah!
+
+## Conclusion
+
+In this part of the series, you learned about concurrent mutations and single-button forms. You implemented
+functionality to mark a task as completed, edit, delete, clear all completed tasks, and delete all tasks. Finally, you
+added the ability to view all tasks, or only active or completed ones.
+
+In the next part, you'll explore how pending UI works in Remix, enabling you to add pending states and implement
+network-aware feedback. Stay tuned!

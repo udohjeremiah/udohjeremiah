@@ -1,0 +1,183 @@
+---
+title: "Remix Todo App: Part 6 - Deploying the App"
+description: Step-by-step guidance on how to deploy your Remix Todo App to production.
+publishedOn: 2024-10-17
+image: /blog/remix-todo-app/hero.webp
+---
+
+## Introduction
+
+Welcome to part 6 of the
+[Remix Todo App series](/blog/remix-todo-app-part-1-building-the-app-layout-and-structure#series-roadmap)! This series
+covers everything you'll use daily in Remix. In [part 5](/blog/remix-todo-app-part-5-implementing-a-theme-switcher), we
+added a theme switcher, allowing users to choose between light and dark themes or sync with their system's preference.
+
+In this part, we'll deploy the app on [Render](https://render.com). While it's not fully production-ready
+(it lacks a real database, so tasks aren't saved after closing), it's "deployment-ready". You can share it with family,
+friends, and colleagues as a beta version while they await the stable release with personalized and persistent tasks 😉.
+Let’s dive in!
+
+## Deploying a Remix App
+
+Deploying a Remix app involves four layers:
+
+1. JavaScript runtime (e.g., Node.js)
+2. JavaScript web server (e.g., Express.js)
+3. Server adapter (e.g., `@remix-run/express`)
+4. Web host or platform
+
+Some web hosts manage multiple layers for you. To deploy Remix with Express.js, you need all four.
+
+Since we initialized this project with `create-remix` without the `--template` flag, we're using the built-in
+"Remix App Server," which combines layers 2 and 3. Our runtime is Node.js, and now we need a web host, so we're using
+Render.
+
+For more on what each layer does, see the
+[Remix docs on deployment](https://remix.run/docs/en/main/discussion/runtimes).
+
+## Deploying on Render
+
+Before deploying, remove the artificial delay from the simulated database in `app/lib/db.server.ts`:
+
+```tsx title="app/lib/db.server.ts" {8-15,22,37,43,63,77,89}#remove
+import type { Item, Todo } from "~/types";
+
+/**
+ * List of todo items.
+ */
+const items: Item[] = [];
+
+/**
+ * Simulates an artificial delay in async operations to mimic real-world API behaviour.
+ * @returns {Promise<void>} A promise that resolves after the delay.
+ */
+async function simulateDelay(): Promise<void> {
+  const ARTIFICIAL_DELAY = 1000;
+  await new Promise((resolve) => setTimeout(resolve, ARTIFICIAL_DELAY));
+}
+
+/**
+ * An implementation of the `Todo` interface that manages a collection of todo items.
+ */
+export const todos: Todo = {
+  async create(description: string) {
+    await simulateDelay();
+
+    const createdTodo: Item = {
+      id: Math.random().toString(16).slice(2),
+      description,
+      completed: false,
+      createdAt: new Date(),
+    };
+
+    items.push(createdTodo);
+
+    return createdTodo;
+  },
+
+  async read() {
+    await simulateDelay();
+
+    return items;
+  },
+
+  async update(id: string, fields: Partial<Omit<Item, "id" | "createdAt">>) {
+    await simulateDelay();
+
+    const itemIndex = items.findIndex((item) => item.id === id);
+
+    if (itemIndex === -1) {
+      return undefined;
+    }
+
+    const updatedTodo: Item = {
+      ...items[itemIndex],
+      ...fields,
+      completedAt: fields.completed ? fields.completedAt : undefined,
+    };
+
+    items[itemIndex] = updatedTodo;
+
+    return updatedTodo;
+  },
+
+  async delete(id: string) {
+    await simulateDelay();
+
+    const itemIndex = items.findIndex((item) => item.id === id);
+
+    if (itemIndex === -1) {
+      return undefined;
+    }
+
+    const [deletedTodo] = items.splice(itemIndex, 1);
+
+    return deletedTodo;
+  },
+
+  async clearCompleted() {
+    await simulateDelay();
+
+    for (let i = items.length - 1; i >= 0; i--) {
+      if (items[i].completed) {
+        items.splice(i, 1);
+      }
+    }
+
+    return items;
+  },
+
+  async deleteAll() {
+    await simulateDelay();
+
+    items.length = 0;
+    return items;
+  },
+};
+```
+
+Next, follow these steps to deploy to Render:
+
+- Create a new GitHub repository for the project.
+
+- Push your local repository (if not initialized, run `git init`):
+
+  ```bash
+  git remote add origin <your-repository-url>
+  git branch -M main
+  git push -u origin main
+  ```
+
+- Sign up on Render (preferably with GitHub).
+
+- Create a [new Web Service](https://dashboard.render.com/select-repo?type=web) on Render, grant access, and connect it
+  to your repository.
+
+- During creation, use the following values:
+
+  | Field         | Values                                                                 |
+  | :------------ | :--------------------------------------------------------------------- |
+  | Language      | `Node`                                                                 |
+  | Branch        | `main`                                                                 |
+  | Build Command | `npm ci --production=false && npm run build && npm prune --production` |
+  | Start Command | `npm start`                                                            |
+
+- Select the "For hobby projects" as the Instance Type.
+
+- Scroll down and click **"Deploy Web Service"**.
+
+That's it! Once the build is complete, your Remix app will be live on your Render URL. No pun intended—you've just
+deployed the first JavaScript todo app in the world that works without JavaScript.
+
+If you encounter issues, check the
+[Remix docs on deploying a Remix App](https://docs.render.com/deploy-remix).
+
+## Conclusion
+
+In this part of the series, you learned how to deploy a Remix app to production on Render. To compare your
+implementation with mine, here's the GitHub repository for the series:
+[https://github.com/udohjeremiah/remix-todo-app](https://github.com/udohjeremiah/remix-todo-app). And here's the
+deployed URL: [https://remix-todo-app-jrhk.onrender.com](https://remix-todo-app-jrhk.onrender.com).
+
+In the next part, you'll learn how to integrate a database and implement authentication in Remix, allowing users to have
+personalized and persistent tasks. Stay tuned!

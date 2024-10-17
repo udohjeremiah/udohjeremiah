@@ -84,9 +84,9 @@ export default function About() {
               </p>
               <p>
                 Currently, my focus is on web development. Utilizing tools like
-                TypeScript, React.js, Remix, Next.js, MongoDB and Redis.io, I
-                develop interactive web applications that address and enhance
-                users&apos; needs.
+                TypeScript, React.js, Remix, Next.js, GSAP, MongoDB and
+                Redis.io, I develop interactive web applications that address
+                and enhance users&apos; needs.
               </p>
               <p>
                 I interned at{" "}

@@ -17,8 +17,8 @@ export default function HomePage() {
       <h1
         className={tw("text-3xl leading-tight tracking-tight", "sm:text-4xl")}
       >
-        Hi there! I&apos;m Udoh. I&apos;m a software developer currently based
-        in {process.env.NEXT_PUBLIC_LOCATION}.
+        Hi there 👋! I&apos;m Udoh. I&apos;m a software developer currently
+        based in {process.env.NEXT_PUBLIC_LOCATION}.
       </h1>
       <Newsletter />
       <div

@@ -1,4 +1,4 @@
-## Hi there! I'm Udoh. I'm a software developer.
+## Hi there 👋! I'm Udoh. I'm a software developer.
 
 - Tech Stack: JavaScript, TypeScript, Node.js, Express.js, React.js, Remix, Next.js, MongoDB, Redis.io, Tailwind CSS,
   GSAP, etc.

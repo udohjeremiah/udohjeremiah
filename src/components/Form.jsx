@@ -1,5 +1,7 @@
 import { useId, useState } from "react";
 
+import ChevronUpDownIcon from "@/components/icons/ChevronUpDownIcon";
+
 import { tw } from "@/lib/utils";
 
 const baseClassName = tw(
@@ -88,13 +90,22 @@ export function Select({ label, data, ...properties }) {
       <label htmlFor={id} className="text-sm font-medium">
         {label}
       </label>
-      <select id={id} className={baseClassName} {...properties}>
-        {data.map((item, index) => (
-          <option key={index} value={item.value}>
-            {item.label} - {item.subtitle}
-          </option>
-        ))}
-      </select>
+      <div className="relative">
+        <select
+          id={id}
+          className={tw(baseClassName, "h-10 appearance-none truncate pr-6")}
+          {...properties}
+        >
+          {data.map((item, index) => (
+            <option key={index} value={item.value}>
+              {item.label} - {item.subtitle}
+            </option>
+          ))}
+        </select>
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+          <ChevronUpDownIcon className="h-4 w-4" />
+        </div>
+      </div>
     </fieldset>
   );
 }
