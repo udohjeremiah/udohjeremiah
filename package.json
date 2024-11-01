@@ -51,6 +51,6 @@
     "sqip-plugin-data-uri": "1.0.0-alpha.52",
     "sqip-plugin-primitive": "1.0.0-alpha.53",
     "sqip-plugin-svgo": "1.0.0-alpha.54",
-    "tailwindcss": "^3.4.4"
+    "tailwindcss": "^3.4.14"
   }
 }
