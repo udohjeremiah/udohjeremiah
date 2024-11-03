@@ -267,10 +267,13 @@ function SomeComponent() {
 
   // Or, an HTMLFormElement instance where the user provides the value but you do the submission
   <Form
+    method="post"
     onChange={(event) => {
       submit(event.currentTarget);
     }}
-  />;
+  >
+    <input name="myKey" />;
+  </Form>
 }
 ```
 

@@ -198,7 +198,7 @@ export async function action({ request }: ActionFunctionArgs) {
       break;
     }
     default: {
-      // optionally throw a response for unsupported intents
+      // optionally throw a response for unknown intents
       throw new Response("Unknown intent", { status: 400 });
     }
   }

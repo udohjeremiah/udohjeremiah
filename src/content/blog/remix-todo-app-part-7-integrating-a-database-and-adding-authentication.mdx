@@ -1,0 +1,3141 @@
+---
+title: "Remix Todo App: Part 7 - Integrating a Database and Adding Authentication"
+description: Learn how to integrate a database and implement authentication in your Remix Todo App.
+publishedOn: 2024-11-03
+image: /blog/remix-todo-app/hero.webp
+---
+
+## Introduction
+
+Welcome to part 7, the final part of the
+[Remix Todo App Series](/blog/remix-todo-app-part-1-building-the-app-layout-and-structure#series-roadmap)! This series
+promised to cover everything you'd use daily in Remix, and I believe it has been delivering on that promise 😉. In
+[part 6](/blog/remix-todo-app-part-6-deploying-the-app), we deployed the app to production on Render.
+
+Now, we'll integrate a database and implement authentication. The app currently doesn't support personal or persistent
+tasks—if multiple users add tasks simultaneously, data overlaps, and everything is lost on restart. We'll fix this by
+adding authentication to differentiate users and integrating a database to persist tasks. Let's dive in!
+
+## User authentication on the web
+
+Authentication is the process by which an app verifies and confirms that a user is who they claim to be. While much goes
+into this process, it can be simplified into three key steps:
+
+- **Identification:** The user establishes their identity, typically with an email address, username, or another unique
+  identifier.
+
+- **Authentication:** The user proves their identity, usually by entering a password, confirming an email, or using a
+  code sent via SMS, email, or a hardware token.
+
+- **Authorization:** The app verifies the user's identity and grants access and permission if valid. Depending on the
+  app, users may have varying access levels and permissions.
+
+Web apps today use various authentication methods, including password-based, certificate-based, biometric, token-based,
+one-time passwords, push notifications, and voice recognition. The choice will depend on an app's complexity and data
+sensitivity.
+
+To improve security, many apps use multiple authentication methods, known as multifactor authentication (MFA), with
+two-factor authentication (2FA) being a common example. But, password-based authentication remains the most widely used.
+
+### Password-based authentication
+
+In this method, users sign up with a unique identifier, such as an email, and a password. The client (browser) sends the
+email and password to the server, where the password is hashed and both the email and hashed password are stored in the
+database.
+
+To sign in, the user submits their email and password, which the client sends to the server. The server checks the
+database for a matching email. If found, it hashes the provided password and compares it to the stored hash. If they
+match, the user is granted access.
+
+This interaction is managed by HTTP, the protocol that standardizes client-server communication. But, HTTP is
+**stateless**, meaning each request is independent and doesn't keep information between requests.
+
+So, how does the app _remember_ that a user was signed in during a previous request? To solve this, two main methods are
+used: **session-based** and **token-based** authentication. These methods enable users to maintain access across
+requests without needing to re-authenticate each time.
+
+### Session-based authentication
+
+HTTP is a stateless protocol, meaning each request doesn't keep information about previous ones. But, sessions can make
+HTTP requests **stateful**.
+
+In session-based authentication, when a user signs in, their credentials are sent to the server for verification. If
+valid, the server creates a unique identifier (called a **session ID**) and stores it, typically in a database. The
+session ID is then sent to the client, which stores it in a cookie. Cookies hold key-value pairs and are automatically
+sent with each request to the server. This creates a stateful session between the client and server.
+
+On subsequent requests, the server gets the session ID from the cookie and looks up the corresponding session data in
+the database. If found, the request is authenticated and processed. Sessions may also have an expiry, with the server
+invalidating them after a period of inactivity. When the user signs out, the session ID is destroyed on both the client
+and server sides.
+
+### Token-based authentication
+
+While session-based authentication is effective, it has drawbacks: the server must track sessions, making it difficult
+to scale applications horizontally across multiple servers. Additionally, each request incurs added latency due to the
+extra lookup in the session store. This leads us to token-based authentication.
+
+A token is a piece of data issued to a user to authorize access to a system. Tokens can be physical or digital. Physical
+tokens include mobile phones, USB drives, smart cards, and key fobs that generate changing login codes. Digital tokens
+include JSON Web Tokens (JWTs), access tokens, ID tokens, and API tokens, typically issued after a successful login.
+JWTs have become the de facto standard for token-based authentication on the web.
+
+A JWT defines a compact, self-contained way to securely transmit information between parties in a JSON object. JWTs are
+trusted and verifiable due to digital signing, using either a secret or a public/private key pair. A JWT consists of
+three Base64Url strings separated by dots (`.`), representing the following parts:
+
+- **Header:** Specifies the token type and the signing algorithm. For example, this header is encoded to Base64Url to
+  form the first part of the JWT:
+  ```json
+  {
+    "alg": "HS256",
+    "typ": "JWT"
+  } 
+  ```
+
+- **Payload:** Contains the claims about the user and any additional data. For example, this payload is encoded to
+  Base64Url to form the second part of the JWT:
+  ```json
+  {
+    "sub": "671fdf89db6779b015977290",
+    "role": "admin"
+  },
+  ```
+
+- **Signature:** Ensures message integrity. The signature is created by signing the encoded header and payload with a
+  secret or private key and specified algorithm. For example, with HMAC SHA256, the signature is:
+  ```ts
+  HMACSHA256(
+    base64UrlEncode(header) + "." +
+    base64UrlEncode(payload),
+    your-256-bit-secret
+  );
+  ```
+
+Here's the JWT using the header and payload above, signed with the secret `fakesecret`:
+
+```
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NzFmZGY4OWRiNjc3OWIwMTU5NzcyOTAiLCJyb2xlIjoiYWRtaW4ifQ.8LoyrdimGyYHXQ2-8PdqY-RF5Z0id46aDkYuvdJV6RY
+```
+
+In token-based authentication using JWTs, when a user signs in, their credentials are sent to the server for
+verification. If valid, the server generates a JWT and sends it back to the client. The client stores this JWT in local
+storage or a cookie. The server only needs to keep the secret or private key used to sign the
+JWT—not the JWT itself—making JWTs **stateless**.
+
+On subsequent requests, the client includes the JWT in the `Authorization` header using the `Bearer` schema:
+`Authorization: Bearer {JWT}`. The server retrieves, decodes, and verifies the JWT using the signing algorithm and
+secret or private key. If valid, the request is authenticated, and the payload can be used as needed. JWTs typically
+include an expiration, after which they become invalid, requiring a new token to be generated. When the user signs out,
+the token is destroyed on the client side, with no server interaction needed.
+
+## Setting up the database
+
+Token-based authentication removes the need for database lookups required in session-based authentication but introduces
+challenges—especially around token invalidation. In session-based authentication, a compromised session can be
+invalidated immediately on the server. But, in token-based systems, a stolen token remains valid until it expires. To
+mitigate this, developers often use short-lived access tokens alongside refresh tokens to reissue tokens on expiration.
+While this approach lowers risk, it doesn't eliminate it.
+
+For this reason, session-based authentication is often preferred for client-server connections, while token-based
+authentication is more suited for APIs and server-to-server connections. In our todo app, we'll use session-based
+authentication.
+
+Before implementing authentication, let's set up the database using MongoDB. First, install the MongoDB Node.js driver:
+
+```bash
+npm install mongodb
+```
+
+Next, run the following command to create a `app/lib/mongodb.server.ts` file:
+
+```bash
+touch app/lib/mongodb.server.ts
+```
+
+Finally, copy the following code into `app/lib/mongodb.server.ts`:
+
+```ts title="app/lib/mongodb.server.ts"
+import { MongoClient, ServerApiVersion } from "mongodb";
+
+if (!process.env.MONGODB_URI) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
+}
+
+const uri = process.env.MONGODB_URI;
+const options = {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  },
+};
+
+let client: MongoClient;
+let clientPromise: Promise<MongoClient>;
+let isConnected = false; // Tracks connection status
+
+if (process.env.NODE_ENV === "development") {
+  // In development mode, use a global variable to preserve value across module reloads with HMR.
+  const globalWithMongo = global as typeof globalThis & {
+    _mongoClientPromise?: Promise<MongoClient>;
+    _mongoClient?: MongoClient;
+  };
+
+  if (!globalWithMongo._mongoClientPromise || !globalWithMongo._mongoClient) {
+    client = new MongoClient(uri, options);
+    globalWithMongo._mongoClient = client;
+    globalWithMongo._mongoClientPromise = client.connect();
+  }
+
+  client = globalWithMongo._mongoClient;
+  clientPromise = globalWithMongo._mongoClientPromise;
+} else {
+  // In production, ensure a single connection instance without using globals.
+  client = new MongoClient(uri, options);
+
+  // Recursive function attempting MongoDB connection with exponential backoff.
+  const connectWithRetry = async (
+    attempt = 1,
+    maxAttempts = 5
+  ): Promise<MongoClient> => {
+    // Exponential backoff formula
+    const delay = Math.pow(5, attempt) * 1000;
+
+    try {
+      return await client.connect();
+    } catch (error) {
+      console.error(
+        `Error connecting to MongoDB (Attempt ${attempt}/${maxAttempts}):`,
+        error
+      );
+
+      if (attempt < maxAttempts) {
+        console.log(`Retrying in ${delay / 1000} seconds...`);
+        // Resolves a Promise after the calculated delay, then retries
+        return new Promise((resolve) => setTimeout(resolve, delay)).then(() =>
+          connectWithRetry(attempt + 1, maxAttempts)
+        );
+      } else {
+        console.error(
+          `Maximum retry attempts (${maxAttempts}) reached. Connection failed.`
+        );
+
+        // Propagate the error after maximum attempts
+        throw error;
+      }
+    }
+  };
+
+  clientPromise = connectWithRetry();
+}
+
+async function mongodb(): Promise<MongoClient> {
+  if (isConnected && client) {
+    // Return the already connected client
+    return client;
+  }
+
+  try {
+    // Connect the client to the server (optional starting in v4.7)
+    client = await clientPromise;
+
+    // Send a ping to confirm successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("You successfully connected to MongoDB!");
+
+    // Mark as connected
+    isConnected = true;
+
+    // Return the connected client
+    return client;
+  } catch (error) {
+    console.error("Failed to connect to MongoDB:", error);
+
+    // Reset `isConnected` to false if the connection failed
+    isConnected = false;
+
+    // Throw error to prevent usage of an unconnected client
+    throw error;
+  }
+}
+
+// Export the mongodb function to share the MongoClient across functions
+export default mongodb;
+```
+
+This code provides a shared MongoDB client with retry logic to handle connection failures. It exports a `default`
+function, which returns a connected MongoDB client as a promise, allowing it to be used across different functions. The
+client connects to a MongoDB deployment via a connection string. To set up this connection string, create an account on
+[MongoDB Atlas](https://www.mongodb.com/docs/atlas), obtain your connection string, and store it in a `.env` file as
+follows:
+
+```env title=".env"
+MONGODB_URI=<connection_string>
+```
+
+## Implementing sign up
+
+With the database configured, we can implement authentication, starting with the `/signup` route. This route displays a
+form with required fields for name, email, and password. On submission, the form data is sent to the route's `action`,
+validated, and, if valid, used to create the user in the database. If successful, the user is redirected to the
+`/signin` route. If validation fails or there's an error during user creation, an error message is returned and
+displayed in the UI.
+
+First, add the icons for the form by creating the files for each icon:
+
+```bash
+touch app/components/icons/{EyeIcon.tsx,EyeOffIcon.tsx,LoaderIcon.tsx}
+```
+
+Then, paste the code for each icon into its respective file:
+
+```tsx title="app/components/icons/EyeIcon.tsx"
+export default function EyeIcon({ ...props }: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+```
+
+```tsx title="app/components/icons/EyeOffIcon.tsx"
+export default function EyeOffIcon({ ...props }: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
+      <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+      <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
+      <path d="m2 2 20 20" />
+    </svg>
+  );
+}
+```
+
+```tsx title="app/components/icons/LoaderIcon.tsx"
+export default function LoaderIcon({ ...props }: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M12 2v4" />
+      <path d="m16.2 7.8 2.9-2.9" />
+      <path d="M18 12h4" />
+      <path d="m16.2 16.2 2.9 2.9" />
+      <path d="M12 18v4" />
+      <path d="m4.9 19.1 2.9-2.9" />
+      <path d="M2 12h4" />
+      <path d="m4.9 4.9 2.9 2.9" />
+    </svg>
+  );
+}
+```
+
+Next, create the file for the `app/routes/signup.tsx` route:
+
+```bash
+touch app/routes/signup.tsx
+```
+
+Finally, copy the following code into `app/routes/signup.tsx`:
+
+```tsx title="app/routes/signup.tsx"
+import { MetaFunction } from "@remix-run/node";
+import { Form, Link, useNavigation } from "@remix-run/react";
+import { useState } from "react";
+
+import EyeIcon from "~/components/icons/EyeIcon";
+import EyeOffIcon from "~/components/icons/EyeOffIcon";
+import LoaderIcon from "~/components/icons/LoaderIcon";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Sign Up | Todo App" },
+    {
+      name: "description",
+      content: "Create an account to manage your tasks efficiently.",
+    },
+  ];
+};
+
+export default function Signup() {
+  const [showPassword, setShowPassword] = useState(false);
+  const navigation = useNavigation();
+
+  const isSubmitting = navigation.formAction === "/signup";
+
+  return (
+    <div className="flex flex-1 items-center justify-center p-6 md:mx-auto md:w-[720px] lg:p-20">
+      <div className="w-full flex-col space-y-4 rounded-3xl border border-gray-200 bg-white/90 p-8 dark:border-gray-700 dark:bg-gray-900">
+        <header>
+          <h1 className="text-xl font-extrabold tracking-tight md:text-2xl">
+            Sign up
+          </h1>
+        </header>
+        <main>
+          <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+            Already have an account?{" "}
+            <Link
+              to="/signin"
+              className="relative text-sm font-medium text-blue-500 after:absolute after:-bottom-0.5 after:left-0 after:h-[1px] after:w-0 after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
+            >
+              Sign in
+            </Link>
+          </p>
+          <Form method="post">
+            <fieldset disabled={isSubmitting} className="mt-6 space-y-6">
+              <div className="space-y-2">
+                <label
+                  htmlFor="name"
+                  className="text-sm font-medium leading-none"
+                >
+                  Name
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  name="name"
+                  placeholder="Enter your name"
+                  required
+                  minLength={2}
+                  className="flex h-9 w-full rounded-3xl border border-gray-200 bg-transparent px-3 py-2 text-sm shadow-sm disabled:pointer-events-none disabled:opacity-25 dark:border-white/50"
+                />
+              </div>
+              <div className="space-y-2">
+                <label
+                  htmlFor="email"
+                  className="text-sm font-medium leading-none"
+                >
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email address"
+                  autoComplete="email"
+                  inputMode="email"
+                  required
+                  className="flex h-9 w-full rounded-3xl border border-gray-200 bg-transparent px-3 py-2 text-sm shadow-sm disabled:pointer-events-none disabled:opacity-25 dark:border-white/50"
+                />
+              </div>
+              <div className="space-y-2">
+                <label
+                  htmlFor="password"
+                  className="text-sm font-medium leading-none"
+                >
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Enter your password"
+                    autoComplete="new-password"
+                    required
+                    minLength={8}
+                    className="flex h-9 w-full rounded-3xl border border-gray-200 bg-transparent px-3 py-2 text-sm shadow-sm disabled:pointer-events-none disabled:opacity-25 dark:border-white/50"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-2 top-[5px] text-gray-200 transition-colors hover:text-black/50 disabled:opacity-50 dark:text-white/50 dark:hover:text-white"
+                    onClick={() =>
+                      setShowPassword((prevPassword) => !prevPassword)
+                    }
+                  >
+                    {showPassword ? <EyeIcon /> : <EyeOffIcon />}
+                  </button>
+                </div>
+                <div className="flex justify-end gap-4">
+                  <Link
+                    to="/forgot-password"
+                    className="relative text-sm font-medium text-blue-500 after:absolute after:-bottom-0.5 after:left-0 after:h-[1px] after:w-0 after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+              </div>
+              <button className="flex h-9 w-full items-center justify-center rounded-full border-2 border-gray-200/50 bg-gradient-to-tl from-[#00fff0] to-[#0083fe] px-4 py-2 text-sm font-medium shadow transition hover:border-gray-500 disabled:pointer-events-none disabled:opacity-50 dark:border-white/50 dark:from-[#8e0e00] dark:to-[#1f1c18] dark:hover:border-white">
+                {isSubmitting ? (
+                  <>
+                    <LoaderIcon className="mr-2 h-4 w-4 animate-spin" />
+                    Signing up
+                  </>
+                ) : (
+                  "Sign up"
+                )}
+              </button>
+            </fieldset>
+          </Form>
+        </main>
+      </div>
+    </div>
+  );
+}
+```
+
+With the route setup complete, the next steps are to define the functions for validating form data and creating a user
+in the database. Start by running the following command to create a `utils.ts` file in `app/lib/`:
+
+```bash
+touch app/lib/utils.ts
+```
+
+Next, paste the following code into `app/lib/utils.ts`:
+
+```tsx title="app/lib/utils.ts"
+export function validateForm(fields: Record<string, string>) {
+  const error: Record<string, string> = {};
+
+  // Return early if fields is falsy
+  if (!fields) {
+    return null;
+  }
+
+  // Validate name
+  if (fields.name) {
+    if (fields.name.trim() === "") {
+      error.name = "Name is required.";
+    } else if (fields.name.length < 3) {
+      error.name = "Name must be at least 3 characters long.";
+    }
+  }
+
+  // Validate email
+  if (fields.email) {
+    if (fields.email.trim() === "") {
+      error.email = "Email is required.";
+    } else if (
+      !/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(fields.email)
+    ) {
+      error.email = "Email address is invalid.";
+    }
+  }
+
+  // Validate password
+  if (fields.password) {
+    if (fields.password.trim() === "") {
+      error.password = "Password is required.";
+    } else if (fields.password.length < 8) {
+      error.password = "Password must be at least 8 characters long.";
+    }
+  }
+
+  // Validate newPassword and confirmPassword together
+  if (fields.newPassword && fields.confirmPassword) {
+    if (!fields.newPassword) {
+      error.newPassword = "New password is required.";
+    } else if (fields.newPassword.length < 8) {
+      error.newPassword = "New password must be at least 8 characters long.";
+    }
+
+    if (!fields.confirmPassword) {
+      error.confirmPassword = "Confirm password is required.";
+    } else if (fields.confirmPassword.length < 8) {
+      error.confirmPassword =
+        "Confirm password must be at least 8 characters long.";
+    } else if (fields.confirmPassword !== fields.newPassword) {
+      error.confirmPassword = "Passwords do not match.";
+    }
+  }
+
+  return Object.keys(error).length ? error : null;
+}
+```
+
+The `validateForm` function accepts a generic object with various fields, then checks each one based on the requirements
+of our app. Note that this is basic validation; for comprehensive validation, consider using libraries like
+[Conform](https://conform.guide) and [Zod](https://zod.dev).
+
+To define the function for creating a user in the database, we'll need a `User` type and environment variables for the
+database and user collection names.
+
+Update `app/types.ts` to include the `User` type:
+
+```tsx title="app/types.ts" {1,5-60}#add
+import { ObjectId } from "mongodb";
+
+// ...existing code here remains the same
+
+/**
+ * Represents a user in the application.
+ */
+export interface User {
+  /**
+   * Unique identifier for the user in the database.
+   * This field is optional because it should be left out when creating a new user,
+   * allowing the MongoDB driver to automatically generate it.
+   */
+  _id?: ObjectId;
+
+  /**
+   * The date and time when the user account was created.
+   */
+  createdAt: Date;
+
+  /**
+   * The user's full name.
+   */
+  name: string;
+
+  /**
+   * The user's email address.
+   */
+  email: string;
+
+  /**
+   * The user's password details, including the salt and hash for secure storage.
+   */
+  password: {
+    /**
+     * Salt used in hashing the user's password.
+     */
+    salt: string;
+
+    /**
+     * Hash of the user's password.
+     */
+    hash: string;
+  };
+
+  /**
+   * List of tasks associated with the user.
+   */
+  tasks: Item[];
+
+  /**
+   * Token for resetting the user's password. This field is optional and is only present if a password reset was requested.
+   */
+  forgotPasswordToken?: string;
+
+  /**
+   * The expiration timestamp for the password reset token, in milliseconds since the Unix epoch. This field is optional.
+   */
+  forgotPasswordTokenExpireAt?: number;
+}
+```
+
+Add the following variables to your `.env` file, replacing the placeholders with your actual database and collection
+names:
+
+```title=".env" {2-3}
+MONGODB_URI=<connection_string>
+MONGODB_DBNAME=<db_name>
+MONGODB_COLL_USERS=<users_collection_name>
+```
+
+Now, update `app/lib/db.server.ts` to define the function for creating a user in the database:
+
+```tsx title="app/lib/db.server.ts" {2} {1,4-46,120}#add
+import crypto from "crypto";
+import type { Item, Todo, User } from "~/types";
+
+import mongodb from "~/lib/mongodb.server";
+
+if (!process.env.MONGODB_DBNAME) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_DBNAME"');
+}
+if (!process.env.MONGODB_COLL_USERS) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_COLL_USERS"');
+}
+
+const dbName = process.env.MONGODB_DBNAME;
+const collUsers = process.env.MONGODB_COLL_USERS;
+
+async function createUser(name: string, email: string, password: string) {
+  try {
+    const client = await mongodb();
+    const collection = client.db(dbName).collection<User>(collUsers);
+
+    const user = await collection.findOne({ email });
+    if (user) {
+      return {
+        error: "The email address already exists.",
+        data: null,
+      };
+    }
+
+    const salt = crypto.randomBytes(16).toString("hex");
+    const hash = crypto
+      .pbkdf2Sync(password, salt, 100000, 64, "sha512")
+      .toString("hex");
+
+    const { insertedId } = await collection.insertOne({
+      createdAt: new Date(),
+      name,
+      email,
+      password: { salt, hash },
+      tasks: [],
+    });
+
+    return { error: null, data: insertedId.toString() };
+  } catch (error) {
+    return { error: "An unexpected error occured.", data: null };
+  }
+}
+
+/**
+ * List of todo items.
+ */
+const items: Item[] = [];
+
+/**
+ * An implementation of the `Todo` interface that manages a collection of todo items.
+ */
+const todos: Todo = {
+  async create(description: string) {
+    const createdTodo: Item = {
+      id: Math.random().toString(16).slice(2),
+      description,
+      completed: false,
+      createdAt: new Date(),
+    };
+
+    items.push(createdTodo);
+
+    return createdTodo;
+  },
+
+  async read() {
+    return items;
+  },
+
+  async update(id: string, fields: Partial<Omit<Item, "id" | "createdAt">>) {
+    const itemIndex = items.findIndex((item) => item.id === id);
+
+    if (itemIndex === -1) {
+      return undefined;
+    }
+
+    const updatedTodo: Item = {
+      ...items[itemIndex],
+      ...fields,
+      completedAt: fields.completed ? fields.completedAt : undefined,
+    };
+
+    items[itemIndex] = updatedTodo;
+
+    return updatedTodo;
+  },
+
+  async delete(id: string) {
+    const itemIndex = items.findIndex((item) => item.id === id);
+
+    if (itemIndex === -1) {
+      return undefined;
+    }
+
+    const [deletedTodo] = items.splice(itemIndex, 1);
+
+    return deletedTodo;
+  },
+
+  async clearCompleted() {
+    for (let i = items.length - 1; i >= 0; i--) {
+      if (items[i].completed) {
+        items.splice(i, 1);
+      }
+    }
+
+    return items;
+  },
+
+  async deleteAll() {
+    items.length = 0;
+    return items;
+  },
+};
+
+export { createUser };
+```
+
+The `createUser` function connects to the MongoDB client and accesses the users' collection, creating it if it doesn't
+exist. It checks for a document with the given email; if found, it returns an object with an `error` message and `data`
+as `null`. Otherwise, it generates a salt and hash for secure password
+storage—[passwords should be hashed, not encrypted or stored in plain text](https://www.okta.com/identity-101/hashing-vs-encryption).
+The function inserts a new user document and returns an object with `error` as `null` and `data` containing the new
+user's ID.
+
+The final step is to handle the form submission in the route's `action`. Update the `/signup` route with the following
+code changes:
+
+```tsx title="app/routes/signup.tsx" {1-2,9-10,22-40,43,48,86-90,109-113,151-155,168-172}
+import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
+import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
+import { useState } from "react";
+
+import EyeIcon from "~/components/icons/EyeIcon";
+import EyeOffIcon from "~/components/icons/EyeOffIcon";
+import LoaderIcon from "~/components/icons/LoaderIcon";
+
+import { createUser } from "~/lib/db.server";
+import { validateForm } from "~/lib/utils";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Sign Up | Todo App" },
+    {
+      name: "description",
+      content: "Create an account to manage your tasks efficiently.",
+    },
+  ];
+};
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+
+  const name = formData.get("name") as string;
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+
+  const formError = validateForm({ name, email, password });
+  if (formError) {
+    return { errors: formError };
+  }
+
+  const { error } = await createUser(name, email, password);
+  if (error) {
+    return { errors: { result: error } };
+  }
+
+  return redirect("/signin");
+}
+
+export default function Signup() {
+  const actionData = useActionData<typeof action>();
+  const [showPassword, setShowPassword] = useState(false);
+  const navigation = useNavigation();
+
+  const isSubmitting = navigation.formAction === "/signup";
+  const errors = isSubmitting ? {} : actionData?.errors;
+
+  return (
+    <div className="flex flex-1 items-center justify-center p-6 md:mx-auto md:w-[720px] lg:p-20">
+      <div className="w-full flex-col space-y-4 rounded-3xl border border-gray-200 bg-white/90 p-8 dark:border-gray-700 dark:bg-gray-900">
+        <header>
+          <h1 className="text-xl font-extrabold tracking-tight md:text-2xl">
+            Sign up
+          </h1>
+        </header>
+        <main>
+          <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+            Already have an account?{" "}
+            <Link
+              to="/signin"
+              className="relative text-sm font-medium text-blue-500 after:absolute after:-bottom-0.5 after:left-0 after:h-[1px] after:w-0 after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
+            >
+              Sign in
+            </Link>
+          </p>
+          <Form method="post">
+            <fieldset disabled={isSubmitting} className="mt-6 space-y-6">
+              <div className="space-y-2">
+                <label
+                  htmlFor="name"
+                  className="text-sm font-medium leading-none"
+                >
+                  Name
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  name="name"
+                  placeholder="Enter your full name"
+                  required
+                  minLength={3}
+                  className="flex h-9 w-full rounded-3xl border border-gray-200 bg-transparent px-3 py-2 text-sm shadow-sm disabled:pointer-events-none disabled:opacity-25 dark:border-white/50"
+                />
+                {errors?.name && (
+                  <p className="flex items-center text-sm font-medium leading-5 text-red-500">
+                    {errors.name}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <label
+                  htmlFor="email"
+                  className="text-sm font-medium leading-none"
+                >
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email address"
+                  autoComplete="email"
+                  inputMode="email"
+                  required
+                  className="flex h-9 w-full rounded-3xl border border-gray-200 bg-transparent px-3 py-2 text-sm shadow-sm disabled:pointer-events-none disabled:opacity-25 dark:border-white/50"
+                />
+                {errors?.email && (
+                  <p className="flex items-center text-sm font-medium leading-5 text-red-500">
+                    {errors.email}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <label
+                  htmlFor="password"
+                  className="text-sm font-medium leading-none"
+                >
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Enter your password"
+                    autoComplete="new-password"
+                    required
+                    minLength={8}
+                    className="flex h-9 w-full rounded-3xl border border-gray-200 bg-transparent px-3 py-2 text-sm shadow-sm disabled:pointer-events-none disabled:opacity-25 dark:border-white/50"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-2 top-[5px] text-gray-200 transition-colors hover:text-black/50 disabled:opacity-50 dark:text-white/50 dark:hover:text-white"
+                    onClick={() =>
+                      setShowPassword((prevPassword) => !prevPassword)
+                    }
+                  >
+                    {showPassword ? <EyeIcon /> : <EyeOffIcon />}
+                  </button>
+                </div>
+                <div className="flex justify-end gap-4">
+                  <Link
+                    to="/forgot-password"
+                    className="relative text-sm font-medium text-blue-500 after:absolute after:-bottom-0.5 after:left-0 after:h-[1px] after:w-0 after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+                {errors?.password && (
+                  <p className="flex items-center text-sm font-medium leading-5 text-red-500">
+                    {errors.password}
+                  </p>
+                )}
+              </div>
+              <button className="flex h-9 w-full items-center justify-center rounded-full border-2 border-gray-200/50 bg-gradient-to-tl from-[#00fff0] to-[#0083fe] px-4 py-2 text-sm font-medium shadow transition hover:border-gray-500 disabled:pointer-events-none disabled:opacity-50 dark:border-white/50 dark:from-[#8e0e00] dark:to-[#1f1c18] dark:hover:border-white">
+                {isSubmitting ? (
+                  <>
+                    <LoaderIcon className="mr-2 h-4 w-4 animate-spin" />
+                    Signing up
+                  </>
+                ) : (
+                  "Sign up"
+                )}
+              </button>
+            </fieldset>
+            {errors?.result && (
+              <output className="mt-6 block text-center text-sm font-medium leading-5 text-red-500">
+                {errors.result}
+              </output>
+            )}
+          </Form>
+        </main>
+      </div>
+    </div>
+  );
+}
+```
+
+In the `action` function, form data is retrieved from the `request`, and the name, email, and password fields are
+extracted. These values are validated by passing them to `validateForm`; if validation succeeds, they are sent to
+`createUser`. On success, the user is redirected to the `/signin` route. If there are any errors, they are returned from
+`action`, accessed using `useActionData`, and displayed in the UI.
+
+Once this is done, you can sign up and refresh your MongoDB database—either through the MongoDB Compass GUI or directly
+on mongodb.com—to view your new user document.
+
+## Implementing sign in
+
+The `/signin` route displays a form for email and password. On submission, the form data is sent to the route's
+`action`, validated, and, if valid, used to authenticate the user. On successful authentication, the user's ID is stored
+in the session as `_id`. The user is then redirected to the home page, with the session stored in the database and the
+user's ID saved in a cookie as the session ID. If validation fails or an error occurs during authentication, an error
+message is returned and displayed in the UI.
+
+First, create the `app/routes/signin.tsx` file by running:
+
+```bash
+touch app/routes/signin.tsx
+```
+
+Then, copy the following code into `app/routes/signin.tsx`:
+
+```tsx title="app/routes/signin.tsx"
+import { MetaFunction } from "@remix-run/node";
+import { Form, Link, useNavigation } from "@remix-run/react";
+import { useState } from "react";
+
+import EyeIcon from "~/components/icons/EyeIcon";
+import EyeOffIcon from "~/components/icons/EyeOffIcon";
+import LoaderIcon from "~/components/icons/LoaderIcon";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Sign In | Todo App" },
+    {
+      name: "description",
+      content: "Access your account to manage your tasks.",
+    },
+  ];
+};
+
+export default function Signin() {
+  const [showPassword, setShowPassword] = useState(false);
+  const navigation = useNavigation();
+
+  const isSubmitting = navigation.formAction === "/signin";
+
+  return (
+    <div className="flex flex-1 items-center justify-center p-6 md:mx-auto md:w-[720px] lg:p-20">
+      <div className="w-full flex-col space-y-4 rounded-3xl border border-gray-200 bg-white/90 p-8 dark:border-gray-700 dark:bg-gray-900">
+        <header>
+          <h1 className="text-xl font-extrabold tracking-tight md:text-2xl">
+            Sign in
+          </h1>
+        </header>
+        <main>
+          <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+            Don&apos;t have an account?{" "}
+            <Link
+              to="/signup"
+              className="relative text-sm font-medium text-blue-500 after:absolute after:-bottom-0.5 after:left-0 after:h-[1px] after:w-0 after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
+            >
+              Sign up
+            </Link>
+          </p>
+          <Form method="post">
+            <fieldset disabled={isSubmitting} className="mt-6 space-y-6">
+              <div className="space-y-2">
+                <label
+                  htmlFor="email"
+                  className="text-sm font-medium leading-none"
+                >
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email address"
+                  autoComplete="email"
+                  inputMode="email"
+                  required
+                  className="flex h-9 w-full rounded-3xl border border-gray-200 bg-transparent px-3 py-2 text-sm shadow-sm disabled:pointer-events-none disabled:opacity-25 dark:border-white/50"
+                />
+              </div>
+              <div className="space-y-2">
+                <label
+                  htmlFor="password"
+                  className="text-sm font-medium leading-none"
+                >
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Enter your password"
+                    autoComplete="current-password"
+                    required
+                    minLength={8}
+                    className="flex h-9 w-full rounded-3xl border border-gray-200 bg-transparent px-3 py-2 text-sm shadow-sm disabled:pointer-events-none disabled:opacity-25 dark:border-white/50"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-2 top-[5px] text-gray-200 transition-colors hover:text-black/50 disabled:opacity-50 dark:text-white/50 dark:hover:text-white"
+                    onClick={() =>
+                      setShowPassword((prevPassword) => !prevPassword)
+                    }
+                  >
+                    {showPassword ? <EyeIcon /> : <EyeOffIcon />}
+                  </button>
+                </div>
+                <div className="flex justify-end gap-4">
+                  <Link
+                    to="/forgot-password"
+                    className="relative text-sm font-medium text-blue-500 after:absolute after:-bottom-0.5 after:left-0 after:h-[1px] after:w-0 after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+              </div>
+              <button
+                disabled={isSubmitting}
+                className="flex h-9 w-full items-center justify-center rounded-full border-2 border-gray-200/50 bg-gradient-to-tl from-[#00fff0] to-[#0083fe] px-4 py-2 text-sm font-medium shadow transition hover:border-gray-500 disabled:pointer-events-none disabled:opacity-50 dark:border-white/50 dark:from-[#8e0e00] dark:to-[#1f1c18] dark:hover:border-white"
+              >
+                {isSubmitting ? (
+                  <>
+                    <LoaderIcon className="mr-2 h-4 w-4 animate-spin" />
+                    Signing in
+                  </>
+                ) : (
+                  "Sign in"
+                )}
+              </button>
+            </fieldset>
+          </Form>
+        </main>
+      </div>
+    </div>
+  );
+}
+```
+
+With the route setup complete, the next step is to define the functions for user authentication and storing the session
+in the database.
+
+Update `app/lib/db.server.ts` with the function for authenticating a user:
+
+```tsx title="app/lib/db.server.ts" {18-45,49}
+import crypto from "crypto";
+import type { Item, Todo, User } from "~/types";
+
+import mongodb from "~/lib/mongodb.server";
+
+if (!process.env.MONGODB_DBNAME) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_DBNAME"');
+}
+if (!process.env.MONGODB_COLL_USERS) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_COLL_USERS"');
+}
+
+const dbName = process.env.MONGODB_DBNAME;
+const collUsers = process.env.MONGODB_COLL_USERS;
+
+// ...existing code here remains the same
+
+async function authenticateUser(email: string, password: string) {
+  try {
+    const client = await mongodb();
+    const collection = client.db(dbName).collection<User>(collUsers);
+
+    const user = await collection.findOne({ email });
+
+    // If the user is not found, return a generic error message.
+    // This prevents revealing whether the email or password is incorrect.
+    if (!user) {
+      return { error: "Incorrect email or password.", data: null };
+    }
+
+    const hash = crypto
+      .pbkdf2Sync(password, user.password.salt, 100000, 64, "sha512")
+      .toString("hex");
+
+    // If the hashed password does not match, return a generic error message.
+    // This also prevents revealing whether the email or password is incorrect.
+    if (hash !== user.password.hash) {
+      return { error: "Incorrect email or password.", data: null };
+    }
+
+    return { error: null, data: user._id.toString() };
+  } catch (error) {
+    return { error: "An unexpected error occured.", data: null };
+  }
+}
+
+// ...existing code here remains the same
+
+export { createUser, authenticateUser };
+```
+
+The `authenticateUser` function connects to the MongoDB client and accesses the users' collection. It searches for a
+document with the provided email. If not found, it returns an object with an `error` message and `data` as `null`. If
+the email exists, it hashes the provided password and compares it with the stored hash. If they don't match, the
+function returns an `error` message and `data` as `null`. If the passwords match, it returns an object with `error` as
+`null` and `data` containing the user's ID.
+
+To define the function for storing sessions in the database, we need the `createSessionStorage` utility from Remix, as
+well as environment variables for the sessions' collection and the secrets used for signing the session cookie.
+
+Add the following variables to your `.env` file, replacing the placeholders with your sessions collection and session
+secrets. Use `openssl` to generate a secure secret:
+
+```bash
+openssl rand -base64 32
+```
+
+```env title=".env" {4,6-8}
+MONGODB_URI=<connection_string>
+MONGODB_DBNAME=<db_name>
+MONGODB_COLL_USERS=<users_collection_name>
+MONGODB_COLL_SESSIONS=<sessions_collection_name>
+
+SESSION_SECRET_CURRENT=<session_secret_current>
+SESSION_SECRET_PREVIOUS=<session_secret_previous>
+SESSION_SECRET_OLD=<session_secret_old>
+```
+
+Create the `app/sessions.server.ts` file:
+
+```bash
+touch app/sessions.server.ts
+```
+
+Now, copy the following code into `app/sessions.server.ts` to define the function for storing a session in the database:
+
+```ts title="app/sessions.server.ts"
+import { Cookie, createCookie, createSessionStorage } from "@remix-run/node";
+import { ObjectId } from "mongodb";
+
+import mongodb from "~/lib/mongodb.server";
+
+if (!process.env.MONGODB_DBNAME) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_DBNAME"');
+}
+if (!process.env.MONGODB_COLL_SESSIONS) {
+  throw new Error(
+    'Invalid/Missing environment variable: "MONGODB_COLL_SESSIONS"',
+  );
+}
+if (
+  !process.env.SESSION_SECRET_CURRENT ||
+  !process.env.SESSION_SECRET_PREVIOUS ||
+  !process.env.SESSION_SECRET_OLD
+) {
+  throw new Error(
+    'Invalid/Missing environment variables for session cookie signing: "SESSION_SECRET_CURRENT", "SESSION_SECRET_PREVIOUS", "SESSION_SECRET_OLD".',
+  );
+}
+
+interface SessionData {
+  _id: string;
+}
+
+interface MongoDBSessionStorage {
+  cookie: Cookie;
+  options: {
+    db: string | undefined;
+    coll: string;
+  };
+}
+
+const dbName = process.env.MONGODB_DBNAME;
+const collName = process.env.MONGODB_COLL_SESSIONS;
+const secrets = [
+  process.env.SESSION_SECRET_CURRENT,
+  process.env.SESSION_SECRET_PREVIOUS,
+  process.env.SESSION_SECRET_OLD,
+];
+const cookie = createCookie("__session", {
+  httpOnly: true,
+  // The `expires` argument to `createData` and `updateData` is the same
+  // `Date` at which the cookie itself expires and is no longer valid.
+  maxAge: 60 * 60 * 24 * 30, // 30 days
+  sameSite: "lax",
+  secrets,
+  secure: process.env.NODE_ENV === "production",
+});
+
+async function createMongoDBSessionStorage({
+  cookie,
+  options,
+}: MongoDBSessionStorage) {
+  // Configure your database client.
+  const client = await mongodb();
+  const collection = client.db(options.db).collection(options.coll);
+
+  // Create an index to auto-purge documents from the database when the `expireAt` date is reached.
+  await collection.createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 });
+
+  return createSessionStorage<SessionData>({
+    cookie,
+    async createData(data, expires) {
+      let _id: ObjectId | null = null;
+      const { _id: _, ...dataWithoutId } = data; // eslint-disable-line -- `_` is unused by design
+
+      if (data._id) {
+        _id = new ObjectId(data._id);
+
+        // Update an existing document or insert a new one with the specified `_id`.
+        await collection.findOneAndUpdate(
+          { _id: new ObjectId(_id) },
+          { $set: { ...dataWithoutId, expireAt: expires } },
+          { upsert: true },
+        );
+      } else {
+        // Insert a new document without an `_id`, allowing MongoDB to generate one automatically.
+        const { insertedId } = await collection.insertOne({
+          ...dataWithoutId,
+          expireAt: expires,
+        });
+
+        _id = insertedId;
+      }
+
+      return _id.toString();
+    },
+    async readData(id) {
+      const session = await collection.findOne({ _id: new ObjectId(id) });
+      return session ? { _id: session._id.toString() } : null;
+    },
+    async updateData(id, data, expires) {
+      const { _id: _, ...dataWithoutId } = data; // eslint-disable-line -- `_` is unused by design
+
+      if (!data._id || data._id === id) {
+        // Partially update the document without changing the `_id`.
+        await collection.updateOne(
+          { _id: new ObjectId(id) },
+          { $set: { ...dataWithoutId, expireAt: expires } },
+          { upsert: true },
+        );
+
+        return;
+      }
+
+      // Remove the existing document by its original `_id`
+      // and insert a new document with the desired `_id`.
+      await collection.deleteOne({ _id: new ObjectId(id) });
+      await collection.insertOne({
+        ...data,
+        _id: new ObjectId(data._id),
+        expireAt: expires,
+      });
+    },
+    async deleteData(id) {
+      await collection.deleteOne({ _id: new ObjectId(id) });
+    },
+  });
+}
+
+const { getSession, commitSession, destroySession } =
+  await createMongoDBSessionStorage({
+    cookie,
+    options: {
+      db: dbName,
+      coll: collName,
+    },
+  });
+
+export { getSession, commitSession, destroySession };
+```
+
+Remix comes with several pre-built [session storage options](https://remix.run/docs/en/main/utils/sessions#sessions). We
+can use the `createSessionStorage` option to store the session in our database. It requires a cookie for persisting the
+session ID, and a set of CRUD (Create, Read, Update, Delete) methods for managing the session data in the database. The
+CRUD methods will be called this way:
+
+- `createData` is called from `commitSession` on the initial session creation when no session ID exists in the cookie.
+  It inserts a session document and returns the session ID.
+- `readData` is called from `getSession` when a session ID exists in the cookie, and returns the session data.
+- `updateData` is called from `commitSession` when a session ID already exists in the cookie. It updates (or upserts)
+  session data.
+- `deleteData` is called from `destroySession` to remove a session from the database.
+
+The final step is to handle the form submission in the route's `action`. Update the `/signin` route with the following
+code changes:
+
+```tsx title="app/routes/signin.tsx" {1-2,4,10-11,23-45,48,53,92-96,134-138,154-158}
+import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
+import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
+import { useState } from "react";
+import { commitSession, getSession } from "~/sessions.server";
+
+import EyeIcon from "~/components/icons/EyeIcon";
+import EyeOffIcon from "~/components/icons/EyeOffIcon";
+import LoaderIcon from "~/components/icons/LoaderIcon";
+
+import { authenticateUser } from "~/lib/db.server";
+import { validateForm } from "~/lib/utils";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Sign In | Todo App" },
+    {
+      name: "description",
+      content: "Access your account to manage your tasks.",
+    },
+  ];
+};
+
+export async function action({ request }: ActionFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const formData = await request.formData();
+
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+
+  const formError = validateForm({ email, password });
+  if (formError) {
+    return { errors: formError };
+  }
+
+  const { error, data: id } = await authenticateUser(email, password);
+  if (error) {
+    return { errors: { result: error } };
+  }
+
+  // Login succeeded, send them to the home page.
+  session.set("_id", id as string);
+  return redirect("/", {
+    headers: { "Set-Cookie": await commitSession(session) },
+  });
+}
+
+export default function Signin() {
+  const actionData = useActionData<typeof action>();
+  const [showPassword, setShowPassword] = useState(false);
+  const navigation = useNavigation();
+
+  const isSubmitting = navigation.formAction === "/signin";
+  const errors = isSubmitting ? {} : actionData?.errors;
+
+  return (
+    <div className="flex flex-1 items-center justify-center p-6 md:mx-auto md:w-[720px] lg:p-20">
+      <div className="w-full flex-col space-y-4 rounded-3xl border border-gray-200 bg-white/90 p-8 dark:border-gray-700 dark:bg-gray-900">
+        <header>
+          <h1 className="text-xl font-extrabold tracking-tight md:text-2xl">
+            Sign in
+          </h1>
+        </header>
+        <main>
+          <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+            Don&apos;t have an account?{" "}
+            <Link
+              to="/signup"
+              className="relative text-sm font-medium text-blue-500 after:absolute after:-bottom-0.5 after:left-0 after:h-[1px] after:w-0 after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
+            >
+              Sign up
+            </Link>
+          </p>
+          <Form method="post">
+            <fieldset disabled={isSubmitting} className="mt-6 space-y-6">
+              <div className="space-y-2">
+                <label
+                  htmlFor="email"
+                  className="text-sm font-medium leading-none"
+                >
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email address"
+                  autoComplete="email"
+                  inputMode="email"
+                  required
+                  className="flex h-9 w-full rounded-3xl border border-gray-200 bg-transparent px-3 py-2 text-sm shadow-sm disabled:pointer-events-none disabled:opacity-25 dark:border-white/50"
+                />
+                {errors?.email && (
+                  <p className="flex items-center text-sm font-medium leading-5 text-red-500">
+                    {errors.email}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <label
+                  htmlFor="password"
+                  className="text-sm font-medium leading-none"
+                >
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Enter your password"
+                    autoComplete="current-password"
+                    required
+                    minLength={8}
+                    className="flex h-9 w-full rounded-3xl border border-gray-200 bg-transparent px-3 py-2 text-sm shadow-sm disabled:pointer-events-none disabled:opacity-25 dark:border-white/50"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-2 top-[5px] text-gray-200 transition-colors hover:text-black/50 disabled:opacity-50 dark:text-white/50 dark:hover:text-white"
+                    onClick={() =>
+                      setShowPassword((prevPassword) => !prevPassword)
+                    }
+                  >
+                    {showPassword ? <EyeIcon /> : <EyeOffIcon />}
+                  </button>
+                </div>
+                <div className="flex justify-end gap-4">
+                  <Link
+                    to="/forgot-password"
+                    className="relative text-sm font-medium text-blue-500 after:absolute after:-bottom-0.5 after:left-0 after:h-[1px] after:w-0 after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+                {errors?.password && (
+                  <p className="flex items-center text-sm font-medium leading-5 text-red-500">
+                    {errors.password}
+                  </p>
+                )}
+              </div>
+              <button
+                disabled={isSubmitting}
+                className="flex h-9 w-full items-center justify-center rounded-full border-2 border-gray-200/50 bg-gradient-to-tl from-[#00fff0] to-[#0083fe] px-4 py-2 text-sm font-medium shadow transition hover:border-gray-500 disabled:pointer-events-none disabled:opacity-50 dark:border-white/50 dark:from-[#8e0e00] dark:to-[#1f1c18] dark:hover:border-white"
+              >
+                {isSubmitting ? (
+                  <>
+                    <LoaderIcon className="mr-2 h-4 w-4 animate-spin" />
+                    Signing in
+                  </>
+                ) : (
+                  "Sign in"
+                )}
+              </button>
+            </fieldset>
+            {errors?.result && (
+              <output className="mt-6 block text-center text-sm font-medium leading-5 text-red-500">
+                {errors.result}
+              </output>
+            )}
+          </Form>
+        </main>
+      </div>
+    </div>
+  );
+}
+```
+
+In the `action` function, form data is retrieved from the request, and the email and password fields are extracted.
+These values are validated by passing them to `validateForm`; if validation succeeds, they are sent to
+`authenticateUser`. On success, the user's ID is set in the session, the session is saved to the database, and the user
+is redirected to the `/` route, with the user's ID stored in a cookie. If there are any errors, they are returned from
+`action`, accessed using `useActionData` and displayed in the UI.
+
+Once implemented, you can sign in and refresh your MongoDB database to view your new user session.
+
+## Implementing routes protection and sign out
+
+With the sign in and sign out flows complete, the next step is to protect routes to prevent access by unauthenticated
+users. We'll also implement sign out functionality so that signed in users can log out of the app.
+
+We'll start by creating a `ProfileMenu` component for the header of the app, which will display the signed in user's
+name, email, and a button to log out.
+
+First, create the file for the icon used in the component:
+
+```bash
+touch app/components/icons/LogOutIcon.tsx
+```
+
+Then, paste the code for the icon into its file:
+
+```tsx title="app/components/icon/LogOutIcon.tsx"
+export default function LogOutIcon({ ...props }: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+      <polyline points="16 17 21 12 16 7" />
+      <line x1="21" x2="9" y1="12" y2="12" />
+    </svg>
+  );
+}
+```
+
+Next, create the `ProfileMenu` component file:
+
+```bash
+touch app/components/ProfileMenu.tsx
+```
+
+Paste the following code into `app/components/ProfileMenu.tsx`:
+
+```tsx title="app/components/ProfileMenu.tsx"
+import { Form, useRouteLoaderData } from "@remix-run/react";
+import { useRef } from "react";
+
+import LogOutIcon from "~/components/icons/LogOutIcon";
+
+import type { loader as indexLoader } from "~/routes/_index";
+
+export default function ProfileMenu() {
+  const indexLoaderData =
+    useRouteLoaderData<typeof indexLoader>("routes/_index");
+  const detailsRef = useRef<HTMLDetailsElement>(null);
+
+  const name = indexLoaderData?.name as string;
+  const email = indexLoaderData?.email as string;
+
+  return (
+    <details ref={detailsRef} className="group relative cursor-pointer">
+      <summary
+        role="button"
+        aria-haspopup="menu"
+        aria-label="Open profile menu"
+        tabIndex={0}
+        className="flex items-center justify-center rounded-full border border-gray-200 bg-gray-50 px-4 py-2 transition hover:border-gray-500 group-open:before:fixed group-open:before:inset-0 group-open:before:cursor-auto dark:border-gray-700 dark:bg-gray-900 [&::-webkit-details-marker]:hidden"
+      >
+        {name[0].toUpperCase()}
+      </summary>
+
+      <div
+        role="menu"
+        aria-roledescription="Profile menu"
+        className="absolute right-0 top-full z-50 mt-2 min-w-max overflow-hidden rounded-3xl border border-gray-200 bg-gray-50 py-1 text-sm font-semibold shadow-lg ring-1 ring-slate-900/10 dark:border-gray-700 dark:bg-gray-900 dark:ring-0"
+      >
+        <div
+          role="presentation"
+          className="cursor-default border-b border-gray-200 px-4 py-2 dark:border-gray-700"
+        >
+          <p>{name}</p>
+          <p className="text-gray-600 dark:text-gray-400">{email}</p>
+        </div>
+        <Form
+          role="presentation"
+          preventScrollReset
+          replace
+          action="/_actions/signout"
+          method="post"
+          onSubmit={() => {
+            detailsRef.current?.removeAttribute("open");
+          }}
+        >
+          <button
+            role="menuitem"
+            className="flex w-full items-center px-4 py-2 transition hover:bg-gray-200 dark:hover:bg-gray-700"
+          >
+            <LogOutIcon className="mr-2 h-5 w-5 text-gray-600 dark:text-gray-400" />
+            Sign out
+          </button>
+        </Form>
+      </div>
+    </details>
+  );
+}
+```
+
+The `ProfileMenu` displays the user's initials and provides a dropdown menu with their name, email, and a button to sign
+out. Clicking the sign out button sends a `POST` request to the `/_actions/signout` route.
+
+Create the `/_actions/signout` route to handle the `POST` request:
+
+```bash
+touch app/routes/\[\_\]actions.signout.tsx
+```
+
+Copy the following code into `app/routes/[_]actions.signout.tsx`:
+
+```tsx title="app/routes/[_]actions.signout.tsx"
+import { ActionFunctionArgs, redirect } from "@remix-run/node";
+import { destroySession, getSession } from "~/sessions.server";
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const session = await getSession(request.headers.get("Cookie"));
+
+  return redirect("/signin", {
+    headers: {
+      "Set-Cookie": await destroySession(session),
+    },
+  });
+};
+```
+
+The `action` retrieves the cookie from the `request`, and passes it to `getSession` which retrieves the session data.
+The session data is then passed to `destroySession` which removes the session from the database and clears the session
+ID from the cookie. Finally, the user is redirected to the `/signin` route.
+
+With the preliminary setup complete, let's secure the index route, which is the only protected route in this app. To
+protect a route, you need to validate the session to ensure a valid session ID is present. In the route's `loader`,
+retrieve the session cookie from the request and pass it to `getSession` to get the session data from the database.
+Check the session data for the necessary information—if absent, redirect to `/signin`; otherwise, proceed with handling
+the request.
+
+To handle the request, we need a function that fetches user data from the database using the session ID stored in the
+cookie. Then, from the fetched user's data, we'll extract the user's ID, name, email (for the `ProfileMenu` component),
+and tasks to display in the app. Before securing the route, let's define this function.
+
+Update `app/lib/db.server.ts` with the following code:
+
+```tsx title="app/lib/db.server.ts" {2,21-35,39}
+import crypto from "crypto";
+import { ObjectId } from "mongodb";
+import type { Item, Todo, User } from "~/types";
+
+import mongodb from "~/lib/mongodb.server";
+
+if (!process.env.MONGODB_DBNAME) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_DBNAME"');
+}
+if (!process.env.MONGODB_COLL_USERS) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_COLL_USERS"');
+}
+
+const dbName = process.env.MONGODB_DBNAME;
+const collUsers = process.env.MONGODB_COLL_USERS;
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+async function getUser(id: string) {
+  try {
+    const client = await mongodb();
+    const collection = client.db(dbName).collection<User>(collUsers);
+
+    const user = await collection.findOne({ _id: new ObjectId(id) });
+    if (!user) {
+      return { error: "User not found.", data: null };
+    }
+
+    return { error: null, data: user };
+  } catch (error) {
+    return { error: "An unexpected error occured.", data: null };
+  }
+}
+
+// ...existing code here remains the same
+
+export { createUser, authenticateUser, getUser };
+```
+
+The `getUser` function connects to the MongoDB client and accesses the users' collection. It searches for a document
+with the provided ID. If no user is found, it returns an object with an `error` message and `data` set to `null`. If a
+user is found, it returns an object with `error` as `null` and `data` containing the user's data.
+
+Now, update `app/routes/_index.tsx` to protect the index route:
+
+```tsx title="app/routes/_index.tsx" {1-5,24} {28-30,85}#remove {10,16,19,31-56,86-89}#add
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
+import {
+  Form,
+  Link,
+  json,
+  redirect,
+  useFetcher,
+  useLoaderData,
+  useSearchParams,
+} from "@remix-run/react";
+import { useEffect, useRef } from "react";
+import { getSession } from "~/sessions.server";
+import type { Item, View } from "~/types";
+
+import ProfileMenu from "~/components/ProfileMenu";
+import ThemeSwitcher from "~/components/ThemeSwitcher";
+import TodoActions from "~/components/TodoActions";
+import TodoList from "~/components/TodoList";
+
+import { getUser, todos } from "~/lib/db.server";
+
+// ...existing code here remains the same
+
+export async function loader() {
+  return json({ tasks: await todos.read() });
+}
+export async function loader({ request }: LoaderFunctionArgs) {
+  // Validate the session to ensure a valid session ID is present.
+  const session = await getSession(request.headers.get("Cookie"));
+  if (!session.has("_id")) {
+    throw redirect("/signin", {
+      // Clear the cookie to handle cases where the session ID remains in the cookie
+      // but is no longer valid in the database. Without this, `commitSession` will
+      // continue calling `updateData` instead of `createData`, which updates the
+      // database but doesn't set a new session ID in the cookie. Clearing the cookie
+      // ensures `createData` runs on the next sign-in, creating a new session ID.
+      headers: { "Set-Cookie": "__session=; Max-Age=0" },
+    });
+  }
+
+  const { error, data: user } = await getUser(session.get("_id") as string);
+  if (error || !user) {
+    throw redirect("/signin");
+  }
+
+  return json({
+    id: user._id.toString(),
+    name: user.name,
+    email: user.email,
+    tasks: user.tasks,
+  });
+}
+
+// ...existing code here remains the same
+
+export default function Home() {
+  const { tasks } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher();
+  const [searchParams] = useSearchParams();
+  const view = searchParams.get("view") || "all";
+  const addFormRef = useRef<HTMLFormElement>(null);
+  const addInputRef = useRef<HTMLInputElement>(null);
+
+  const isAdding =
+    fetcher.state === "submitting" &&
+    fetcher.formData?.get("intent") === "create task";
+
+  useEffect(() => {
+    if (!isAdding) {
+      addFormRef.current?.reset();
+      addInputRef.current?.focus();
+    }
+  }, [isAdding]);
+
+  return (
+    <div className="flex flex-1 flex-col md:mx-auto md:w-[720px]">
+      <header className="mb-12 flex items-center justify-between">
+        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
+          TODO
+        </h1>
+        <ThemeSwitcher />
+        <div className="flex items-center justify-center gap-2">
+          <ThemeSwitcher />
+          <ProfileMenu />
+        </div>
+      </header>
+
+      {/* ...existing code here remains the same */}
+
+      {/* ...existing code here remains the same */}
+    </div>
+  );
+}
+```
+
+Refresh the app after making these changes. If you were previously signed in, sign out using the profile menu. Try
+accessing the `/` route—you should be redirected to `/signin` if not authenticated. To regain access, fill out the sign
+in form and submit. The index route is now protected from unauthenticated users.
+
+## Implementing forgot and reset password
+
+With the sign up, sign in, and sign out flows complete, the next step is to add forgot and reset password functionality.
+This allows users to reset their password if they forget it. Typically, users submit their email and are informed that a
+reset link will be sent if the email is valid. If an associated account exists, they receive the reset link; otherwise,
+no action is taken. This prevents potential attackers from discovering valid email accounts.
+
+For simplicity, our implementation will differ slightly. If the email has no associated account, users will be notified
+that a reset link will be sent. If an account exists, they will be redirected to the reset password page to change their
+password.
+
+First, create the `/forgot-password` route by running:
+
+```bash
+touch app/routes/forgot-password.tsx
+```
+
+Copy the following code into `app/routes/forgot-password.tsx`:
+
+```tsx title="app/routes/forgot-password.tsx"
+import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
+import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
+
+import LoaderIcon from "~/components/icons/LoaderIcon";
+
+import { initiatePasswordReset } from "~/lib/db.server";
+import { validateForm } from "~/lib/utils";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Forgot Password | Todo App" },
+    {
+      name: "description",
+      content: "Recover your password to regain access to your account.",
+    },
+  ];
+};
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+
+  const email = formData.get("email") as string;
+
+  const formError = validateForm({ email });
+  if (formError) {
+    return { errors: formError };
+  }
+
+  const { error, data: token } = await initiatePasswordReset(email);
+  if (error) {
+    return { errors: { result: error } };
+  }
+
+  return redirect(`/reset-password?token=${token}`);
+}
+
+export default function ForgotPassword() {
+  const actionData = useActionData<typeof action>();
+  const navigation = useNavigation();
+
+  const isSubmitting = navigation.formAction === "/forgot-password";
+  const errors = isSubmitting ? {} : actionData?.errors;
+
+  return (
+    <div className="flex flex-1 items-center justify-center p-6 md:mx-auto md:w-[720px] lg:p-20">
+      <div className="w-full flex-col space-y-4 rounded-3xl border border-gray-200 bg-white/90 p-8 dark:border-gray-700 dark:bg-gray-900">
+        <header>
+          <h1 className="text-xl font-extrabold tracking-tight md:text-2xl">
+            Password recovery
+          </h1>
+        </header>
+        <main>
+          <Form method="post">
+            <fieldset disabled={isSubmitting} className="mt-6 space-y-6">
+              <div className="space-y-2">
+                <label
+                  htmlFor="email"
+                  className="text-sm font-medium leading-none"
+                >
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email address"
+                  autoComplete="email"
+                  inputMode="email"
+                  required
+                  className="flex h-9 w-full rounded-3xl border border-gray-200 bg-transparent px-3 py-2 text-sm shadow-sm disabled:pointer-events-none disabled:opacity-25 dark:border-white/50"
+                />
+                {errors?.email && (
+                  <p className="flex items-center text-sm font-medium leading-5 text-red-500">
+                    {errors.email}
+                  </p>
+                )}
+              </div>
+              <button
+                disabled={isSubmitting}
+                className="flex h-9 w-full items-center justify-center rounded-full border-2 border-gray-200/50 bg-gradient-to-tl from-[#00fff0] to-[#0083fe] px-4 py-2 text-sm font-medium shadow transition hover:border-gray-500 disabled:pointer-events-none disabled:opacity-50 dark:border-white/50 dark:from-[#8e0e00] dark:to-[#1f1c18] dark:hover:border-white"
+              >
+                {isSubmitting ? (
+                  <>
+                    <LoaderIcon className="mr-2 h-4 w-4 animate-spin" />
+                    Recovering
+                  </>
+                ) : (
+                  "Recover"
+                )}
+              </button>
+            </fieldset>
+            {errors?.result && (
+              <output className="mt-6 block text-center text-sm font-medium leading-5">
+                {errors.result}
+              </output>
+            )}
+          </Form>
+          <div className="text-muted-foreground mt-8 flex h-5 items-center justify-center space-x-6 text-sm">
+            <Link
+              to="/signin"
+              className="relative text-sm font-medium text-blue-500 after:absolute after:-bottom-0.5 after:left-0 after:h-[1px] after:w-0 after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
+            >
+              Sign in
+            </Link>
+            <div className="h-full w-[1px] border border-gray-200 dark:border-gray-700" />
+            <Link
+              to="/signup"
+              className="relative text-sm font-medium text-blue-500 after:absolute after:-bottom-0.5 after:left-0 after:h-[1px] after:w-0 after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
+            >
+              Sign up
+            </Link>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}
+```
+
+The `/forgot-password` route displays a form for email input. On submission, the `action` function validates the email
+using `validateForm`. If valid, it calls `initiatePasswordReset`, which connects to the MongoDB client and checks for an
+associated account. If one is found, a token is generated, and the user's document is updated with `forgotPasswordToken`
+and `forgotPasswordTokenExpireAt`. The function returns the token, and the user is redirected to `/reset-password` with
+the token as a query parameter.
+
+Next, update `app/lib/db.server.ts` to define the `initiatePasswordReset` function:
+
+```tsx title="app/lib/db.server.ts" {23-54,58}
+import crypto from "crypto";
+import { ObjectId } from "mongodb";
+import type { Item, Todo, User } from "~/types";
+
+import mongodb from "~/lib/mongodb.server";
+
+if (!process.env.MONGODB_DBNAME) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_DBNAME"');
+}
+if (!process.env.MONGODB_COLL_USERS) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_COLL_USERS"');
+}
+
+const dbName = process.env.MONGODB_DBNAME;
+const collUsers = process.env.MONGODB_COLL_USERS;
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+async function initiatePasswordReset(email: string) {
+  try {
+    const client = await mongodb();
+    const collection = client.db(dbName).collection<User>(collUsers);
+
+    const user = await collection.findOne({ email });
+    // If the user is not found, return a generic error message.
+    // This prevents revealing whether an account associated with the email exists.
+    if (!user) {
+      return {
+        error:
+          "If an account exists for this email, a password reset link will be sent.",
+        data: null,
+      };
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+    await collection.updateOne(
+      { email },
+      {
+        $set: {
+          forgotPasswordToken: token,
+          forgotPasswordTokenExpireAt: Date.now() + 1000 * 60 * 60, // 1 hr
+        },
+      }
+    );
+
+    return { error: null, data: token };
+  } catch (error) {
+    return { error: "An unexpected error occured.", data: null };
+  }
+}
+
+// ...existing code here remains the same
+
+export { createUser, authenticateUser, getUser, initiatePasswordReset };
+```
+
+Navigate to the `/forgot-password` route, enter an email, and submit. If the email has an associated account, you should
+be redirected to `/reset-password`. If not, a message will be displayed in the UI.
+
+The final step is to create and set up the `/reset-password` route and implement the password reset functionality. This
+route displays a form for entering a new password and confirming it, along with a hidden input for the token. The
+token's value is retrieved from the URL's search parameters or defaults to an empty string if absent. On submission, the
+form data is sent to the route's `action`.
+
+The `action` retrieves the form data, extracts the token, new password, and confirmation fields, and validates them
+using `validateForm`. If valid, it passes the token and new password to `updatePassword`, which connects to the MongoDB
+client and searches for a document with a matching `forgotPasswordToken` in the users' collection. If not found or
+expired, it returns an object with an `error` message and `data` as `null`. If valid, it generates a new password hash,
+updates the user document, and returns an object with `null` for `error` and the user's ID in `data`. The user is then
+redirected to `/signin`.
+
+Update `app/lib/db.server.ts` to define `updatePassword`:
+
+```tsx title="app/lib/db.server.ts" {25-60,64-70}
+import crypto from "crypto";
+import { ObjectId } from "mongodb";
+import type { Item, Todo, User } from "~/types";
+
+import mongodb from "~/lib/mongodb.server";
+
+if (!process.env.MONGODB_DBNAME) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_DBNAME"');
+}
+if (!process.env.MONGODB_COLL_USERS) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_COLL_USERS"');
+}
+
+const dbName = process.env.MONGODB_DBNAME;
+const collUsers = process.env.MONGODB_COLL_USERS;
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+async function updatePassword(token: string, password: string) {
+  try {
+    const client = await mongodb();
+    const collection = client.db(dbName).collection<User>(collUsers);
+
+    const user = await collection.findOne({ forgotPasswordToken: token });
+    if (!user) {
+      return { error: "Token is not valid.", data: null };
+    }
+    if (Date.now() > (user.forgotPasswordTokenExpireAt ?? 0)) {
+      return { error: "Token has expired.", data: null };
+    }
+
+    const salt = crypto.randomBytes(16).toString("hex");
+    const hash = crypto
+      .pbkdf2Sync(password, salt, 100000, 64, "sha512")
+      .toString("hex");
+
+    await collection.updateOne(
+      { _id: user._id },
+      {
+        $set: {
+          password: { salt, hash },
+        },
+        $unset: {
+          forgotPasswordToken: "",
+          forgotPasswordTokenExpiryDate: "",
+        },
+      }
+    );
+
+    return { error: null, data: user._id.toString() };
+  } catch (error) {
+    return { error: "An unexpected error occured.", data: null };
+  }
+}
+
+// ...existing code here remains the same
+
+export {
+  createUser,
+  authenticateUser,
+  getUser,
+  initiatePasswordReset,
+  updatePassword,
+};
+```
+
+Create the `/reset-password` route:
+
+```bash
+touch app/routes/reset-password.tsx
+```
+
+Copy the following into `app/routes/reset-password.tsx`:
+
+```tsx title="app/routes/reset-password.tsx"
+import { ActionFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
+import {
+  Form,
+  Link,
+  useActionData,
+  useNavigation,
+  useSearchParams,
+} from "@remix-run/react";
+import { useState } from "react";
+
+import EyeIcon from "~/components/icons/EyeIcon";
+import EyeOffIcon from "~/components/icons/EyeOffIcon";
+import LoaderIcon from "~/components/icons/LoaderIcon";
+
+import { updatePassword } from "~/lib/db.server";
+import { validateForm } from "~/lib/utils";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Reset Password | Todo App" },
+    {
+      name: "description",
+      content: "Set a new password to secure your account.",
+    },
+  ];
+};
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+
+  const token = formData.get("token") as string;
+  const newPassword = formData.get("new-password") as string;
+  const confirmPassword = formData.get("confirm-password") as string;
+
+  const formError = validateForm({ newPassword, confirmPassword });
+  if (formError) {
+    return { errors: formError };
+  }
+
+  const { error } = await updatePassword(token, newPassword);
+  if (error) {
+    return { errors: { result: error } };
+  }
+
+  return redirect("/signin");
+}
+
+export default function ResetPassword() {
+  const actionData = useActionData<typeof action>();
+  const navigation = useNavigation();
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [searchParams] = useSearchParams();
+
+  const token = searchParams.get("token") || "";
+  const isSubmitting = navigation.formAction === "/reset-password";
+  const errors = isSubmitting ? {} : actionData?.errors;
+
+  return (
+    <div className="flex flex-1 items-center justify-center p-6 md:mx-auto md:w-[720px] lg:p-20">
+      <div className="w-full flex-col space-y-4 rounded-3xl border border-gray-200 bg-white/90 p-8 dark:border-gray-700 dark:bg-gray-900">
+        <header>
+          <h1 className="text-xl font-extrabold tracking-tight md:text-2xl">
+            Password reset
+          </h1>
+        </header>
+        <main>
+          <Form method="post">
+            <fieldset disabled={isSubmitting} className="mt-6 space-y-6">
+              <input type="hidden" name="token" value={token} />
+              <div className="space-y-2">
+                <label
+                  htmlFor="new-password"
+                  className="text-sm font-medium leading-none"
+                >
+                  New password
+                </label>
+                <div className="relative">
+                  <input
+                    id="new-password"
+                    type={showNewPassword ? "text" : "password"}
+                    name="new-password"
+                    placeholder="Enter new password"
+                    autoComplete="new-password"
+                    required
+                    minLength={8}
+                    className="flex h-9 w-full rounded-3xl border border-gray-200 bg-transparent px-3 py-2 text-sm shadow-sm disabled:pointer-events-none disabled:opacity-25 dark:border-white/50"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-2 top-[5px] text-gray-200 transition-colors hover:text-black/50 disabled:opacity-50 dark:text-white/50 dark:hover:text-white"
+                    onClick={() =>
+                      setShowNewPassword((prevPassword) => !prevPassword)
+                    }
+                  >
+                    {showNewPassword ? <EyeIcon /> : <EyeOffIcon />}
+                  </button>
+                </div>
+                {errors?.newPassword && (
+                  <p className="flex items-center text-sm font-medium leading-5 text-red-500">
+                    {errors.newPassword}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <label
+                  htmlFor="confirm-password"
+                  className="text-sm font-medium leading-none"
+                >
+                  Confirm password
+                </label>
+                <div className="relative">
+                  <input
+                    id="confirm-password"
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirm-password"
+                    placeholder="Re-enter new password"
+                    autoComplete="off"
+                    required
+                    minLength={8}
+                    className="flex h-9 w-full rounded-3xl border border-gray-200 bg-transparent px-3 py-2 text-sm shadow-sm disabled:pointer-events-none disabled:opacity-25 dark:border-white/50"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-2 top-[5px] text-gray-200 transition-colors hover:text-black/50 disabled:opacity-50 dark:text-white/50 dark:hover:text-white"
+                    onClick={() =>
+                      setShowConfirmPassword((prevPassword) => !prevPassword)
+                    }
+                  >
+                    {showConfirmPassword ? <EyeIcon /> : <EyeOffIcon />}
+                  </button>
+                </div>
+                {errors?.confirmPassword && (
+                  <p className="flex items-center text-sm font-medium leading-5 text-red-500">
+                    {errors.confirmPassword}
+                  </p>
+                )}
+              </div>
+              <button
+                disabled={isSubmitting}
+                className="flex h-9 w-full items-center justify-center rounded-full border-2 border-gray-200/50 bg-gradient-to-tl from-[#00fff0] to-[#0083fe] px-4 py-2 text-sm font-medium shadow transition hover:border-gray-500 disabled:pointer-events-none disabled:opacity-50 dark:border-white/50 dark:from-[#8e0e00] dark:to-[#1f1c18] dark:hover:border-white"
+              >
+                {isSubmitting ? (
+                  <>
+                    <LoaderIcon className="mr-2 h-4 w-4 animate-spin" />
+                    Reseting
+                  </>
+                ) : (
+                  "Reset"
+                )}
+              </button>
+            </fieldset>
+            {errors?.result && (
+              <output className="mt-6 block text-center text-sm font-medium leading-5 text-red-500">
+                {errors.result}
+              </output>
+            )}
+          </Form>
+          <div className="text-muted-foreground mt-8 flex h-5 items-center justify-center space-x-6 text-sm">
+            <Link
+              to="/signin"
+              className="relative text-sm font-medium text-blue-500 after:absolute after:-bottom-0.5 after:left-0 after:h-[1px] after:w-0 after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
+            >
+              Sign in
+            </Link>
+            <div className="h-full w-[1px] border border-gray-200 dark:border-gray-700" />
+            <Link
+              to="/signup"
+              className="relative text-sm font-medium text-blue-500 after:absolute after:-bottom-0.5 after:left-0 after:h-[1px] after:w-0 after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full"
+            >
+              Sign up
+            </Link>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}
+```
+
+You should now be able to reset your password and be redirected to the `/signin` route to log in with your new password.
+
+## Implementing persistent tasks
+
+With the sign up, sign in, sign out, and password reset flows complete, the final step is to add persistent tasks for
+signed in users. This ensures that when users close the app or sign out and return later, their tasks remain intact and
+aren't lost on restart.
+
+To achieve this, we need to make a few changes. First, we'll update the CRUD methods that manage tasks to write to the
+MongoDB database instead of using an in-memory database. Then, we'll modify the action in `app/routes/_index.tsx` to
+pass the user ID from the session cookie to these methods.
+
+First, update `app/types.ts` to reflect the new function definitions for the CRUD methods:
+
+```tsx title="app/types.ts" {10-53}#remove {54-105}#add
+import { ObjectId } from "mongodb";
+
+// ...existing code here remains the same
+
+/**
+ * Represents operations that can be performed on todo items.
+ * This includes creating, reading, updating, and deleting todo items,
+ * as well as clearing completed items or deleting all items.
+ */
+export interface Todo {
+  /**
+   * Creates a new todo item.
+   * @param {string} description - The description of the new todo item.
+   * @returns {Promise<Item>} A promise that resolves to the newly created todo item.
+   */
+  create: (description: string) => Promise<Item>;
+
+  /**
+   * Retrieves all todo items.
+   * @returns {Promise<Item[]>} A promise that resolves to an array of todo items.
+   */
+  read: () => Promise<Item[]>;
+
+  /**
+   * Updates an existing todo item by its ID.
+   * @param {string} id - The unique identifier of the todo item to update.
+   * @param {Partial<Omit<Item, "id" | "createdAt">>} fields - An object containing the fields to update.
+   * @returns {Promise<Item | undefined>} A promise that resolves to the updated todo item, or `undefined` if the item was not found.
+   */
+  update: (
+    id: string,
+    fields: Partial<Omit<Item, "id" | "createdAt">>
+  ) => Promise<Item | undefined>;
+
+  /**
+   * Deletes a todo item by its ID.
+   * @param {string} id - The unique identifier of the todo item to delete.
+   * @returns {Promise<Item | undefined>} A promise that resolves to the deleted todo item, or `undefined` if the item was not found.
+   */
+  delete: (id: string) => Promise<Item | undefined>;
+
+  /**
+   * Clears all completed todo items.
+   * @returns {Promise<Item[]>} A promise that resolves to the updated list of todo items.
+   */
+  clearCompleted: () => Promise<Item[]>;
+
+  /**
+   * Deletes all todo items.
+   * @returns {Promise<Item[]>} A promise that resolves to an empty array.
+   */
+  deleteAll: () => Promise<Item[]>;
+}
+export interface Todo {
+  /**
+   * Creates a new todo item.
+   * @param {string} userId - The unique identifier of the user associated with the todo item.
+   * @param {string} description - The description of the new todo item.
+   * @returns {Promise<Item | undefined>} A promise that resolves to the newly created todo item, or `undefined` if no user is found.
+   */
+  create: (userId: string, description: string) => Promise<Item | undefined>;
+
+  /**
+   * Retrieves all todo items for a specific user.
+   * @param {string} userId - The unique identifier of the user whose todo items to retrieve.
+   * @returns {Promise<Item[] | undefined>} A promise that resolves to an array of todo items for the user, or `undefined` if no user is found.
+   */
+  read: (userId: string) => Promise<Item[] | undefined>;
+
+  /**
+   * Updates an existing todo item by its `todoId`.
+   * @param {string} userId - The unique identifier of the user associated with the todo item.
+   * @param {string} todoId - The unique identifier of the todo item to update.
+   * @param {Partial<Omit<Item, "todoId" | "userId" | "createdAt">>} fields - An object containing the fields to update.
+   * @returns {Promise<Item | undefined>} A promise that resolves to the updated todo item, or `undefined` if the user or item is not found.
+   */
+  update: (
+    userId: string,
+    todoId: string,
+    fields: Partial<Omit<Item, "_id" | "createdAt">>
+  ) => Promise<Item | undefined>;
+
+  /**
+   * Deletes a todo item by its `todoId`.
+   * @param {string} userId - The unique identifier of the user associated with the todo item.
+   * @param {string} todoId - The unique identifier of the todo item to delete.
+   * @returns {Promise<Item | undefined>} A promise that resolves to the deleted todo item, or `undefined` if the user or item is not found.
+   */
+  delete: (userId: string, todoId: string) => Promise<Item | undefined>;
+
+  /**
+   * Clears all completed todo items for a specific user.
+   * If the userId is not associated with any user, it returns `undefined`.
+   * @param {string} userId - The unique identifier of the user associated with the todo items.
+   * @returns {Promise<Item[] | undefined>} A promise that resolves to the updated list of todo items, or `undefined` if no user is found.
+   */
+  clearCompleted: (userId: string) => Promise<Item[] | undefined>;
+
+  /**
+   * Deletes all todo items for a specific user.
+   * @param {string} userId - The unique identifier of the user whose todo items are to be deleted.
+   * @returns {Promise<Item[] | undefined>} A promise that resolves to an empty array indicating all items were deleted, or `undefined` if no user is found.
+   */
+  deleteAll: (userId: string) => Promise<Item[] | undefined>;
+}
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+```
+
+Next, update `app/lib/server.ts` to define the CRUD methods for managing tasks in the database:
+
+```tsx title="app/lib/db.server.ts" {27-30,35-97}#remove {98-254,262}#add
+import crypto from "crypto";
+import { ObjectId } from "mongodb";
+import type { Item, Todo, User } from "~/types";
+
+import mongodb from "~/lib/mongodb.server";
+
+if (!process.env.MONGODB_DBNAME) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_DBNAME"');
+}
+if (!process.env.MONGODB_COLL_USERS) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_COLL_USERS"');
+}
+
+const dbName = process.env.MONGODB_DBNAME;
+const collUsers = process.env.MONGODB_COLL_USERS;
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+/**
+ * List of todo items.
+ */
+const items: Item[] = [];
+
+/**
+ * An implementation of the `Todo` interface that manages a collection of todo items.
+ */
+export const todos: Todo = {
+  async create(description: string) {
+    const createdTodo: Item = {
+      id: Math.random().toString(16).slice(2),
+      description,
+      completed: false,
+      createdAt: new Date(),
+    };
+
+    items.push(createdTodo);
+
+    return createdTodo;
+  },
+
+  async read() {
+    return items;
+  },
+
+  async update(id: string, fields: Partial<Omit<Item, "id" | "createdAt">>) {
+    const itemIndex = items.findIndex((item) => item.id === id);
+
+    if (itemIndex === -1) {
+      return undefined;
+    }
+
+    const updatedTodo: Item = {
+      ...items[itemIndex],
+      ...fields,
+      completedAt: fields.completed ? fields.completedAt : undefined,
+    };
+
+    items[itemIndex] = updatedTodo;
+
+    return updatedTodo;
+  },
+
+  async delete(id: string) {
+    const itemIndex = items.findIndex((item) => item.id === id);
+
+    if (itemIndex === -1) {
+      return undefined;
+    }
+
+    const [deletedTodo] = items.splice(itemIndex, 1);
+
+    return deletedTodo;
+  },
+
+  async clearCompleted() {
+    for (let i = items.length - 1; i >= 0; i--) {
+      if (items[i].completed) {
+        items.splice(i, 1);
+      }
+    }
+
+    return items;
+  },
+
+  async deleteAll() {
+    items.length = 0;
+    return items;
+  },
+};
+const todos: Todo = {
+  async create(userId, description) {
+    try {
+      const client = await mongodb();
+      const collection = client.db(dbName).collection<User>(collUsers);
+
+      const user = await collection.findOne({ _id: new ObjectId(userId) });
+      if (!user) {
+        return undefined;
+      }
+
+      const createdTodo: Item = {
+        id: crypto.randomBytes(16).toString("hex"),
+        description,
+        completed: false,
+        createdAt: new Date(),
+        completedAt: undefined,
+        editing: false,
+      };
+
+      await collection.updateOne(
+        { _id: new ObjectId(userId) },
+        { $push: { tasks: createdTodo } },
+      );
+
+      return createdTodo;
+    } catch (error) {
+      console.error("Error creating task:", error);
+      return undefined;
+    }
+  },
+
+  async read(userId) {
+    try {
+      const client = await mongodb();
+      const collection = client.db(dbName).collection<User>(collUsers);
+
+      const user = await collection.findOne({ _id: new ObjectId(userId) });
+      if (!user) {
+        return undefined;
+      }
+
+      return user.tasks;
+    } catch (error) {
+      console.error("Error reading task:", error);
+      return undefined;
+    }
+  },
+
+  async update(userId, todoId, fields) {
+    try {
+      const client = await mongodb();
+      const collection = client.db(dbName).collection<User>(collUsers);
+
+      const user = await collection.findOne({ _id: new ObjectId(userId) });
+      if (!user) {
+        return undefined;
+      }
+
+      let updatedTodo = user.tasks.find((task) => todoId === task.id);
+      if (!updatedTodo) {
+        return undefined;
+      }
+
+      updatedTodo = {
+        ...updatedTodo,
+        ...fields,
+        completedAt: fields.completed ? fields.completedAt : undefined,
+      };
+
+      await collection.updateOne(
+        { _id: new ObjectId(userId), "tasks.id": todoId },
+        {
+          $set: {
+            "tasks.$": updatedTodo,
+          },
+        },
+      );
+
+      return updatedTodo;
+    } catch (error) {
+      console.error("Error updating task:", error);
+      return undefined;
+    }
+  },
+
+  async delete(userId, todoId) {
+    try {
+      const client = await mongodb();
+      const collection = client.db(dbName).collection<User>(collUsers);
+
+      const user = await collection.findOne({ _id: new ObjectId(userId) });
+      if (!user) {
+        return undefined;
+      }
+
+      const deletedTodo = user.tasks.find((task) => todoId === task.id);
+      if (!deletedTodo) {
+        return undefined;
+      }
+
+      await collection.updateOne(
+        { _id: new ObjectId(userId) },
+        { $pull: { tasks: { id: todoId } } },
+      );
+
+      return deletedTodo;
+    } catch (error) {
+      console.error("Error deleting task:", error);
+      return undefined;
+    }
+  },
+
+  async clearCompleted(userId) {
+    try {
+      const client = await mongodb();
+      const collection = client.db(dbName).collection<User>(collUsers);
+
+      const user = await collection.findOne({ _id: new ObjectId(userId) });
+      if (!user) {
+        return undefined;
+      }
+
+      await collection.updateOne(
+        { _id: new ObjectId(userId) },
+        { $pull: { tasks: { completed: true } } },
+      );
+
+      return user.tasks.filter((task) => !task.completed);
+    } catch (error) {
+      console.error("Error clearing completed tasks:", error);
+      return undefined;
+    }
+  },
+
+  async deleteAll(userId) {
+    try {
+      const client = await mongodb();
+      const collection = client.db(dbName).collection<User>(collUsers);
+
+      const user = await collection.findOne({ _id: new ObjectId(userId) });
+      if (!user) {
+        return undefined;
+      }
+
+      await collection.updateOne(
+        { _id: new ObjectId(userId) },
+        { $set: { tasks: [] } },
+      );
+
+      return [];
+    } catch (error) {
+      console.error("Error deleting all tasks:", error);
+      return undefined;
+    }
+  },
+};
+
+export {
+  createUser,
+  authenticateUser,
+  getUser,
+  initiatePasswordReset,
+  updatePassword,
+  todos,
+};
+```
+
+The changes should be self-explanatory, as the code and JSDoc detail each function. Finally, update
+`app/routes/_index.tsx` to pass the user ID when calling these methods so the functions know which user they are
+handling:
+
+```tsx title="app/routes/_index.tsx" {40,44-45,52-53,57-58,65-66,70,74} {31,34}#add
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
+import {
+  Form,
+  Link,
+  json,
+  redirect,
+  useFetcher,
+  useLoaderData,
+  useSearchParams,
+} from "@remix-run/react";
+import { useEffect, useRef } from "react";
+import { destroySession, getSession } from "~/sessions.server";
+import type { Item, View } from "~/types";
+
+import ProfileMenu from "~/components/ProfileMenu";
+import ThemeSwitcher from "~/components/ThemeSwitcher";
+import TodoActions from "~/components/TodoActions";
+import TodoList from "~/components/TodoList";
+
+import { getUser, todos } from "~/lib/db.server";
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+export async function action({ request }: ActionFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const formData = await request.formData();
+
+  const userId = session.get("_id") as string;
+  const { intent, ...values } = Object.fromEntries(formData);
+
+  switch (intent) {
+    case "create task": {
+      const { description } = values;
+      await todos.create(userId, description as string);
+      break;
+    }
+    case "toggle completion": {
+      const { id: todoId, completed } = values;
+      await todos.update(userId, todoId as string, {
+        completed: !JSON.parse(completed as string),
+        completedAt: !JSON.parse(completed as string) ? new Date() : undefined,
+      });
+      break;
+    }
+    case "edit task": {
+      const { id: todoId } = values;
+      await todos.update(userId, todoId as string, { editing: true });
+      break;
+    }
+    case "save task": {
+      const { id: todoId, description } = values;
+      await todos.update(userId, todoId as string, {
+        description: description as string,
+        editing: false,
+      });
+      break;
+    }
+    case "delete task": {
+      const { id: todoId } = values;
+      await todos.delete(userId, todoId as string);
+      break;
+    }
+    case "clear completed": {
+      await todos.clearCompleted(userId);
+      break;
+    }
+    case "delete all": {
+      await todos.deleteAll(userId);
+      break;
+    }
+    default: {
+      throw new Response("Unknown intent", { status: 400 });
+    }
+  }
+
+  return json({ ok: true });
+}
+
+export default function Home() {
+  // ...existing code here remains the same
+}
+```
+
+Now, you can add, edit, mark as completed, or delete tasks as before. You can also clear completed tasks or delete all
+tasks.
+
+## Implementing error boundary and delete account
+
+The app's core functionality is complete. Users can be authenticated and distinguished from others, and tasks are
+persistently stored across sessions. As a final touch, we'll add an error boundary and implement a delete account
+feature.
+
+The `ErrorBoundary` component is displayed whenever an uncaught error occurs in a Remix app. Since the app integrates
+external services like MongoDB, unexpected errors might occur. It is therefore wise to define a custom error boundary.
+While Remix comes with a default `ErrorBoundary`, you can create your own global error boundary by exporting it from the
+root route.
+
+Update `app/root.tsx` with the following changes:
+
+```tsx title="app/root.tsx" {3,48-63}#add
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import {
+  Link,
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  json,
+} from "@remix-run/react";
+
+import { ThemeScript, useTheme } from "~/components/ThemeScript";
+
+import { parseTheme } from "~/lib/theme-cookie.server";
+
+import "./tailwind.css";
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const theme = await parseTheme(request);
+
+  return json({ theme }, { headers: { Vary: "Cookie" } });
+}
+
+export function Layout({ children }: { children: React.ReactNode }) {
+  const theme = useTheme() === "dark" ? "dark" : "";
+
+  return (
+    <html
+      lang="en"
+      className={`bg-white/90 font-system antialiased dark:bg-gray-900 ${theme}`}
+    >
+      <head>
+        <ThemeScript />
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Meta />
+        <Links />
+      </head>
+      <body className="flex min-h-screen max-w-[100vw] flex-col overflow-x-hidden bg-gradient-to-r from-[#00fff0] to-[#0083fe] px-4 py-8 text-black dark:from-[#8E0E00] dark:to-[#1F1C18] dark:text-white">
+        {children}
+        <ScrollRestoration />
+        <Scripts />
+      </body>
+    </html>
+  );
+}
+
+export function ErrorBoundary() {
+  return (
+    <div className="flex flex-1 flex-col items-center justify-center gap-4">
+      <h1 className="text-center text-4xl font-extrabold tracking-tight lg:text-5xl">
+        Oops, an error occurred!
+      </h1>
+      <Link
+        to="."
+        replace
+        className="inline-flex justify-center rounded-full border border-gray-200 bg-gray-50 px-8 py-4 text-xl font-medium hover:border-gray-500 dark:border-gray-700 dark:bg-gray-900"
+      >
+        Try again
+      </Link>
+    </div>
+  );
+}
+
+export default function App() {
+  return <Outlet />;
+}
+```
+
+
+Next, we'll add a delete account feature so users who no longer wish to use the app can remove their account. This
+involves adding a button to the `ProfileMenu` component, which sends a `POST` request to an `/_actions/deleteAccount`
+route. The route's `action` will retrieve the session from the request, pass the session ID to a `deleteUser` function
+to remove the user from the database, and then destroy the session data and clear the session cookie.
+
+First, we need an icon for the delete user button. Run this command to create it:
+
+```bash
+touch app/components/icons/UserRoundXIcon.tsx
+```
+
+Next, add the code for the icon:
+
+```tsx title="app/components/icon/UserRoundXIcon.tsx"
+export default function UserRoundXIcon({
+  ...props
+}: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M2 21a8 8 0 0 1 11.873-7" />
+      <circle cx="10" cy="8" r="5" />
+      <path d="m17 17 5 5" />
+      <path d="m22 17-5 5" />
+    </svg>
+  );
+}
+```
+
+Now, create the `deleteUser` function by updating `app/lib/db.server.ts`:
+
+```tsx title="app/lib/db.server.ts" {29-45,54}
+import crypto from "crypto";
+import { ObjectId } from "mongodb";
+import type { Item, Todo, User } from "~/types";
+
+import mongodb from "~/lib/mongodb.server";
+
+if (!process.env.MONGODB_DBNAME) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_DBNAME"');
+}
+if (!process.env.MONGODB_COLL_USERS) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_COLL_USERS"');
+}
+
+const dbName = process.env.MONGODB_DBNAME;
+const collUsers = process.env.MONGODB_COLL_USERS;
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+async function deleteUser(id: string) {
+  try {
+    const client = await mongodb();
+    const collection = client.db(dbName).collection<User>(collUsers);
+
+    const user = await collection.findOne({ _id: new ObjectId(id) });
+    if (!user) {
+      return { error: "User not found.", data: null };
+    }
+
+    await collection.deleteOne({ _id: new ObjectId(id) });
+
+    return { error: null, data: "User deleted successfully." };
+  } catch (error) {
+    return { error: "An unexpected error occured.", data: null };
+  }
+}
+
+export {
+  createUser,
+  authenticateUser,
+  getUser,
+  initiatePasswordReset,
+  updatePassword,
+  todos,
+  deleteUser,
+};
+```
+
+Then, update the `ProfileMenu` component to include the delete account button:
+
+```tsx title="app/components/ProfileMenu.tsx" {5,59-81}
+import { Form, useRouteLoaderData } from "@remix-run/react";
+import { useRef } from "react";
+
+import LogOutIcon from "~/components/icons/LogOutIcon";
+import UserRoundXIcon from "~/components/icons/UserRoundXIcon";
+
+import type { loader as indexLoader } from "~/routes/_index";
+
+export default function ProfileMenu() {
+  const indexLoaderData =
+    useRouteLoaderData<typeof indexLoader>("routes/_index");
+  const detailsRef = useRef<HTMLDetailsElement>(null);
+
+  const name = indexLoaderData?.name as string;
+  const email = indexLoaderData?.email as string;
+
+  return (
+    <details ref={detailsRef} className="group relative cursor-pointer">
+      <summary
+        role="button"
+        aria-haspopup="menu"
+        aria-label="Open profile menu"
+        tabIndex={0}
+        className="flex items-center justify-center rounded-full border border-gray-200 bg-gray-50 px-4 py-2 transition hover:border-gray-500 group-open:before:fixed group-open:before:inset-0 group-open:before:cursor-auto dark:border-gray-700 dark:bg-gray-900 [&::-webkit-details-marker]:hidden"
+      >
+        {name[0].toUpperCase()}
+      </summary>
+
+      <div
+        role="menu"
+        aria-roledescription="Profile menu"
+        className="absolute right-0 top-full z-50 mt-2 min-w-max overflow-hidden rounded-3xl border border-gray-200 bg-gray-50 py-1 text-sm font-semibold shadow-lg ring-1 ring-slate-900/10 dark:border-gray-700 dark:bg-gray-900 dark:ring-0"
+      >
+        <div
+          role="presentation"
+          className="cursor-default border-b border-gray-200 px-4 py-2 dark:border-gray-700"
+        >
+          <p>{name}</p>
+          <p className="text-gray-600 dark:text-gray-400">{email}</p>
+        </div>
+        <Form
+          role="presentation"
+          preventScrollReset
+          replace
+          action="/_actions/signout"
+          method="post"
+          onSubmit={() => {
+            detailsRef.current?.removeAttribute("open");
+          }}
+        >
+          <button
+            role="menuitem"
+            className="flex w-full items-center px-4 py-2 transition hover:bg-gray-200 dark:hover:bg-gray-700"
+          >
+            <LogOutIcon className="mr-2 h-5 w-5 text-gray-600 dark:text-gray-400" />
+            Sign out
+          </button>
+        </Form>
+        <Form
+          role="presentation"
+          preventScrollReset
+          replace
+          action="/_actions/deleteAccount"
+          method="post"
+          onSubmit={(event) => {
+            detailsRef.current?.removeAttribute("open");
+
+            if (!confirm("Are you sure you want to delete your account?")) {
+              event.preventDefault();
+              return;
+            }
+          }}
+        >
+          <button
+            role="menuitem"
+            className="flex w-full items-center px-4 py-2 transition hover:bg-gray-200 dark:hover:bg-gray-700"
+          >
+            <UserRoundXIcon className="mr-2 h-5 w-5 text-gray-600 dark:text-gray-400" />
+            Delete
+          </button>
+        </Form>
+      </div>
+    </details>
+  );
+}
+```
+
+Run the following command to create the `app/routes/[_]actions.deleteAccount.tsx` file:
+
+```bash
+touch app/routes/\[\_\]actions.deleteAccount.tsx
+```
+
+Finally, add the following code to `app/routes/[_]actions.deleteAccount.tsx`:
+
+```tsx title="app/routes/[_]actions.deleteAccount.tsx"
+import { ActionFunctionArgs, redirect } from "@remix-run/node";
+import { destroySession, getSession } from "~/sessions.server";
+
+import { deleteUser } from "~/lib/db.server";
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const session = await getSession(request.headers.get("Cookie"));
+
+  const { error } = await deleteUser(session.get("_id") as string);
+  if (error) {
+    return;
+  }
+
+  return redirect("/signup", {
+    headers: {
+      "Set-Cookie": await destroySession(session),
+    },
+  });
+};
+```
+
+With this functionality in place, users can delete their accounts if they choose to do so. Voilà!
+
+## Conclusion
+
+Before pushing your code to GitHub, make sure to add the environment variables from `.env` to your deployed project on
+Render.com. [Render has a useful article on how to do this](https://docs.render.com/configure-environment-variables).
+Also, never commit your `.env` file to GitHub, as it contains sensitive information. Ensure that `.env` is listed in
+your `.gitignore` to avoid accidental commits.
+
+That's it! This concludes our 7-part series on building the Remix Todo App. Thank you for following along and staying
+dedicated, even during the long stretches. 😊 I hope this series met its goal of covering 80% of the key concepts you'll
+use in Remix and provided valuable insights. Until next time, take care!

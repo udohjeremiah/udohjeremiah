@@ -1,5 +1,13 @@
 [
   {
+    "href": "https://remix-todo-app-jrhk.onrender.com",
+    "image": "/projects/remix-todo-app.webp",
+    "name": "Remix Todo App",
+    "description": "The first JavaScript todo app in the world that works without JavaScript.",
+    "openSource": true,
+    "repositoryHref": "https://github.com/udohjeremiah/remix-todo-app"
+  },
+  {
     "href": "https://safe-green.vercel.app",
     "image": "/projects/safe-green.webp",
     "name": "Safe",
