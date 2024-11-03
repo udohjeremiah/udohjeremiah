@@ -1213,7 +1213,12 @@ touch app/sessions.server.ts
 Now, copy the following code into `app/sessions.server.ts` to define the function for storing a session in the database:
 
 ```ts title="app/sessions.server.ts"
-import { Cookie, createCookie, createSessionStorage } from "@remix-run/node";
+import {
+  Cookie,
+  createCookie,
+  createSessionStorage,
+  SessionStorage,
+} from "@remix-run/node";
 import { ObjectId } from "mongodb";
 
 import mongodb from "~/lib/mongodb.server";
@@ -1223,7 +1228,7 @@ if (!process.env.MONGODB_DBNAME) {
 }
 if (!process.env.MONGODB_COLL_SESSIONS) {
   throw new Error(
-    'Invalid/Missing environment variable: "MONGODB_COLL_SESSIONS"',
+    'Invalid/Missing environment variable: "MONGODB_COLL_SESSIONS"'
   );
 }
 if (
@@ -1232,7 +1237,7 @@ if (
   !process.env.SESSION_SECRET_OLD
 ) {
   throw new Error(
-    'Invalid/Missing environment variables for session cookie signing: "SESSION_SECRET_CURRENT", "SESSION_SECRET_PREVIOUS", "SESSION_SECRET_OLD".',
+    'Invalid/Missing environment variables for session cookie signing: "SESSION_SECRET_CURRENT", "SESSION_SECRET_PREVIOUS", "SESSION_SECRET_OLD".'
   );
 }
 
@@ -1289,7 +1294,7 @@ async function createMongoDBSessionStorage({
         await collection.findOneAndUpdate(
           { _id: new ObjectId(_id) },
           { $set: { ...dataWithoutId, expireAt: expires } },
-          { upsert: true },
+          { upsert: true }
         );
       } else {
         // Insert a new document without an `_id`, allowing MongoDB to generate one automatically.
@@ -1315,7 +1320,7 @@ async function createMongoDBSessionStorage({
         await collection.updateOne(
           { _id: new ObjectId(id) },
           { $set: { ...dataWithoutId, expireAt: expires } },
-          { upsert: true },
+          { upsert: true }
         );
 
         return;
@@ -1336,14 +1341,22 @@ async function createMongoDBSessionStorage({
   });
 }
 
-const { getSession, commitSession, destroySession } =
-  await createMongoDBSessionStorage({
-    cookie,
-    options: {
-      db: dbName,
-      coll: collName,
-    },
-  });
+const sessionStoragePromise = createMongoDBSessionStorage({
+  cookie,
+  options: {
+    db: dbName,
+    coll: collName,
+  },
+});
+
+const getSession: SessionStorage["getSession"] = async (...args) =>
+  (await sessionStoragePromise).getSession(...args);
+
+const commitSession: SessionStorage["commitSession"] = async (...args) =>
+  (await sessionStoragePromise).commitSession(...args);
+
+const destroySession: SessionStorage["destroySession"] = async (...args) =>
+  (await sessionStoragePromise).destroySession(...args);
 
 export { getSession, commitSession, destroySession };
 ```
