@@ -104,6 +104,12 @@
         "description": "Code hosting platform."
       },
       {
+        "href": "https://www.mongodb.com/products/tools/compass",
+        "image": "/logos/mongodb.svg",
+        "name": "MongoDB Compass",
+        "description": "GUI for MongoDB."
+      },
+      {
         "href": "https://www.postman.com",
         "image": "/logos/postman.svg",
         "name": "Postman",

@@ -388,7 +388,7 @@ export default function TodoItem({ todo }: { todo: Item }) {
 
 Notice the `useFetchers` hook? It returns an array of all active fetchers. Since the `TodoItem` component didn't create
 the "Clear Completed" or "Delete All" fetchers, we use this to track their submissions. Now, clicking "Clear Completed"
-or "Delete All" will not only disable the buttons but also reduce the opacity of the tasks being removed.
+or "Delete All" won't only disable the buttons but also reduce the opacity of the tasks being removed.
 
 ### Optimisitic UI for task-specific interactions
 
