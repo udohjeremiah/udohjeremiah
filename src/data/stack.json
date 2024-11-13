@@ -39,10 +39,10 @@
         "description": "Utility-first CSS framework."
       },
       {
-        "href": "https://gsap.com",
-        "image": "/logos/gsap.svg",
-        "name": "GSAP",
-        "description": "JavaScript animation library."
+        "href": "https://motion.dev",
+        "image": "/logos/motion.svg",
+        "name": "Motion",
+        "description": "Modern animation library for JavaScript and React."
       },
       {
         "href": "https://nodejs.org",
