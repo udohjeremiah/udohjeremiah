@@ -25,6 +25,12 @@
     "category": "History",
     "books": [
       {
+        "href": "https://www.amazon.com/101-Myths-Bible-Invented-Biblical/dp/1570718423",
+        "image": "https://covers.openlibrary.org/b/olid/OL8698082M-M.jpg",
+        "name": "101 Myths of the Bible",
+        "author": "Gary Greenberg"
+      },
+      {
         "href": "https://www.amazon.com/Pagans-Traditional-Religion-Rise-Christianity-ebook/dp/B00L7X6ZU8",
         "image": "https://covers.openlibrary.org/b/olid/OL25671995M-M.jpg",
         "name": "Pagans: The End of Traditional Religion and the Rise of Christianity",
@@ -103,7 +109,7 @@
       {
         "href": "https://www.amazon.com/Die-Empty-Unleash-Your-Every/dp/1591846994",
         "image": "https://covers.openlibrary.org/b/olid/OL27150608M-M.jpg",
-        "name": "Die empty",
+        "name": "Die Empty",
         "author": "Todd Henry"
       }
     ]

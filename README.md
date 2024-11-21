@@ -1,7 +1,7 @@
 ## Hi there 👋! I'm Udoh. I'm a software developer.
 
 - Tech Stack: JavaScript, TypeScript, Node.js, Express.js, React.js, Remix, Next.js, MongoDB, Redis.io, Tailwind CSS,
-  GSAP, etc.
+  Motion, etc.
 - Portfolio: [udohjeremiah.com](https://udohjeremiah.com)
 - Blog: [udohjeremiah.com/blog](https://udohjeremiah.com/blog)
 - Linkedin: [Udoh Jeremiah](https://www.linkedin.com/in/udoh-jeremiah-02a640304)
