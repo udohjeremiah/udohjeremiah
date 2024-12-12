@@ -27,12 +27,6 @@
         "description": "Typed superset of JavaScript."
       },
       {
-        "href": "https://www.rust-lang.org",
-        "image": "/logos/rust.svg",
-        "name": "Rust",
-        "description": "Fast, memory-safe language for reliable software."
-      },
-      {
         "href": "https://tailwindcss.com",
         "image": "/logos/tailwindcss.svg",
         "name": "TailwindCSS",
@@ -61,6 +55,12 @@
         "image": "/logos/reactjs.svg",
         "name": "React.js",
         "description": "Library for building user interfaces."
+      },
+      {
+        "href": "https://astro.build",
+        "image": "/logos/astro.svg",
+        "name": "Astro",
+        "description": "The web framework for content-driven websites."
       },
       {
         "href": "https://reactrouter.com",
