@@ -3,7 +3,6 @@
     "category": "Spirituality",
     "books": [
       {
-        "href": "https://www.amazon.com/Sabbath-Classics-Abraham-Joshua-Heschel/dp/0374529752",
         "image": "https://covers.openlibrary.org/b/olid/OL18337770M-M.jpg",
         "name": "The Sabbath",
         "author": "Abraham Joshua Heschel"
@@ -14,10 +13,14 @@
     "category": "Philosophy",
     "books": [
       {
-        "href": "https://www.amazon.com/Meditations-Marcus-Aurelius/dp/1503280462",
         "image": "https://covers.openlibrary.org/b/olid/OL37044614M-M.jpg",
         "name": "Meditations",
         "author": "Marcus Aurelius"
+      },
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL5981437M-M.jpg",
+        "name": "The Book",
+        "author": "Alan Watts"
       }
     ]
   },
@@ -25,25 +28,21 @@
     "category": "History",
     "books": [
       {
-        "href": "https://www.amazon.com/101-Myths-Bible-Invented-Biblical/dp/1570718423",
         "image": "https://covers.openlibrary.org/b/olid/OL8698082M-M.jpg",
         "name": "101 Myths of the Bible",
         "author": "Gary Greenberg"
       },
       {
-        "href": "https://www.amazon.com/Pagans-Traditional-Religion-Rise-Christianity-ebook/dp/B00L7X6ZU8",
         "image": "https://covers.openlibrary.org/b/olid/OL25671995M-M.jpg",
         "name": "Pagans",
         "author": "James J. O'Donnell"
       },
       {
-        "href": "https://www.amazon.com/Gnostic-Gospels-Elaine-Pagels/dp/0679724532",
         "image": "https://covers.openlibrary.org/b/olid/OL7699825M-M.jpg",
         "name": "The Gnostic Gospels",
         "author": "Elaine Pagels"
       },
       {
-        "href": "https://www.amazon.com/The-Origin-of-Satan-Elaine-Pagels-audiobook/dp/B00HS1D326",
         "image": "https://covers.openlibrary.org/b/olid/OL20092566M-M.jpg",
         "name": "The Origin of Satan",
         "author": "Elaine Pagels"
@@ -54,7 +53,6 @@
     "category": "Psychology",
     "books": [
       {
-        "href": "https://www.amazon.com/Thinking-Fast-and-Slow-audiobook/dp/B005Z9GAJG",
         "image": "https://covers.openlibrary.org/b/olid/OL36689110M-M.jpg",
         "name": "Thinking, Fast and Slow",
         "author": "Daniel Kahneman"
@@ -65,49 +63,41 @@
     "category": "Productivity",
     "books": [
       {
-        "href": "https://www.amazon.com/Digital-Minimalism-Choosing-Focused-Noisy/dp/0525536515",
         "image": "https://covers.openlibrary.org/b/olid/OL26879249M-M.jpg",
         "name": "Digital Minimalism",
         "author": "Cal Newport"
       },
       {
-        "href": "https://www.amazon.com/No-More-Mr-Nice-Guy/dp/0762415339",
         "image": "https://covers.openlibrary.org/b/olid/OL9492038M-M.jpg",
         "name": "No More Mr. Nice Guy!",
         "author": "Robert A. Glover"
       },
       {
-        "href": "https://www.amazon.com/Good-They-Cant-Ignore-You/dp/1455509124",
         "image": "https://covers.openlibrary.org/b/olid/OL40423376M-M.jpg",
         "name": "So Good They Can't Ignore You",
         "author": "Cal Newport"
       },
       {
-        "href": "https://www.amazon.com/Monk-Who-Sold-His-Ferrari/dp/0062515675",
         "image": "https://covers.openlibrary.org/b/olid/OL24982483M-M.jpg",
         "name": "The Monk Who Sold His Ferrari",
         "author": "Robin S. Sharma"
       },
       {
-        "href": "https://www.amazon.com/Way-Men-Jack-Donovan/dp/0985452307",
         "image": "https://covers.openlibrary.org/b/olid/OL26977636M-M.jpg",
         "name": "The Way of Men",
         "author": "Jack Donovan"
       },
       {
-        "href": "https://www.amazon.com/Way-Superior-Man-Challenges-Anniversary/dp/1622038320",
         "image": "https://covers.openlibrary.org/b/olid/OL35354845M-M.jpg",
         "name": "The Way of the Superior Man",
         "author": "David Deida"
       },
       {
-        "href": "https://www.amazon.com/Where-Good-Ideas-Come-Innovation/dp/1594485380",
         "image": "https://covers.openlibrary.org/b/olid/OL45327859M-M.jpg",
         "name": "Where Good Ideas Come From",
         "author": "Steven Johnson"
       },
       {
-        "href": "https://www.amazon.com/Die-Empty-Unleash-Your-Every/dp/1591846994",
         "image": "https://covers.openlibrary.org/b/olid/OL27150608M-M.jpg",
         "name": "Die Empty",
         "author": "Todd Henry"
@@ -122,7 +112,6 @@
     "category": "Design",
     "books": [
       {
-        "href": "https://www.refactoringui.com/#get-refactoring-ui",
         "image": "https://covers.openlibrary.org/b/olid/OL31679681M-M.jpg",
         "name": "Refactoring UI",
         "author": "Adam Wathan, Steve Schoger"
@@ -137,7 +126,6 @@
     "category": "Others",
     "books": [
       {
-        "href": "https://www.amazon.com/Simple-Genius-Maxwell-David-Baldacci/dp/044661873X",
         "image": "https://covers.openlibrary.org/b/olid/OL30870669M-M.jpg",
         "name": "Simple Genius",
         "author": "David Baldacci"

@@ -2,7 +2,6 @@ import Image from "next/image";
 
 import Card from "@/components/Card";
 import Header from "@/components/Header";
-import Link from "@/components/Link";
 
 import readings from "@/data/readings.json";
 
@@ -18,15 +17,9 @@ export const metadata = {
 
 function Book({ data }) {
   return (
-    <Link
+    <figure
       key={data.href}
-      href={data.href}
-      label={data.name}
-      className={tw(
-        "flex flex-col gap-4 rounded-lg p-4 no-underline transition-colors",
-        "hover:bg-neutral-100",
-        "dark:hover:bg-neutral-800",
-      )}
+      className="flex flex-col gap-4 rounded-lg p-4 no-underline"
     >
       <Image
         src={data.image}
@@ -36,8 +29,8 @@ function Book({ data }) {
         quality={100}
         className="rounded-md"
       />
-      <div>
-        <p
+      <figcaption className="flex flex-col">
+        <span
           className={tw(
             "text-sm font-medium",
             "text-neutral-900",
@@ -45,14 +38,15 @@ function Book({ data }) {
           )}
         >
           {data.name}
-        </p>
-        <p
+        </span>
+        <span className="sr-only"> by</span>
+        <span
           className={tw("text-sm", "text-neutral-500", "dark:text-neutral-400")}
         >
           {data.author}
-        </p>
-      </div>
-    </Link>
+        </span>
+      </figcaption>
+    </figure>
   );
 }
 
