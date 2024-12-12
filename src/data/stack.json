@@ -27,9 +27,15 @@
         "description": "Typed superset of JavaScript."
       },
       {
+        "href": "https://astro.build",
+        "image": "/logos/astro.svg",
+        "name": "Astro",
+        "description": "The web framework for content-driven websites."
+      },
+      {
         "href": "https://tailwindcss.com",
         "image": "/logos/tailwindcss.svg",
-        "name": "TailwindCSS",
+        "name": "Tailwind CSS",
         "description": "Utility-first CSS framework."
       },
       {
@@ -55,12 +61,6 @@
         "image": "/logos/reactjs.svg",
         "name": "React.js",
         "description": "Library for building user interfaces."
-      },
-      {
-        "href": "https://astro.build",
-        "image": "/logos/astro.svg",
-        "name": "Astro",
-        "description": "The web framework for content-driven websites."
       },
       {
         "href": "https://reactrouter.com",
