@@ -104,22 +104,10 @@
         "description": "Code hosting platform."
       },
       {
-        "href": "https://www.mongodb.com/products/tools/compass",
-        "image": "/logos/mongodb.svg",
-        "name": "MongoDB Compass",
-        "description": "GUI for MongoDB."
-      },
-      {
         "href": "https://www.postman.com",
         "image": "/logos/postman.svg",
         "name": "Postman",
         "description": "Build, test, & debug APIs."
-      },
-      {
-        "href": "https://redis.io/insight",
-        "image": "/logos/redis-insight.svg",
-        "name": "Redis Insight",
-        "description": "The best Redis GUI."
       },
       {
         "href": "https://jakearchibald.github.io/svgomg",
@@ -188,29 +176,6 @@
     ]
   },
   {
-    "category": "Finance",
-    "items": [
-      {
-        "href": "https://chippercash.com",
-        "image": "/logos/chippercash.svg",
-        "name": "Chipper Cash",
-        "description": "Send money to banks in Africa."
-      },
-      {
-        "href": "https://www.exodus.com",
-        "image": "/logos/exodus.svg",
-        "name": "Exodus",
-        "description": "Exodus bitcoin & crypto wallet."
-      },
-      {
-        "href": "https://www.metatrader5.com",
-        "image": "/logos/metatrader5.webp",
-        "name": "MetaTrader 5",
-        "description": "Free app for Forex trading & analysis."
-      }
-    ]
-  },
-  {
     "category": "Social",
     "items": [
       {
@@ -234,42 +199,13 @@
     ]
   },
   {
-    "category": "Productivity",
-    "items": [
-      {
-        "href": "https://apps.apple.com/us/app/home-workout-no-equipments",
-        "image": "/logos/homeworkout.webp",
-        "name": "Home Workout - No Equipments",
-        "description": "Body weight fitness & training."
-      }
-    ]
-  },
-  {
     "category": "Other",
     "items": [
-      {
-        "href": "https://netnewswire.com",
-        "image": "/logos/netnewswire.webp",
-        "name": "NetNewsWire",
-        "description": "RSS reader for Mac, iPhone, & iPad."
-      },
       {
         "href": "https://protonvpn.com",
         "image": "/logos/proton-vpn.svg",
         "name": "ProtonVPN",
         "description": "VPN for speed & security."
-      },
-      {
-        "href": "https://techcabal.com",
-        "image": "/logos/techcabal.webp",
-        "name": "TechCabal",
-        "description": "African tech news."
-      },
-      {
-        "href": "https://tripmode.ch",
-        "image": "/logos/tripmode.webp",
-        "name": "TripMode",
-        "description": "Save data & money. Browse faster."
       }
     ]
   }
