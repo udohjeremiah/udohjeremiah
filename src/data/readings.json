@@ -68,6 +68,11 @@
         "author": "Cal Newport"
       },
       {
+        "image": "https://covers.openlibrary.org/b/olid/OL25613003M-M.jpg",
+        "name": "Essentialism",
+        "author": "Greg McKeown"
+      },
+      {
         "image": "https://covers.openlibrary.org/b/olid/OL9492038M-M.jpg",
         "name": "No More Mr. Nice Guy!",
         "author": "Robert A. Glover"
@@ -119,7 +124,11 @@
     ]
   },
   {
-    "category": "Public Speaking",
+    "category": "Writing",
+    "books": []
+  },
+  {
+    "category": "Speaking",
     "books": []
   },
   {
