@@ -68,6 +68,16 @@
         "author": "Cal Newport"
       },
       {
+        "image": "https://covers.openlibrary.org/b/olid/OL27150608M-M.jpg",
+        "name": "Die Empty",
+        "author": "Todd Henry"
+      },
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL25613003M-M.jpg",
+        "name": "Essentialism",
+        "author": "Greg McKeown"
+      },
+      {
         "image": "https://covers.openlibrary.org/b/olid/OL9492038M-M.jpg",
         "name": "No More Mr. Nice Guy!",
         "author": "Robert A. Glover"
@@ -96,11 +106,6 @@
         "image": "https://covers.openlibrary.org/b/olid/OL45327859M-M.jpg",
         "name": "Where Good Ideas Come From",
         "author": "Steven Johnson"
-      },
-      {
-        "image": "https://covers.openlibrary.org/b/olid/OL27150608M-M.jpg",
-        "name": "Die Empty",
-        "author": "Todd Henry"
       }
     ]
   },
@@ -119,7 +124,11 @@
     ]
   },
   {
-    "category": "Public Speaking",
+    "category": "Writing",
+    "books": []
+  },
+  {
+    "category": "Speaking",
     "books": []
   },
   {
