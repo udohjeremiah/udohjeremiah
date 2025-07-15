@@ -74,7 +74,7 @@ export type Props = Record<string, never>;
   aria-label="Menu"
   aria-hidden="true"
   data-state="closed"
-  class="bg-muted fixed inset-0 z-1000 flex h-full w-full flex-col gap-16 overflow-auto px-8 py-4 transition-transform duration-1000 ease-in-out will-change-transform transform-3d sm:p-8 lg:px-12"
+  class="bg-muted fixed inset-0 z-1000 flex h-full w-full flex-col gap-16 overflow-auto px-8 py-4 transition-transform duration-1000 ease-in-out will-change-transform [data-state=closed]:translate-y-full [data-state=open]:translate-y-0"
 >
   <button
     id="site-nav-close"
