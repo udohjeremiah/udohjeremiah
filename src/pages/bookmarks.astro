@@ -1,0 +1,58 @@
+---
+import PageHeader from "@components/PageHeader.astro";
+import links from "@data/links.json";
+import BaseLayout from "@layouts/BaseLayout.astro";
+
+import fs from "fs";
+import path from "path";
+
+const lastUpdated = new Date(
+  Math.max(
+    fs.statSync(path.resolve(".", "src/pages/bookmarks.astro")).mtime.getTime(),
+    fs.statSync(path.resolve(".", "src/data/links.json")).mtime.getTime(),
+  ),
+);
+---
+
+<BaseLayout
+  title="Bookmarks | Udoh Jeremiah"
+  description="Web pages I've read and liked on the Internet."
+>
+  <main class="flex-1 space-y-12 px-8 py-20 lg:px-20">
+    <PageHeader
+      title="Bookmarks"
+      description=`
+        Serendipity is alive and well online—it wears the face of a stray link,
+        a mistyped search, a forgotten tab, a friend's repost, or a midnight
+        scroll that led you somewhere you didn't know you needed to go.
+      `
+      lastUpdated={lastUpdated}
+    />
+    <div class="space-y-5">
+      <p>
+        Bill Gates once wrote in 1999 that the Internet was becoming the town
+        square for the global village of tomorrow. I don't think it's "becoming"
+        anymore — it is!
+      </p>
+      <p>
+        This page exists to help me keep track of links to things I've read and
+        liked on the internet. You can call them my
+        <i>"all-time favourite things on the internet."</i> I know, I know — browsers
+        have this feature 🤧. I've tried using it before, but it just doesn't work
+        for me. A change of laptop or uninstalling a browser is enough to make me
+        lose them 🤷‍♂️.
+      </p>
+    </div>
+    <ul class="marker:text-muted-foreground list-disc space-y-2 ps-6.5">
+      {
+        links
+          .sort((a, b) => a.title.localeCompare(b.title))
+          .map((link) => (
+            <li class="ps-1.5">
+              <a href={link.href}>{link.title}</a>
+            </li>
+          ))
+      }
+    </ul>
+  </main>
+</BaseLayout>

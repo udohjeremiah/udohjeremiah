@@ -1,0 +1,68 @@
+---
+import BackToPost from "@components/BackToPost.astro";
+import BackToTop from "@components/BackToTop.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import type { CollectionEntry } from "astro:content";
+import { formatDateTime } from "src/utils";
+
+type Props = CollectionEntry<"notes">["data"] & { children: unknown };
+
+const { title, description, publishedOn, updatedOn } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <main class="flex-1 px-8 py-20 md:px-0">
+    <article
+      class="prose prose-a:no-underline prose-headings:scroll-mt-20 sm:prose-headings:scroll-mt-28 prose-table:block prose-code:wrap-break-word prose-code:before:content-none prose-code:after:content-none prose-invert prose-code:bg-muted prose-code:-translate-y-px prose-code:rounded-md prose-code:px-1 prose-code:py-0.5 prose-table:overflow-x-auto mx-auto space-y-12"
+    >
+      <BackToPost title="notes" href="/notes" />
+      <header class="border-s-4 ps-6 uppercase">
+        <span class="text-muted-foreground flex items-center gap-1 text-sm">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="size-4"
+          >
+            <path d="M16 19h6"></path>
+            <path d="M16 2v4"></path>
+            <path d="M19 16v6"></path>
+            <path
+              d="M21 12.598V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8.5"
+            >
+            </path>
+            <path d="M3 10h18"></path>
+            <path d="M8 2v4"></path>
+          </svg>
+          <time datetime={publishedOn.toISOString()}>
+            {formatDateTime(publishedOn)}
+          </time>
+        </span>
+        <hgroup>
+          <h1 class="mb-0 text-3xl text-balance">{title}</h1>
+          <p class="mt-0 mb-0 text-sm">{description}</p>
+        </hgroup>
+        {
+          updatedOn && (
+            <span class="text-muted-foreground text-sm">
+              Updated on
+              <time datetime={updatedOn.toISOString()}>
+                {formatDateTime(updatedOn)}
+              </time>
+            </span>
+          )
+        }
+      </header>
+      <div>
+        <slot />
+      </div>
+    </article>
+  </main>
+  <BackToTop />
+</BaseLayout>

@@ -1,0 +1,30 @@
+---
+interface Props {
+  tag: string;
+  count?: number;
+}
+
+const { tag, count } = Astro.props;
+
+export function generateTagColor(tag: string) {
+  let hash = 0;
+  for (let i = 0; i < tag.length; i++) {
+    hash = (hash << 5) - hash + tag.charCodeAt(i);
+    hash |= 0; // keep in 32‑bit int range
+  }
+
+  const hue = Math.abs(hash) % 360;
+  const saturation = 60;
+  const lightness = 50;
+
+  return `hsl(${hue} ${saturation}% ${lightness}%)`;
+}
+---
+
+<span
+  class="text-foreground inline-flex items-center justify-center rounded px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap lowercase"
+  style={`background-color: ${generateTagColor(tag)}`}
+>
+  {tag}
+  {count && `(${count})`}
+</span>

@@ -1,0 +1,17 @@
+# build output
+dist
+# generated types
+.astro
+
+# dependencies
+**/node_modules
+
+# standard
+**/.git
+
+# lockfiles
+package-lock.json
+
+# markdown files in src/content
+src/content/**/*.md
+src/content/**/*.mdx

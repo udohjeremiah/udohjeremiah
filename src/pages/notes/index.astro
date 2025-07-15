@@ -1,0 +1,80 @@
+---
+import PageHeader from "@components/PageHeader.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+import fs from "fs";
+import path from "path";
+import { formatPostDate } from "src/utils";
+
+const notes = (await getCollection("notes")).sort(
+  (a, b) => b.data.publishedOn.getTime() - a.data.publishedOn.getTime(),
+);
+
+const notesByYear = notes.reduce<Record<number, typeof notes>>((acc, note) => {
+  const year = new Date(note.data.publishedOn).getFullYear();
+  (acc[year] ||= []).push(note);
+  return acc;
+}, {});
+
+const sortedNotesByYear = Object.entries(notesByYear).sort(
+  ([a], [b]) => Number(b) - Number(a),
+);
+
+const lastUpdated = new Date(
+  Math.max(
+    fs
+      .statSync(path.resolve(".", "src/pages/notes/index.astro"))
+      .mtime.getTime(),
+    new Date(notes[0]?.data.publishedOn ?? 0).getTime(),
+  ),
+);
+---
+
+<BaseLayout title="Notes | Udoh Jeremiah" description="Short-form posts">
+  <main class="flex-1 space-y-12 px-8 py-20 lg:px-20">
+    <PageHeader
+      title="Notes"
+      description=`
+        Mental clarity is not achieved by thinking harder, but by thinking
+        outside of your head. Capturing your thoughts creates space. It allows
+        you to see what's really there — and sometimes, what needs to go.
+      `
+      lastUpdated={lastUpdated}
+    />
+    <p>
+      Notes are brief, spontaneous, informal, and unstructured content. It's
+      where I share short-form content whenever I catch a thought in those rare,
+      fleeting moments. You should read
+      <a href="/notes/everything-we-share-doesnt-have-to-be-a-blog-post">
+        this
+      </a> first to understand why I created it.
+    </p>
+    <div class="space-y-4">
+      {
+        sortedNotesByYear.map(([year, notes]) => (
+          <div>
+            <h2 class="text-muted-foreground border-b px-2 py-4 text-end italic">
+              {year}
+            </h2>
+            <ul>
+              {notes.map((note) => (
+                <li>
+                  <a
+                    href={`/notes/${note.id}`}
+                    class="hover:bg-muted hover:border-b-muted grid grid-cols-[1fr_auto] items-center gap-10 border-b px-2 py-4 [background:unset] [transition:unset]"
+                  >
+                    <div>{note.data.title}</div>
+                    <time class="text-muted-foreground">
+                      {formatPostDate(note.data.publishedOn)}
+                    </time>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </main>
+</BaseLayout>

@@ -1,0 +1,771 @@
+---
+title: Why JavaScript Needs TypeScript in the Web Application Era
+description: Discover why you should consider TypeScript over JavaScript for your next web application project.
+heroImage: ../../../public/blog/why-javascript-needs-typescript-in-the-web-application-era.webp
+publishedOn: 2024-07-27
+tags: [coding, javascript, typescript]
+---
+
+## Introduction
+
+A web app is a website but a website isn't a web app. Technically, they are the
+same—a set of related pages located under a single domain name and accessed with
+a browser—and we often use the terms interchangeably. Still, their contrasting
+differences in purpose, complexity, technical architecture, interactivity, and
+integration with external systems or services demand we treat them as completely
+different things. A website is a collection of static web pages accessed through
+a web browser whereas a web app is an interactive software accessed through a
+web browser. Most of the stuff built or used on the Web today aren't sites but
+apps, popular examples of such apps are eBay, Facebook, Google Docs, Microsoft
+Office, Netflix, Paypal, and Uber. Unless you're building a static blog or
+portfolio site, likely, your end goal for your site or the features you want to
+be incorporated into it demands it's an app.
+
+JavaScript is the main programming language used on the Web. According to
+Wikipedia,
+[99% of websites use JavaScript on the client side for webpage behaviour](https://en.wikipedia.org/wiki/JavaScript).
+If you are building a website today and need a programming language for
+interactivity, dynamic content, or client-side logic, you would need a
+sophisticated technical reason NOT to use JavaScript. JavaScript has its
+shortcomings though, that significantly prevents it from scaling from a single
+developer with 1,000 lines of code to a team of 10 developers with 10,000 lines
+of code. Over the years, many methods, tools, and systems have emerged that
+attempt to be the _holy grail_ that fixes JavaScript's _problems_; only one
+survived: TypeScript.
+
+TypeScript is ubiquitous in the web app era today, just as JavaScript was in the
+website era. Big techs like Airbnb, Google, Medium, Microsoft (the creators),
+Netflix, and Slack, among others, have adopted it. Many open-source libraries,
+frameworks, and runtime engines heavily used in the web community today are
+built on it. It's rare to see a job for a web developer today without TypeScript
+as a requirement. As Matt Pocock of
+[totaltypescript.com](https://www.totaltypescript.com) puts it:
+
+> These days, TypeScript is an industry default. If you're starting an
+> enterprise app today, you’ll need a good reason NOT to use TypeScript.
+
+In this article, I seek to tell you NOT how bad JavaScript is, that wouldn't be
+fair because JavaScript enabled the Web to get where it is today. Instead, I
+seek to show you how the Web started, how JavaScript became its _de facto_
+programming language, the shortcomings of JavaScript in large-scale apps, and
+why TypeScript is the most reasonable way to advance with JavaScript in the
+foreseeable future.
+
+## Prerequisite
+
+This article assumes you have experience building websites with HTML, CSS, and
+JavaScript. If otherwise, I recommend you learn these technologies, and create
+some websites before proceeding. However, it is still a good read if you only
+care to know about a small part of the history of the Web.
+
+## The Birth of the Web
+
+The Web isn't the Internet and the Internet isn't the Web. Though they are often
+mistakenly used as a synonym for each other, the Web is a service that operates
+over the Internet, just as email does. In 1989, while working at the
+[European Organization for Nuclear Research (CERN)](https://home.cern) in
+Switzerland, Tim Berners-Lee invented the World Wide Web - a global information
+medium that users can access via computers connected to the Internet. By 1990,
+he and his work team had built all the tools necessary for a working web and the
+[first website](http://info.cern.ch) was published.
+
+For the first few years of the web, it appealed only to niche users in technical
+and academic circles. However, with the 1993 introduction of the
+[Mosaic](https://en.wikipedia.org/wiki/NCSA_Mosaic) browser developed by Marc
+Andreessen and Eric Bina at the
+[National Center for Supercomputing Applications (NCSA)](https://www.ncsa.illinois.edu),
+the web gained popularity among the general public.
+
+With many other browsers being developed, and the Mosaic browser being easy to
+install and use, including images and text on the same page (previous browsers
+displayed images in a separate window), and able to submit forms to a server,
+the Web became not just popular but also showed that it could be more than just
+a medium to organize and link documents for people to find easily.
+
+However, if the Web was going to be more, it couldn't just be _static_. Humans
+crave interaction. Our brains love feedback. We want to interact with something,
+get feedback, use that feedback to interact again, and then the loop
+continues—that's how humans create connections. So, there was a desire in the
+growing web community to add dynamic behaviours to web pages. This would require
+programming capabilities and hence a programming language for the Web.
+
+## The evolution of programming languages used on the Web
+
+In 1992, Pei-Yuan Wei released
+[ViolaWWW](https://en.wikipedia.org/wiki/ViolaWWW), a discontinued browser that
+featured a scripting language called Viola. This scripting language can be
+accessed from an HTML document, making it the first programming language for the
+web. However, ViolaWWW could not compete with Mosaic, the browser that brought
+the Web into the mainstream. Eventually, the ViolaWWW browser fell into disuse
+and was abandoned.
+
+NCSA, the institution where the Mosaic browser was invented, also developed
+[Server Side Includes (SSI)](https://en.wikipedia.org/wiki/Server_Side_Includes "Server Side Includes")
+and
+[Common Gateway Interface (CGI)](https://en.wikipedia.org/wiki/Common_Gateway_Interface).
+SSI is a server-side scripting language, for dynamic content on the web that
+enables including the contents of one or more files into a web page on a web
+server. CGI is an interface specification that allows web servers to execute an
+external program, often written in a scripting language and commonly known as a
+_CGI script_, to process HTTP or HTTPS user requests returning the output as web
+content. With the introduction of CGI and [Perl](https://www.perl.org)'s text
+processing capabilities, Perl became the go-to language for creating dynamic web
+pages, becoming popularly known as _Perl CGI Scripts_. With SSI and CGI, early
+web users in 1993 and 1994 could run interactive programs.
+
+In 1995, a new scripting language developed by Rasmus Lerdorf in 1994 emerged.
+Based on CGI, it gradually replaced Perl CGI scripts in many cases. This
+language is [PHP](https://www.php.net). Initially designed to create dynamic web
+pages and handle web forms, PHP evolved into a powerful server-side scripting
+language. It was embedded directly within HTML, making it accessible and easy
+for web developers to create interactive web apps.
+
+After graduating from UIUC, Marc Andreessen and Jim Clark, former CEO of
+[Silicon Graphics](https://en.wikipedia.org/wiki/Silicon_Graphics), met and
+formed [Netscape](https://en.wikipedia.org/wiki/Netscape) in 1994 to develop the
+[Netscape Navigator](https://en.wikipedia.org/wiki/Netscape_Navigator) browser.
+The browser soon became the dominant web client and superseded Mosaic in
+popularity. In 1995, a month before PHP was released to the public, JavaScript,
+designed to be a lightweight, interpreted language that could run in the
+browser, was created by Brendan Eich at Netscape. JavaScript made client-side
+scripting possible as it could run in the browser enabling interactive web pages
+without requiring a round trip to the server as previous solutions did. However,
+JavaScript's browser inconsistencies, limited network capabilities, reliance on
+form submissions that caused full-page reloads, security concerns and
+performance issues led developers who wanted to offer sophisticated apps over
+the Web to look for alternatives.
+
+Other alternatives to JavaScript in its early days were
+[Active X](https://en.wikipedia.org/wiki/ActiveX)
+(as used in JScript, VBScript, ActivePerl, and Active Server Pages),
+[ActionScript](https://en.wikipedia.org/wiki/ActionScript),
+[Adobe Flash](https://en.wikipedia.org/wiki/Adobe_Flash),
+[CFML](https://en.wikipedia.org/wiki/ColdFusion_Markup_Language)
+(as used in Adobe ColdFusion), [Java](https://www.java.com)
+(as used in Java Applets, Java Servlets, and JavaServer Pages). However, as
+years went by, with the standardization of JavaScript in
+[ECMAScript](https://ecma-international.org/publications-and-standards/standards/ecma-262),
+[AJAX](<https://en.wikipedia.org/wiki/Ajax_(programming)>) programming becoming
+popular, and browser vendors improving the performance of their
+[JavaScript engines](https://en.wikipedia.org/wiki/JavaScript_engine), and
+dropping support for Flash and Java, JavaScript ultimately triumphed and became
+the Web's _de facto_ programming language for client-side scripting.
+
+## JavaScript
+
+### The birth of JavaScript
+
+A newly hired developer brought into Netscape to create a scripting language
+that could run on the Web, Brendan Eich in May 1995 invented the JavaScript
+programming language. But why the connection to Java? It's a long story but
+here's a short version: Eich joined Netscape expecting to implement the
+[Scheme language](https://www.scheme.org) in the browser. Events took a turn,
+after Sun Microsystems, a fellow Microsoft competitor whom Netscape had created
+an alliance with, launched Java in May 1995. Eich wasn't going to develop a
+language based on Scheme anymore, instead, it would have to be somehow connected
+to Java. Eich created a language in a ten-day flurry that technically had little
+in common with Java but was given a name close to Java as a marketing ploy.
+
+Meanwhile, [Microsoft](https://www.microsoft.com) observed from afar as Netscape
+led and advanced the Web. It eventually occurred to Microsoft that
+[the Internet was a big deal](https://www.wired.com/2010/05/0526bill-gates-internet-memo/),
+prompting the debut of the
+[Internet Explorer (IE)](https://en.wikipedia.org/wiki/Internet_Explorer)
+browser in August 1995. Microsoft also developed its version of JavaScript,
+called JScript, which was included in IE 3.0. Although JScript and JavaScript
+were essentially the same languages, Microsoft used a different name, likely to
+avoid trademark issues with Sun Microsystems.
+
+After being rebuffed by the World Wide Web Consortium (W3C), the Web's official
+standards keeper, Netscape in November 1996
+[announced its plan](https://web.archive.org/web/19981203070212/http://cgi.netscape.com/newsref/pr/newsrelease289.html)
+to standardize JavaScript via
+[Ecma International](https://ecma-international.org), a European non-profit
+standards organization. This led to the official release of the first ECMAScript
+language specification in June 1997, a standard specification that browser
+vendors could align their JavaScript engines to conform to. However, despite the
+standards process continuing for a few years with more releases, IE being the
+dominant browser with a market share reaching 95% in the early 2000s undermined
+the effort to fully standardize JavaScript, as JScript became the de facto
+standard for client-side scripting on the Web.
+
+IE (and the JScript language) didn't wear the crown for long. Things started to
+change with the release of the [Firefox](https://mozilla.org/firefox) browser
+from [Mozilla](https://www.mozilla.org) in November 2004, as Firefox took
+significant market share from IE. Jesse Garrett in 2005 released a white paper
+in which he coined the term
+"[Ajax](<https://en.wikipedia.org/wiki/Ajax_(programming)>)" and described a set
+of technologies, of which JavaScript was the backbone, sparking a renaissance
+period of JavaScript, spearheaded by open-source libraries, such as
+[jQuery](https://jquery.com) , [Prototype](http://prototypejs.org),
+[Dojo Toolkit](https://dojotoolkit.org), [MooTools](https://mootools.net), and
+the communities that formed around them. [Google](https://about.google) debuted
+its [Chrome](https://www.google.com/chrome/) browser in September 2008, with the
+[V8](https://v8.dev) JavaScript engine faster than its competition, pushing
+other browser vendors to "up" their JavaScript engines. Finally, in July 2008,
+all parties came together for a conference in Oslo which led to the eventual
+agreement in early 2009 to combine all relevant work and drive the language
+forward. The result was the ECMAScript 5 standard, released in December 2009.
+JavaScript won!
+
+### Shortcomings of JavaScript
+
+Now the CEO of [Brave](https://brave.com),
+[Brendan Eich, shared in an armchair discussion](https://www.youtube.com/watch?v=XOmhtfTrRxc)
+how he was assigned at Netscape to develop a demo in ten days to demonstrate the
+possibility of a browser-based language. That demo eventually evolved into
+JavaScript. Here’s what Eich had to say about it:
+
+> ... That I did. I did that in ten days. I have many regrets which cannot be
+> fixed, because, as it often happens in the valley, that demo was considered
+> done and it shipped. There were actually some changes that I made later that I
+> regret more because I got early adopters sort of whining for things, but I
+> won’t get into that; that was my fault too. The main thing I think was
+> everybody’s fault was the idea that there should be a language in HTML. Marc
+> Andreessen was very clear that you should just be able to write the code in
+> your page, right? And, you know, this is easier said than done. But what he
+> meant was it should be interpreted, as was pointed out earlier; it should be
+> very fast to load, it should be accessible to beginners, amateur programmers,
+> and graphic designers who know a little basic from their Apple II
+> (you know, 15 years earlier). It should be a language for the masses, as
+> opposed to Java ...
+
+You've heard it straight from the horse's mouth. What more can be said? The
+rapid development of JavaScript in its initial 10-day creation led to several
+design "flaws", which are viewed as shortcomings or peculiarities of the
+language today. These flaws can't be fixed, because as we know it
+**you don't break the Web**, and trying to fix things backward will. Over time,
+many of these issues have been addressed or mitigated through language evolution
+and best practices.
+
+But then, JavaScript's application today has outgrown its original intention as
+a simple scripting language for non-programmers to create dynamic, interactive
+websites. Although JavaScript has evolved significantly to meet the demands of
+these new areas, the rule to never break the Web means we must live with some of
+the flaws of the language that can't be addressed or mitigated. These
+"must-live-with" flaws, three in particular, limit JavaScript's ability to be
+used efficiently in building, scaling, and maintaining large-scale web apps:
+
+- JavaScript is too forgiving
+- JavaScript can produce runtime errors from syntactically valid code
+- JavaScript is a weakly and dynamically typed language
+
+#### JavaScript is too forgiving
+
+A major design decision for JavaScript was to create a simple, easier-to-learn
+programming language that web designers or non-programmers could easily adopt.
+This may explain why Netscape abandoned the idea of Java in the browser in
+favour of a scripting language. To make it appeal to the masses, the language
+didn't need to be as strict as languages like Java, C, or C++. The approach
+worked, and the benefits for JavaScript included a lower barrier to entry,
+easier learning, rapid development, and increased adoption. However, this
+flexibility gave room for problematic code and harder-to-find bugs. Carefully
+consider the examples below:
+
+```js
+"use strict";
+
+console.log(1 + / + + + / + 1); // 1/ + + + /1
+
+console.log("5" - 2); // 3
+console.log("5" + 2); // '52'
+console.log("5" - -2); // 7
+console.log("a" - 1); // NaN
+console.log("a" + 1); // a1
+
+console.log([] - []); // 0
+console.log([] + []); // ""
+console.log(!+[] + [] + ![]); // truefalse
+console.log([1, 2, 3] - [4, 5, 6]); // NaN
+console.log([1, 2, 3] + [4, 5, 6]); // 1,2,34,5,6
+
+console.log([] + {}); // [object Object]
+console.log({} + {}); // [object Object][object Object]
+
+console.log(true + true); // 2
+console.log(true - false); // 1
+console.log(true - 10); // -9
+console.log(true + 10); // 11
+console.log(true - "10"); // -9
+console.log(true + "10"); // true10
+
+console.log(true + 1 === 2); // true
+console.log(true === 1); // false
+
+console.log(3 > 2 > 1); // false
+```
+
+JavaScript goes to such enormous lengths to avoid crashing that it can impede
+its usability for large-scale programs. While its "forgiving" nature might be a
+beneficial feature, it can become a serious liability in critical enterprise web
+apps. For example, in a banking app where millions of dollars could be lost, or
+a healthcare app where lives could be endangered due to an unexpected erroneous
+runtime value, JavaScript's forgiveness isn't a "virtue" but a "plague" that
+needs to be avoided at all costs.
+
+#### JavaScript can produce runtime errors from syntactically valid code
+
+Imagine writing a valid program that's free of syntax errors, and produced no
+errors during development, only to have such a program throw an error in runtime
+because of your **valid syntax**. JavaScript is the only language I know that
+does this. How bad! Carefully consider the examples below:
+
+```js
+"use strict";
+
+console.log(x); // Runtime Error: Cannot access 'x' before initialization
+let x = 10;
+
+const num = 123;
+num.push(4); // Runtime Error: num.push is not a function
+
+const nullValue = null;
+console.log(nullValue.prop); // Runtime Error: Cannot read properties of null (reading 'prop')
+
+let undefinedValue;
+console.log(undefinedValue.prop); // Runtime Error: Cannot read properties of undefined (reading 'prop')
+
+const notAFunction = "I am not a function";
+notAFunction(); // Runtime Error: notAFunction is not a function
+
+const user = {
+  name: "Alice",
+};
+console.log(user.address.city); // Runtime Error: Cannot read property 'city' of undefined
+
+const obj = {};
+Object.defineProperty(obj, "property", { value: 42, configurable: false });
+delete obj.property; // Runtime Error: Cannot delete property 'property' of #<Object>
+
+const obj2 = {};
+Object.defineProperty(obj2, "fixedValue", { value: 10, writable: false });
+obj2.fixedValue = 20; // Runtime Error: Cannot assign to read only property 'fixedValue' of object '#<Object>'
+
+function myFunction() {
+  this.value = 10;
+}
+myFunction(); // Runtime Error: Cannot set properties of undefined (setting 'value')
+
+class MyClass {
+  constructor() {
+    Object.defineProperty(this, "fixedValue", {
+      value: 42,
+      writable: false,
+    });
+  }
+}
+let instance2 = new MyClass();
+instance2.fixedValue = 100; // Runtime Error: Cannot assign to read only property 'fixedValue' of object '#<MyClass>'
+
+const circularReference = {};
+circularReference.self = circularReference;
+JSON.stringify(circularReference); // Runtime Error: Converting circular structure to JSON
+```
+
+The examples above are all syntactically correct, so such a program can be
+considered a "valid" JavaScript program (no errors would be thrown during
+development). However, when you deploy your app and run the code in production,
+be prepared for surprises as your program crashes—not due to an unexpected error
+outside your code or from an external service, but because of your valid
+JavaScript syntax. JavaScript indeed breaks the
+[principle of least surprise](https://en.wikipedia.org/wiki/Principle_of_least_astonishment)
+to a great extent. You might argue that you wouldn't write such "silly" code in
+your programs, but the potential for JavaScript's flexibility and dynamic nature
+to cause these kinds of runtime errors, even if the code is syntactically
+correct, makes it an "inefficient" language for a large-scale project with over
+10 developers and a codebase of more than 10,000 lines.
+
+#### JavaScript is a weakly and dynamically typed language
+
+Arguably, one of JavaScript's biggest design flaws is its use of
+**weak typing**. This feature allows for all manner of unpredictable type
+coercions, leading to the numerous
+[WATs](https://www.destroyallsoftware.com/talks/wat) and
+[WTFs](https://wtfjs.com) that have made JavaScript the subject of jokes for
+years. JavaScript's weak typing allows operations between different data types
+to be normal and unchecked, which opens up web apps with a large codebase for
+unexpected runtime results and hard-to-debug issues. Carefully consider the
+examples below:
+
+```js
+"use strict";
+
+console.log(1 + / + + + / + 1); // 1/ + + + /1
+
+console.log("5" - 2); // 3
+console.log("5" + 2); // '52'
+console.log("5" - -2); // 7
+
+console.log("a" - 1); // NaN
+console.log("a" + 1); // a1
+console.log("a" - -1); // NaN
+
+console.log(true - "10"); // -9
+console.log(true + "10"); // "true10"
+console.log(true - -"10"); // 11
+
+console.log(true + 1 === 2); // true
+console.log(true === 1); // false
+
+console.log([] - []); // 0
+console.log([] + []); // ""
+
+console.log([1, 2] - [3, 4]); // NaN
+console.log([1, 2] + [3, 4]); // 1,23,4
+
+console.log([] + {}); // [object Object]
+console.log({} + {}); // [object Object][object Object]
+console.log(typeof ({} + {})); // string
+
+console.log({ a: 1, b: 2 } + [1, 2, 3]); // [object Object]1,2,3
+```
+
+JavaScript is also dynamically typed. Variables in your programs can take
+different types as your program runs, and type checks are performed during
+runtime. This means that type errors found during execution can cause the
+program in production to crash. Carefully consider the following examples:
+
+```js
+"use strict";
+
+let value = "Hello"; // Initially a string
+console.log(`Value is a string: ${value}`); // Outputs: Value is a string: Hello
+
+value = 42; // Now a number
+console.log(`Value is a number: ${value}`); // Outputs: Value is a number: 42
+
+value = [1, 2, 3]; // Now an array
+console.log(`Value is an array: ${value}`); // Outputs: Value is an array: 1,2,3
+
+value = { received: "yes" }; // Now an object
+console.log(`Value is an object: ${JSON.stringify(value)}`); // Outputs: Value is an object: {"received":"yes"}
+
+value = value["recieved"]; // Now undefined
+console.log(value.toUpperCase()); // TypeError: value.toUpperCase is not a function
+```
+
+This combination of JavaScript being a dynamically typed and very weakly typed
+language makes it a "recipe for looming disaster" when used to develop a
+large-scale web app. With JavaScript, you can't be fully guaranteed that the
+code in your program won't throw an error during runtime. This leaves you with
+an app prone to unexpected failures, interruptions, or crashes.
+
+### Alternatives provided over the years to address JavaScript's shortcomings
+
+Since JavaScript graced the web, alternative languages and tools have been
+developed over the years that claim to address and overcome some or all of its
+shortcomings. Here are a few of them:
+
+- [ActionScript](https://en.wikipedia.org/wiki/ActionScript)
+- [ClojureScript](https://clojurescript.org)
+- [Closure Compiler](https://developers.google.com/closure/compiler)
+- [CoffeeScript](https://coffeescript.org)
+- [Dart](https://dart.dev)
+- [Elm](https://elm-lang.org)
+- [Flow](https://flow.org)
+- [GWT](https://www.gwtproject.org)
+- [Haxe](https://haxe.org)
+- [PureScript](https://www.purescript.org)
+- [ReasonML (now ReScript)](https://rescript-lang.org)
+- [Scala.js](https://www.scala-js.org)
+- [TypeScript](https://www.typescriptlang.org)
+
+Unfortunately, most of these languages and tools today are either no longer
+being actively developed, have slid into obscurity, or weren't warmly received
+by the web community. This begs the question: Does JavaScript need a replacement
+or an enhancement? However, one language stuck around: TypeScript. It did so
+because it was probably the only language (among the alternatives) that followed
+Brendan Eich's law:
+["Always bet on JavaScript."](https://brendaneich.com/wp-content/uploads/2017/12/dotJS-2017.pdf)
+While other languages and tools aimed to fix JavaScript's shortcomings by
+introducing a new way of thinking, new behaviour, and new syntax, TypeScript
+simply said, "Your current JavaScript code is okay; all it needs is just a
+syntax for types." Today, TypeScript has gained mainstream adoption and is the
+go-to language for developers when they want to build large-scale JavaScript
+apps.
+
+## TypeScript
+
+### What is TypeScript?
+
+TypeScript is a free, open-source, high-level, strongly typed programming
+language developed by Microsoft. It was first released to the public in October
+2012 with version 0.8, following two years of internal development. TypeScript
+was created to address the limitations of JavaScript for developing large-scale
+web apps. Designed for application-scale JavaScript, TypeScript
+[transpiles](https://en.wikipedia.org/wiki/Source-to-source_compiler) to
+JavaScript. To learn more about the language's history, I recommend watching the
+[documentary on TypeScript](https://www.youtube.com/watch?v=U6s2pdxebSo&t=305s).
+
+TypeScript is **JavaScript with syntax for types**. It's a _typed_ superset of
+JavaScript, meaning all JavaScript programs are syntactically valid TypeScript.
+Therefore, a JavaScript program is also a valid TypeScript program. A TypeScript
+program can use existing JavaScript code from a JavaScript file, library, or
+framework without needing to modify it, and you can call TypeScript-generated
+code from other JavaScript programs. TypeScript adds static typing with optional
+type annotations to JavaScript, which means your programs are type-checked at
+compile time to ensure the types are correct, and it compiles to readable,
+standards-based JavaScript code.
+
+While originally developed by Microsoft, TypeScript is now
+[hosted on GitHub](https://github.com/microsoft/TypeScript) under an Apache 2.0
+license. It is actively maintained and developed by Microsoft and a vibrant
+open-source community.
+
+### Benefits of using TypeScript over JavaScript
+
+Brendan Eich, the creator of the JavaScript programming language and co-founder
+of Mozilla and Brave,
+[discussed TypeScript during a conversation with Lex Fridman on his podcast](https://www.youtube.com/watch?v=4hGvSFzB76I&list=PPSV).
+Here's what Eich had to say about it:
+
+> ... Microsoft did something smart too. They, Anders [Hejlsberg's] company
+> [and] Luke Hoban who has left Microsoft, also did TypeScript. And they
+> realized something I think that Gilad Bracha has also popularized (and he was
+> involved in Dart at Google): if you don't worry about soundness in the type
+> system [and] you don't try to enforce the type checks at runtime—in
+> particular, just use it as a sort of warning system, a tool type system—you
+> can still have a lot of value for developers, especially in large projects.
+> So, TypeScript has been a roaring success for Microsoft ... I think it's
+> [TypeScript] beneficial. Now, its technically a superset of JavaScript so of
+> course I love it. The shortest Javascript program is still a TypeScript
+> program. Any JavaScript program is a TypeScript program, which is brilliant
+> because then you can start incrementally adding type annotations, getting
+> warnings, learning how to use them ...
+
+Eich sees TypeScript as a beneficial tool that addresses many of JavaScript's
+flaws, which make it inefficient for large-scale web apps. Why shouldn't you?
+While TypeScript can't fix all of JavaScript's shortcomings, it does resolve
+many issues that hinder JavaScript's efficiency in developing and maintaining
+large applications. In turn, TypeScript provides enormous benefits that enable
+developers to build, scale, and maintain large-scale JavaScript applications.
+Key benefits include static typing, enhanced IntelliSense, type safety, early
+error detection, support for modern JavaScript features, and easier debugging.
+
+However, our primary focus is on the three must-live-with flaws of JavaScript
+discussed earlier that prevent it from being used in large-scale web apps and
+how TypeScript specifically addresses that:
+
+- TypeScript is strict
+- TypeScript can catch runtime errors in syntactically valid code during development
+- TypeScript is a strongly and statically typed language
+
+#### TypeScript is strict
+
+TypeScript is strict. Unlike JavaScript, where developers can perform
+"nonsensical" actions—such as adding an object to an array or subtracting a
+string from a boolean—resulting in errors that can crash your program or cause
+unintended behaviour, TypeScript prevents such issues during development. It
+alerts you to these nonsensical actions, enabling you to catch subtle bugs
+before they creep into production. Consider the examples below:
+
+```ts
+console.log(1 + / + + + / + 1); // Error: Operator '+' cannot be applied to types 'number' and 'RegExp'.
+
+console.log("5" - 2); // Error: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+console.log("5" + 2); // '52'
+console.log("5" - -2); // Error: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+console.log("a" - 1); // Error: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+console.log("a" + 1); // Error: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+
+console.log([] - []); // Error: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+console.log([] + []); // Error: Operator '+' cannot be applied to types 'never[]' and 'never[]'.
+console.log(!+[] + [] + ![]); // Error: Operator '+' cannot be applied to types 'boolean' and 'never[]'.
+console.log([1, 2, 3] - [4, 5, 6]); // Error: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+
+console.log([1, 2, 3] + [4, 5, 6]); // Error: Operator '+' cannot be applied to types 'number[]' and 'number[]'.
+console.log([] + {}); // Error: Operator '+' cannot be applied to types 'never[]' and '{}'.
+console.log({} + {}); // Error: Operator '+' cannot be applied to types '{}' and '{}'.
+
+console.log(true + true); // Error: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
+console.log(true - false); // Error: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+console.log(true - 10); // Error: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+console.log(true + 10); // Error: Operator '+' cannot be applied to types 'boolean' and 'number'.
+console.log(true - "10"); // Error: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+console.log(true + "10"); // true10
+
+console.log(true + 1 === 2); // Error: Operator '+' cannot be applied to types 'boolean' and 'number'.
+console.log(true === 1); // Error: This comparison appears to be unintentional because the types 'boolean' and 'number' have no overlap.
+
+console.log(3 > 2 > 1); // Error: Operator '>' cannot be applied to types 'boolean' and 'number'.
+```
+
+As you can see, TypeScript's strictness makes nearly all of these examples fail,
+and for good reasons: they are nonsensical and would result in erroneous and
+unexpected outcomes. This strictness is particularly valuable for large-scale
+web apps, where such subtle bugs are harder to detect and costly. TypeScript
+ensures that your program crashes during development when you do these
+nonsensical things, allowing you to identify and fix the issues before moving
+forward. This makes maintaining and scaling your app easier, as you can be
+confident that your production code is free from such bugs.
+
+#### TypeScript can catch runtime errors in syntactically valid code during development
+
+While JavaScript allows you to write programs that may appear error-free but can
+throw errors in production due to valid syntax issues, TypeScript helps by
+detecting these potential runtime errors during development. TypeScript alerts
+you to syntax that could cause runtime failures, providing early warnings before
+the code reaches production. Consider the examples below:
+
+```ts
+console.log(x); // Error: Block-scoped variable 'x' used before its declaration.
+let x = 10;
+
+const num = 123;
+num.push(4); // Error: Property 'push' does not exist on type '123'.
+
+const nullValue = null;
+console.log(nullValue.prop); // Error: 'nullValue' is possibly 'null'.
+
+let undefinedValue;
+console.log(undefinedValue.prop); // Error: 'undefinedValue' is possibly 'undefined'.
+
+const notAFunction = "I am not a function";
+notAFunction(); // Error: This expression is not callable.
+
+const user = {
+  name: "Alice",
+};
+console.log(user.address.city); // Error: Property 'address' does not exist on type '{ name: string; }'.
+
+const obj = {};
+Object.defineProperty(obj, "property", { value: 42, configurable: false });
+delete obj.property; // Error: Property 'property' does not exist on type '{}'.
+
+const obj2 = {};
+Object.defineProperty(obj2, "fixedValue", { value: 10, writable: false });
+obj2.fixedValue = 20; // Error: Property 'fixedValue' does not exist on type '{}'.
+
+function myFunction() {
+  this.value = 10; // Error: this' implicitly has type 'any' because it does not have a type annotation.
+}
+myFunction();
+
+class MyClass {
+  constructor() {
+    Object.defineProperty(this, "fixedValue", {
+      value: 42,
+      writable: false,
+    });
+  }
+}
+let instance2 = new MyClass();
+instance2.fixedValue = 100; // Error: Property 'fixedValue' does not exist on type 'MyClass'.
+
+const circularReference = {};
+circularReference.self = circularReference; // Error: Property 'self' does not exist on type '{}'.
+JSON.stringify(circularReference);
+```
+
+As seen in the examples above, TypeScript does an excellent job of identifying
+valid syntax that could cause runtime errors in production, preventing these
+issues from slipping through. With TypeScript, you don’t need to worry about
+valid syntax causing runtime crashes. Even if you’re confident in your ability
+to write sensible JavaScript code, it's difficult to guarantee that
+syntactically correct code won’t produce runtime errors. TypeScript helps ensure
+that your syntactically valid programs are error-free in production.
+
+#### TypeScript is a strongly and statically typed language
+
+TypeScript uses **strong typing**. As a strongly typed language, TypeScript does
+not allow operations between different data types unless explicit type
+conversions are performed. One of JavaScript's biggest design
+flaws—**weak typing**—is eliminated. Developers working on large-scale apps can
+be assured that there will be no more unpredictable type coercions from
+operations between mismatched types, which can lead to erroneous and unexpected
+results. TypeScript throws an error for such operations unless explicit
+conversions are done. Consider the examples below:
+
+```ts
+console.log(1 + / + + + / + 1); // Error: Operator '+' cannot be applied to types 'number' and 'RegExp'.
+
+console.log("5" - 2); // Error: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+console.log("5" + 2); // '52'
+console.log("5" - -2); // Error: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+
+console.log("a" - 1); // Error: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+console.log("a" + 1); // a1
+console.log("a" - -1); // Error: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+
+console.log(true - "10"); // Error: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+console.log(true + "10"); // "true10"
+console.log(true - -"10"); // Error: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+
+console.log(true + 1 === 2); // Error: Operator '+' cannot be applied to types 'boolean' and 'number'.
+console.log(true === 1); // Error: This comparison appears to be unintentional because the types 'boolean' and 'number' have no overlap.
+console.log([] - []); // Error: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+console.log([] + []); // Error: Operator '+' cannot be applied to types 'never[]' and 'never[]'.
+
+console.log([1, 2] - [3, 4]); // Error: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+console.log([1, 2] + [3, 4]); // Error: Operator '+' cannot be applied to types 'number[]' and 'number[]'.
+
+console.log([] + {}); // Error: Operator '+' cannot be applied to types 'never[]' and '{}'.
+console.log({} + {}); // Error: Operator '+' cannot be applied to types '{}' and '{}'.
+console.log(typeof ({} + {})); // Error: Operator '+' cannot be applied to types '{}' and '{}'.
+console.log({ a: 1, b: 2 } + [1, 2, 3]); // Error: Operator '+' cannot be applied to types '{ a: number; b: number; }' and 'number[]'.
+```
+
+TypeScript is also statically typed. Variables in your programs must have a
+defined type before the program runs, and the type cannot change during the
+execution of your program. Type checks are performed during compile-time. This
+ensures that variables are used as intended, and all type errors are detected
+and must be fixed during development. With TypeScript, unlike JavaScript, our
+production code is free of type errors that might cause our program to crash.
+Consider the examples below:
+
+```ts
+let value = "Hello"; // Initially a string
+console.log(`Value is a string: ${value}`); // Outputs: Value is a string: Hello
+
+value = 42; // Error: Type 'number' is not assignable to type 'string'.
+console.log(`Value is a number: ${value}`); // Outputs: Value is a number: 42
+
+value = [1, 2, 3]; // Error: Type 'number[]' is not assignable to type 'string'.
+console.log(`Value is an array: ${value}`); // Outputs: Value is an array: 1,2,3
+
+value = { received: "yes" }; // Error: Type '{ received: string; }' is not assignable to type 'string'.
+console.log(`Value is an object: ${JSON.stringify(value)}`); // Outputs: Value is an object: {"received":"yes"}
+
+value = value["recieved"]; // Error: Element implicitly has an 'any' type because index expression is not of type 'number'.
+console.log(value.toUpperCase());
+```
+
+This combination of TypeScript being strongly and statically typed enables
+developers to write readable and maintainable code, and to detect bugs more
+easily, especially when working with a large codebase. With TypeScript, you are
+assured that the code in your program won't crash during runtime due to type
+errors. This not only makes your app robust and future-proof but also makes it
+easy to scale and maintain.
+
+## Conclusion
+
+Using a weakly and dynamically typed language like JavaScript for a small web
+app with 1,000 lines of code and 1-3 developers is manageable, as it's easy to
+read the source code, communicate expectations, and understand functionality.
+However, it becomes exponentially harder with a medium to large group of
+developers and 10,000 lines of code. TypeScript addresses these shortcomings by
+enabling developers to build large-scale JavaScript apps that are readable,
+maintainable, and scalable.
+
+The examples used in this article were basic to ensure anyone familiar with
+JavaScript could easily follow along. This approach prevents readers from
+getting bogged down in complex code and keeps the article concise. Don't dismiss
+these examples as trivial; in the real world, especially when working with a
+team on a large codebase, the risk of making "silly" and "nonsensical" mistakes
+is high. TypeScript acts as a safeguard against such errors. I hope this article
+has sparked your interest in exploring TypeScript further. If so, I've done my
+job well.
+
+Who knows, in the future, we might not _even_ need TypeScript or JavaScript.
+With the
+[ECMAScript TC39 proposal for type annotations](https://tc39.es/proposal-type-annotations),
+JavaScript could adopt type syntax, making TypeScript just a CLI tool for
+type-checking. Plus, with Douglas Crockford, the inventor of
+[JSON](https://www.json.org/json-en.html),
+[pushing for a new language to replace JavaScript](https://www.youtube.com/watch?v=lc5Np9OqDHU&list=PPSV),
+we might see something better come along. But that's all in the future. Right
+now, JavaScript is the go-to for the web, and TypeScript boosts it for
+large-scale apps.
+
+Remember, **"hackers hack, crackers crack, and whiners whine. Be a hacker."**
+Take care.

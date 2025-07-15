@@ -1,0 +1,178 @@
+---
+import { SITE_MAIL } from "src/constants";
+
+const { pathname } = Astro.url;
+
+const navMainLinks = [
+  {
+    title: "Home",
+    href: "/",
+    isActive: pathname.slice(1) === "",
+  },
+  {
+    title: "About",
+    href: "/about",
+    isActive: pathname.slice(1) === "about",
+  },
+  {
+    title: "Work",
+    href: "/work",
+    isActive: pathname.slice(1) === "work",
+  },
+  {
+    title: "Blog",
+    href: "/blog",
+    isActive: pathname.slice(1) === "blog",
+  },
+  {
+    title: "Notes",
+    href: "/notes",
+    isActive: pathname.slice(1) === "notes",
+  },
+  {
+    title: "Readings",
+    href: "/readings",
+    isActive: pathname.slice(1) === "readings",
+  },
+];
+
+const navSubLinks = [
+  { title: "RSS", href: "/rss.xml" },
+  { title: "Bookmarks", href: "/bookmarks" },
+  { title: "Colophon", href: "/colophon" },
+];
+
+const navSocialLinks = [
+  { title: "GitHub", href: "https://github.com/udohjeremiah" },
+  {
+    title: "LinkedIn",
+    href: "https://www.linkedin.com/in/udoh-jeremiah-02a640304",
+  },
+  {
+    title: "Discord",
+    href: "https://discordapp.com/users/1229921586149331066",
+  },
+];
+
+export type Props = Record<string, never>;
+---
+
+<button
+  id="site-nav-open"
+  type="button"
+  aria-controls="site-nav"
+  aria-expanded="false"
+  class="text-2xl font-extralight tracking-widest uppercase duration-500 hover:cursor-pointer hover:font-bold sm:text-3xl lg:text-4xl"
+>
+  Menu
+</button>
+
+<div
+  id="site-nav"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menu"
+  aria-hidden="true"
+  data-state="closed"
+  class="bg-muted fixed inset-0 z-1000 flex h-full w-full flex-col gap-16 overflow-auto px-8 py-4 transition-transform duration-1000 ease-in-out will-change-transform transform-3d sm:p-8 lg:px-12"
+>
+  <button
+    id="site-nav-close"
+    type="button"
+    aria-controls="site-nav"
+    aria-expanded="true"
+    class="self-end text-2xl font-extralight tracking-widest uppercase duration-500 hover:cursor-pointer hover:font-bold sm:text-3xl lg:text-4xl"
+  >
+    Close
+  </button>
+  <div class="grid grid-cols-1 gap-16 xl:grid-cols-[1fr_auto] xl:gap-32">
+    <nav aria-label="Site Navigation">
+      <ul class="grid grid-cols-1 gap-16 md:grid-cols-2">
+        {
+          navMainLinks.map((mainLink, index) => (
+            <li>
+              <a
+                aria-current={mainLink.isActive ? "page" : "false"}
+                href={mainLink.href}
+                class="text-muted-foreground group flex items-start gap-4 pb-1 text-6xl xl:text-7xl"
+              >
+                <span class="text-sm">{`${index + 1}`.padStart(2, "0")}.</span>
+                <span class={mainLink.isActive ? "text-foreground" : ""}>
+                  {mainLink.title}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <div class="mt-auto flex flex-col gap-16 tracking-wider">
+      <div>
+        <p class="text-muted-foreground">Send me an email</p>
+        <a href={`mailto:${SITE_MAIL}`} class="text-xl md:text-3xl">
+          {SITE_MAIL}
+        </a>
+      </div>
+      <div>
+        <p class="text-muted-foreground">Connect with me</p>
+        <div class="flex items-center gap-6">
+          {
+            navSocialLinks.map((socialLink) => (
+              <a href={socialLink.href}>{socialLink.title}</a>
+            ))
+          }
+        </div>
+      </div>
+      <div class="flex items-center gap-6">
+        {
+          navSubLinks.map((subLink) => (
+            <a href={subLink.href}>
+              <span>{subLink.title}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const siteNav = document.getElementById("site-nav") as HTMLDivElement;
+  const siteNavOpen = document.getElementById(
+    "site-nav-open",
+  ) as HTMLButtonElement;
+  const siteNavClose = document.getElementById(
+    "site-nav-close",
+  ) as HTMLButtonElement;
+
+  siteNavOpen.addEventListener("click", () => {
+    siteNav.setAttribute("data-state", "open");
+    siteNav.setAttribute("aria-hidden", "false");
+
+    siteNavOpen.setAttribute("aria-expanded", "true");
+    siteNavClose.setAttribute("aria-expanded", "true");
+
+    document.body.classList.add("overflow-hidden");
+    siteNavClose.focus();
+  });
+
+  siteNavClose.addEventListener("click", () => {
+    siteNav.setAttribute("data-state", "closed");
+
+    siteNav.addEventListener(
+      "transitionend",
+      function handleTransitionEnd(event) {
+        if (event.propertyName === "transform") {
+          siteNav.setAttribute("aria-hidden", "true");
+          siteNav.removeEventListener("transitionend", handleTransitionEnd);
+        }
+      },
+    );
+
+    siteNavOpen.setAttribute("aria-expanded", "false");
+    siteNavClose.setAttribute("aria-expanded", "false");
+
+    document.body.classList.remove("overflow-hidden");
+    siteNavOpen.focus();
+  });
+</script>

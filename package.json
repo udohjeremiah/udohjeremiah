@@ -1,18 +1,76 @@
 {
-  "name": "",
+  "name": "udohjeremiah",
   "type": "module",
   "version": "0.0.1",
+  "license": "CC-BY-NC-4.0",
+  "description": "I write, speak and code...",
+  "homepage": "https://udohjeremiah.com",
+  "author": {
+    "name": "Udoh Jeremiah",
+    "email": "hello@udohjeremiah.com",
+    "url": "https://udohjeremiah.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/udohjeremiah/udohjeremiah.git"
+  },
+  "readme": "README.md",
+  "bugs": {
+    "url": "https://github.com/udohjeremiah/udohjeremiah/issues"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "lint": "eslint . --ext .js,.ts,.astro",
+    "lint:fix": "eslint . --ext .js,.ts,.astro --fix",
+    "typecheck": "astro check",
+    "prepare": "husky",
+    "commitizen": "cz",
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "^4.3.0",
     "@astrojs/rss": "^4.0.12",
     "@astrojs/sitemap": "^3.4.1",
-    "astro": "^5.9.2",
-    "sharp": "^0.34.2"
+    "@astrojs/ts-plugin": "^1.10.4",
+    "@expressive-code/plugin-line-numbers": "^0.41.3",
+    "@tailwindcss/vite": "^4.1.8",
+    "astro": "^5.11.0",
+    "astro-expressive-code": "^0.41.3",
+    "rehype-autolink-headings": "^7.1.0",
+    "rehype-external-links": "^3.0.0",
+    "rehype-slug": "^6.0.0",
+    "sharp": "^0.34.2",
+    "tailwindcss": "^4.1.8",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@eslint/js": "^9.28.0",
+    "@tailwindcss/typography": "^0.5.16",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^9.28.0",
+    "eslint-plugin-astro": "^1.3.1",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prettier": "^5.4.1",
+    "globals": "^16.2.0",
+    "husky": "^9.1.7",
+    "prettier": "^3.5.3",
+    "prettier-plugin-astro": "0.14.1",
+    "prettier-plugin-astro-organize-imports": "^0.4.11",
+    "prettier-plugin-tailwindcss": "^0.6.12",
+    "rehype-accessible-emojis": "^0.3.2",
+    "typescript-eslint": "^8.34.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   }
 }

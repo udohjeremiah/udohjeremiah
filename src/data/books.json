@@ -1,0 +1,157 @@
+[
+  {
+    "category": "Design",
+    "books": [
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL31679681M-M.jpg",
+        "name": "Refactoring UI",
+        "author": "Adam Wathan, Steve Schoger",
+        "pageCount": 218
+      }
+    ]
+  },
+  {
+    "category": "Fiction",
+    "books": [
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL30870669M-M.jpg",
+        "name": "Simple Genius",
+        "author": "David Baldacci",
+        "pageCount": 400
+      }
+    ]
+  },
+  {
+    "category": "History",
+    "books": [
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL8698082M-M.jpg",
+        "name": "101 Myths of the Bible",
+        "author": "Gary Greenberg",
+        "pageCount": 352
+      },
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL25671995M-M.jpg",
+        "name": "Pagans",
+        "author": "James J. O'Donnell",
+        "pageCount": 210
+      },
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL7699825M-M.jpg",
+        "name": "The Gnostic Gospels",
+        "author": "Elaine Pagels",
+        "pageCount": 192
+      },
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL20092566M-M.jpg",
+        "name": "The Origin of Satan",
+        "author": "Elaine Pagels",
+        "pageCount": 214
+      }
+    ]
+  },
+  {
+    "category": "Philosophy",
+    "books": [
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL37044614M-M.jpg",
+        "name": "Meditations",
+        "author": "Marcus Aurelius",
+        "pageCount": 160
+      },
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL5981437M-M.jpg",
+        "name": "The Book",
+        "author": "Alan Watts",
+        "pageCount": 163
+      }
+    ]
+  },
+  {
+    "category": "Productivity",
+    "books": [
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL26879249M-M.jpg",
+        "name": "Digital Minimalism",
+        "author": "Cal Newport",
+        "pageCount": 304
+      },
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL27150608M-M.jpg",
+        "name": "Die Empty",
+        "author": "Todd Henry",
+        "pageCount": 240
+      },
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL25613003M-M.jpg",
+        "name": "Essentialism",
+        "author": "Greg McKeown",
+        "pageCount": 272
+      },
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL9492038M-M.jpg",
+        "name": "No More Mr. Nice Guy!",
+        "author": "Robert A. Glover",
+        "pageCount": 204
+      },
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL40423376M-M.jpg",
+        "name": "So Good They Can't Ignore You",
+        "author": "Cal Newport",
+        "pageCount": 304
+      },
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL24232983M-M.jpg",
+        "name": "Talent is Overrated",
+        "author": "Geoff Colvin",
+        "pageCount": 240
+      },
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL32026973M-M.jpg",
+        "name": "The Monk Who Sold His Ferrari",
+        "author": "Robin S. Sharma",
+        "pageCount": 224
+      },
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL26977636M-M.jpg",
+        "name": "The Way of Men",
+        "author": "Jack Donovan",
+        "pageCount": 298
+      },
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL35354845M-M.jpg",
+        "name": "The Way of the Superior Man",
+        "author": "David Deida",
+        "pageCount": 324
+      },
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL45327859M-M.jpg",
+        "name": "Where Good Ideas Come From",
+        "author": "Steven Johnson",
+        "pageCount": 326
+      }
+    ]
+  },
+  {
+    "category": "Psychology",
+    "books": [
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL36689110M-M.jpg",
+        "name": "Thinking, Fast and Slow",
+        "author": "Daniel Kahneman",
+        "pageCount": 499
+      }
+    ]
+  },
+  {
+    "category": "Spirituality",
+    "books": [
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL18337770M-M.jpg",
+        "name": "The Sabbath",
+        "author": "Abraham Joshua Heschel",
+        "pageCount": 118
+      }
+    ]
+  }
+]

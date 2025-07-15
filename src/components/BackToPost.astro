@@ -1,0 +1,31 @@
+---
+interface Props {
+  title: string;
+  href: string;
+}
+
+const { title, href } = Astro.props;
+---
+
+<a
+  href={href}
+  class="text-muted-foreground flex w-max items-center gap-2 text-sm"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="size-4"
+  >
+    <path d="M3 19V5"></path>
+    <path d="m13 6-6 6 6 6"></path>
+    <path d="M7 12h14"></path>
+  </svg>
+  Back to {title}
+</a>

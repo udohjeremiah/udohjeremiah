@@ -1,49 +1,253 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import BaseLayout from "@layouts/BaseLayout.astro";
+
+import projects from "@data/projects.json";
+import { getCollection } from "astro:content";
+import { SITE_MAIL } from "src/constants";
+import { formatDateTime } from "src/utils";
+
+const selectedProjects = projects.slice(0, 4);
+
+const selectedWritings = (await getCollection("blog"))
+  .sort((a, b) => b.data.publishedOn.getTime() - a.data.publishedOn.getTime())
+  .slice(0, 4);
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
-</html>
+<BaseLayout title="Home | Udoh Jeremiah">
+  <main class="flex-1">
+    <section
+      class="flex h-[calc(100vh-4rem)] flex-col justify-center gap-16 px-8 py-20 text-3xl md:h-[calc(100vh-6rem)] md:text-5xl lg:px-20"
+    >
+      <p>Hello 👋</p>
+      <p>
+        It's a miracle 💥 you're here! Out of billions of corners on the
+        internet, you stumbled onto mine — thank you 😘.
+      </p>
+      <p>Let me introduce myself 🤖...</p>
+    </section>
+
+    <section
+      class="bg-foreground text-background space-y-16 px-8 py-20 lg:px-20"
+    >
+      <div
+        class="flex flex-col gap-16 md:flex md:items-center md:justify-center md:text-center"
+      >
+        <hgroup class="space-y-4">
+          <h2 class="text-3xl font-bold md:text-5xl lg:text-6xl">
+            Software Engineer 👨‍💻
+          </h2>
+          <div class="flex flex-col items-center">
+            <span class="border-background/20 w-2/5 self-start border-t"></span>
+            <p class="py-4 text-center text-sm font-light tracking-widest">
+              <q>
+                Software is a great combination between artistry and
+                engineering.
+              </q>
+              <span class="whitespace-nowrap">— Bill Gates</span>
+            </p>
+            <span class="border-background/20 w-2/5 self-end border-t"></span>
+          </div>
+        </hgroup>
+        <p class="text-3xl font-extralight md:max-w-[25ch] md:text-6xl">
+          I apply my knowledge of computer programming to develop engaging user
+          interfaces that assist people succeed and remaining productive.
+        </p>
+      </div>
+      <div
+        class="grid grid-cols-1 items-baseline space-y-4 uppercase md:grid-cols-2"
+      >
+        <h3>Smattering of past projects</h3>
+        <ul class="flex flex-col">
+          {
+            selectedProjects.map((project) => (
+              <li>
+                <a
+                  href={project.href}
+                  class="flex items-center justify-between gap-4 py-8 font-light tracking-wider"
+                >
+                  <div class="flex flex-col flex-wrap gap-2 lg:flex-row lg:items-center">
+                    <span class="text-2xl">{project.name}</span>
+                    <span class="text-sm">
+                      •{" "}
+                      {project.roles.length === 1
+                        ? project.roles[0]
+                        : project.roles.slice(0, -1).join(", ") +
+                          " & " +
+                          project.roles.at(-1)}
+                    </span>
+                  </div>
+                  <span class="text-3xl">&rarr;</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <a
+          href="/work"
+          class="mt-4 flex w-max items-center gap-2 text-2xl font-light md:-mt-13.5"
+        >
+          SEE ALL <span class="text-3xl">&rarr;</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="space-y-16 px-8 py-20 lg:px-20">
+      <div
+        class="flex flex-col gap-16 md:flex md:items-center md:justify-center md:text-center"
+      >
+        <hgroup class="space-y-4">
+          <h2 class="text-3xl font-bold md:text-5xl lg:text-6xl">Speaker 🗣️</h2>
+          <div class="flex flex-col items-center">
+            <span class="border-foreground/20 w-2/5 self-start border-t"></span>
+            <p class="py-4 text-center text-sm font-light tracking-widest">
+              <q>
+                There's no greater agony than bearing an untold story inside
+                you.
+              </q>
+              <span class="whitespace-nowrap">— Maya Angelou</span>
+            </p>
+            <span class="border-foreground/20 w-2/5 self-end border-t"></span>
+          </div>
+        </hgroup>
+        <p class="text-3xl font-extralight md:max-w-[25ch] md:text-6xl">
+          I use my voice to share my story, experiences, and ideas to inspire
+          others and empower them to live their best lives.
+        </p>
+      </div>
+      <div
+        class="grid grid-cols-1 items-baseline space-y-4 uppercase md:grid-cols-2"
+      >
+        <h3>Smattering of past speeches</h3>
+        <ul></ul>
+        <a href="/" class="flex w-max items-center gap-2 text-2xl font-light">
+          SEE ALL <span class="text-3xl">&rarr;</span>
+        </a>
+      </div>
+    </section>
+
+    <section
+      class="bg-foreground text-background space-y-16 px-8 py-20 lg:px-20"
+    >
+      <div
+        class="flex flex-col gap-16 md:flex md:items-center md:justify-center md:text-center"
+      >
+        <hgroup class="space-y-4">
+          <h2 class="text-3xl font-bold md:text-5xl lg:text-6xl">Writer ✍️</h2>
+          <div class="flex flex-col items-center">
+            <span class="border-background/20 w-2/5 self-start border-t"></span>
+            <p class="py-4 text-center text-sm font-light tracking-widest">
+              <q>I write to discover what I know.</q>
+              <span class="whitespace-nowrap">— Flannery O'Connor</span>
+            </p>
+            <span class="border-background/20 w-2/5 self-end border-t"></span>
+          </div>
+        </hgroup>
+        <p class="text-3xl font-extralight md:max-w-[25ch] md:text-6xl">
+          I record my thoughts on life, the tools I use, and the projects I
+          undertake to enhance my learning and assist others who find them
+          useful.
+        </p>
+      </div>
+      <div
+        class="grid grid-cols-1 items-baseline space-y-4 uppercase md:grid-cols-2"
+      >
+        <h3>Smattering of past writings</h3>
+        <ul class="flex flex-col">
+          {
+            selectedWritings.map((writing) => (
+              <li>
+                <a
+                  href={`blog/${writing.id}`}
+                  class="grid grid-cols-[1fr_auto] items-center gap-4 py-8 font-light md:gap-10"
+                >
+                  <div class="flex flex-col gap-2">
+                    <span class="line-clamp-2 text-xl tracking-wider whitespace-normal">
+                      {writing.data.title}
+                    </span>
+                    <time datetime={writing.data.publishedOn.toISOString()}>
+                      • {formatDateTime(writing.data.publishedOn)}
+                    </time>
+                  </div>
+                  <span class="text-3xl">&rarr;</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <a
+          href="/blog"
+          class="mt-4 flex w-max items-center gap-2 text-2xl font-light md:-mt-13.5"
+        >
+          SEE ALL <span class="text-3xl">&rarr;</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="px-8 py-20 lg:px-20">
+      <div
+        class="flex flex-col gap-16 md:flex md:items-center md:justify-center md:text-center"
+      >
+        <hgroup class="space-y-4">
+          <h2 class="text-3xl font-bold md:text-5xl lg:text-6xl">
+            All in all 🧍‍♂️
+          </h2>
+          <div class="flex flex-col items-center">
+            <span class="border-foreground/20 w-2/5 self-start border-t"></span>
+            <p class="py-4 text-center text-sm font-light tracking-widest">
+              <q>The whole is greater than the sum of its parts.</q>
+              <span class="whitespace-nowrap">— Aristotle</span>
+            </p>
+            <span class="border-foreground/20 w-2/5 self-end border-t"></span>
+          </div>
+        </hgroup>
+        <p class="text-3xl font-extralight md:max-w-[25ch] md:text-6xl">
+          As a human being, my purpose is to help make the world a better place.
+        </p>
+        <a href="/about" class="flex w-max items-center gap-2 text-3xl">
+          GET TO KNOW ME <span class="text-3xl">&rarr;</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="bg-foreground text-background px-8 py-20 lg:px-20">
+      <div
+        class="flex flex-col gap-16 md:flex md:items-center md:justify-center md:text-center"
+      >
+        <hgroup class="space-y-4">
+          <h2 class="text-3xl font-bold md:text-5xl lg:text-6xl">
+            Let's chat or collab?
+          </h2>
+          <div class="flex flex-col items-center">
+            <span class="border-background/20 w-2/5 self-start border-t"></span>
+            <p class="py-4 text-center text-sm font-light tracking-widest">
+              <q>Alone we can do little; together we can do so much.</q>
+              <span class="whitespace-nowrap">— Helen Keller</span>
+            </p>
+            <span class="border-background/20 w-2/5 self-end border-t"></span>
+          </div>
+        </hgroup>
+        <div class="space-y-4 font-extralight">
+          <blockquote class="text-3xl md:max-w-[25ch] md:text-6xl">
+            <p>
+              "Never doubt that a small group of thoughtful, committed citizens
+              can change the world. Indeed, it is the only thing that ever has."
+            </p>
+          </blockquote>
+          <span class="text-xl"> — Margaret Mead</span>
+        </div>
+        <div class="space-y-2">
+          <a
+            href={`mailto:${SITE_MAIL}`}
+            class="flex w-max items-center gap-2 text-3xl"
+          >
+            REACH OUT <span class="text-3xl">&rarr;</span>
+          </a>
+          <p class="md:text-xl">
+            —and together as committed citizens, let's make the world a better
+            place.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

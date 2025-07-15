@@ -1,0 +1,1052 @@
+---
+title: "Remix Todo App: Part 5 - Implementing a Theme Switcher"
+description: Add a theme switcher to your Remix Todo App to support light and dark modes.
+heroImage: ../../../public/blog/remix-todo-app/hero.webp
+publishedOn: 2024-10-17T00:00:05Z
+tags: [coding, remix]
+---
+
+## Introduction
+
+Welcome to part 5 of the
+[Remix Todo App Series](/blog/remix-todo-app-part-1-building-the-app-layout-and-structure#series-roadmap)!
+This series aims to teach you everything you'll use daily in Remix. In
+[part 4](/blog/remix-todo-app-part-4-pending-ui), we improved the todo app by
+adding a pending UI, making it network-aware and enhancing the user experience.
+
+In this part, we'll explore different ways to implement a theme switcher in
+Remix, examining the pros and cons of each approach. Finally, we'll implement
+the theme switcher in our todo app using the method that supports progressive
+enhancement.
+
+## Different ways to implement a theme switcher
+
+A theme switcher lets users select a visual theme for an app, typically between
+light and dark modes. Some implementations may also let users match their
+system's preference.
+
+Depending on your app's needs and your comfort with complexity, there are four
+main ways to implement a theme switcher:
+
+- React state
+- URL search params
+- Browser local storage
+- Browser cookies
+
+### React state
+
+The simplest way to manage state in a React app is with `useState` or the
+Context API for global state. This allows you to store the user's theme, style
+the app accordingly, and update the state on theme changes. It's simple, easy to
+implement, and component-scoped.
+
+Here's a theme switcher implementation in a Remix app using `useState` and the
+Context API:
+
+```tsx {7-10,21,77}
+// app/components/ThemeProvider.tsx
+import React from "react";
+
+export type Theme = "system" | "light" | "dark";
+type ThemeContextType = [Theme, React.Dispatch<React.SetStateAction<Theme>>];
+
+const ThemeContext = React.createContext<ThemeContextType>([
+  "system",
+  () => {},
+]);
+
+export const useTheme = () => {
+  const context = React.useContext(ThemeContext);
+  if (context === undefined) {
+    throw new Error("useTheme must be used within a ThemeProvider");
+  }
+  return context;
+};
+
+export default function ThemeProvider({ children }: React.PropsWithChildren) {
+  const [theme, setTheme] = React.useState<Theme>("system");
+
+  React.useEffect(() => {
+    switch (theme) {
+      case "system": {
+        const syncTheme = (media: MediaQueryList | MediaQueryListEvent) => {
+          document.documentElement.classList.toggle("dark", media.matches);
+        };
+        const media = window.matchMedia("(prefers-color-scheme: dark)");
+        syncTheme(media);
+        media.addEventListener("change", syncTheme);
+        return () => media.removeEventListener("change", syncTheme);
+      }
+      case "light": {
+        document.documentElement.classList.remove("dark");
+        break;
+      }
+      case "dark": {
+        document.documentElement.classList.add("dark");
+        break;
+      }
+      default: {
+        console.error("Invalid theme:", theme);
+      }
+    }
+  }, [theme]);
+
+  return (
+    <ThemeContext.Provider value={[theme, setTheme]}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+// app/components/ThemeSwitcher.tsx
+import { type Theme, useTheme } from "~/components/ThemeProvider";
+
+export default function ThemeSwitcher() {
+  const [theme, setTheme] = useTheme();
+
+  return (
+    <select
+      value={theme}
+      onChange={(event) => setTheme(event.target.value as Theme)}
+    >
+      <option value="system">System</option>
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+    </select>
+  );
+}
+
+// tailwind.config.ts
+import type { Config } from "tailwindcss";
+
+export default {
+  darkMode: "selector",
+  content: ["./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}"],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+} satisfies Config;
+
+// app/root.tsx
+// ...existing imports
+import ThemeProvider from "~/components/ThemeProvider";
+
+export function Layout({ children }: { children: React.ReactNode }) {
+  // ...existing code
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <Outlet />
+    </ThemeProvider>
+  );
+}
+```
+
+But, the drawbacks of this approach are that it requires JavaScript to function,
+the state isn't available for server-side rendering, and the state isn't
+persistent across component remounting, page refreshes, or browsing sessions. It
+fails the test for a good user experience and progressive enhancement.
+
+### URL search params
+
+Another way to manage global state, like a theme, is by using the URL. The URL
+can act as the single source of truth, allowing us to read and set the theme
+state from it. This approach makes the UI shareable and ensures the state
+persists across component remounts, page refreshes, or browsing sessions.
+
+Here's a theme switcher implementation in a Remix app using the URL and the
+Context API:
+
+```tsx {8-11,22-33}
+// app/components/ThemeProvider.tsx
+import { useSearchParams } from "@remix-run/react";
+import React from "react";
+
+export type Theme = "system" | "light" | "dark";
+type ThemeContextType = [Theme, React.Dispatch<React.SetStateAction<Theme>>];
+
+const ThemeContext = React.createContext<ThemeContextType>([
+  "system",
+  () => {},
+]);
+
+export const useTheme = () => {
+  const context = React.useContext(ThemeContext);
+  if (context === undefined) {
+    throw new Error("useTheme must be used within a ThemeProvider");
+  }
+  return context;
+};
+
+export default function ThemeProvider({ children }: React.PropsWithChildren) {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const theme = (searchParams.get("theme") as Theme) || "system";
+  const setTheme = (theme: Theme) => {
+    setSearchParams(
+      (prev) => {
+        prev.set("theme", theme);
+        return prev;
+      },
+      { replace: true, preventScrollReset: true },
+    );
+  };
+
+  React.useEffect(() => {
+    switch (theme) {
+      case "system": {
+        const syncTheme = (media: MediaQueryList | MediaQueryListEvent) => {
+          document.documentElement.classList.toggle("dark", media.matches);
+        };
+        const media = window.matchMedia("(prefers-color-scheme: dark)");
+        syncTheme(media);
+        media.addEventListener("change", syncTheme);
+        return () => media.removeEventListener("change", syncTheme);
+      }
+      case "light": {
+        document.documentElement.classList.remove("dark");
+        break;
+      }
+      case "dark": {
+        document.documentElement.classList.add("dark");
+        break;
+      }
+      default: {
+        console.error("Invalid theme:", theme);
+      }
+    }
+  }, [theme]);
+
+  return (
+    <ThemeContext.Provider value={[theme, setTheme]}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+```
+
+But, this method has some drawbacks. It relies on JavaScript to work, doesn't
+support server-side rendering, and requires the theme state to be appended as a
+search param on every page. If a user manually enters a URL without the search
+param, the theme state is lost. While it improves the user experience slightly,
+it fails for progressive enhancement.
+
+### Browser local storage
+
+The easiest way to persist a global state, like a theme, beyond the component
+lifecycle or URL is with local storage. Local storage keeps data across browser
+sessions without expiration. This makes it ideal for preserving the theme state
+through component remounting, page refreshes, and browsing sessions.
+
+Here's a theme switcher implementation in a Remix app using local storage and
+the Context API:
+
+```tsx {7-10,21-29,33}
+// app/components/ThemeProvider.tsx
+import React from "react";
+
+export type Theme = "system" | "light" | "dark" | null;
+type ThemeContextType = [Theme, React.Dispatch<React.SetStateAction<Theme>>];
+
+const ThemeContext = React.createContext<ThemeContextType>([
+  "system",
+  () => {},
+]);
+
+export const useTheme = () => {
+  const context = React.useContext(ThemeContext);
+  if (!context) {
+    throw new Error("useTheme must be used within a ThemeProvider");
+  }
+  return context;
+};
+
+export default function ThemeProvider({ children }: React.PropsWithChildren) {
+  const [theme, setTheme] = React.useState<Theme>(null);
+
+  React.useEffect(() => {
+    const storedTheme = localStorage.getItem("theme");
+    if (!storedTheme) {
+      localStorage.setItem("theme", "system");
+    }
+    setTheme(storedTheme ? (storedTheme as Theme) : "system");
+  }, []);
+
+  React.useEffect(() => {
+    if (theme !== null) {
+      localStorage.setItem("theme", theme);
+    }
+
+    switch (theme) {
+      case "system": {
+        const syncTheme = (media: MediaQueryList | MediaQueryListEvent) => {
+          document.documentElement.classList.toggle("dark", media.matches);
+        };
+        const media = window.matchMedia("(prefers-color-scheme: dark)");
+        syncTheme(media);
+        media.addEventListener("change", syncTheme);
+        return () => media.removeEventListener("change", syncTheme);
+      }
+      case "light": {
+        document.documentElement.classList.remove("dark");
+        break;
+      }
+      case "dark": {
+        document.documentElement.classList.add("dark");
+        break;
+      }
+      default: {
+        console.error("Invalid theme:", theme);
+      }
+    }
+  }, [theme]);
+
+  return (
+    <ThemeContext.Provider value={[theme, setTheme]}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+// app/components/ThemeSwitcher.tsx
+import { type Theme, useTheme } from "~/components/ThemeProvider";
+
+export default function ThemeSwitcher() {
+  const [theme, setTheme] = useTheme();
+
+  return (
+    <select
+      value={theme ?? ""}
+      onChange={(event) => setTheme(event.target.value as Theme)}
+    >
+      <option value="system">System</option>
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+    </select>
+  );
+}
+```
+
+But, like React state or URL search params, this approach requires JavaScript
+and isn't available during server-side rendering, which causes the UI to
+flicker. While it improves the user experience compared to the previous
+approaches, it doesn't support progressive enhancement, as JavaScript is
+necessary for the theme switcher to work.
+
+### Browser cookies
+
+A cookie is a small piece of data sent from a server to a user's browser via an
+HTTP response. The browser can store, create, or modify cookies and send them
+back to the server on future requests. This allows seamless data sharing between
+server and browser, making cookies ideal for managing user preferences.
+
+Although cookies require more code and result in a global state that can't be
+isolated to a single component, they offer significant benefits. Cookies make
+the state available server-side for rendering, persist across component
+remounts, page refreshes, browsing sessions, and serve as a single source of
+truth to eliminate state synchronization issues. Most importantly, they work
+without JavaScript, making them ideal for progressive enhancement.
+
+## Implementing the theme switcher
+
+To manage theme state with cookies, though it requires more code, the steps are
+simple. First, create a cookie object, then use it in your server loader and
+action. In the `loader`, read the theme from the cookie to style the UI. When
+the user changes their theme, update the cookie in the `action`, and Remix
+reloads the page with the new preference.
+
+### Creating the cookie object
+
+Start by creating the file for the cookie object:
+
+```bash
+touch app/lib/theme-cookie.server.ts
+```
+
+Next, update `app/types.ts` to include the `Theme` type:
+
+```tsx title="app/types.ts" ins={3-10}
+// ...existing code here remains the same
+
+/**
+ * Represents the available theme options for the application.
+ *
+ * - "system": Follows the system's color scheme, but defaults to light if JavaScript is disabled.
+ * - "light": Applies the light color scheme.
+ * - "dark": Applies the dark color scheme.
+ */
+export type Theme = "system" | "light" | "dark";
+```
+
+Finally, copy the following code into `app/lib/theme-cookie.server.tsx`:
+
+```tsx title="app/lib/theme-cookie.server.tsx"
+import { createCookie } from "@remix-run/node";
+import type { Theme } from "~/types";
+
+const cookie = createCookie("theme", {
+  maxAge: 31_536_000,
+});
+
+export function validateTheme(value: unknown): value is Theme {
+  return value === "system" || value === "light" || value === "dark";
+}
+
+export async function parseTheme(request: Request) {
+  const header = request.headers.get("Cookie");
+  const vals = await cookie.parse(header);
+
+  const theme = vals?.theme;
+  if (validateTheme(theme)) {
+    return theme;
+  } else {
+    return "system";
+  }
+}
+
+export function serializeTheme(theme: Theme) {
+  const eatCookie = theme === "system";
+  if (eatCookie) {
+    return cookie.serialize({}, { expires: new Date(0), maxAge: 0 });
+  } else {
+    return cookie.serialize({ theme });
+  }
+}
+```
+
+This code may seem extensive, so let's break it down. First, we create a cookie
+object using the `createCookie` utility from Remix, which creates a logical
+container for managing a browser cookie on the server. We name the cookie
+`theme` and set its `maxAge` attribute to one year, while defaults are used for
+other
+[cookie attributes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#attributes)
+that aren't specified. Next, we define three helper functions: `validateTheme`,
+`parseTheme`, and `serializeTheme`. `validateTheme` is a
+[type guard](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates)
+that checks if a value is a valid theme, returning `true` if the value is valid
+or `false` otherwise. `parseTheme` reads the theme from the request `Cookie`
+header, returning the theme or defaulting to `"system"`. Finally,
+`serializeTheme` clears the cookie if the theme is `"system"` or updates it with
+the new value otherwise.
+
+### Reading the cookie object
+
+With the cookie object created, the next step is to read the theme from the
+cookie and apply it to the UI. Since we're using Tailwind CSS and want users to
+manually select a theme instead of relying on the operating system's preference,
+we need to add the `selector` strategy to `tailwind.config.ts`. Then, based on
+the cookie's theme value, we'll add the `dark` class to the `<html>` element.
+
+First, update `tailwind.config.ts` to use the `selector` strategy:
+
+```ts title="tailwind.config.ts" ins={4}
+import type { Config } from "tailwindcss";
+
+export default {
+  darkMode: "selector",
+  content: ["./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}"],
+  theme: {
+    extend: {
+      fontFamily: {
+        system: [
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Roboto",
+          "Oxygen",
+          "Ubuntu",
+          "Cantarell",
+          "Open Sans",
+          "Helvetica Neue",
+          "sans-serif",
+          "Apple Color Emoji",
+          "Twemoji Mozilla",
+          "Segoe UI Emoji",
+          "Segoe UI Symbol",
+          "Noto Color Emoji",
+          "EmojiOne Color",
+          "Android Emoji",
+        ],
+      },
+    },
+  },
+  plugins: [],
+} satisfies Config;
+```
+
+Next, add a loader function for the root route to read the theme from the
+cookie:
+
+```tsx title="app/root.tsx" ins={1,8,11,15-19}
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import {
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  json,
+} from "@remix-run/react";
+
+import { parseTheme } from "~/lib/theme-cookie.server";
+
+import "./tailwind.css";
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const theme = await parseTheme(request);
+
+  return json({ theme }, { headers: { Vary: "Cookie" } });
+}
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+```
+
+The `Vary: Cookie` header informs caching mechanisms that the response may vary
+based on the `Cookie` header in the request.
+
+Next, we'll style the UI using the theme value returned from the root route
+loader. But before that, let’s create a `ThemeScript.tsx` file in
+`app/components/` that contains a utility function to read the theme value. Run
+the following command:
+
+```bash
+touch app/components/ThemeScript.tsx
+```
+
+Copy the following code into `app/components/ThemeScript.tsx`:
+
+```tsx title="app/components/ThemeScript.tsx"
+import { useRouteLoaderData } from "@remix-run/react";
+import type { loader as rootLoader } from "~/root";
+import type { Theme } from "~/types";
+
+export function useTheme(): Theme {
+  const rootLoaderData = useRouteLoaderData<typeof rootLoader>("root");
+  const rootTheme = rootLoaderData?.theme ?? "system";
+
+  return rootTheme;
+}
+```
+
+The `useRouteLoaderData` hook accesses data returned from a route's loader
+outside the route's default component. The value passed to `useRouteLoaderData`
+must be the path of the route file relative to the app folder, excluding the
+extension. In this case, `useTheme` retrieves the root loader data and returns
+the theme.
+
+Finally, update `app/root.tsx` to use the theme value read from the cookie to
+style the UI:
+
+```tsx title="app/root.tsx" {25} ins={11,20}
+import { LoaderFunctionArgs } from "@remix-run/node";
+import {
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  json,
+} from "@remix-run/react";
+
+import { useTheme } from "~/components/ThemeScript";
+
+import { parseTheme } from "~/lib/theme-cookie.server";
+
+import "./tailwind.css";
+
+// ...existing code here remains the same
+
+export function Layout({ children }: { children: React.ReactNode }) {
+  const theme = useTheme() === "dark" ? "dark" : "";
+
+  return (
+    <html
+      lang="en"
+      className={`font-system bg-white/90 antialiased dark:bg-gray-900 ${theme}`}
+    >
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Meta />
+        <Links />
+      </head>
+      <body className="flex min-h-screen max-w-[100vw] flex-col overflow-x-hidden bg-gradient-to-r from-[#00fff0] to-[#0083fe] px-4 py-8 text-black dark:from-[#8E0E00] dark:to-[#1F1C18] dark:text-white">
+        {children}
+        <ScrollRestoration />
+        <Scripts />
+      </body>
+    </html>
+  );
+}
+
+// ...existing code here remains the same
+```
+
+### Updating the cookie object
+
+The final step is updating the cookie when the user selects a theme. We'll need
+a `ThemeSwitcher` component that enables users to select a theme. Upon selecting
+a theme, an `action` will be called to update the cookie with the new value.
+
+First, we need icons for the `ThemeSwitcher` component. Run this command to
+create files for each icon:
+
+```bash
+touch app/components/icons/{MonitorIcon.tsx,MoonIcon.tsx,SunIcon.tsx,UpDownIcon.tsx}
+```
+
+Next, add the respective code for each icon:
+
+```tsx title="app/components/icon/MonitorIcon.tsx"
+export default function MonitorIcon({ ...props }: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <rect width="20" height="14" x="2" y="3" rx="2" />
+      <line x1="8" x2="16" y1="21" y2="21" />
+      <line x1="12" x2="12" y1="17" y2="21" />
+    </svg>
+  );
+}
+```
+
+```tsx title="app/components/icon/MoonIcon.tsx"
+export default function MoonIcon({ ...props }: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+    </svg>
+  );
+}
+```
+
+```tsx title="app/components/icon/SunIcon.tsx"
+export default function SunIcon({ ...props }: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2" />
+      <path d="M12 20v2" />
+      <path d="m4.93 4.93 1.41 1.41" />
+      <path d="m17.66 17.66 1.41 1.41" />
+      <path d="M2 12h2" />
+      <path d="M20 12h2" />
+      <path d="m6.34 17.66-1.41 1.41" />
+      <path d="m19.07 4.93-1.41 1.41" />
+    </svg>
+  );
+}
+```
+
+```tsx title="app/components/icon/UpDownIcon.tsx"
+export default function UpDownIcon({ ...props }: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="m7 15 5 5 5-5" />
+      <path d="m7 9 5-5 5 5" />
+    </svg>
+  );
+}
+```
+
+Now, create the file for the `ThemeSwitcher` component:
+
+```bash
+touch app/components/ThemeSwitcher.tsx
+```
+
+Copy the following code into `app/components/ThemeSwitcher.tsx`:
+
+```tsx title="app/component/ThemeSwitcher.tsx"
+import { Form, useLocation } from "@remix-run/react";
+import { useRef } from "react";
+
+import { useTheme } from "~/components/ThemeScript";
+import MonitorIcon from "~/components/icons/MonitorIcon";
+import MoonIcon from "~/components/icons/MoonIcon";
+import SunIcon from "~/components/icons/SunIcon";
+import UpDownIcon from "~/components/icons/UpDownIcon";
+
+export default function ThemeSwitcher() {
+  const location = useLocation();
+  const theme = useTheme();
+  const detailsRef = useRef<HTMLDetailsElement>(null);
+
+  return (
+    <details ref={detailsRef} className="group relative cursor-pointer">
+      <summary
+        role="button"
+        aria-haspopup="listbox"
+        aria-label="Select your theme preference"
+        tabIndex={0}
+        className="flex w-28 items-center justify-between rounded-3xl border border-gray-200 bg-gray-50 px-4 py-2 transition hover:border-gray-500 group-open:before:fixed group-open:before:inset-0 group-open:before:cursor-auto dark:border-gray-700 dark:bg-gray-900 [&::-webkit-details-marker]:hidden"
+      >
+        {theme.replace(/^./, (c) => c.toUpperCase())}
+        <UpDownIcon className="ml-2 h-4 w-4" />
+      </summary>
+
+      <Form
+        role="listbox"
+        aria-roledescription="Theme switcher"
+        preventScrollReset
+        replace
+        action="/_actions/theme"
+        method="post"
+        onSubmit={() => {
+          detailsRef.current?.removeAttribute("open");
+        }}
+        className="absolute right-0 top-full z-50 mt-2 w-36 overflow-hidden rounded-3xl border border-gray-200 bg-gray-50 py-1 text-sm font-semibold shadow-lg ring-1 ring-slate-900/10 dark:border-gray-700 dark:bg-gray-900 dark:ring-0"
+      >
+        <input
+          type="hidden"
+          name="returnTo"
+          value={location.pathname + location.search + location.hash}
+        />
+        {[
+          { name: "system", icon: MonitorIcon },
+          { name: "light", icon: SunIcon },
+          { name: "dark", icon: MoonIcon },
+        ].map((option) => (
+          <button
+            key={option.name}
+            role="option"
+            aria-selected={option.name === theme}
+            name="theme"
+            value={option.name}
+            className={`flex w-full items-center px-4 py-2 transition hover:bg-gray-200 dark:hover:bg-gray-700 ${option.name === theme ? "text-sky-500 dark:text-red-500" : ""}`}
+          >
+            <option.icon className="mr-2 h-5 w-5" />{" "}
+            {option.name.replace(/^./, (c) => c.toUpperCase())}
+          </button>
+        ))}
+      </Form>
+    </details>
+  );
+}
+```
+
+The `ThemeSwitcher` displays the current theme and opens a menu with theme
+options. Selecting an option sends a `POST` request to `_actions/theme` with the
+selected theme and a redirect URL (which is the current page) as the request
+data.
+
+Next, create the `_actions/theme` route to handle the `POST` request. We're not
+doing this in the index route to keep the code and logic clean. Run the
+following command to create the `_actions/theme` route:
+
+```bash
+touch app/routes/\[\_\]actions.theme.tsx
+```
+
+Copy the following code into `app/routes/[_]actions/theme.tsx`:
+
+```tsx title="app/routes/[_]actions/theme.tsx"
+import { type ActionFunctionArgs, redirect } from "@remix-run/node";
+
+import { serializeTheme, validateTheme } from "~/lib/theme-cookie.server";
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+
+  const theme = formData.get("theme");
+  if (!validateTheme(theme)) {
+    throw new Response("Invalid theme", { status: 400 });
+  }
+
+  let returnTo = formData.get("returnTo");
+  if (
+    !returnTo ||
+    typeof returnTo !== "string" ||
+    !returnTo.startsWith("/") ||
+    returnTo.startsWith("//")
+  ) {
+    returnTo = "/";
+  }
+
+  return redirect(returnTo, {
+    headers: { "Set-Cookie": await serializeTheme(theme) },
+  });
+}
+```
+
+The `action` throws a `400` response if no theme or an invalid one is provided.
+It validates the redirect URL, defaulting to the index route if invalid.
+Finally, it redirects with the theme serialized via `serializeTheme` from
+`theme-cookie.server.tsx`.
+
+With all that done, we can now test our implementation. Import the
+`ThemeSwitcher` component into `app/routes/_index.tsx`:
+
+```tsx title="app/routes/_index.tsx" del={52-56} ins={15,57}
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import {
+  Await,
+  Form,
+  Link,
+  defer,
+  json,
+  useFetcher,
+  useLoaderData,
+  useSearchParams,
+} from "@remix-run/react";
+import { Suspense, useEffect, useRef } from "react";
+import type { Item, View } from "~/types";
+
+import ThemeSwitcher from "~/components/ThemeSwitcher";
+import TodoActions from "~/components/TodoActions";
+import TodoList from "~/components/TodoList";
+
+import { todos } from "~/lib/db.server";
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+export default function Home() {
+  const { tasks } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher();
+  const [searchParams] = useSearchParams();
+  const view = searchParams.get("view") || "all";
+  const addFormRef = useRef<HTMLFormElement>(null);
+  const addInputRef = useRef<HTMLInputElement>(null);
+
+  const isAdding =
+    fetcher.state === "submitting" &&
+    fetcher.formData?.get("intent") === "create task";
+
+  useEffect(() => {
+    if (!isAdding) {
+      addFormRef.current?.reset();
+      addInputRef.current?.focus();
+    }
+  }, [isAdding]);
+
+  return (
+    <div className="flex flex-1 flex-col md:mx-auto md:w-[720px]">
+      <header className="mb-12 flex items-center justify-between">
+        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
+          TODO
+        </h1>
+        <select className="appearance-none rounded-3xl border border-gray-200 bg-gray-50 px-4 py-2 dark:border-gray-700 dark:bg-gray-900">
+          <option>System</option>
+          <option>Light</option>
+          <option>Dark</option>
+        </select>
+        <ThemeSwitcher />
+      </header>
+
+      {/* ...existing code here remains the same */}
+
+      {/* ...existing code here remains the same */}
+    </div>
+  );
+}
+```
+
+Once done, you should be able to select a theme and see the app's color scheme
+change.
+
+### Enhancing the user experience
+
+This implementation works with or without JavaScript, meaning the theme switcher
+is available to all users. How sweet 😊. Now, let's enhance it for those with
+JavaScript enabled.
+
+Did you notice when selecting a theme, the server action completes and Remix
+revalidates before the theme updates? Also, selecting `"system"` defaults to
+light, even if your system prefers dark mode. Let's fix that.
+
+First, we'll optimistically update the theme immediately after selection, then
+revert to the cookie's state once Remix revalidates. Update
+`app/components/ThemeScript.tsx` with the following changes:
+
+```tsx {1,8,10-12,14} title="app/components/ThemeScript.tsx"
+import { useNavigation, useRouteLoaderData } from "@remix-run/react";
+import type { loader as rootLoader } from "~/root";
+import type { Theme } from "~/types";
+
+export function useTheme(): Theme {
+  const rootLoaderData = useRouteLoaderData<typeof rootLoader>("root");
+  const rootTheme = rootLoaderData?.theme ?? "system";
+  const navigation = useNavigation();
+
+  const theme = navigation.formData?.has("theme")
+    ? (navigation.formData.get("theme") as Theme)
+    : rootTheme;
+
+  return theme;
+}
+```
+
+Now, the app's theme will instantly change when a theme is selected, with no
+delay.
+
+To resolve the second issue, we'll need a script and `useEffect`. On page load,
+the script will automatically apply the `dark` class to the `<html>` element if
+the `theme` is `"system"` and the system prefers dark mode. The `useEffect` will
+run when `theme` changes, ensuring the `dark` class is applied based on the
+system's preference.
+
+Update `app/components/ThemeScript.tsx` with the following changes to create a
+`ThemeScript` component:
+
+```tsx title="app/components/ThemeScript.tsx" {2,8-58}
+import { useNavigation, useRouteLoaderData } from "@remix-run/react";
+import { useEffect, useMemo } from "react";
+import type { loader as rootLoader } from "~/root";
+import type { Theme } from "~/types";
+
+// ...existing code here remains the same
+
+export function ThemeScript() {
+  const theme = useTheme();
+
+  const script = useMemo(
+    () => `
+        const theme = ${JSON.stringify(theme)};
+        const media = window.matchMedia("(prefers-color-scheme: dark)")
+        if (theme === "system" && media.matches) {
+          document.documentElement.classList.add("dark");
+        }
+      `,
+    [], // eslint-disable-line -- we don't want this script to ever change
+  );
+
+  useEffect(() => {
+    switch (theme) {
+      case "system": {
+        const syncTheme = (media: MediaQueryList | MediaQueryListEvent) => {
+          document.documentElement.classList.toggle("dark", media.matches);
+        };
+        const media = window.matchMedia("(prefers-color-scheme: dark)");
+        syncTheme(media);
+        media.addEventListener("change", syncTheme);
+        return () => media.removeEventListener("change", syncTheme);
+      }
+      case "light": {
+        document.documentElement.classList.remove("dark");
+        break;
+      }
+      case "dark": {
+        document.documentElement.classList.add("dark");
+        break;
+      }
+      default: {
+        console.error("Invalid theme:", theme);
+      }
+    }
+  }, [theme]);
+
+  return <script dangerouslySetInnerHTML={{ __html: script }} />;
+}
+```
+
+Then, include the `ThemeScript` component in the `<head>` of `app/root.tsx`:
+
+```tsx title="app/root.tsx" {11,28}
+import { LoaderFunctionArgs } from "@remix-run/node";
+import {
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  json,
+} from "@remix-run/react";
+
+import { ThemeScript, useTheme } from "~/components/ThemeScript";
+
+import { parseTheme } from "~/lib/theme-cookie.server";
+
+import "./tailwind.css";
+
+// ...existing code here remains the same
+
+export function Layout({ children }: { children: React.ReactNode }) {
+  const theme = useTheme() === "dark" ? "dark" : "";
+
+  return (
+    <html
+      lang="en"
+      className={`font-system bg-white/90 antialiased dark:bg-gray-900 ${theme}`}
+    >
+      <head>
+        <ThemeScript />
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Meta />
+        <Links />
+      </head>
+      <body className="flex min-h-screen max-w-[100vw] flex-col overflow-x-hidden bg-gradient-to-r from-[#00fff0] to-[#0083fe] px-4 py-8 text-black dark:from-[#8E0E00] dark:to-[#1F1C18] dark:text-white">
+        {children}
+        <ScrollRestoration />
+        <Scripts />
+      </body>
+    </html>
+  );
+}
+
+// ...existing code here remains the same
+```
+
+Now, selecting `"system"` correctly reflects your system's preference, and the
+script will run on page load or refresh to set the theme accordingly. Huzzah!
+
+## Conclusion
+
+In this part of the series, you learned how to implement a theme switcher in
+Remix. You set up the switcher to support light and dark modes and sync with the
+system's preferences.
+
+In the next part, you'll learn how to deploy your Remix app to production. Stay
+tuned!

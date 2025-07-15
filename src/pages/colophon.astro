@@ -1,0 +1,63 @@
+---
+import PageHeader from "@components/PageHeader.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+
+import fs from "fs";
+import path from "path";
+
+const lastUpdated = fs.statSync(
+  path.resolve(".", "src/pages/colophon.astro"),
+).mtime;
+---
+
+<BaseLayout
+  title="Colophon | Udoh Jeremiah"
+  description="Tools and resources used to build this site."
+>
+  <main class="flex-1 space-y-12 px-8 py-20 lg:px-20">
+    <PageHeader
+      title="Colophon"
+      description=`
+        We craft our magic with the tools of those who came before us—every
+        spark a gift from their fire.
+      `
+      lastUpdated={lastUpdated}
+    />
+    <div class="space-y-5">
+      <p>
+        Isaac Newton, in his letter to Robert Hooke in 1675, wrote: "If I have
+        seen further, it is by standing on the shoulders of giants." I believe
+        that too!
+      </p>
+      <p>
+        This website was created safely and smoothly because of the awesome work
+        others have done out there that I built on. This page exists to give
+        honor to these heroes.
+      </p>
+    </div>
+    <div>
+      <h2 class="text-sm font-bold uppercase">Tech Stack</h2>
+      <p>
+        Built with <a href="https://astro.build">Astro</a>, styled with
+        <a href="https://tailwindcss.com">TailwindCSS</a>, formatted with
+        <a href="https://prettier.io">Prettier</a>, and linted with
+        <a href="https://eslint.org">ESLint</a>.
+      </p>
+    </div>
+    <div>
+      <h2 class="text-sm font-bold uppercase">Source Control</h2>
+      <p>
+        This site's code is managed locally with
+        <a href="https://git-scm.com">Git</a> and hosted in the cloud on
+        <a href="https://github.com">GitHub</a>.
+      </p>
+    </div>
+    <div>
+      <h2 class="text-sm font-bold uppercase">Hosting</h2>
+      <p>
+        This site is deployed and hosted using
+        <a href="https://www.netlify.com">Netlify</a>.
+      </p>
+    </div>
+  </main>
+</BaseLayout>

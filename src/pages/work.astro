@@ -1,0 +1,139 @@
+---
+import PageHeader from "@components/PageHeader.astro";
+import projects from "@data/projects.json";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { Image } from "astro:assets";
+
+import fs from "fs";
+import path from "path";
+
+const lastUpdated = new Date(
+  Math.max(
+    fs.statSync(path.resolve(".", "src/pages/work.astro")).mtime.getTime(),
+    fs.statSync(path.resolve(".", "src/data/projects.json")).mtime.getTime(),
+  ),
+);
+---
+
+<BaseLayout
+  title="Work | Udoh Jeremiah"
+  description="Projects I've built or worked on"
+>
+  <main class="flex-1 space-y-12 px-8 py-20 lg:px-20">
+    <PageHeader
+      title="Work"
+      description="The extraordinary is in what we do, not who we are."
+      lastUpdated={lastUpdated}
+    />
+    <p>
+      These are some of the things (or to sound professional products) I've
+      brought to life or companies I've worked with. If I were to summarise my
+      work in one sentence, it would be this: "Do things I enjoy that make the
+      world a better place and make me money."
+    </p>
+    <ul class="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
+      {
+        projects.map((project) => (
+          <li class="bg-card text-card-foreground flex flex-col gap-4 rounded-xl border p-6 shadow">
+            <Image
+              src={project.image}
+              alt={project.name}
+              width="2823"
+              height="1373"
+              quality="max"
+              class="h-auto w-96 rounded-t-xl"
+            />
+            <div class="flex justify-between gap-4 text-xs">
+              <span class="bg-background text-foreground flex items-center gap-1 rounded-full px-2 py-1 font-medium">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="size-3.5"
+                >
+                  <path d="M8 2v4" />
+                  <path d="M16 2v4" />
+                  <rect width="18" height="18" x="3" y="4" rx="2" />
+                  <path d="M3 10h18" />
+                  <path d="M8 14h.01" />
+                  <path d="M12 14h.01" />
+                  <path d="M16 14h.01" />
+                  <path d="M8 18h.01" />
+                  <path d="M12 18h.01" />
+                  <path d="M16 18h.01" />
+                </svg>
+                {project.years}
+              </span>
+              {project.repositoryHref && (
+                <span class="bg-background text-foreground rounded-full px-2 py-1 font-medium">
+                  Open source
+                </span>
+              )}
+            </div>
+            <p class="text-xl font-semibold">{project.name}</p>
+            <p>{project.description}</p>
+            <div class="flex flex-wrap gap-2">
+              {project.roles.map((role) => (
+                <span class="bg-background text-foreground rounded-full px-3 py-1.5 text-sm font-medium">
+                  {role}
+                </span>
+              ))}
+            </div>
+            <div class="mt-auto flex items-center justify-between gap-4">
+              <a
+                href={project.href}
+                class="flex items-center gap-1 [background:unset] [transition:unset] hover:opacity-80"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="size-4"
+                >
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                </svg>
+                View App
+              </a>
+              {project.repositoryHref && (
+                <a
+                  href={project.repositoryHref}
+                  class="flex items-center gap-1 [background:unset] [transition:unset] hover:opacity-80"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="size-4"
+                  >
+                    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                    <path d="M9 18c-4.51 2-5-2-7-2" />
+                  </svg>
+                  View Code
+                </a>
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</BaseLayout>

@@ -1,0 +1,160 @@
+---
+import PageHeader from "@components/PageHeader.astro";
+import books from "@data/books.json";
+import BaseLayout from "@layouts/BaseLayout.astro";
+
+import fs from "fs";
+import path from "path";
+
+const allBooks = books
+  .sort((a, b) => a.category.localeCompare(b.category))
+  .flatMap((group) =>
+    group.books
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((book) => ({
+        ...book,
+        category: group.category,
+      })),
+  );
+
+const filterOptions = [
+  "All",
+  ...Array.from(new Set(books.map((book) => book.category))).sort(),
+];
+
+const sortOptions = Array.from(
+  new Set(["Category", "Name", "Author", "Page Count"]),
+);
+
+const lastUpdated = new Date(
+  Math.max(
+    fs.statSync(path.resolve(".", "src/pages/readings.astro")).mtime.getTime(),
+    fs.statSync(path.resolve(".", "src/data/books.json")).mtime.getTime(),
+  ),
+);
+---
+
+<BaseLayout title="Readings | Udoh Jeremiah" description="Books I've read">
+  <main class="flex-1 space-y-12 px-8 py-20 lg:px-20">
+    <PageHeader
+      title="Readings"
+      description=`
+        "You think your pain and your heartbreak are unprecedented in the
+        history of the world, but then you read. It was books that taught me
+        that the things that tormented me most were the very things that
+        connected me with all the people who were alive, who had ever been
+        alive." — James Baldwin
+      `
+      lastUpdated={lastUpdated}
+    />
+    <div class="space-y-5">
+      <p>
+        Ralph Waldo Emerson is often credited with saying, "I cannot remember
+        the books I've read any more than the meals I have eaten; even so, they
+        have made me." Ralph didn't have the internet in his time, so I see why
+        he couldn't keep a log 🤭.
+      </p>
+      <p>
+        Now that we have the internet, this is my attempt to remember the books
+        I've read — so I can revisit the ones that had the most profound effect
+        on me or point others to them.
+      </p>
+    </div>
+    <div class="space-y-8">
+      <form
+        class="flex flex-col items-center justify-between gap-4 border-b pb-4 sm:flex-row"
+      >
+        <div class="flex w-full flex-col gap-2">
+          <label for="filter" class="text-sm">Category</label>
+          <select
+            id="filter"
+            class="bg-muted w-full rounded border px-3 py-2.5 text-sm"
+          >
+            {
+              filterOptions.map((filterOption) => (
+                <option value={filterOption.toLowerCase()}>
+                  {filterOption}
+                </option>
+              ))
+            }
+          </select>
+        </div>
+        <div class="flex w-full flex-col gap-2">
+          <label for="sort" class="text-sm">Sort By</label>
+          <select
+            id="sort"
+            class="bg-muted w-full rounded border px-3 py-2.5 text-sm"
+          >
+            {
+              sortOptions.map((sortOption) => (
+                <option value={sortOption.toLowerCase()}>{sortOption}</option>
+              ))
+            }
+          </select>
+        </div>
+      </form>
+      <ul class="grid grid-cols-1 gap-x-8 ps-0 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          allBooks.map((book) => (
+            <li
+              class="book flex items-center gap-4 border-b-2"
+              data-category={book.category.toLowerCase()}
+              data-name={book.name.toLowerCase()}
+              data-author={book.author.toLowerCase()}
+              data-page-count={book.pageCount}
+            >
+              <img src={book.image} alt={book.name} class="my-8 h-auto w-20" />
+              <div class="line-clamp-2 flex flex-col text-sm uppercase">
+                <span>{book.category}</span>
+                <span class="text-xl font-bold text-balance sm:text-2xl">
+                  {book.name}
+                </span>
+                <span>
+                  {book.author} | {book.pageCount} pages
+                </span>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </main>
+  <script>
+    const filterSelect = document.getElementById("filter") as HTMLSelectElement;
+    const sortSelect = document.getElementById("sort") as HTMLSelectElement;
+    const books = document.querySelectorAll(
+      "li.book",
+    ) as NodeListOf<HTMLLIElement>;
+    const booksParent = books[0]?.parentElement;
+
+    function applyFilterSort() {
+      const filter = filterSelect.value;
+      const sort = sortSelect.value;
+      const booksArr = Array.from(books);
+
+      booksArr.sort((a, b) => {
+        if (sort === "name") {
+          return (a.dataset.name ?? "").localeCompare(b.dataset.name ?? "");
+        }
+        if (sort === "author") {
+          return (a.dataset.author ?? "").localeCompare(b.dataset.author ?? "");
+        }
+        if (sort === "page count") {
+          return Number(a.dataset.pageCount) - Number(b.dataset.pageCount);
+        }
+        return (a.dataset.category ?? "").localeCompare(
+          b.dataset.category ?? "",
+        );
+      });
+
+      booksArr.forEach((book) => {
+        const show = filter === "all" || book.dataset.category === filter;
+        book.style.display = show ? "" : "none";
+        booksParent?.appendChild(book);
+      });
+    }
+
+    filterSelect.addEventListener("change", applyFilterSort);
+    sortSelect.addEventListener("change", applyFilterSort);
+  </script>
+</BaseLayout>

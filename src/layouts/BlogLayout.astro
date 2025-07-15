@@ -1,0 +1,114 @@
+---
+import blogPlaceholder from "@assets/blog-placeholder.webp";
+import BackToPost from "@components/BackToPost.astro";
+import BackToTop from "@components/BackToTop.astro";
+import Tag from "@components/Tag.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { formatDateTime } from "src/utils";
+
+type Props = CollectionEntry<"blog">["data"] & { children: unknown };
+
+const { title, description, heroImage, publishedOn, updatedOn, tags } =
+  Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <main class="flex-1 px-8 py-20 md:px-0">
+    <article
+      class="prose prose-a:no-underline prose-headings:scroll-mt-20 sm:prose-headings:scroll-mt-28 prose-table:block prose-code:wrap-break-word prose-code:before:content-none prose-code:after:content-none prose-invert prose-code:bg-muted prose-code:-translate-y-px prose-code:rounded prose-code:px-1 prose-code:py-0.5 prose-table:overflow-x-auto mx-auto space-y-12"
+    >
+      <BackToPost title="blog" href="/blog" />
+      <header
+        class="border-foreground bg-background border-4 shadow-[0.5rem_0.5rem_0_0_#ffffff]"
+      >
+        <Image
+          src={heroImage ?? blogPlaceholder}
+          alt={title}
+          width={1200}
+          height={650}
+          loading="eager"
+          class="mt-0 mb-0 h-full w-full overflow-hidden object-cover"
+        />
+        <div class="flex flex-col gap-4 p-4">
+          <span class="text-muted-foreground flex items-center gap-1 text-sm">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="size-4"
+            >
+              <path d="M16 19h6"></path>
+              <path d="M16 2v4"></path>
+              <path d="M19 16v6"></path>
+              <path
+                d="M21 12.598V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8.5"
+              >
+              </path>
+              <path d="M3 10h18"></path>
+              <path d="M8 2v4"></path>
+            </svg>
+            <time datetime={publishedOn.toISOString()}>
+              {formatDateTime(publishedOn)}
+            </time>
+          </span>
+          <hgroup>
+            <h1 class="mb-0 text-3xl text-balance">{title}</h1>
+            <p class="mt-0 mb-0">{description}</p>
+          </hgroup>
+          {
+            updatedOn && (
+              <span class="text-muted-foreground text-sm">
+                Updated on
+                <time datetime={updatedOn.toISOString()}>
+                  {formatDateTime(updatedOn)}
+                </time>
+              </span>
+            )
+          }
+          <div class="flex flex-wrap items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="size-4"
+            >
+              <path
+                d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"
+              >
+              </path>
+              <circle cx="7.5" cy="7.5" r=".5" fill="currentColor"></circle>
+            </svg>
+            {
+              tags.map((tag) => (
+                <a
+                  href={`/blog/?tag=${encodeURIComponent(tag)}`}
+                  class="[background:unset] [transition:unset] hover:opacity-80"
+                >
+                  <Tag tag={tag} />
+                </a>
+              ))
+            }
+          </div>
+        </div>
+      </header>
+      <div>
+        <slot />
+      </div>
+    </article>
+  </main>
+  <BackToTop />
+</BaseLayout>

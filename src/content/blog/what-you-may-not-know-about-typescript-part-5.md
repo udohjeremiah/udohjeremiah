@@ -1,0 +1,741 @@
+---
+title: What You May Not Know About TypeScript (Part 5)
+description: Explore the hidden depths of TypeScript in this blog series. Discover its lesser obvious details, expanding your understanding.
+heroImage: ../../../public/blog/what-you-may-not-know-about-typescript.webp
+publishedOn: 2024-06-08
+tags: [coding, typescript]
+---
+
+This is the fifth article (part 5) in my series about
+**"What You May Not Know About TypeScript."** You might want to start reading
+from [part 1](https://www.udohjeremiah.com/blog/what-you-may-not-know-about-typescript-part-1)
+to get an introduction to what led me to write this. With that said, let's get
+started.
+
+## In TypeScript, declaration merging for namespaces have non-exported members only visible in the original (un-merged) namespace.
+
+This means that after merging, merged members that came from other declarations
+cannot see non-exported members.
+
+We can see this more clearly in this example:
+
+```ts error
+namespace Animal {
+  let haveMuscles = true;
+
+  export function animalsHaveMuscles() {
+    return haveMuscles;
+  }
+}
+
+namespace Animal {
+  export function doAnimalsHaveMuscles() {
+    return ~~haveMuscles~~; //! Cannot find name 'haveMuscles'.
+  }
+}
+```
+
+Because `haveMuscles` is not exported, only the `animalsHaveMuscles` function
+that shares the same un-merged namespace can see the symbol. The
+`doAnimalsHaveMuscles` function, even though it's part of the merged `Animal`
+namespace can not see this un-exported member.
+
+## In TypeScript, namespaces are flexible enough to merge with other declarations.
+
+To do so, the namespace declaration must follow the declaration it will merge
+with. The resulting declaration has properties of both declaration types.
+TypeScript uses this capability to model some patterns in JavaScript and other
+programming languages.
+
+Merging namespaces with classes gives the user a way of describing inner
+classes:
+
+```ts
+class Album {
+  label: Album.AlbumLabel;
+}
+
+namespace Album {
+  export class AlbumLabel {}
+}
+```
+
+The visibility rules for merged members are the same as when merging namespaces,
+so we must export the `AlbumLabel` class for the merged class to see it. The
+result is a class managed inside of another class. You can also use namespaces
+to add more static members to an existing class.
+
+In addition to the pattern of inner classes, you may also be familiar with the
+JavaScript practice of creating a function and then extending the function
+further by adding properties to the function. TypeScript uses declaration
+merging to build up definitions like this in a type-safe way.
+
+```ts
+function buildLabel(name: string): string {
+  return buildLabel.prefix + name + buildLabel.suffix;
+}
+
+namespace buildLabel {
+  export let suffix = "";
+  export let prefix = "Hello, ";
+}
+
+console.log(buildLabel("Sam Smith")); // Hello, Sam Smith
+```
+
+Similarly, namespaces can be used to extend enums with static members:
+
+```ts
+enum Color {
+  red = 1,
+  green = 2,
+  blue = 4,
+}
+
+namespace Color {
+  export function mixColor(colorName: string) {
+    if (colorName == "yellow") {
+      return Color.red + Color.green;
+    } else if (colorName == "white") {
+      return Color.red + Color.green + Color.blue;
+    } else if (colorName == "magenta") {
+      return Color.red + Color.blue;
+    } else if (colorName == "cyan") {
+      return Color.green + Color.blue;
+    } else {
+      return;
+    }
+  }
+}
+```
+
+## In TypeScript, classes can not merge with other classes or with variables.
+
+```ts error
+class ~~A~~ { //! Duplicate identifier 'A'.
+  x = 0;
+  y = 0;
+  z = 0;
+}
+
+class ~~A~~ { //! Duplicate identifier 'A'.
+  z = 0;
+}
+```
+
+For information on mimicking class merging, see the
+[Mixins in TypeScript](https://www.typescriptlang.org/docs/handbook/mixins.html).
+
+## In TypeScript, unlike JavaScript, you can use module augmentation to merge two modules.
+
+Although JavaScript modules do not support merging, you can patch existing
+objects by importing and updating them.
+
+Let's look at a toy `Observable` example:
+
+```ts title="observable.ts"
+export class Observable<T> {
+  // ...
+}
+```
+
+```ts title="map.ts"
+import { Observable } from "./observable";
+
+Observable.prototype.map = function (f) {
+  // ...
+};
+```
+
+This works in TypeScript too, but the compiler doesn't know about
+`Observable.prototype.map`. You can use **module augmentation** to tell the
+compiler about it:
+
+```ts title="observable.ts"
+export class Observable<T> {
+  // ...
+}
+```
+
+```ts title="map.ts"
+import { Observable } from "./observable";
+
+declare module "./observable" {
+  interface Observable<T> {
+    map<U>(f: (x: T) => U): Observable<U>;
+  }
+}
+
+Observable.prototype.map = function (f) {
+  // ...
+};
+```
+
+```ts title="consumer.ts"
+import "./map";
+import { Observable } from "./observable";
+
+let o: Observable<number>;
+o.map((x) => x.toFixed());
+```
+
+The module name is resolved the same way as module specifiers in
+`import`/`export`. Then the declarations in an augmentation are merged as if
+they were declared in the same file as the original.
+
+However, there are two limitations to keep in mind:
+
+1. You can't declare new top-level declarations in the augmentation — just
+   patches to existing declarations.
+
+2. Default exports also cannot be augmented, only named exports (since you need
+   to augment an export by its exported name, and the default is a reserved
+   word - see [#14080](https://github.com/Microsoft/TypeScript/issues/14080) for
+   details).
+
+## In TypeScript, you can add declarations to the global scope from inside a module.
+
+```ts title="observable.ts"
+export class Observable<T> {
+  // ...
+}
+
+declare global {
+  interface Array<T> {
+    toObservable(): Observable<T>;
+  }
+}
+
+Array.prototype.toObservable = function () {
+  // ...
+};
+```
+
+Global augmentations have the same behaviour and limits as module augmentations.
+
+## In TypeScript, numeric enums can be mixed in computed and constant members.
+
+Each enum member has a value associated with it which can be either constant or
+computed. An enum member is considered constant if:
+
+- It is the first member in the enum and it has no initializer, in which case
+  it's assigned the value `0`:
+
+  ```ts error
+  // E.X is constant
+  enum E {
+    X,
+  }
+
+  E.~~X~~ = 2; //! Cannot assign to 'X' because it is a read-only property.
+  ```
+
+- It does not have an initializer and the preceding enum member was a numeric
+  constant. In this case, the value of the current enum member will be the value
+  of the preceding enum member plus one.
+
+  ```ts
+  // All enum members in 'E1' and 'E2' are constant.
+  enum E1 {
+    X,
+    Y,
+    Z,
+  }
+
+  enum E2 {
+    A = 1,
+    B,
+    C,
+  }
+  ```
+
+- The enum member is initialized with a constant enum expression. A constant
+  enum expression is a subset of TypeScript expressions that can be fully
+  evaluated at compile time. An expression is a constant enum expression if it
+  is:
+
+  1. a literal enum expression (basically a string literal or a numeric literal)
+  2. a reference to a previously defined constant enum member
+     (which can originate from a different enum)
+  3. a parenthesized constant enum expression
+  4. one of the `+`, `-`, `~` unary operators applied to constant enum
+     expression
+  5. `+`, `-`, `*`, `/`, `%`, `<<`, `>>`, `>>>`, `&`, `|`, `^`
+     binary operators with constant enum expressions as operands
+
+It is a compile time error for constant enum expressions to be evaluated to
+`NaN` or `Infinity`.
+
+In all other cases, enum member is considered computed.
+
+```ts
+enum FileAccess {
+  // constant members
+  None,
+  Read = 1 << 1,
+  Write = 1 << 2,
+  ReadWrite = Read | Write,
+
+  // computed member
+  G = "123".length,
+}
+```
+
+## In TypeScript, enums without initializers either need to be first or have to come after numeric enums initialized with numeric constants or other constant enum members.
+
+In other words, the following isn't allowed:
+
+```ts error
+enum E {
+  A = Math.round(Math.random()),
+  ~~B~~, //! Enum member must have initializer.
+}
+```
+
+## In TypeScript, enums can be mixed with string and numeric members.
+
+Technically enums can be mixed with string and numeric members - they are called
+heterogenous enums, but it's not clear why you would ever want to do so:
+
+```ts
+enum BooleanLikeHeterogeneousEnum {
+  No = 0,
+  Yes = "YES",
+}
+```
+
+Unless you're trying to take advantage of JavaScript's runtime behaviour in a
+clever way, it's advised that you don't do this.
+
+## In TypeScript, when all members in an enum have literal enum values, some special semantics come into play.
+
+There is a special subset of constant enum members that aren't calculated:
+literal enum members. A literal enum member is a constant enum member with no
+initialized value, or with values that are initialized to
+
+- any string literal (e.g. `"foo"`, `"bar"`, `"baz"`)
+- any numeric literal (e.g. `1`, `100`)
+- a unary minus applied to any numeric literal (e.g. `-1`, `-100`)
+
+When all members in an enum have literal enum values, some special semantics
+come into play.
+
+The first is that enum members also become types as well! For example, we can
+say that certain members can only have the value of an enum member:
+
+```ts error
+enum ShapeKind {
+  Circle,
+  Square,
+}
+
+interface Circle {
+  kind: ShapeKind.Circle;
+  radius: number;
+}
+
+interface Square {
+  kind: ShapeKind.Square;
+  sideLength: number;
+}
+
+let c: Circle = {
+  ~~kind~~: ShapeKind.Square, //! Type 'ShapeKind.Square' is not assignable to type 'ShapeKind.Circle'.
+  radius: 100,
+};
+```
+
+The other change is that enum types themselves effectively become a union of
+each enum member. With union enums, the type system is able to leverage the fact
+that it knows the exact set of values that exist in the enum itself. Because of
+that, TypeScript can catch bugs where we might be comparing values incorrectly.
+For example:
+
+```ts error
+enum E {
+  Foo,
+  Bar,
+}
+
+function f(x: E) {
+  if (x !== E.Foo || ~~x !== E.Bar~~) { //! This comparison appears to be unintentional because the types 'E.Foo' and 'E.Bar' have no overlap.
+    // ...
+  }
+}
+```
+
+In that example, we first checked whether `x` was not `E.Foo`. If that check
+succeeds, then our `||` will short-circuit, and the body of the `if` will run.
+However, if the check didn't succeed, then `x` can only be `E.Foo`, so it
+doesn't make sense to see whether it's not equal to `E.Bar`.
+
+## In TypeScript, enums are real objects that exist at runtime.
+
+For example, the following enum:
+
+```ts
+enum E {
+  X,
+  Y,
+  Z,
+}
+```
+
+can actually be passed around to functions:
+
+```ts
+enum E {
+  X,
+  Y,
+  Z,
+}
+
+function f(obj: { X: number }) {
+  return obj.X;
+}
+
+// Works, since 'E' has a property named 'X' which is a number.
+f(E);
+```
+
+## In TypeScript, use `keyof typeof` to get a type that represents all enum keys as strings
+
+Even though enums are real objects that exist at runtime, the `keyof` keyword
+works differently than you might expect for typical objects. Instead, use
+`keyof typeof` to get a type representing all enum keys as strings:
+
+```ts
+enum LogLevel {
+  ERROR,
+  WARN,
+  INFO,
+  DEBUG,
+}
+
+/**
+ * This is equivalent to:
+ * type LogLevelStrings = 'ERROR' | 'WARN' | 'INFO' | 'DEBUG';
+ */
+type LogLevelStrings = keyof typeof LogLevel;
+
+function printImportant(key: LogLevelStrings, message: string) {
+  const num = LogLevel[key];
+
+  if (num <= LogLevel.WARN) {
+    console.log("Log level key is:", key);
+    console.log("Log level value is:", num);
+    console.log("Log level message is:", message);
+  }
+}
+
+printImportant("ERROR", "This is a message");
+// Log level key is: ERROR
+// Log level value is: 0
+// Log level message is: This is a message
+```
+
+## In TypeScript, numeric enums members also get a reverse mapping from enum values to enum names.
+
+In addition to creating an object with property names for members, numeric enums
+members also get a reverse mapping from enum values to enum names. For example,
+in this example:
+
+```ts
+enum Enum {
+  A,
+}
+
+let a = Enum.A;
+let nameOfA = Enum[a];
+console.log(nameOfA); // "A"
+```
+
+TypeScript compiles this down to the following JavaScript:
+
+```ts
+"use strict";
+var Enum;
+(function (Enum) {
+  Enum[(Enum["A"] = 0)] = "A";
+})(Enum || (Enum = {}));
+let a = Enum.A;
+let nameOfA = Enum[a];
+console.log(nameOfA);
+```
+
+In this generated code, an enum is compiled into an object that stores both
+forward (`name` -> `value`) and reverse (`value` -> `name`) mappings. References
+to other enum members are always emitted as property accesses and never inlined.
+
+Keep in mind that string enum members do not get a reverse mapping generated at
+all.
+
+## In TypeScript, you can use ambient enums to describe the shape of already existing enum types.
+
+```ts
+declare enum Enum {
+  A = 1,
+  B,
+  C = 2,
+}
+```
+
+One important difference between ambient and non-ambient enums is that, in
+regular enums, members that don't have an initializer will be considered
+constant if their preceding enum member is considered constant. By contrast, an
+ambient (and non-const) enum member that does not have an initializer is always
+considered computed.
+
+## In TypeScript, it's possible to use `const` enums.
+
+In most cases, enums are a perfectly valid solution. However sometimes
+requirements are tighter. To avoid paying the cost of extra generated code and
+additional indirection when accessing enum values, it's possible to use `const`
+enums. Const enums are defined using the `const` modifier on our enums:
+
+```ts
+const enum Enum {
+  A = 1,
+  B = A * 2,
+}
+```
+
+Const enums can only use constant enum expressions and unlike regular enums they
+are completely removed during compilation. Const enum members are inlined at use
+sites. This is possible since const enums cannot have computed members.
+
+```ts
+const enum Direction {
+  Up,
+  Down,
+  Left,
+  Right,
+}
+
+let directions = [
+  Direction.Up,
+  Direction.Down,
+  Direction.Left,
+  Direction.Right,
+];
+```
+
+in generated code will become
+
+```ts
+"use strict";
+let directions = [
+  0 /* Direction.Up */, 1 /* Direction.Down */, 2 /* Direction.Left */,
+  3 /* Direction.Right */,
+];
+```
+
+Inlining enum values is straightforward at first, but comes with subtle
+implications. These pitfalls pertain to ambient const enums only
+(basically const enums in `.d.ts` files) and sharing them between projects, but
+if you are publishing or consuming `.d.ts` files, these pitfalls likely apply to
+you, because `tsc --declaration` transforms `.ts` files into `.d.ts` files. If
+this affects you, then do read about the
+[`const` enum pitfalls from TypeScript's documentation](https://www.typescriptlang.org/docs/handbook/enums.html#const-enum-pitfalls).
+
+## In modern TypeScript, you may not need an enum when an object with `as const` could suffice.
+
+```ts
+const enum EDirection {
+  Up,
+  Down,
+  Left,
+  Right,
+}
+
+const ODirection = {
+  Up: 0,
+  Down: 1,
+  Left: 2,
+  Right: 3,
+} as const;
+
+// (enum member) EDirection.Up = 0
+EDirection.Up;
+
+// (property) Up: 0
+ODirection.Up;
+
+// Using the enum as a parameter
+function walk(dir: EDirection) {}
+
+// It requires an extra line to pull out the values
+type Direction = (typeof ODirection)[keyof typeof ODirection];
+function run(dir: Direction) {}
+
+walk(EDirection.Left);
+run(ODirection.Right);
+```
+
+The biggest argument in favour of this format over TypeScript's `enum` is that
+it keeps your codebase aligned with the state of JavaScript, and
+[when/if](https://github.com/rbuckton/proposal-enum) enums are added to
+JavaScript then you can move to the additional syntax.
+
+## In TypeScript, `Iterable` is a type we can use if we want to take in types which are iterable.
+
+An object is deemed iterable if it has an implementation for the
+`Symbol.iterator` property. Some built-in types like `Array`, `Map`, `Set`,
+`String`, `Int32Array`, `Uint32Array`, etc. have their `Symbol.iterator`
+property already implemented. `Symbol.iterator` function on an object is
+responsible for returning the list of values to iterate on.
+
+Here is an example:
+
+```ts
+function toArray<X>(xs: Iterable<X>): X[] {
+  return [...xs];
+}
+```
+
+`for..of` loops over an iterable object, invoking the `Symbol.iterator` property
+on the object. Here is a simple `for..of` loop on an array:
+
+```ts
+let someArray = [1, "string", false];
+
+for (let entry of someArray) {
+  console.log(entry);
+}
+// 1
+// string
+// false
+```
+
+Both `for..of` and `for..in` statements iterate over lists; the values iterated
+on are different though, `for..in` returns a list of keys on the object being
+iterated, whereas `for..of` returns a list of values of the numeric properties
+of the object being iterated:
+
+```ts
+let list = ["a", "b", "c"];
+
+for (let i in list) {
+  console.log(i);
+}
+// 0
+// 1
+// 2
+
+for (let i of list) {
+  console.log(i);
+}
+// a
+// b
+// c
+```
+
+Another distinction is that `for..in` operates on any object; it serves as a way
+to inspect properties on this object. `for..of` on the other hand, is mainly
+interested in values of iterable objects. Built-in objects like `Map` and `Set`
+implement `Symbol.iterator` property allowing access to stored values:
+
+```ts
+let pets: any = new Set(["Cat", "Dog", "Hamster"]);
+
+pets["species"] = "mammals";
+
+for (let pet in pets) {
+  console.log(pet);
+}
+// species
+
+for (let pet of pets) {
+  console.log(pet);
+}
+// Cat
+// Dog
+// Hamster
+
+console.log(pets); // Set(3) { 'Cat', 'Dog', 'Hamster', species: 'mammals' }
+```
+
+## In TypeScript, when targeting an ES5 or ES3-compliant engine, iterators are only allowed on values of `Array` type.
+
+It is an error to use `for..of` loops on non-Array values, even if these
+non-Array values implement the `Symbol.iterator` property.
+
+The compiler will generate a simple `for` loop for a `for..of` loop, for
+instance:
+
+```ts
+let numbers = [1, 2, 3];
+
+for (let num of numbers) {
+  console.log(num);
+}
+// 1
+// 2
+// 3
+```
+
+will be generated as:
+
+```ts
+"use strict";
+let numbers = [1, 2, 3];
+for (let num of numbers) {
+  console.log(num);
+}
+```
+
+When targeting an ECMAScript 2015-compliant engine, the compiler will generate
+`for..of` loops to target the built-in iterator implementation in the engine.
+
+## TypeScript provides a special type `unique symbol` to enable treating symbols as unique literals.
+
+`unique symbol` is a subtype of `symbol`, and is produced only from calling
+`Symbol()` or `Symbol.for()`, or from explicit type annotations. This type is
+only allowed on `const` declarations and `readonly static` properties, and to
+reference a specific unique symbol, you'll have to use the `typeof` operator.
+Each reference to a unique symbol implies a unique identity that's tied to a
+given declaration:
+
+```ts error
+declare const sym1: unique symbol;
+
+// sym2 can only be a constant reference.
+let ~~sym2~~: unique symbol = Symbol(); //! A variable whose type is a 'unique symbol' type must be 'const'.
+
+// Works - refers to a unique symbol, but its identity is tied to 'sym1'.
+let sym3: typeof sym1 = sym1;
+
+// Also works.
+class C {
+  static readonly StaticSymbol: unique symbol = Symbol();
+}
+```
+
+Because each `unique symbol` has a completely separate identity, no two
+`unique symbol` types are assignable or comparable to each other:
+
+```ts error
+const sym2 = Symbol();
+const sym3 = Symbol();
+
+if (~~sym2 === sym3~~) { // This comparison appears to be unintentional because the types 'typeof sym2' and 'typeof sym3' have no overlap.
+  // ...
+}
+```
+
+## In TypeScript, you can use triple-slash directives at the top of your containing file to specify compiler directives.
+
+Triple-slash directives are single-line comments containing a single XML tag.
+The contents of the comment are used as compiler directives.
+
+Triple-slash directives are only valid at the top of their containing file. A
+triple-slash directive can only be preceded by single or multi-line comments,
+including other triple-slash directives. If they are encountered following a
+statement or a declaration they are treated as regular single-line comments and
+hold no special meaning. You can learn more about
+[triple-slash directives from the TypeScript docs](https://www.typescriptlang.org/docs/handbook/triple-slash-directives.html).
+
+## Conclusion
+
+Remember, **"hackers hack, crackers crack, and whiners whine. Be a hacker."**
+Take care.

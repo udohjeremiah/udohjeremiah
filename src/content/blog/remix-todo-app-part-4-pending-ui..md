@@ -1,0 +1,783 @@
+---
+title: "Remix Todo App: Part 4 - Pending UI"
+description: Improve user experience by adding pending states and implementing network-aware UI feedbacks.
+heroImage: ../../../public/blog/remix-todo-app/hero.webp
+publishedOn: 2024-10-17T00:00:04Z
+tags: [coding, remix]
+---
+
+## Introduction
+
+This is part 4 of the
+[Remix Todo App Series](/blog/remix-todo-app-part-1-building-the-app-layout-and-structure#series-roadmap),
+which aims to teach you everything about Remix that you'll use daily. In
+[part 3](/blog/remix-todo-app-part-3-multiple-forms-with-single-button-and-concurrent-mutations),
+we enhanced the todo app with functionality to mark tasks as completed, edit,
+delete, clear all completed tasks, delete all tasks, and view only active or
+completed tasks.
+
+In this part, we'll discuss pending UI in Remix. Unlike other frameworks, Remix
+builds on the core model of HTML and browser behaviour, handling state
+differently. While many React-based frameworks rely on `useState` for managing
+pending UI during network interactions, Remix simplifies this with
+`useNavigation` and `useFetcher`.
+
+## Types of pending UI
+
+So far, our todo app lacks visual feedback during network interactions. We can
+improve this by using `useNavigation` and `useFetcher` to create a network-aware
+interface for a better user experience. But before we proceed, let's review the
+main types of pending UI to help us choose the appropriate feedback mechanism
+for various use cases.
+
+- **Skeleton fallbacks:** Displays a visual placeholder outlining the structure
+  of upcoming content. It's typically used when loading non-critical data for
+  initial page rendering.
+
+- **Busy indicators:** Shows a visual sign while an action is being processed by
+  the server. It's used when the outcome is uncertain, requiring a wait for the
+  server's response before updating the UI.
+
+- **Optimisitic UI:** Updates the UI with an expected state before receiving the
+  server's response. It's used when the outcome can be reliably predicted,
+  enabling immediate feedback.
+
+## Implementing pending UI
+
+As discussed, use skeleton fallbacks for data loading, busy indicators for data
+creation, and optimistic UI for updates. We'll implement:
+
+- Busy indicators for adding tasks, clearing completed tasks, or deleting all
+  tasks
+- Optimistic UI for marking tasks as completed, saving, or deleting
+
+We're skipping skeleton fallbacks for initial task loading since tasks are
+critical data. To implement it, use `defer` in the loader, render with
+`<Await>`, and wrap it in `<Suspense>`. For details, see the
+[Remix streaming docs](https://remix.run/docs/en/main/guides/streaming).
+
+Pending states from `<Form>` or `useSubmit` can be accessed via `useNavigation`.
+For `<fetcher.Form>` or `fetcher.submit`, use `useFetcher`. To track all pending
+states, use `useFetchers`.
+
+### Busy Indicators for adding, clearing, or deleting tasks
+
+Our busy indicators will be a decrease in opacity and disabled form controls.
+When adding a task, we'll reduce the opacity of the add form and disable the
+input and button. When clearing all completed tasks, we'll lower the opacity of
+those tasks and disable their controls. For deleting all tasks, we'll do the
+same for all tasks.
+
+Update `app/routes/_index.tsx` with the following changes to implement the
+visual cues when adding a new task:
+
+```tsx title="app/routes/_index.tsx" {71} del={53} ins={10,29-41,49,54-57,59}
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import {
+  Form,
+  Link,
+  json,
+  useFetcher,
+  useLoaderData,
+  useSearchParams,
+} from "@remix-run/react";
+import { useEffect, useRef } from "react";
+import type { Item, View } from "~/types";
+
+import TodoActions from "~/components/TodoActions";
+import TodoList from "~/components/TodoList";
+
+import { todos } from "~/lib/db.server";
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+// ...existing code here remains the same
+
+export default function Home() {
+  const { tasks } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher();
+  const [searchParams] = useSearchParams();
+  const view = searchParams.get("view") || "all";
+  const addFormRef = useRef<HTMLFormElement>(null);
+  const addInputRef = useRef<HTMLInputElement>(null);
+
+  const isAdding =
+    fetcher.state === "submitting" &&
+    fetcher.formData?.get("intent") === "create task";
+
+  useEffect(() => {
+    if (!isAdding) {
+      addFormRef.current?.reset();
+      addInputRef.current?.focus();
+    }
+  }, [isAdding]);
+
+  return (
+    <div className="flex flex-1 flex-col md:mx-auto md:w-[720px]">
+      {/* ...existing code here remains the same */}
+
+      <main className="flex-1 space-y-8">
+        <fetcher.Form
+          ref={addFormRef}
+          method="post"
+          className="rounded-full border border-gray-200 bg-white/90 shadow-md dark:border-gray-700 dark:bg-gray-900"
+        >
+          <fieldset className="flex items-center gap-2 p-2 text-sm">
+          <fieldset
+            disabled={isAdding}
+            className="flex items-center gap-2 p-2 text-sm disabled:pointer-events-none disabled:opacity-25"
+          >
+            <input
+              ref={addInputRef}
+              type="text"
+              name="description"
+              placeholder="Create a new todo..."
+              required
+              className="flex-1 rounded-full border-2 border-gray-200 px-3 py-2 text-sm font-bold text-black dark:border-white/50"
+            />
+            <button
+              name="intent"
+              value="create task"
+              className="rounded-full border-2 border-gray-200/50 bg-gradient-to-tl from-[#00fff0] to-[#0083fe] px-3 py-2 text-base font-black transition hover:scale-105 hover:border-gray-500 sm:px-6 dark:border-white/50 dark:from-[#8e0e00] dark:to-[#1f1c18] dark:hover:border-white"
+            >
+              {isAdding ? "Adding..." : "Add"}
+            </button>
+          </fieldset>
+        </fetcher.Form>
+
+        {/* ...existing code here remains the same */}
+
+        {/* ...existing code here remains the same */}
+
+        {/* ...existing code here remains the same */}
+      </main>
+
+      {/* ...existing code here remains the same */}
+    </div>
+  );
+}
+```
+
+Notice the `useEffect`? It clears the input after a task is successfully
+submitted. With `useEffect`, once the `action` completes, we reset the form and
+focus back on the input.
+
+Next, update `app/components/TodoActions.tsx` with the following changes to
+implement the visual cues when clearing completed or deleting all tasks:
+
+```tsx title="app/components/TodoActions.tsx" {43-45,50,53,58} ins={7-13}
+import { useFetcher } from "@remix-run/react";
+import type { Item } from "~/types";
+
+export default function TodoActions({ tasks }: { tasks: Item[] }) {
+  const fetcher = useFetcher();
+
+  const isClearingCompleted =
+    fetcher.state === "submitting" &&
+    fetcher.formData?.get("intent") === "clear completed";
+
+  const isDeletingAll =
+    fetcher.state === "submitting" &&
+    fetcher.formData?.get("intent") === "delete all";
+
+  return (
+    <div className="flex items-center justify-between gap-4 text-sm">
+      <p className="text-center leading-7">
+        {tasks.length} {tasks.length === 1 ? "item" : "items"} left
+      </p>
+      <fetcher.Form
+        method="post"
+        className="flex items-center gap-4"
+        onSubmit={(event) => {
+          const submitter = (event.nativeEvent as SubmitEvent)
+            .submitter as HTMLButtonElement;
+
+          if (
+            submitter.value === "clear completed" &&
+            !confirm("Are you sure you want to clear all completed tasks?")
+          ) {
+            event.preventDefault();
+            return;
+          } else if (
+            submitter.value === "delete all" &&
+            !confirm("Are you sure you want to delete all tasks?")
+          ) {
+            event.preventDefault();
+            return;
+          }
+        }}
+      >
+        <button
+          disabled={
+            !tasks.some((todo) => todo.completed) || isClearingCompleted
+          }
+          name="intent"
+          value="clear completed"
+          className="text-red-400 transition hover:text-red-600 disabled:pointer-events-none disabled:opacity-25"
+        >
+          {isClearingCompleted ? "Clearing..." : "Clear Completed"}
+        </button>
+        <button
+          disabled={tasks.length === 0 || isDeletingAll}
+          name="intent"
+          value="delete all"
+          className="text-red-400 transition hover:text-red-600 disabled:pointer-events-none disabled:opacity-25"
+        >
+          {isDeletingAll ? "Deleting..." : "Delete All"}
+        </button>
+      </fetcher.Form>
+    </div>
+  );
+}
+```
+
+Finally, update `app/components/TodoItem.tsx` to apply visual cues when clearing
+completed or deleting all tasks:
+
+```tsx title="app/components/TodoItem.tsx" {1,56,71-73,144,154} ins={22,28-41,133}
+import { useFetcher, useFetchers } from "@remix-run/react";
+import { useState } from "react";
+import type { Item } from "~/types";
+
+import DeleteIcon from "~/components/icons/DeleteIcon";
+import EditIcon from "~/components/icons/EditIcon";
+import SaveIcon from "~/components/icons/SaveIcon";
+import SquareCheckIcon from "~/components/icons/SquareCheckIcon";
+import SquareIcon from "~/components/icons/SquareIcon";
+
+const dateFormatter = new Intl.DateTimeFormat("en-GB", {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+  hour: "numeric",
+  minute: "numeric",
+  hour12: true,
+  timeZone: "UTC",
+});
+
+export default function TodoItem({ todo }: { todo: Item }) {
+  const fetchers = useFetchers();
+  const fetcher = useFetcher();
+  const [isEditing, setIsEditing] = useState(false);
+
+  const editing = typeof document !== "undefined" ? isEditing : todo.editing;
+
+  const isClearingCompleted = fetchers.some(
+    (fetcher) =>
+      fetcher.state === "submitting" &&
+      fetcher.formData?.get("intent") === "clear completed",
+  );
+
+  const isDeletingAll = fetchers.some(
+    (fetcher) =>
+      fetcher.state === "submitting" &&
+      fetcher.formData?.get("intent") === "delete all",
+  );
+
+  const actionInProgress =
+    isDeletingAll || (todo.completed && isClearingCompleted);
+
+  return (
+    <li
+      className={`my-4 flex gap-4 border-b border-dashed border-gray-200 pb-4 last:border-none last:pb-0 dark:border-gray-700 ${
+        editing ? "items-center" : "items-start"
+      }`}
+    >
+      <fetcher.Form method="post">
+        <input type="hidden" name="id" value={todo.id} />
+        <input type="hidden" name="completed" value={`${todo.completed}`} />
+        <button
+          aria-label={`Mark task as ${
+            todo.completed ? "incomplete" : "complete"
+          }`}
+          disabled={editing || actionInProgress}
+          name="intent"
+          value="toggle completion"
+          className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
+        >
+          {todo.completed ? (
+            <SquareCheckIcon className="h-4 w-4" />
+          ) : (
+            <SquareIcon className="h-4 w-4" />
+          )}
+        </button>
+      </fetcher.Form>
+
+      {!editing && (
+        <div
+          className={`flex-1 space-y-0.5 ${
+            todo.completed || actionInProgress ? "opacity-25" : ""
+          }`}
+        >
+          <p>{todo.description}</p>
+          <div className="space-y-0.5 text-xs">
+            <p>
+              Created at{" "}
+              <time dateTime={`${new Date(todo.createdAt).toISOString()}`}>
+                {dateFormatter.format(new Date(todo.createdAt))}
+              </time>
+            </p>
+            {todo.completed && (
+              <p>
+                Completed at{" "}
+                <time dateTime={`${new Date(todo.completedAt!).toISOString()}`}>
+                  {dateFormatter.format(new Date(todo.completedAt!))}
+                </time>
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      <fetcher.Form
+        method="post"
+        className={`flex items-center gap-4 ${editing ? "flex-1" : ""}`}
+        onSubmit={(event) => {
+          const submitter = (event.nativeEvent as SubmitEvent)
+            .submitter as HTMLButtonElement;
+
+          if (submitter.value === "edit task") {
+            setIsEditing(true);
+            event.preventDefault();
+            return;
+          }
+
+          if (submitter.value === "save task") {
+            setIsEditing(false);
+            return;
+          }
+
+          if (
+            submitter.value === "delete task" &&
+            !confirm("Are you sure you want to delete this task?")
+          ) {
+            event.preventDefault();
+            return;
+          }
+        }}
+      >
+        <input type="hidden" name="id" value={todo.id} />
+        {editing ? (
+          <>
+            <input
+              name="description"
+              defaultValue={todo.description}
+              required
+              className="flex-1 rounded-full border-2 px-3 py-2 text-sm text-black"
+            />
+            <button
+              aria-label="Save task"
+              disabled={actionInProgress}
+              name="intent"
+              value="save task"
+              className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 dark:border-gray-700 dark:hover:bg-gray-700"
+            >
+              <SaveIcon className="h-4 w-4" />
+            </button>
+          </>
+        ) : (
+          <button
+            aria-label="Edit task"
+            disabled={todo.completed || actionInProgress}
+            name="intent"
+            value="edit task"
+            className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
+          >
+            <EditIcon className="h-4 w-4" />
+          </button>
+        )}
+        <button
+          aria-label="Delete task"
+          disabled={todo.completed || editing || actionInProgress}
+          name="intent"
+          value="delete task"
+          className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
+        >
+          <DeleteIcon className="h-4 w-4" />
+        </button>
+      </fetcher.Form>
+    </li>
+  );
+}
+```
+
+Notice the `useFetchers` hook? It returns an array of all active fetchers. Since
+the `TodoItem` component didn't create the "Clear Completed" or "Delete All"
+fetchers, we use this to track their submissions. Now, clicking
+"Clear Completed" or "Delete All" won't only disable the buttons but also reduce
+the opacity of the tasks being removed.
+
+### Optimisitic UI for task-specific interactions
+
+When a user toggles a task's completion, saves it after editing, or deletes it,
+we can predict the next UI state. So, we'll optimistically update the UI
+immediately after these actions and then revert to the actual data from the
+database once the form is successfully submitted and Remix completes
+revalidation.
+
+Update `app/components/TodoItem.tsx` with the following changes:
+
+```tsx title="app/components/TodoItem.tsx" {69,71,77,87-89,91,99,102-103,143,160,170} ins={43-59}
+import { useFetcher, useFetchers } from "@remix-run/react";
+import { useState } from "react";
+import type { Item } from "~/types";
+
+import DeleteIcon from "~/components/icons/DeleteIcon";
+import EditIcon from "~/components/icons/EditIcon";
+import SaveIcon from "~/components/icons/SaveIcon";
+import SquareCheckIcon from "~/components/icons/SquareCheckIcon";
+import SquareIcon from "~/components/icons/SquareIcon";
+
+const dateFormatter = new Intl.DateTimeFormat("en-GB", {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+  hour: "numeric",
+  minute: "numeric",
+  hour12: true,
+  timeZone: "UTC",
+});
+
+export default function TodoItem({ todo }: { todo: Item }) {
+  const fetchers = useFetchers();
+  const fetcher = useFetcher();
+  const [isEditing, setIsEditing] = useState(false);
+
+  const editing = typeof document !== "undefined" ? isEditing : todo.editing;
+
+  const isClearingCompleted = fetchers.some(
+    (fetcher) =>
+      fetcher.state === "submitting" &&
+      fetcher.formData?.get("intent") === "clear completed",
+  );
+
+  const isDeletingAll = fetchers.some(
+    (fetcher) =>
+      fetcher.state === "submitting" &&
+      fetcher.formData?.get("intent") === "delete all",
+  );
+
+  const actionInProgress =
+    isDeletingAll || (todo.completed && isClearingCompleted);
+
+  const isTogglingCompletion =
+    fetcher.state !== "idle" &&
+    fetcher.formData?.get("intent") === "toggle completion";
+
+  const isSaving =
+    fetcher.state !== "idle" && fetcher.formData?.get("intent") === "save task";
+
+  const completed = isTogglingCompletion
+    ? !JSON.parse(fetcher.formData?.get("completed") as string)
+    : todo.completed;
+
+  const completedAt =
+    isTogglingCompletion || !todo.completedAt ? new Date() : todo.completedAt;
+
+  const description = isSaving
+    ? (fetcher.formData?.get("description") as string)
+    : todo.description;
+
+  return (
+    <li
+      className={`my-4 flex gap-4 border-b border-dashed border-gray-200 pb-4 last:border-none last:pb-0 dark:border-gray-700 ${
+        editing ? "items-center" : "items-start"
+      }`}
+    >
+      <fetcher.Form method="post">
+        <input type="hidden" name="id" value={todo.id} />
+        <input type="hidden" name="completed" value={`${completed}`} />
+        <button
+          aria-label={`Mark task as ${completed ? "incomplete" : "complete"}`}
+          disabled={editing || actionInProgress}
+          name="intent"
+          value="toggle completion"
+          className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
+        >
+          {completed ? (
+            <SquareCheckIcon className="h-4 w-4" />
+          ) : (
+            <SquareIcon className="h-4 w-4" />
+          )}
+        </button>
+      </fetcher.Form>
+
+      {!editing && (
+        <div
+          className={`flex-1 space-y-0.5 ${
+            completed || actionInProgress ? "opacity-25" : ""
+          }`}
+        >
+          <p>{description}</p>
+          <div className="space-y-0.5 text-xs">
+            <p>
+              Created at{" "}
+              <time dateTime={`${new Date(todo.createdAt).toISOString()}`}>
+                {dateFormatter.format(new Date(todo.createdAt))}
+              </time>
+            </p>
+            {completed && (
+              <p>
+                Completed at{" "}
+                <time dateTime={`${new Date(completedAt).toISOString()}`}>
+                  {dateFormatter.format(new Date(completedAt))}
+                </time>
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      <fetcher.Form
+        method="post"
+        className={`flex items-center gap-4 ${editing ? "flex-1" : ""}`}
+        onSubmit={(event) => {
+          const submitter = (event.nativeEvent as SubmitEvent)
+            .submitter as HTMLButtonElement;
+
+          if (submitter.value === "edit task") {
+            setIsEditing(true);
+            event.preventDefault();
+            return;
+          }
+
+          if (submitter.value === "save task") {
+            setIsEditing(false);
+            return;
+          }
+
+          if (
+            submitter.value === "delete task" &&
+            !confirm("Are you sure you want to delete this task?")
+          ) {
+            event.preventDefault();
+            return;
+          }
+        }}
+      >
+        <input type="hidden" name="id" value={todo.id} />
+        {editing ? (
+          <>
+            <input
+              name="description"
+              defaultValue={description}
+              required
+              className="flex-1 rounded-full border-2 px-3 py-2 text-sm text-black"
+            />
+            <button
+              aria-label="Save task"
+              disabled={actionInProgress}
+              name="intent"
+              value="save task"
+              className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 dark:border-gray-700 dark:hover:bg-gray-700"
+            >
+              <SaveIcon className="h-4 w-4" />
+            </button>
+          </>
+        ) : (
+          <button
+            aria-label="Edit task"
+            disabled={completed || actionInProgress}
+            name="intent"
+            value="edit task"
+            className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
+          >
+            <EditIcon className="h-4 w-4" />
+          </button>
+        )}
+        <button
+          aria-label="Delete task"
+          disabled={completed || editing || actionInProgress}
+          name="intent"
+          value="delete task"
+          className="rounded-full border border-gray-200 p-1 transition hover:bg-gray-200 disabled:pointer-events-none disabled:opacity-25 dark:border-gray-700 dark:hover:bg-gray-700"
+        >
+          <DeleteIcon className="h-4 w-4" />
+        </button>
+      </fetcher.Form>
+    </li>
+  );
+}
+```
+
+Notice we're using `fetcher.state !== "idle"`. `fetcher.state` can be
+`"submitting"`, `"loading"`, or `"idle"`. It's `"submitting"` when a form is
+submitted and the route's action (`POST`) or loader (`GET`) is called,
+`"loading"` when the loaders are reloading after an action submission, and
+`"idle"` when nothing is being fetched. Since we're implementing optimistic UI,
+we want to display the database data only after the `action` completes and data
+is revalidated, which is why we use `fetcher.state !== "idle"`. The UI updates
+optimistically and reverts to the database values after submission and
+revalidation.
+
+We also want to optimistically complete or remove tasks from the visible list
+and adjust the task count when they are marked as completed or deleted. Update
+`app/components/TodoList.tsx` and `app/components/TodoActions.tsx` as follows:
+
+```tsx title="app/components/TodoList.tsx" del={29-39} ins={1,14-28,41-57}
+import { useFetchers } from "@remix-run/react";
+import { useMemo } from "react";
+import type { Item, View } from "~/types";
+
+import TodoItem from "~/components/TodoItem";
+
+export default function TodoList({
+  todos,
+  view,
+}: {
+  todos: Item[];
+  view: View;
+}) {
+  const fetchers = useFetchers();
+
+  const isDeleting = fetchers.some(
+    (fetcher) =>
+      fetcher.state !== "idle" &&
+      fetcher.formData?.get("intent") === "delete task",
+  );
+
+  const deletingTodoIds = fetchers
+    .filter(
+      (fetcher) =>
+        fetcher.state !== "idle" &&
+        fetcher.formData?.get("intent") === "delete task",
+    )
+    .map((fetcher) => fetcher.formData?.get("id"));
+  const visibleTodos = useMemo(
+    () =>
+      todos.filter((todo) =>
+        view === "active"
+          ? !todo.completed
+          : view === "completed"
+            ? todo.completed
+            : true,
+      ),
+    [todos, view],
+  );
+
+  const visibleTodos = useMemo(() => {
+    let filteredTodos = todos.filter((todo) =>
+      view === "active"
+        ? !todo.completed
+        : view === "completed"
+          ? todo.completed
+          : true,
+    );
+
+    if (isDeleting) {
+      filteredTodos = filteredTodos.filter(
+        (todo) => !deletingTodoIds.includes(todo.id),
+      );
+    }
+
+    return filteredTodos;
+  }, [deletingTodoIds, isDeleting, todos, view]);
+
+  if (visibleTodos.length === 0) {
+    return (
+      <p className="text-center leading-7">
+        {view === "all"
+          ? "No tasks available"
+          : view === "active"
+            ? "No active tasks"
+            : "No completed tasks"}
+      </p>
+    );
+  }
+
+  return (
+    <ul>
+      {visibleTodos.map((todo) => (
+        <TodoItem key={todo.id} todo={todo} />
+      ))}
+    </ul>
+  );
+}
+```
+
+```tsx title="app/components/TodoActions.tsx" {1} ins={5,16-61}
+import { useFetcher, useFetchers } from "@remix-run/react";
+import type { Item } from "~/types";
+
+export default function TodoActions({ tasks }: { tasks: Item[] }) {
+  const fetchers = useFetchers();
+  const fetcher = useFetcher();
+
+  const isClearingCompleted =
+    fetcher.state === "submitting" &&
+    fetcher.formData?.get("intent") === "clear completed";
+
+  const isDeletingAll =
+    fetcher.state === "submitting" &&
+    fetcher.formData?.get("intent") === "delete all";
+
+  const isTogglingCompletion = fetchers.some(
+    (fetcher) =>
+      fetcher.state !== "idle" &&
+      fetcher.formData?.get("intent") === "toggle completion",
+  );
+
+  const isDeleting = fetchers.some(
+    (fetcher) =>
+      fetcher.state !== "idle" &&
+      fetcher.formData?.get("intent") === "delete task",
+  );
+
+  const completingTodoIds = fetchers
+    .filter(
+      (fetcher) =>
+        fetcher.state !== "idle" &&
+        fetcher.formData?.get("intent") === "toggle completion",
+    )
+    .map((fetcher) => ({
+      id: fetcher.formData?.get("id"),
+      completed: fetcher.formData?.get("completed"),
+    }));
+
+  const deletingTodoIds = fetchers
+    .filter(
+      (fetcher) =>
+        fetcher.state !== "idle" &&
+        fetcher.formData?.get("intent") === "delete task",
+    )
+    .map((fetcher) => fetcher.formData?.get("id"));
+
+  tasks = isTogglingCompletion
+    ? tasks.map((task) => {
+        const completingTodo = completingTodoIds.find(
+          (todo) => todo.id === task.id,
+        );
+        if (completingTodo) {
+          task.completed = !JSON.parse(completingTodo.completed as string);
+        }
+        return task;
+      })
+    : tasks;
+
+  tasks = isDeleting
+    ? tasks.filter((task) => !deletingTodoIds.includes(task.id))
+    : tasks;
+
+  return (
+    <div className="flex items-center justify-between gap-4 text-sm">
+      {/* ...existing code here remains the same */}
+    </div>
+  );
+}
+```
+
+That's it! You should now be able to perform any operation on a todo item and
+see it update optimistically. If the operation fails on the server, the data
+will revert to the database state. With that, we wrap up this article.
+
+## Conclusion
+
+In this part of the series, you learned about pending UI. You implemented a
+skeleton fallback for initially loading tasks, busy indicators for creating,
+clearing, or deleting tasks, and optimistic UI when interacting with individual
+tasks. The todo app is now network-aware!
+
+In the next part, you'll learn how to add a theme switcher to the Remix app,
+enabling light, dark, or OS preference themes for the todo app. Stay tuned!

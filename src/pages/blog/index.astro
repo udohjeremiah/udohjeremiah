@@ -1,114 +1,129 @@
 ---
-import BaseHead from '../../components/BaseHead.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
-import { getCollection } from 'astro:content';
-import FormattedDate from '../../components/FormattedDate.astro';
-import { Image } from 'astro:assets';
+import PageHeader from "@components/PageHeader.astro";
+import Tag from "@components/Tag.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+import fs from "fs";
+import path from "path";
+import { formatPostDate } from "src/utils";
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.publishedOn.getTime() - a.data.publishedOn.getTime(),
+);
+
+const postsByYear = posts.reduce<Record<number, typeof posts>>((acc, post) => {
+  const year = new Date(post.data.publishedOn).getFullYear();
+  (acc[year] ||= []).push(post);
+  return acc;
+}, {});
+
+const sortedPostsByYear = Object.entries(postsByYear).sort(
+  ([a], [b]) => Number(b) - Number(a),
+);
+
+const tagCounts = posts.reduce<Record<string, number>>((acc, post) => {
+  post.data.tags.forEach((tag) => (acc[tag] = (acc[tag] ?? 0) + 1));
+  return acc;
+}, {});
+
+const lastUpdated = new Date(
+  Math.max(
+    fs
+      .statSync(path.resolve(".", "src/pages/blog/index.astro"))
+      .mtime.getTime(),
+    new Date(posts[0]?.data.publishedOn ?? 0).getTime(),
+  ),
 );
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
-		</main>
-		<Footer />
-	</body>
-</html>
+<BaseLayout title="Blog | Udoh Jeremiah" description="Long-form posts">
+  <main class="flex-1 space-y-12 px-8 py-20 lg:px-20">
+    <PageHeader
+      title="Blog"
+      description=`
+        "The purpose of a writer is to keep civilization from destroying
+        itself." — Albert Camus
+      `
+      lastUpdated={lastUpdated}
+    />
+    <p>
+      Blogs are medium (or sometimes lengthy), thoughtful, formal and
+      well-structured content. It's where I share long-form content after days
+      of rigorous refinement. You should read
+      <a href="/blog/is-blogging-still-relevant-for-programmers">this</a> if you
+      think blogging is no longer relevant for programmers.
+    </p>
+    <div class="space-y-2">
+      <p class="text-sm font-semibold uppercase">Tags</p>
+      <div class="flex flex-wrap items-center gap-4">
+        <a
+          href="/blog"
+          class="[background:unset] [transition:unset] hover:opacity-80"
+        >
+          <Tag tag="all" count={posts.length} />
+        </a>
+        {
+          Object.entries(tagCounts)
+            .sort(([aTag], [bTag]) => aTag.localeCompare(bTag))
+            .map(([tag, count]) => (
+              <a
+                href={`?tag=${encodeURIComponent(tag)}`}
+                class="[background:unset] [transition:unset] hover:opacity-80"
+              >
+                <Tag tag={tag} count={count} />
+              </a>
+            ))
+        }
+      </div>
+      <div class="space-y-4">
+        {
+          sortedPostsByYear.map(([year, posts]) => (
+            <div>
+              <h2 class="text-muted-foreground border-b px-2 py-4 text-end italic">
+                {year}
+              </h2>
+              <ul>
+                {posts.map((post) => (
+                  <li data-tags={post.data.tags.join(",").toLowerCase()}>
+                    <a
+                      href={`/blog/${post.id}`}
+                      class="hover:bg-muted hover:border-b-muted grid grid-cols-[1fr_auto] items-center gap-10 border-b px-2 py-4 whitespace-normal [background:unset] [transition:unset]"
+                    >
+                      <div class="flex flex-col gap-2 lg:flex-row lg:items-center">
+                        <span>{post.data.title}</span>
+                        <div class="flex flex-wrap items-center gap-2 lg:flex-nowrap">
+                          {post.data.tags
+                            .sort((a, b) => a.localeCompare(b))
+                            .map((tag) => (
+                              <Tag tag={tag} />
+                            ))}
+                        </div>
+                      </div>
+                      <time class="text-muted-foreground">
+                        {formatPostDate(post.data.publishedOn)}
+                      </time>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </main>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const tag = params.get("tag")?.toLowerCase();
+    const posts = document.querySelectorAll(
+      "li[data-tags]",
+    ) as NodeListOf<HTMLLIElement>;
+
+    posts.forEach((post) => {
+      const tags = post.dataset.tags?.split(",");
+      const shouldShow = !tag || tags?.includes(tag);
+      post.style.display = shouldShow ? "" : "none";
+    });
+  </script>
+</BaseLayout>

@@ -1,0 +1,823 @@
+---
+title: Understanding JavaScript's Internationalization API
+description: A concise guide to mastering JavaScript's Internationalization API for globalized web apps.
+heroImage: ../../../public/blog/understanding-javascript-internationalization-api.webp
+publishedOn: 2024-09-04
+tags: [coding, javascript]
+---
+
+## Introduction
+
+Do you believe in this?
+
+> Everyone in the world should be able to use their own language on the Web.
+
+If you don't, then please close your browser, and go read a book with your
+device or go out to view nature's beauty. But if you do believe, then come with
+me, and let's learn how we can make the World Wide Web _worldwide_.
+
+The web apps we build today _by default_ aren't accessible in all languages.
+Surprised? Let me explain. The HTML, CSS, and JavaScript code we're accustomed
+to writing works well in a language with a left-to-right text direction,
+_mm/dd/yyyy_ date format, and _12,345,678.90_ number format. A typical example
+of such a language is U.S. English. If your app gets used in a different
+language than the one I described (without adapting it), all hell will break
+loose: text direction will be chaotic, dates will be misread, and numbers will
+make no sense.
+
+In this article, I'll explain what writing internationalized JavaScript apps
+means. Also, you'll learn why we even need to write internationalized apps in
+the first place. And by the end, you'll learn how we can use the JavaScript
+internationalization API to internationalize our apps. Let's get the ball
+rolling.
+
+## Prerequisite
+
+This article assumes you have a basic understanding of HTML, CSS, and
+JavaScript. If not, I recommend familiarising yourself with these technologies
+before proceeding.
+
+## What is internationalization, localization, and globalization?
+
+[According to ECMAScript International](https://402.ecma-international.org/#sec-internationalization-localization-globalization),
+the official standard body that defines JavaScript:
+
+- **Internationalization** of software (often shortened to "i18n") means
+  designing it such that it supports or can be easily adapted to support the
+  needs of users speaking different languages and having different cultural
+  expectations, and enables worldwide communication between them.
+
+- **Localization** of software (sometimes shortened to "l10n") is the process of
+  adapting it to a specific language and culture.
+
+- **Globalization** of software is commonly understood to be the combination of
+  internationalization and localization.
+
+The internationalization phase is where you deal with adaptation barriers. The
+barriers that would make it difficult to adapt your app so that your users can
+read and relate to it. The localization phase is where you _actually_ adapt for
+different users. You change the language via translation; you flick the text
+direction; you use a different date, time, and number format, and so on.
+
+## Why do we need an Internationalization API in JavaScript?
+
+The [ECMAScript Language Specification (ECMA-262)](https://ecma-international.org/publications-and-standards/standards/ecma-262)
+is the standard that defines the JavaScript programming language from which all
+web browsers build their JavaScript engines. In this standard, strings are based
+on Unicode (making text in all writing systems supported), and a few
+language-sensitive methods are provided:
+
+- `String.prototype.localeCompare`
+- `String.toLocaleLowerCase`
+- `String.prototype.toLocaleUpperCase`
+- `Number.prototype.toLocaleString`
+- `Date.prototype.toLocaleString`
+- `Date.prototype.toLocaleDaxteString`
+- `Date.prototype.toLocaleTimeString`
+
+But, none of these language-sensitive methods allow apps to specify the language
+or control details of their behavior. This limitation creates a barrier if you
+want to build apps that many people around the world use.
+
+The open-source community over the years has created libraries, such as
+Globalize.js, Numeral.js, Moment,js, date-fns, Day.js, etc, to fill in some of
+the gaps created by the Web's lack or immature support of i18n. These libraries
+provided i18n support, as well as date, time, and number formatting.
+
+In 2012, the
+[ECMAScript Internationalization API Specification (ECMA 402)](https://ecma-international.org/publications-and-standards/standards/ecma-402)
+i.e., the JavaScript i18n API, was approved as a standard. ECMA-402 is designed
+as an extension of ECMA-262, and it defines the API for JavaScript objects that
+support programs that need to adapt to the regional, linguistic, and cultural
+conventions used by different human languages and countries. As I write this,
+[all major browsers have implemented the i18n API](https://caniuse.com/internationalization).
+This means developers can now internationalize their apps, without reaching for
+external tools.
+
+"But still I'm not building for a global audience, so I don't think I need this
+API" you might object. Well, you need to **properly** support that one region
+and language you're building for, and the i18n API makes doing so effortless.
+So, let's keep the ball rolling.
+
+## What does the JavaScript Internationalization API provide?
+
+ECMA-402 provides a set of language-sensitive functionality that are required in
+most apps as a complement to ECMA-262. But, unlike ECMA-262, ECMA-402 provides
+additional functionality and lets apps specify languages, assist with language
+negotiation, and control details of the behavior.
+
+Listed below are the customizable language-sensitive constructors currently
+provided by the i18n API:
+
+- String comparison (`Intl.Collator`)
+- Date and time formatting (`Intl.DateTimeFormat`)
+- Number formatting (`Intl.NumberFormat`)
+- Relative time formatting (`Intl.RelativeTimeFormat`)
+- Duration formatting (`Intl.DurationFormat`)
+- List formatting (`Intl.ListFormat`)
+- Text segmentation (`Intl.Segmenter`)
+- Pluralization rules (`Intl.PluralRules`)
+- Display names (`Intl.DisplayNames`)
+
+Also, in the i18n API, the existing language-sensitive methods defined on
+`String`, `Number`, and `Date` in ECMA-262 were **respecified** to accept locale
+and other parameters and interpret them in the same way as the new API
+introduced by the i18n API.
+
+## What is the Intl object?
+
+The `Intl` object is a standard built-in object in JavaScript used to package
+**all** functionality, from constructors to other language-sensitive functions,
+defined in the i18n API. It provides a namespace for the constructors of the
+i18n API, minimizing the risk of _name collisions_ as more constructors are
+added to the API over time.
+
+Unlike most objects in the global scope (e.g., `Date`, `Number`, `Error`),
+`Intl` has some different behavior that is worth paying attention to:
+
+- The `Intl` object does not have a construct internal method, so you cannot use
+  it as a constructor with the `new` operator:
+
+  ```js error
+  new ~~Intl~~(); //! TypeError: Intl is not a constructor
+  ```
+
+- The `Intl` object does not have a call internal method, so you cannot invoke
+  it as a function:
+
+  ```js error
+  ~~Intl~~(); //! TypeError: Intl is not a function
+  ```
+
+- All properties and methods of the `Intl` object are **static**, just like the
+  `Math` object:
+
+  ```js
+  Intl.Collator(); // Collator {compare: ƒ}
+  Intl.getCanonicalLocales("EN-GB"); // ['en-GB']
+  ```
+
+Note that all `Intl` constructors cannot be invoked as a function and must be
+called with the `new` operator:
+
+```js error
+new Intl.RelativeTimeFormat(); // RelativeTimeFormat {}
+
+~~Intl.RelativeTimeFormat()~~; //! TypeError: Constructor Intl.RelativeTimeFormat requires 'new'
+```
+
+The exceptions to this rule are `Intl.Collator`, `Intl.DateTimeFormat`, and
+`Intl.NumberFormat`. Each of these constructs and returns a new object when
+called as a function. But, why? For backward compatibility with past editions
+of the i18n API. Remember, _you don't break the Web_.
+
+## The `locales` and `options` arguments
+
+A distinctive feature of the language-sensitive functionality provided in the
+i18n API as well as the respecified language-sensitive methods of ECMA-262, is
+that it allows apps to specify languages, assist with language negotiation, and
+control details of the behavior. This is possible because they all accept
+`locales` and `options` arguments, which gives them the room to tailor the
+functionality to their needs.
+
+The `locales` argument, which can be a string or an array of strings, is used to
+specify the **locale** to be used in a given operation. The JavaScript
+implementation (e.g., the browser or Node.js) examines `locales` and then
+computes a locale it understands that comes closest to satisfying the expressed
+preference.
+
+The `options` argument, which must be an object, is used to specify other
+parameters that let the app control the behavior of the constructed object. The
+properties that can be specified in the `options` argument vary between
+constructors and functions, and if the `options` argument is not provided or is
+`undefined`, default values will be used for all properties.
+
+### What is a locale?
+
+A locale is a set of parameters that defines the user's region, language, and
+country-based preferences for a user interface.
+
+Among other things, a locale represents the following according to the rules in
+the given region:
+
+- Language
+- Currency
+- Time zone
+- Measurement unit
+- Numbering system
+- Collation i.e. sort-order
+- Calendar
+
+### How does the JavaScript Internationalization API identify locales?
+
+Except for currencies, the i18n API identifies language tags, time zones,
+measurement units, numbering systems, collation types, and calendar types using
+the IETF Best Current Practice (BCP) 47 standard as defined by
+[Unicode Technical Standard 35](https://unicode.org/reports/tr35/#BCP_47_Conformance).
+Currencies are identified using 3-letter currency codes as defined by ISO 4127.
+
+The [IANA Language Subtag Registry](https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry)
+defines and maintains the list of language tags. A language tag consists of a
+language code, an optional script code, and an optional regional code, all
+separated by hyphens (-). For example, `sr` for Serbian, `sr-Cyrl` for Serbian
+in Cyrillic script, `sr-Cyrl-BA` for Serbian in Cyrillic script as used in
+Bosnia-Herzegovina.
+
+But, BCP 47 allows for **extensions**, and with the `"u"` ( Unicode) extension,
+you can specify additional parameters for currency, date and time formatting,
+number formatting, etc., as part of a language tag. For example,
+`en-GB-u-nu-thai`, which means use British English with Thai digits
+(๐, ๑, ๒, ๓, ๔, ๕, ๖, ๗, ๘, ๙) in number formatting:
+
+```js
+let nf = new Intl.NumberFormat("th-Th-u-nu-thai");
+console.log(nf.format(10335497)); // ๑๐,๓๓๕,๔๙๗
+```
+
+BCP 47 extension subtags (e.g., `cf` for currency, `nu` for numbering systems)
+are defined in the
+[Unicode CLDR Project](https://github.com/unicode-org/cldr/tree/main/common/bcp47).
+And, you can use the `Intl.supportedValuesOf()` static method to see the
+supported currency, time zone, measurement unit, numbering system, collation, or
+calendar values supported by an implementation:
+
+```js
+console.log(Intl.supportedValuesOf("currency")); // ['AED', 'AFN', …]
+console.log(Intl.supportedValuesOf("unit")); // ['acre', 'bit', …]
+console.log(Intl.supportedValuesOf("calendar")); // ['buddhist', 'chinese', …]
+```
+
+### What does the JavaScript Internationalization API accept as a valid `locales`?
+
+The string defining a locale is often referred to as a _locale identifier_. A
+locale identifier is a case-insensitive ASCII string. As we learned earlier,
+each section contained in the locale must be separated by a hyphen (-) and it
+must follow this format:
+
+1. A language subtag with 2-3 or 5-8 letters
+2. A script subtag with 4 letters (optional)
+3. A region subtag with either 2 letters or 3 digits (optional)
+4. One or more variant subtags (all of which must be unique), each with either
+   5-8 alphanumerals or a digit followed by 3 alphanumerals (optional)
+5. One or more BCP 47 extension sequences (optional)
+6. A private-use extension sequence (optional)
+
+The `locales` argument may be:
+
+- `undefined` (or omitted): The implementation's default locale will be used:
+
+  ```js
+  new Intl.DateTimeFormat(undefined); // `locales` is undefined
+  new Intl.DateTimeFormat(); // `locales` is omitted
+  ```
+
+- A locale: A locale identifier or an `Intl.Locale` object that wraps a locale
+  identifier:
+
+  ```js
+  new Intl.DateTimeFormat("en-GB"); // `locales` is a locale identifier
+
+  let locale = new Intl.Locale("en-GB"); // {language: 'en', script: undefined, region: 'GB', …}
+  new Intl.DateTimeFormat(locale); // `locales` is an `Intl.Locale` object
+  ```
+
+- A locales list: An array of locale identifiers, where the locale identifier
+  recognized by the implementation is used:
+
+  ```js
+  new Intl.DateTimeFormat(["de-CH", "en-GB"]); // `locales` is a list of locales
+  ```
+
+A `TypeError` is thrown if the locale identifier isn't a string or an array of
+strings:
+
+```js error
+new Intl.DateTimeFormat(~~10~~); //! TypeError
+
+new Intl.DateTimeFormat({ ~~locales~~: "en-GB" }); //! TypeError
+```
+
+A `RangeError` is thrown if the locale identifier is a syntactically invalid
+string:
+
+```js error
+new Intl.DateTimeFormat("12-GB"); //! RangeError: Incorrect locale information provided
+```
+
+To be safe and sure, you can use the `Intl.getCanonicalLocales` static method to
+validate locale identifiers if they are structurally valid language tags, before
+using them:
+
+```js error
+try {
+  Intl.getCanonicalLocales("EN-GB"); // en-GB
+  Intl.getCanonicalLocales(["EN-US", "Fr"]); // ["en-US", "fr"]
+  Intl.getCanonicalLocales("12_GB"); //! throws an error
+} catch (err) {
+  console.log((err as Error).toString()); // RangeError: Incorrect locale information provided
+}
+```
+
+The system's locale is used, if an implementation doesn't recognize a
+well-formed locale identifier or any locale identifiers from the locales list:
+
+```js
+new Intl.DateTimeFormat("my-locale"); // falls back to system's locale
+new Intl.DateTimeFormat(["my-locale", "our-locale"]); // falls back to system's locale
+```
+
+### How does the JavaScript Internationalization API resolve locales?
+
+The process of resolving a locale is referred to as
+**locale (or language) negotiation**. Knowing the internals of how this process
+works isn't important for you to write correct code, inasmuch as you specify
+well-formed valid `locales`. But, in some rare instances, it might help.
+
+As we now know, the constructors from the i18n API, as well as the updated
+language-sensitive functions in `String`, `Number`, and `Date` each take a
+`locales` and `options` argument. Together, these arguments form a request. The
+constructors then compare this request against the actual capabilities of their
+implementation to determine the actual locale to be used.
+
+Two matching algorithms exist from which implementations can use to compare the
+request represented by the `locales` and `options` argument against the locales
+it has available to pick the best one: the `"lookup"` matcher which follows the
+[Lookup algorithm specified in BCP 47](https://datatracker.ietf.org/doc/html/rfc4647#section-3.4),
+and the `"best fit"` matcher, which is the default algorithm, lets the
+implementation provide a locale.
+
+You can specify a matching algorithm from the existing ones using the
+`localeMatcher` property in the `options` argument:
+
+```js
+new Intl.DateTimeFormat("en-GB", { localeMatcher: "best fit" }); // the default
+new Intl.DateTimeFormat("en-GB", { localeMatcher: "lookup" });
+```
+
+And, you can find out the result of the negotiation for a constructed object
+using the `resolvedOptions` method. It returns an object with properties for all
+parameters except the matcher parameters:
+
+```js
+let dtf = new Intl.DateTimeFormat("en-GB", { localeMatcher: "lookup" });
+console.log(dtf.resolvedOptions()); // …
+
+dtf = new Intl.DateTimeFormat("en-GB-u-ca-buddhist", {
+  localeMatcher: "best-fit",
+});
+console.log(dtf.resolvedOptions()); // …
+
+dtf = new Intl.DateTimeFormat("en-GB-u-ca-invalid");
+console.log(dtf.resolvedOptions()); // …
+```
+
+## How is the JavaScript Internationalization API used?
+
+The JavaScript i18n API can be used in two ways: _directly_ or _indirectly_.
+
+### Using the i18n API directly
+
+JavaScript apps can use the i18n API directly by using the new
+language-sensitive constructors, specifying a list of preferred locales and
+options to configure its behavior.
+
+#### `Intl.Collator`
+
+This object enables language-sensitive string comparison.
+
+```js
+/** Strings */
+console.log(new Intl.Collator().compare("a", "z")); // -1
+console.log(new Intl.Collator().compare("z", "a")); // 1
+console.log(new Intl.Collator().compare("a", "a")); // 0
+
+/** Using locales */
+// In Polish, ł sorts with l
+console.log(new Intl.Collator("pl").compare("ł", "z")); // -1
+
+// in Czech, ł sorts after z
+console.log(new Intl.Collator("cs").compare("ł", "z")); // 1
+
+/** Using options */
+// In Spanish, ñ and n are separate base letters
+console.log(
+  new Intl.Collator("es", { sensitivity: "base" }).compare("ñandú", "nandu"),
+); // 1
+
+// In English, ñ has n as the base letter
+console.log(
+  new Intl.Collator("en", { sensitivity: "base" }).compare("ñandú", "nandu"),
+); // 0
+
+/** Arrays */
+console.log(
+  ["Banana", "apple", "Apricot", "blueberry"].sort(
+    new Intl.Collator("en").compare,
+  ),
+); // ['apple', 'Apricot', 'Banana', 'blueberry']
+```
+
+For a list of the Unicode extension keys allowed in `locales`, and the
+properties supported in `options`, when using the `Intl.Collator()` constructor,
+see
+[Parameters for Intl.Collator() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Collator/Collator#parameters).
+
+#### `Intl.DateTimeFormat`
+
+This object enables language-sensitive date and time formatting.
+
+```js
+const date = new Date(Date.UTC(2024, 8, 6, 4, 24, 16, 500));
+
+// The default locale, and the default options are used
+console.log(new Intl.DateTimeFormat().format(date));
+
+/** Using locales */
+// British English uses day-month-year order
+console.log(new Intl.DateTimeFormat("en-GB").format(date)); // 06/09/2024
+
+// US English uses month-day-year order
+console.log(new Intl.DateTimeFormat("en-US").format(date)); // 9/6/2024
+
+// Korean uses year-month-day order
+console.log(new Intl.DateTimeFormat("ko-KR").format(date)); // 2024. 9. 6.
+
+// Swedish uses year-month-day and hyphen as separators
+console.log(new Intl.DateTimeFormat("sv-SE").format(date)); // 2024-09-06
+
+// Arabic uses real Arabic digits
+console.log(new Intl.DateTimeFormat("ar-EG").format(date)); // ٦‏/٩‏/٢٠٢٤
+
+// Include a fallback language, when requesting a language that may not be supported
+// Afrikaans as spoken in Zimbabwe, include a fallback language, in this case Dutch
+console.log(new Intl.DateTimeFormat(["af-ZW", "nl"]).format(date));
+
+/** Using options */
+console.log(
+  new Intl.DateTimeFormat("en-GB", {
+    dateStyle: "full",
+    timeStyle: "long",
+    timeZone: "Africa/Lagos",
+  }).format(date),
+); // Friday 6 September 2024 at 05:24:16 GMT+1
+```
+
+For a list of the Unicode extension keys allowed in `locales`, and the
+properties supported in `options`, when using the `Intl.DateTimeFormat()`
+constructor, see
+[Parameters for Intl.DateTimeFormat() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat#parameters).
+
+#### `Intl.NumberFormat`
+
+This object enables language-sensitive number formatting.
+
+```js
+const number = 1234560.789;
+
+// The default locale, and the default options are used
+console.log(new Intl.NumberFormat().format(number));
+
+/** Using locales */
+// Britian uses period as decimal separator and comma for thousands
+console.log(new Intl.NumberFormat("en-GB").format(number)); // 1,234,560.789
+
+// German uses comma as decimal separator and period for thousands
+console.log(new Intl.NumberFormat("de-DE").format(number)); // 1.234.560,789
+
+// Arabic uses real Arabic digits
+console.log(new Intl.NumberFormat("ar-EG").format(number)); // ١٬٢٣٤٬٥٦٠٫٧٨٩
+
+// India uses thousands/lakh/crore separators
+console.log(new Intl.NumberFormat("en-IN").format(number)); // 12,34,560.789
+
+// Include a fallback language, when requesting a language that may not be supported
+// Afrikaans as spoken in Zimbabwe, include a fallback language, in this case Dutch
+console.log(new Intl.NumberFormat(["af-ZW", "nl"]).format(number)); // 1 234 560,789
+
+/** Using options */
+// Request a currency format
+console.log(
+  new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(
+    number,
+  ),
+); // 1.234.560,79 €
+
+// The Japanese yen doesn't use a minor unit
+console.log(
+  new Intl.NumberFormat("ja-JP", { style: "currency", currency: "JPY" }).format(
+    number,
+  ),
+); // ￥1,234,561
+
+// Formatting with percent
+console.log(
+  new Intl.NumberFormat("en-US", {
+    style: "percent",
+  }).format(0.67),
+); // 67%
+```
+
+For a list of the Unicode extension keys allowed in `locales`, and the
+properties supported in `options`, when using the `Intl.NumberFormat()`
+constructor, see
+[Parameters for Intl.NumberFormat() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat#parameters).
+
+#### `Intl.RelativeTimeFormat`
+
+This object enables language-sensitive relative time formatting.
+
+```js
+/** Using format(value, unit) */
+const rtf1 = new Intl.RelativeTimeFormat("en");
+console.log(rtf1.format(3, "year")); // in 3 years
+console.log(rtf1.format(-1, "day")); // 1 day ago
+
+const rtf2 = new Intl.RelativeTimeFormat("en", { style: "short" });
+console.log(rtf2.format(2, "quarter")); // in 2 qtrs.
+console.log(rtf2.format(-4, "hour")); // 4 hr. ago
+
+const rtf3 = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+console.log(rtf3.format(-1, "day")); // yesterday
+console.log(rtf3.format(0, "day")); // today
+cosole.log(rtf3.format(1, "day")); // tomorrow
+
+/** Using formatToParts(value, unit) */
+const rtf4 = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+console.log(rtf4.format(-1, "day")); // [{ type: "literal", value: "yesterday"}]
+console.log(rtf4.formatToParts(14, "day"));
+// [
+//   { type: 'literal', value: 'in ' },
+//   { type: 'integer', unit: 'day' value: '14' },
+//   { type: 'literal', value: ' days' }
+// ]
+```
+
+For a list of the Unicode extension keys allowed in `locales`, and the
+properties supported in `options`, when using the `Intl.RelativeTimeFormat()`
+constructor, see
+[Parameters for Intl.RelativeTimeFormat() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/RelativeTimeFormat#parameters).
+
+#### `Intl.ListFormat`
+
+This object enables language-sensitive list formatting.
+
+```js
+const frameworks = ["React", "Vue", "Angular"];
+
+/** Using format(list) */
+console.log(new Intl.ListFormat("en-GB").format(frameworks)); // React, Vue and Angular
+console.log(new Intl.ListFormat("en-US").format(frameworks)); // React, Vue, and Angular
+console.log(new Intl.ListFormat("de").format(frameworks)); // React, Vue und Angular
+
+console.log(new Intl.ListFormat("en", { type: "disjunction" }).format(frameworks)); // React, Vue, or Angular
+console.log(new Intl.ListFormat("de", { type: "disjunction"});.format(frameworks)); // React, Vue oder Angular
+
+console.log(new Intl.ListFormat("en", { style: "narrow", type: "unit" }).format(frameworks)); // React Vue Angular
+console.log(new Intl.ListFormat("de", { style: "narrow", type: "unit" }).format(frameworks)); // React, Vue und Angular
+
+/** Using formatToParts(list) */
+console.log(
+  new Intl.ListFormat("en-GB", {
+    style: "long",
+    type: "conjunction",
+  }).formatToParts(frameworks)
+);
+// [
+//   { type: 'element', value: 'React' },
+//   { type: 'literal', value: ', ' },
+//   { type: 'element', value: 'Vue' },
+//   { type: 'literal', value: ' and ' },
+//   { type: 'element', value: 'Angular' }
+// ];
+```
+
+For a list of the Unicode extension keys allowed in `locales`, and the
+properties supported in `options`, when using the `Intl.ListFormat()`
+constructor, see
+[Parameters for Intl.ListFormat() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/ListFormat#parameters).
+
+#### `Intl.Segmenter`
+
+This object enables language-sensitive text segmentation, enabling you to get
+meaningful items (graphemes, words, or sentences) from a string.
+
+```js
+const str1 = "This text will be segmented.";
+
+// Instead of doing this
+let segmentedText = str1.split(" ");
+console.log(segmentedText); // ['This', 'text', 'will', 'be', 'segmented.']
+
+// Do this
+let segmenter = new Intl.Segmenter("en", { granularity: "word" });
+segmentedText = Array.from(segmenter.segment(str1), ({ segment }) => segment);
+console.log(segmentedText); // 'This', ' ', 'text', ' ', 'will', ' ', 'be', ' ', 'segmented', '.']
+
+// Here `String.prototype.split()` gives the wrong result, because Japanese does not use whitespaces between words
+const str2 = "吾輩は猫である。名前はたぬき。";
+segmentedText = str2.split(" ");
+console.log(segmentedText); // ['吾輩は猫である。名前はたぬき。']
+
+// Using `Intl.Segmenter`, we get the correct result
+const segmenter = new Intl.Segmenter("ja-JP", { granularity: "word" });
+segmentedText = Array.from(segmenter.segment(str2), ({ segment }) => segment);
+console.log(segmentedText); // ['吾輩', 'は', '猫', 'で', 'ある', '。', '名前', 'は', 'たぬき', '。']
+```
+
+For a list of the Unicode extension keys allowed in `locales`, and the
+properties supported in `options`, when using the `Intl.Segmenter()`
+constructor, see
+[Parameters for Intl.Segmenter() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/Segmenter#parameters).
+
+#### `Intl.PluralRules`
+
+This object enables plural-sensitive formatting and plural-related language rules.
+
+```js
+/** Using select */
+const pr = new Intl.PluralRules();
+console.log(pr.select(0)); // 'other' if default locale is US English
+console.log(pr.select(1)); // 'one' if default locale is US English
+console.log(pr.select(2)); // 'other' if default locale is US English
+console.log(pr.select(3)); // 'other' if default locale is US English
+
+const arCardinalRules = new Intl.PluralRules("ar-EG");
+console.log(arCardinalRules.select(0)); // zero
+console.log(arCardinalRules.select(1)); // one
+console.log(arCardinalRules.select(2)); // two
+console.log(arCardinalRules.select(6)); // few
+console.log(arCardinalRules.select(18)); // many
+
+const enOrdinalRules = new Intl.PluralRules("en-US", { type: "ordinal" });
+console.log(enOrdinalRules.select(0)); // "other" (0th)
+console.log(enOrdinalRules.select(1)); // "one"   (1st)
+console.log(enOrdinalRules.select(2)); // "two"   (2nd)
+console.log(enOrdinalRules.select(3)); // "few"   (3rd)
+console.log(enOrdinalRules.select(4)); // "other" (4th)
+console.log(enOrdinalRules.select(21)); // "one"  (21st)
+
+/** Using selectRange */
+console.log(new Intl.PluralRules("pl").selectRange(102, 201)); // 'many'
+console.log(new Intl.PluralRules("fr").selectRange(102, 201)); // 'other'
+
+// Using the tags from select
+const suffixes = new Map([
+  ["one", "st"],
+  ["two", "nd"],
+  ["few", "rd"],
+  ["other", "th"],
+]);
+const formatOrdinals = (n) => {
+  const rule = enOrdinalRules.select(n);
+  const suffix = suffixes.get(rule);
+  return `${n}${suffix}`;
+};
+formatOrdinals(0); // '0th'
+formatOrdinals(1); // '1st'
+formatOrdinals(2); // '2nd'
+formatOrdinals(3); // '3rd'
+formatOrdinals(4); // '4th'
+formatOrdinals(11); // '11th'
+formatOrdinals(21); // '21st'
+formatOrdinals(42); // '42nd'
+formatOrdinals(103); // '103rd'
+```
+
+For a list of the Unicode extension keys allowed in `locales`, and the
+properties supported in `options`, when using the `Intl.PluralRules()`
+constructor, see
+[Parameters for Intl.PluralRules() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules/PluralRules#parameters).
+
+#### `Intl.DisplayNames`
+
+This object enables the consistent translation of language, region, and script
+display names.
+
+```js
+// Get display names of language in English
+let languageNames = new Intl.DisplayNames(["en"], { type: "language" });
+console.log(languageNames.of("en")); // English
+console.log(languageNames.of("th")); // Thai
+console.log(languageNames.of("ko")); // Korean
+console.log(languageNames.of("sv")); // Swedish
+
+// Get display names of language in Spanish
+languageNames = new Intl.DisplayNames(["es"], { type: "language" });
+console.log(languageNames.of("en")); // inglés
+console.log(languageNames.of("th")); // tailandés
+console.log(languageNames.of("ko")); // coreano
+console.log(languageNames.of("sv")); // sueco
+
+// Get display names of date and time in English
+const dateTimeNames = new Intl.DisplayNames("es", { type: "dateTimeField" });
+console.log(dateTimeNames.of("era")); // era
+console.log(dateTimeNames.of("weekOfYear")); // week
+console.log(dateTimeNames.of("minute")); // minute
+console.log(dateTimeNames.of("second")); // second
+
+// Get display names of date and time in Dutch
+const dn = new Intl.DisplayNames("es", { type: "dateTimeField" });
+console.log(dateTimeNames.of("era")); // tijdperk
+console.log(dateTimeNames.of("weekOfYear")); // week
+console.log(dateTimeNames.of("hour")); // uur
+console.log(dateTimeNames.of("minute")); // minuut
+```
+
+For a list of the Unicode extension keys allowed in `locales`, and the
+properties supported in `options`, when using the `Intl.DisplayNames()`
+constructor, see
+[Parameters for Intl.DisplayNames() from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/DisplayNames#parameters).
+
+### Using the i18n API indirectly
+
+JavaScript apps can also use the i18n API indirectly by using the respecified
+language-sensitive functions in `String`, `Number`, and `Date`, with the new
+`locales` and `options` parameters. This enables the updated collation and
+formatting methods to produce the same result as the `compare` and `format`
+methods of the `Intl.Collator`, `Intl.NumberFormat`, and `Intl.DateTimeFormat`
+constructors.
+
+#### `String`
+
+```js
+const str1 = "a";
+const str2 = "z";
+
+// This
+const result1 = str1.localeCompare(str2, "en-US");
+// is same as
+const result2 = new Intl.Collator("en-US").compare(str1, str2);
+
+console.log(result1 === result2); // true
+```
+
+#### `Number`
+
+```js
+const number = 1234560.789;
+
+// This
+const result1 = number.toLocaleString("en-IN");
+// is same as
+const result2 = new Intl.NumberFormat("en-IN").format(number);
+
+console.log(result1 === result2); // true
+```
+
+#### `Date`
+
+```js
+const date = new Date(Date.UTC(2024, 8, 6, 4, 24, 16, 500));
+
+// This
+const result1 = date.toLocaleDateString("en-GB");
+// is same as
+const result2 = new Intl.DateTimeFormat("en-GB").format(date);
+
+console.log(result1 === result2); // true
+
+// This
+const result3 = date.toLocaleString("en-GB");
+// is same as
+const result4 = new Intl.DateTimeFormat("en-GB", {
+  year: "numeric",
+  month: "numeric",
+  day: "numeric",
+  hour: "numeric",
+  minute: "numeric",
+  second: "numeric",
+}).format(date);
+
+console.log(result3 === result4); // true
+
+// This
+const result5 = date.toLocaleTimeString("en-GB");
+// is same as
+const result6 = new Intl.DateTimeFormat("en-GB", {
+  hour: "numeric",
+  minute: "numeric",
+  second: "numeric",
+}).format(date);
+
+console.log(result5 === result6); // true
+```
+
+## Conclusion
+
+Yay! You did it. You've finally reached the end of the journey. You learned what
+i8n means in the context of the Web, why we developers need it, and how we can
+use it in our JavaScript apps. The JavaScript i18n API has grown to maturity and
+we (might) no longer have to reach out for external tools to write
+internationalized apps. This not only reduces our dependencies, strips down
+bundle size but also makes the Web a joy for everyone to use.
+
+While the journey ends here for this article, I hope the i18n journey doesn't
+end here for you. Yes, you've learned about writing internationalized JavaScript
+apps, but there's still more. JavaScript isn't the ONLY core Web technology:
+HTML and CSS are on the list too. So, this isn't complete knowledge of
+**internationalization for the Web**. As you master and use the concepts
+discussed here, take your time to also learn how to write internationalized HTML
+and CSS code.
+
+Now, the ball is in your court. Make the most of it and let's have a
+_global web_.

@@ -1,0 +1,110 @@
+[
+  {
+    "title": "How can I ... ?",
+    "href": "https://tkdodo.eu/blog/how-can-i"
+  },
+  {
+    "title": "Functional HTML",
+    "href": "https://overreacted.io/functional-html"
+  },
+  {
+    "title": "How to Avoid Sleepwalking into Irrelevance in the Age of AI",
+    "href": "https://www.thecaringtechie.com/p/how-to-avoid-sleepwalking-into-irrelevance"
+  },
+  {
+    "title": "Good vs Great Animations",
+    "href": "https://emilkowal.ski/ui/good-vs-great-animations"
+  },
+  {
+    "title": "Every Html Element",
+    "href": "https://iamwillwang.com/every-html-element"
+  },
+  {
+    "title": "So, you want to push a web platform feature?",
+    "href": "https://blog.yoav.ws/posts/so_you_want_to_push_a_web_platform_feature"
+  },
+  {
+    "title": "Open-Source is Just That",
+    "href": "https://vale.rocks/posts/open-source-entitlement"
+  },
+  {
+    "title": "How not to be boring",
+    "href": "https://newsletter.posthog.com/p/how-not-to-be-boring"
+  },
+  {
+    "title": "Learn In Public",
+    "href": "https://www.swyx.io/learn-in-public"
+  },
+  {
+    "title": "Building a digital garden with Obsidian and Astro",
+    "href": "https://www.emgoto.com/obsidian-digital-garden"
+  },
+  {
+    "title": "The Best Programmers I Know",
+    "href": "https://endler.dev/2025/best-programmers"
+  },
+  {
+    "title": "Taste Is Eating Silicon Valley.",
+    "href": "https://www.workingtheorys.com/p/taste-is-eating-silicon-valley"
+  },
+  {
+    "title": "Who Knows What's Good or Bad?",
+    "href": "https://davidgallan.medium.com/who-knows-what-s-good-or-bad-my-tedx-talk-transcript-8404344779ce"
+  },
+  {
+    "title": "Using the Platform",
+    "href": "https://timkadlec.com/remembers/2019-10-21-using-the-platform"
+  },
+  {
+    "title": "Why AI Is Making Dev Skills More Valuable, Not Less",
+    "href": "https://www.builder.io/blog/ai-dev-skill"
+  },
+  {
+    "title": "A handful of reasons JavaScript won't be available",
+    "href": "https://piccalil.li/blog/a-handful-of-reasons-javascript-wont-be-available"
+  },
+  {
+    "title": "How to be a -10x Engineer",
+    "href": "https://taylor.town/-10x"
+  },
+  {
+    "title": "Minimal CSS-only blurry image placeholders",
+    "href": "https://leanrada.com/notes/css-only-lqip"
+  },
+  {
+    "title": "Writes and Write-Nots",
+    "href": "https://paulgraham.com/writes.html"
+  },
+  {
+    "title": "Publishing your work increases your luck",
+    "href": "https://github.com/readme/guides/publishing-your-work"
+  },
+  {
+    "title": "Cool URIs don't change",
+    "href": "https://www.w3.org/Provider/Style/URI.html"
+  },
+  {
+    "title": "Turing Machines",
+    "href": "https://samwho.dev/turing-machines"
+  },
+  {
+    "title": "React \"as\" Prop Using TypeScript",
+    "href": "https://playfulprogramming.com/posts/react-as-prop"
+  },
+  {
+    "title": "How Git Internally Works",
+    "href": "https://octobot.medium.com/how-git-internally-works-1f0932067bee"
+  },
+  {
+    "title": "Why LLM-Powered Programming is More Mech Suit Than Artificial Human",
+    "href": "https://matthewsinclair.com/blog/0178-why-llm-powered-programming-is-more-mech-suit-than-artificial-human"
+  },
+  {
+    "title": "How JavaScript Works Behind the Scenes",
+    "href": "https://www.deepintodev.com/blog/how-javascript-works-behind-the-scenes"
+  },
+  {
+    "title": "The Hidden Cost of AI Coding",
+    "href": "https://terriblesoftware.org/2025/04/23/the-hidden-cost-of-ai-coding"
+  }
+]
