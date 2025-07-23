@@ -14,5 +14,5 @@ You can connect with me:
 - Website: [udohjeremiah.com](https://udohjeremiah.com)
 - Mail: [hello@udohjeremiah.com](mailto:hello@udohjeremiah.com)
 - GitHub: [Udoh Jeremiah](https://github.com/udohjeremiah)
-- LinkedIn: [Udoh Jeremiah](https://www.linkedin.com/in/udoh-jeremiah-02a640304)
+- LinkedIn: [Udoh Jeremiah](https://www.linkedin.com/in/udohjeremiah)
 - Discord: [Udoh Jeremiah](https://discordapp.com/users/1229921586149331066)
