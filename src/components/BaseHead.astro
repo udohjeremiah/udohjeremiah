@@ -16,11 +16,8 @@ const {
 } = Astro.props;
 ---
 
-<!-- Charset & Viewport -->
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-<!-- Basic Metadata -->
 <title>{title}</title>
 <meta name="description" content={description} />
 <meta name="application-name" content={title} />
@@ -32,14 +29,10 @@ const {
 <meta name="robots" content="index, follow" />
 <meta name="theme-color" content="#000000" />
 <meta name="color-scheme" content="dark light" />
-
-<!-- Canonical & SEO -->
 <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <meta name="creator" content={SITE_AUTHOR} />
 <meta name="generator" content={Astro.generator} />
-
-<!-- Icons -->
 <link rel="icon" href="/favicon.ico" type="image/x-icon" />
 <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
 <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
@@ -57,16 +50,12 @@ const {
 />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="manifest" href="/site.webmanifest" />
-
-<!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content={SITE_TITLE} />
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(image.src, Astro.url)} />
-
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:url" content={Astro.url} />
 <meta name="twitter:title" content={title} />
@@ -74,20 +63,13 @@ const {
 <meta name="twitter:image" content={new URL(image.src, Astro.url)} />
 <meta name="twitter:creator" content="@udohjeremiah" />
 <meta name="twitter:site" content="@udohjeremiah" />
-
-<!-- RSS Feed -->
 <link
   rel="alternate"
   type="application/rss+xml"
   title={SITE_TITLE}
   href={new URL("rss.xml", Astro.site)}
 />
-
-<!-- Security / Content Policies -->
-<!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'"/> -->
 <meta http-equiv="X-Content-Type-Options" content="nosniff" />
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
 <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
-
-<!-- Misc Accessibility -->
 <meta name="format-detection" content="telephone=no, email=no, address=no" />

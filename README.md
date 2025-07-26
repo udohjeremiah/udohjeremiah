@@ -1,7 +1,7 @@
 ## Hi there 👋! I'm Udoh Jeremiah. I write, speak and code...
 
 As a software engineer, I apply my knowledge of computer programming to develop
-engaging user interfaces that assist people succeed and remaining productive.
+engaging user interfaces that help people succeed and remain productive.
 
 As a speaker, I use my voice to share my story, experiences, and ideas to
 inspire others and empower them to live their best lives.
