@@ -8,7 +8,6 @@ import expressiveCode from "astro-expressive-code";
 
 import { rehypeAccessibleEmojis } from "rehype-accessible-emojis";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeExternalLinks from "rehype-external-links";
 import rehypeSlug from "rehype-slug";
 
 // https://astro.build/config
@@ -18,13 +17,6 @@ export default defineConfig({
   markdown: {
     rehypePlugins: [
       rehypeAccessibleEmojis,
-      [
-        rehypeExternalLinks,
-        {
-          rel: ["nofollow"],
-          content: { type: "text", value: " 🔗" },
-        },
-      ],
       rehypeSlug,
       [
         rehypeAutolinkHeadings,

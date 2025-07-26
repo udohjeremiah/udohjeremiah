@@ -3,6 +3,8 @@ import opengraphImage from "@assets/opengraph-image.png";
 import BaseHead from "@components/BaseHead.astro";
 import Footer from "@components/Footer.astro";
 import Header from "@components/Header.astro";
+import "@fontsource-variable/geist";
+import "@fontsource-variable/geist-mono";
 import "@styles/global.css";
 import type { ComponentProps } from "astro/types";
 import { SITE_DESCRIPTION, SITE_TITLE } from "src/constants";
@@ -22,7 +24,7 @@ const {
     <BaseHead title={title} description={description} image={image} />
   </head>
   <body
-    class="bg-background text-foreground font-system flex min-h-screen flex-col antialiased"
+    class="bg-background text-foreground flex min-h-screen flex-col antialiased"
   >
     <Header />
     <slot />

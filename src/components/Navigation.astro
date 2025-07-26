@@ -44,10 +44,7 @@ const navSubLinks = [
 
 const navSocialLinks = [
   { title: "GitHub", href: "https://github.com/udohjeremiah" },
-  {
-    title: "LinkedIn",
-    href: "https://www.linkedin.com/in/udohjeremiah",
-  },
+  { title: "LinkedIn", href: "https://www.linkedin.com/in/udohjeremiah" },
   {
     title: "Discord",
     href: "https://discordapp.com/users/1229921586149331066",
@@ -96,7 +93,9 @@ export type Props = Record<string, never>;
                 href={mainLink.href}
                 class="text-muted-foreground group flex items-start gap-4 pb-1 text-6xl xl:text-7xl"
               >
-                <span class="text-sm">{`${index + 1}`.padStart(2, "0")}.</span>
+                <span class="font-mono text-sm">
+                  {`${index + 1}`.padStart(2, "0")}.
+                </span>
                 <span class={mainLink.isActive ? "text-foreground" : ""}>
                   {mainLink.title}
                 </span>
