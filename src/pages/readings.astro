@@ -125,12 +125,15 @@ const lastUpdated = new Date(
     const books = document.querySelectorAll(
       "li.book",
     ) as NodeListOf<HTMLLIElement>;
-    const booksParent = books[0]?.parentElement;
+    if (!filterSelect || !sortSelect) {
+      throw new Error("Select elements not found");
+    }
 
     function applyFilterSort() {
       const filter = filterSelect.value;
       const sort = sortSelect.value;
       const booksArr = Array.from(books);
+      const booksParent = books[0]?.parentElement as HTMLUListElement;
 
       booksArr.sort((a, b) => {
         if (sort === "name") {
@@ -150,7 +153,7 @@ const lastUpdated = new Date(
       booksArr.forEach((book) => {
         const show = filter === "all" || book.dataset.category === filter;
         book.style.display = show ? "" : "none";
-        booksParent?.appendChild(book);
+        booksParent.appendChild(book);
       });
     }
 

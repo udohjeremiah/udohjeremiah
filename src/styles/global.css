@@ -58,19 +58,41 @@
       0 100%;
   }
 
-  #site-nav {
-    @apply pointer-events-none;
+  #site-nav[data-state="closed"] {
+    @apply pointer-events-none transition-none;
     transform: translate3d(0px, -100vh, 0px) scale3d(1, 1, 1) rotateX(0deg)
       rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
   }
 
   #site-nav[data-state="open"] {
-    @apply pointer-events-auto;
+    @apply pointer-events-auto transition-transform;
     transform: translate3d(0px, 0vh, 0px) scale3d(1, 1, 1) rotateX(0deg)
       rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
   }
 
   .expressive-code {
     @apply mt-4;
+  }
+
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: fade 0.3s ease-in-out both;
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0.5;
+      filter: blur(8px);
+      transform: scale(0.98);
+    }
+    to {
+      opacity: 1;
+      filter: blur(0);
+      transform: scale(1);
+    }
   }
 }
