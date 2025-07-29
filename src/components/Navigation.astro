@@ -71,7 +71,7 @@ export type Props = Record<string, never>;
   aria-label="Menu"
   aria-hidden="true"
   data-state="closed"
-  class="bg-muted fixed inset-0 z-1000 flex h-full w-full flex-col gap-16 overflow-auto px-8 py-4 transition-transform duration-1000 ease-in-out will-change-transform transform-3d sm:p-8 lg:px-12"
+  class="bg-muted fixed inset-0 z-1000 flex h-full w-full flex-col gap-16 overflow-auto px-8 py-4 duration-1000 ease-in-out will-change-transform transform-3d sm:p-8 lg:px-12"
 >
   <button
     id="site-nav-close"
@@ -136,28 +136,25 @@ export type Props = Record<string, never>;
 </div>
 
 <script>
-  const siteNav = document.getElementById("site-nav") as HTMLDivElement;
-  const siteNavOpen = document.getElementById(
-    "site-nav-open",
-  ) as HTMLButtonElement;
-  const siteNavClose = document.getElementById(
-    "site-nav-close",
-  ) as HTMLButtonElement;
+  const siteNav = document.getElementById("site-nav");
+  const siteNavOpen = document.getElementById("site-nav-open");
+  const siteNavClose = document.getElementById("site-nav-close");
+  if (!siteNav || !siteNavOpen || !siteNavClose) {
+    throw new Error("Site navigation elements not found");
+  }
 
   siteNavOpen.addEventListener("click", () => {
     siteNav.setAttribute("data-state", "open");
     siteNav.setAttribute("aria-hidden", "false");
-
     siteNavOpen.setAttribute("aria-expanded", "true");
     siteNavClose.setAttribute("aria-expanded", "true");
-
     document.body.classList.add("overflow-hidden");
     siteNavClose.focus();
   });
 
   siteNavClose.addEventListener("click", () => {
+    siteNav.classList.add("transition-transform");
     siteNav.setAttribute("data-state", "closed");
-
     siteNav.addEventListener(
       "transitionend",
       function handleTransitionEnd(event) {
@@ -167,10 +164,8 @@ export type Props = Record<string, never>;
         }
       },
     );
-
     siteNavOpen.setAttribute("aria-expanded", "false");
     siteNavClose.setAttribute("aria-expanded", "false");
-
     document.body.classList.remove("overflow-hidden");
     siteNavOpen.focus();
   });

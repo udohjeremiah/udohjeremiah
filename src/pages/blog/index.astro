@@ -80,7 +80,7 @@ const lastUpdated = new Date(
         {
           sortedPostsByYear.map(([year, posts]) => (
             <div>
-              <h2 class="text-muted-foreground border-b px-2 py-4 text-end italic">
+              <h2 class="text-muted-foreground border-b px-2 py-4 text-end font-mono">
                 {year}
               </h2>
               <ul>
@@ -116,11 +116,9 @@ const lastUpdated = new Date(
   <script>
     const params = new URLSearchParams(window.location.search);
     const tag = params.get("tag")?.toLowerCase();
-    const posts = document.querySelectorAll(
-      "li[data-tags]",
-    ) as NodeListOf<HTMLLIElement>;
+    const posts = document.querySelectorAll("li[data-tags]");
 
-    posts.forEach((post) => {
+    (posts as NodeListOf<HTMLLIElement>).forEach((post) => {
       const tags = post.dataset.tags?.split(",");
       const shouldShow = !tag || tags?.includes(tag);
       post.style.display = shouldShow ? "" : "none";
