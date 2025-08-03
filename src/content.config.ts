@@ -13,12 +13,15 @@ const blog = defineCollection({
       tags: z.array(
         z.enum([
           "ai",
+          "animations",
           "coding",
           "death",
+          "html",
           "javascript",
           "life",
           "remix",
           "speaking",
+          "tailwindcss",
           "typescript",
           "writing",
         ]),
