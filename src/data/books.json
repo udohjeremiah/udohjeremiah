@@ -64,6 +64,12 @@
         "name": "The Book",
         "author": "Alan Watts",
         "pageCount": 163
+      },
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL2385402M-M.jpg",
+        "name": "What Does It All Mean?",
+        "author": "Thomas Nagel",
+        "pageCount": 112
       }
     ]
   },
