@@ -14,7 +14,11 @@ const { title, description, heroImage, publishedOn, updatedOn, tags } =
   Astro.props;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout
+  title={title}
+  description={description}
+  image={heroImage ?? blogPlaceholder}
+>
   <main class="flex-1 px-8 py-20 md:px-0">
     <article
       class="prose prose-a:no-underline prose-headings:scroll-mt-20 sm:prose-headings:scroll-mt-28 prose-table:block prose-code:wrap-break-word prose-code:before:content-none prose-code:after:content-none prose-invert prose-code:bg-muted prose-code:-translate-y-px prose-code:rounded prose-code:px-1 prose-code:py-0.5 prose-table:overflow-x-auto mx-auto space-y-12"
