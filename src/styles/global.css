@@ -1,20 +1,38 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+@config "../../tailwind.config.js";
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --font-sans: "Geist Variable", sans-serif;
   --font-mono: "Geist Mono Variable", monospace;
 
-  --color-background: oklch(0 0 0);
-  --color-foreground: oklch(1 0 180);
+  --color-background: #fdfbd4;
+  --color-foreground: #0f0f06;
 
-  --color-card: oklch(0.21 0.006 285.885);
-  --color-card-foreground: oklch(0.985 0 0);
+  --color-card: #d8d47b;
+  --color-card-foreground: #0f0f06;
 
-  --color-muted: oklch(0.274 0.006 286.033);
-  --color-muted-foreground: oklch(0.705 0.015 286.067);
+  --color-muted: #b0ad62;
+  --color-muted-foreground: #414021;
 
-  --color-border: oklch(1 0 0 / 10%);
+  --color-border: #89864b;
+
+  --radius: 0.625rem;
+}
+
+.dark {
+  --color-background: #0f0f06;
+  --color-foreground: #fdfbd4;
+
+  --color-card: #18180a;
+  --color-card-foreground: #fdfbd4;
+
+  --color-muted: #21210e;
+  --color-muted-foreground: #d8d47b;
+
+  --color-border: #646236;
 }
 
 @layer base {
@@ -24,38 +42,19 @@
     border-color: var(--color-border, currentColor);
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
     text-rendering: optimizelegibility;
-  }
-
-  a {
-    background-image:
-      linear-gradient(#f0b100, #f0b100),
-      linear-gradient(currentColor, currentColor),
-      linear-gradient(currentColor, currentColor);
-    background-size:
-      20px 1px,
-      100% 1px,
-      0 1px;
-    background-position:
-      calc(20px * -1) 100%,
-      100% 100%,
-      0 100%;
-    background-repeat: no-repeat;
-    transition:
-      background-size 1s linear,
-      background-position 1s linear;
-  }
-
-  a:where(:hover, :focus-visible) {
-    background-size:
-      20px 1px,
-      0 1px,
-      100% 1px;
-    background-position:
-      calc(100% + 20px) 100%,
-      100% 100%,
-      0 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   #site-nav[data-state="closed"] {
@@ -70,6 +69,33 @@
       rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
   }
 
+  a {
+    position: relative;
+    text-decoration: none;
+  }
+
+  a::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 0.5px;
+    border-radius: 4px;
+    background-color: currentColor;
+    bottom: 0;
+    left: 0;
+    transform-origin: left;
+    transform: scaleX(1);
+    transition:
+      transform 0.5s ease-in-out,
+      transform-origin 0s linear 0.5s;
+  }
+
+  a:hover::before {
+    transform-origin: right;
+    transform: scaleX(0);
+    transition: transform 0.5s ease-in-out;
+  }
+
   .expressive-code {
     @apply mt-4;
   }
@@ -78,21 +104,20 @@
     navigation: auto;
   }
 
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: fade 0.3s ease-in-out both;
+  ::view-transition-old(root) {
+    animation-delay: 1s;
   }
 
-  @keyframes fade {
+  ::view-transition-new(root) {
+    animation: circle-in 1s;
+  }
+
+  @keyframes circle-in {
     from {
-      opacity: 0.5;
-      filter: blur(8px);
-      transform: scale(0.98);
+      clip-path: circle(0% at 50% 50%);
     }
     to {
-      opacity: 1;
-      filter: blur(0);
-      transform: scale(1);
+      clip-path: circle(100% at 50% 50%);
     }
   }
 }

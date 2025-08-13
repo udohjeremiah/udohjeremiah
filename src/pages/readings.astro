@@ -125,9 +125,6 @@ const lastUpdated = new Date(
     const books = document.querySelectorAll(
       "li.book",
     ) as NodeListOf<HTMLLIElement>;
-    if (!filterSelect || !sortSelect) {
-      throw new Error("Select elements not found");
-    }
 
     function applyFilterSort() {
       const filter = filterSelect.value;

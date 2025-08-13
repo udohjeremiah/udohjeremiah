@@ -25,9 +25,6 @@ export type Props = Record<string, never>;
 
 <script>
   const backToTop = document.getElementById("back-to-top") as HTMLButtonElement;
-  if (!backToTop) {
-    throw new Error("Back to top button not found");
-  }
 
   function toggleBackToTop() {
     if (window.scrollY > 300) {

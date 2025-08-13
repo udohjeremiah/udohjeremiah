@@ -62,7 +62,7 @@ const lastUpdated = new Date(
                 <li>
                   <a
                     href={`/notes/${note.id}`}
-                    class="hover:bg-muted hover:border-b-muted grid grid-cols-[1fr_auto] items-center gap-10 border-b px-2 py-4 [background:unset] [transition:unset]"
+                    class="hover:bg-muted grid grid-cols-[1fr_auto] items-center gap-10 border-b px-2 py-4 before:content-none"
                   >
                     <div>{note.data.title}</div>
                     <time class="text-muted-foreground">

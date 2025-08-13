@@ -164,8 +164,11 @@ const selectedWritings = (await getCollection("blog"))
                     <span class="line-clamp-2 text-xl tracking-wider whitespace-normal">
                       {writing.data.title}
                     </span>
-                    <time datetime={writing.data.publishedOn.toISOString()}>
-                      • {formatDateTime(writing.data.publishedOn)}
+                    <time
+                      datetime={writing.data.publishedOn.toISOString()}
+                      class="font-mono"
+                    >
+                      {formatDateTime(writing.data.publishedOn)}
                     </time>
                   </div>
                   <span class="text-3xl">&rarr;</span>

@@ -3,7 +3,7 @@ title: How to Create an Escalade Loader Using Only HTML and Tailwind CSS
 description: Learn how to create an escalade loader from scratch using HTML and Tailwind CSS.
 heroImage: ../../../public/blog/how-to-create-an-escalade-loader/hero.webp
 publishedOn: 2025-08-03
-tags: [animations, coding, html, tailwindcss]
+tags: [animation, coding, html, tailwindcss]
 ---
 
 ## Introduction

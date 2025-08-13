@@ -19,13 +19,9 @@ const {
 ---
 
 <!doctype html>
-<html lang="en-GB" class="scroll-smooth">
-  <head>
-    <BaseHead title={title} description={description} image={image} />
-  </head>
-  <body
-    class="bg-background text-foreground flex min-h-screen flex-col antialiased"
-  >
+<html lang="en-GB">
+  <BaseHead title={title} description={description} image={image} />
+  <body>
     <Header />
     <slot />
     <Footer />

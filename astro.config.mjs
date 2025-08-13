@@ -25,7 +25,7 @@ export default defineConfig({
           properties: {
             ariaLabel: "Link to section",
             class: [
-              "before:text-muted-foreground [font-weight:inherit] [color:inherit] [background:unset] [transition:unset] before:mr-1 before:-ml-3.5 before:hidden before:text-base before:content-['#'] hover:underline hover:before:inline-block before:hover:no-underline",
+              "after:text-muted-foreground static [font-weight:inherit] [color:inherit] before:content-none after:ml-1 after:hidden after:text-base after:content-['#'] hover:underline hover:after:inline-block hover:after:no-underline",
             ],
           },
         },
