@@ -1,0 +1,43 @@
+---
+export type Props = Record<string, never>;
+---
+
+<select id="theme" class="cursor-pointer appearance-none text-2xl">
+  <option value="system">💻</option>
+  <option value="light">☀️</option>
+  <option value="dark">🌙</option>
+</select>
+
+<script>
+  const storedTheme = localStorage.getItem("theme") ?? "system";
+  const media = window.matchMedia("(prefers-color-scheme: dark)");
+  const themeSelect = document.getElementById("theme") as HTMLSelectElement;
+
+  // Set the initial select value
+  themeSelect.value = storedTheme;
+
+  function applyTheme(theme: string) {
+    if (theme === "system") {
+      document.documentElement.classList.toggle("dark", media.matches);
+    } else if (theme === "light") {
+      document.documentElement.classList.remove("dark");
+    } else if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      console.error("Invalid theme:", theme);
+    }
+  }
+
+  function handleChange() {
+    const theme = themeSelect.value;
+    applyTheme(theme);
+    localStorage.setItem("theme", theme);
+  }
+
+  media.addEventListener("change", () => {
+    document.startViewTransition(() => applyTheme(themeSelect.value));
+  });
+  themeSelect.addEventListener("change", () => {
+    document.startViewTransition(handleChange);
+  });
+</script>

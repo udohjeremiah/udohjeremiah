@@ -16,60 +16,78 @@ const {
 } = Astro.props;
 ---
 
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>{title}</title>
-<meta name="description" content={description} />
-<meta name="application-name" content={title} />
-<meta name="author" content={SITE_AUTHOR} />
-<meta
-  name="copyright"
-  content=`© ${new Date().getFullYear()} ${SITE_AUTHOR}`
-/>
-<meta name="robots" content="index, follow" />
-<meta name="theme-color" content="#000000" />
-<meta name="color-scheme" content="dark light" />
-<link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
-<link rel="sitemap" href="/sitemap-index.xml" />
-<meta name="creator" content={SITE_AUTHOR} />
-<meta name="generator" content={Astro.generator} />
-<link rel="icon" href="/favicon.ico" type="image/x-icon" />
-<link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
-<link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
-<link
-  rel="icon"
-  type="image/png"
-  href="/android-chrome-192x192.png"
-  sizes="192x192"
-/>
-<link
-  rel="icon"
-  type="image/png"
-  href="/android-chrome-512x512.png"
-  sizes="512x512"
-/>
-<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-<link rel="manifest" href="/site.webmanifest" />
-<meta property="og:type" content="website" />
-<meta property="og:site_name" content={SITE_TITLE} />
-<meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image.src, Astro.url)} />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:url" content={Astro.url} />
-<meta name="twitter:title" content={title} />
-<meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={new URL(image.src, Astro.url)} />
-<meta name="twitter:creator" content="@udohjeremiah" />
-<meta name="twitter:site" content="@udohjeremiah" />
-<link
-  rel="alternate"
-  type="application/rss+xml"
-  title={SITE_TITLE}
-  href={new URL("rss.xml", Astro.site)}
-/>
-<meta http-equiv="X-Content-Type-Options" content="nosniff" />
-<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
-<meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
-<meta name="format-detection" content="telephone=no, email=no, address=no" />
+<head>
+  <script is:inline>
+    (() => {
+      const storedTheme = localStorage.getItem("theme");
+      const media = window.matchMedia("(prefers-color-scheme: dark)");
+      document.documentElement.classList.toggle(
+        "dark",
+        storedTheme === "dark" ||
+          (storedTheme === "system" && media.matches) ||
+          (!storedTheme && media.matches),
+      );
+    })();
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="application-name" content={title} />
+  <meta name="author" content={SITE_AUTHOR} />
+  <meta
+    name="copyright"
+    content=`© ${new Date().getFullYear()} ${SITE_AUTHOR}`
+  />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0f0f06" />
+  <meta name="color-scheme" content="dark light" />
+  <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  <meta name="creator" content={SITE_AUTHOR} />
+  <meta name="generator" content={Astro.generator} />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
+  <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
+  <link
+    rel="icon"
+    type="image/png"
+    href="/android-chrome-192x192.png"
+    sizes="192x192"
+  />
+  <link
+    rel="icon"
+    type="image/png"
+    href="/android-chrome-512x512.png"
+    sizes="512x512"
+  />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content={SITE_TITLE} />
+  <meta property="og:url" content={Astro.url} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(image.src, Astro.url)} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content={Astro.url} />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={new URL(image.src, Astro.url)} />
+  <meta name="twitter:creator" content="@udohjeremiah" />
+  <meta name="twitter:site" content="@udohjeremiah" />
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title={SITE_TITLE}
+    href={new URL("rss.xml", Astro.site)}
+  />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta
+    http-equiv="Referrer-Policy"
+    content="strict-origin-when-cross-origin"
+  />
+  <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+  <meta name="format-detection" content="telephone=no, email=no, address=no" />
+  <slot />
+</head>

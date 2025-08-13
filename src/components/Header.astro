@@ -1,8 +1,6 @@
 ---
-import logo from "@assets/logo.svg";
 import Navigation from "@components/Navigation.astro";
-import Image from "astro/components/Image.astro";
-import { SITE_AUTHOR } from "src/constants";
+import ThemeSwitcher from "@components/ThemeSwitcher.astro";
 
 export type Props = Record<string, never>;
 ---
@@ -10,13 +8,9 @@ export type Props = Record<string, never>;
 <header
   class="bg-background sticky inset-0 z-50 flex items-center justify-between px-8 py-4 sm:p-8 lg:px-20"
 >
-  <a href="/" class="[background:unset] [transition:unset]">
-    <Image
-      src={logo}
-      alt={SITE_AUTHOR}
-      loading="eager"
-      class="h-auto w-9 sm:w-10 lg:w-12"
-    />
-  </a>
-  <Navigation />
+  <a href="/" class="text-5xl font-black before:content-none">UJ</a>
+  <div class="flex items-center justify-center gap-2">
+    <Navigation />
+    <ThemeSwitcher />
+  </div>
 </header>

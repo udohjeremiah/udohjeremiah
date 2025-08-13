@@ -21,11 +21,11 @@ const { title, description, heroImage, publishedOn, updatedOn, tags } =
 >
   <main class="flex-1 px-8 py-20 md:px-0">
     <article
-      class="prose prose-a:no-underline prose-headings:scroll-mt-20 sm:prose-headings:scroll-mt-28 prose-table:block prose-code:wrap-break-word prose-code:before:content-none prose-code:after:content-none prose-invert prose-code:bg-muted prose-code:-translate-y-px prose-code:rounded prose-code:px-1 prose-code:py-0.5 prose-table:overflow-x-auto mx-auto space-y-12"
+      class="prose prose-headings:scroll-mt-20 sm:prose-headings:scroll-mt-28 mx-auto space-y-12"
     >
       <BackToPost title="blog" href="/blog" />
       <header
-        class="border-foreground bg-background border-4 shadow-[0.5rem_0.5rem_0_0_#ffffff]"
+        class="border-foreground bg-background overflow-hidden rounded border-4 shadow-[0.5rem_0.5rem_0_0_var(--color-foreground)]"
       >
         <Image
           src={heroImage ?? blogPlaceholder}
@@ -100,7 +100,7 @@ const { title, description, heroImage, publishedOn, updatedOn, tags } =
               tags.map((tag) => (
                 <a
                   href={`/blog/?tag=${encodeURIComponent(tag)}`}
-                  class="[background:unset] [transition:unset] hover:opacity-80"
+                  class="before:content-none hover:opacity-80"
                 >
                   <Tag tag={tag} />
                 </a>

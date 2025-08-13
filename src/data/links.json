@@ -1,5 +1,37 @@
 [
   {
+    "title": "Full-Breadth Developers",
+    "href": "https://justin.searls.co/posts/full-breadth-developers"
+  },
+  {
+    "title": "We are still the web",
+    "href": "https://thehistoryoftheweb.com/we-are-still-the-web"
+  },
+  {
+    "title": "The deskilling of web dev is harming us all",
+    "href": "https://www.baldurbjarnason.com/2024/the-deskilling-of-web-dev-is-harming-us-all"
+  },
+  {
+    "title": "Anatomy of a web component",
+    "href": "https://dbushell.com/2025/08/01/anatomy-of-a-web-component/"
+  },
+  {
+    "title": "Things not to do as a presenter if you want to a great talk recording",
+    "href": "https://christianheilmann.com/2025/08/05/things-not-to-do-as-a-presenter-if-you-want-a-great-talk-recording"
+  },
+  {
+    "title": "Are we really engineers?",
+    "href": "https://www.hillelwayne.com/post/are-we-really-engineers"
+  },
+  {
+    "title": "Generative AI is not going to build your engineering team for you",
+    "href": "https://stackoverflow.blog/2024/12/31/generative-ai-is-not-going-to-build-your-engineering-team-for-you"
+  },
+  {
+    "title": "Simple live reload for developing static sites",
+    "href": "https://leanrada.com/notes/simple-live-reload"
+  },
+  {
     "title": "Lunch with Alan Kay: how to become educated enough to invent the future",
     "href": "https://futureofcoding.org/notes/alan-kay-lunch"
   },

@@ -57,10 +57,7 @@ const lastUpdated = new Date(
     <div class="space-y-2">
       <p class="text-sm font-semibold uppercase">Tags</p>
       <div class="flex flex-wrap items-center gap-4">
-        <a
-          href="/blog"
-          class="[background:unset] [transition:unset] hover:opacity-80"
-        >
+        <a href="/blog" class="before:content-none hover:opacity-80">
           <Tag tag="all" count={posts.length} />
         </a>
         {
@@ -69,7 +66,7 @@ const lastUpdated = new Date(
             .map(([tag, count]) => (
               <a
                 href={`?tag=${encodeURIComponent(tag)}`}
-                class="[background:unset] [transition:unset] hover:opacity-80"
+                class="before:content-none hover:opacity-80"
               >
                 <Tag tag={tag} count={count} />
               </a>
@@ -79,7 +76,7 @@ const lastUpdated = new Date(
       <div class="space-y-4">
         {
           sortedPostsByYear.map(([year, posts]) => (
-            <div>
+            <div data-year={year}>
               <h2 class="text-muted-foreground border-b px-2 py-4 text-end font-mono">
                 {year}
               </h2>
@@ -88,10 +85,10 @@ const lastUpdated = new Date(
                   <li data-tags={post.data.tags.join(",").toLowerCase()}>
                     <a
                       href={`/blog/${post.id}`}
-                      class="hover:bg-muted hover:border-b-muted grid grid-cols-[1fr_auto] items-center gap-10 border-b px-2 py-4 whitespace-normal [background:unset] [transition:unset]"
+                      class="hover:bg-muted grid grid-cols-[1fr_auto] items-center gap-10 border-b px-2 py-4 whitespace-normal before:content-none"
                     >
                       <div class="flex flex-col gap-2 lg:flex-row lg:items-center">
-                        <span>{post.data.title}</span>
+                        <span class="line-clamp-2">{post.data.title}</span>
                         <div class="flex flex-wrap items-center gap-2 lg:flex-nowrap">
                           {post.data.tags
                             .sort((a, b) => a.localeCompare(b))
@@ -100,7 +97,7 @@ const lastUpdated = new Date(
                             ))}
                         </div>
                       </div>
-                      <time class="text-muted-foreground">
+                      <time class="text-muted-foreground font-mono uppercase">
                         {formatPostDate(post.data.publishedOn)}
                       </time>
                     </a>
@@ -116,12 +113,20 @@ const lastUpdated = new Date(
   <script>
     const params = new URLSearchParams(window.location.search);
     const tag = params.get("tag")?.toLowerCase();
+    const postsByYear = document.querySelectorAll("[data-year]");
     const posts = document.querySelectorAll("li[data-tags]");
 
     (posts as NodeListOf<HTMLLIElement>).forEach((post) => {
       const tags = post.dataset.tags?.split(",");
       const shouldShow = !tag || tags?.includes(tag);
-      post.style.display = shouldShow ? "" : "none";
+      if (!shouldShow) post.style.display = "none";
+    });
+
+    (postsByYear as NodeListOf<HTMLElement>).forEach((yearSection) => {
+      const postsInYear = yearSection.querySelectorAll(
+        `li[data-tags]:not([style*='display: none'])`,
+      );
+      if (!postsInYear.length) yearSection.style.display = "none";
     });
   </script>
 </BaseLayout>
