@@ -68,7 +68,7 @@ small to make a change:
 
 Maybe, just maybe, I have to accept that I cannot solve all of the world's
 problems, but I can at least make a contribution. But, there's that part of me
-that doesn't want that. "I want it all", it says. 
+that doesn't want that. "I want it all", it says.
 
 Or, maybe, just maybe, I have to stop thinking about these questions and just
 exist. I don't get an answer to them anyway, so why bother? Or will an answer
