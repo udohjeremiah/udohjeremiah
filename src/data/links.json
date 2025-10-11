@@ -1,5 +1,9 @@
 [
   {
+    "title": "What Is a Modular Monolith And Why You Should Care?",
+    "href": "https://thetshaped.dev/p/what-is-a-modular-monolith-benefits-and-microservices-challenges"
+  },
+  {
     "title": "Fault Tolerance",
     "href": "https://www.brandondail.com/posts/fault-tolerance-react"
   },
