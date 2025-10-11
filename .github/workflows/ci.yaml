@@ -73,7 +73,9 @@ jobs:
           fetch-depth: 0
       - name: ⚙️ commitlint
         uses: wagoid/commitlint-github-action@v6
-
+        with:
+          configFile: .commitlintrc.mjs
+          failOnWarnings: true
   build:
     name: 🚀 Build
     runs-on: ubuntu-latest
