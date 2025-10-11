@@ -11,8 +11,8 @@ export default {
     // Header length must be concise and readable
     "header-max-length": [RuleConfigSeverity.Error, "always", 72],
 
-    // Allow references (e.g. issues, PRs); disallow empty reference field
-    "references-empty": [RuleConfigSeverity.Error, "never"],
+    // Allow references (e.g. issues, PRs); allow empty reference field (relaxed)
+    "references-empty": [RuleConfigSeverity.Disabled],
 
     // Scope must not be empty (encourages more context)
     "scope-empty": [RuleConfigSeverity.Error, "never"],
