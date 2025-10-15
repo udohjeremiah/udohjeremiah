@@ -1,5 +1,14 @@
 [
   {
+    "name": "Planex",
+    "description": "AI-Powered Exoplanet Detection System",
+    "image": "/projects/planex.webp",
+    "href": "https://planex-nu.vercel.app",
+    "repositoryHref": "https://github.com/udohjeremiah/planex",
+    "roles": ["Frontend Developer"],
+    "years": "2025—2025"
+  },
+  {
     "name": "Heartbeat AI",
     "description": "AI-Powered Recruitment Assistant",
     "image": "/projects/heartbeat-ai.webp",
