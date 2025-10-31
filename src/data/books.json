@@ -51,6 +51,17 @@
     ]
   },
   {
+    "category": "Nigeria",
+    "books": [
+      {
+        "image": "https://covers.openlibrary.org/b/olid/OL48258481M-M.jpg",
+        "name": "Do Not Die in Their War",
+        "author": "Dele Farotimi",
+        "pageCount": 334
+      }
+    ]
+  },
+  {
     "category": "Philosophy",
     "books": [
       {
