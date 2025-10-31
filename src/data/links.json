@@ -1,5 +1,41 @@
 [
   {
+    "title": "Just use cURL",
+    "href": "https://justuse.org/curl"
+  },
+  {
+    "title": "The inevitability of anger",
+    "href": "https://www.baldurbjarnason.com/2025/the-inevitability-of-anger"
+  },
+  {
+    "title": "What Actually Happens When You Press 'Send' to ChatGPT",
+    "href": "https://blog.bytebytego.com/p/what-actually-happens-when-you-press"
+  },
+  {
+    "title": "Everything I know about good API design",
+    "href": "https://www.seangoedecke.com/good-api-design"
+  },
+  {
+    "title": "The story of how RSS beat Microsoft",
+    "href": "https://buttondown.com/blog/rss-vs-ice"
+  },
+  {
+    "title": "The Programmer Identity Crisis",
+    "href": "https://hojberg.xyz/the-programmer-identity-crisis"
+  },
+  {
+    "title": "The Zero-Dollar Dream Job",
+    "href": "https://www.the-founders-corner.com/p/the-zero-dollar-dream-job-how-to"
+  },
+  {
+    "title": "Nobody Cares How Hard You Work",
+    "href": "https://alifeengineered.substack.com/p/nobody-cares-how-hard-you-work"
+  },
+  {
+    "title": "Lesser Apes",
+    "href": "https://www.generalist.com/p/lesser-apes"
+  },
+  {
     "title": "What Is a Modular Monolith And Why You Should Care?",
     "href": "https://thetshaped.dev/p/what-is-a-modular-monolith-benefits-and-microservices-challenges"
   },
