@@ -1,7 +1,7 @@
 ---
 title: I'm not a pedophile
 description: But I'm a technophile
-publishedOn: 2026-11-30
+publishedOn: 2025-11-30
 ---
 
 I'm not a pedophile, but I am a technophile.
