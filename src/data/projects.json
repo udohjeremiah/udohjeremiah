@@ -1,5 +1,14 @@
 [
   {
+    "name": "chat",
+    "description": "My Own Version of WhatsApp",
+    "image": "/projects/chat.webp",
+    "href": "https://chat.udohjeremiah.com",
+    "repositoryHref": "https://github.com/udohjeremiah/chat",
+    "roles": ["Creator", "Developer"],
+    "years": "2025—Present"
+  },
+  {
     "name": "zod-to-mongo-schema",
     "description": "Convert Zod schemas to MongoDB-compatible JSON Schemas effortlessly.",
     "image": "/projects/zod-to-mongo-schema.webp",
