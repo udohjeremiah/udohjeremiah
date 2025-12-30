@@ -1,6 +1,6 @@
 ---
 title: Great public speakers
-description: The secret of great public speakers.
+description: The secret of great public speakers
 publishedOn: 2025-11-20
 ---
 
