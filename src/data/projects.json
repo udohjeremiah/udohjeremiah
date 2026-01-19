@@ -23,7 +23,7 @@
     "image": "/projects/planex.webp",
     "href": "https://planex-nu.vercel.app",
     "repositoryHref": "https://github.com/udohjeremiah/planex",
-    "roles": ["Frontend Developer"],
+    "roles": ["Creator", "Frontend Developer"],
     "years": "2025—2025"
   },
   {
@@ -31,16 +31,16 @@
     "description": "AI-Powered Recruitment Assistant",
     "image": "/projects/heartbeat-ai.webp",
     "href": "https://heartbeat365.com",
-    "roles": ["Frontend Developer"],
+    "roles": ["Frontend Engineer"],
     "years": "2025—2025"
   },
   {
-    "name": "Remix Todo App",
+    "name": "Todo App",
     "description": "The first JavaScript todo app in the world that works without JavaScript.",
-    "image": "/projects/remix-todo-app.webp",
+    "image": "/projects/todo-app.webp",
     "href": "https://remix-todo-app-jrhk.onrender.com",
     "repositoryHref": "https://github.com/udohjeremiah/remix-todo-app",
-    "roles": ["Creator", "Full-Stack Developer"],
+    "roles": ["Creator", "Full Stack Engineer"],
     "years": "2024—2024"
   },
   {
@@ -48,7 +48,7 @@
     "description": "A cutting-edge investment platform with a sleek and modern design.",
     "image": "/projects/safe-green.webp",
     "href": "https://safe-green.vercel.app",
-    "roles": ["Creator", "Full-Stack Developer"],
+    "roles": ["Creator", "Full Stack Developer"],
     "years": "2024—2024"
   },
   {
@@ -57,7 +57,7 @@
     "image": "/projects/ecommerce-store.webp",
     "href": "https://ecommerce-store-olive-gamma.vercel.app",
     "repositoryHref": "https://github.com/udohjeremiah/ecommerce-store",
-    "roles": ["Creator", "Full-Stack Developer"],
+    "roles": ["Creator", "Full Stack Developer"],
     "years": "2024—2024"
   },
   {
@@ -66,7 +66,7 @@
     "image": "/projects/ecommerce-cms.webp",
     "href": "https://ecommerce-cms-mu.vercel.app",
     "repositoryHref": "https://github.com/udohjeremiah/ecommerce-cms",
-    "roles": ["Creator", "Full-Stack Developer"],
+    "roles": ["Creator", "Full Stack Developer"],
     "years": "2024—2024"
   },
   {
@@ -75,7 +75,7 @@
     "image": "/projects/photo-album.webp",
     "href": "https://photo-album-blond.vercel.app",
     "repositoryHref": "https://github.com/udohjeremiah/photo-album",
-    "roles": ["Creator", "Full-Stack Developer"],
+    "roles": ["Creator", "Full Stack Developer"],
     "years": "2024—2024"
   },
   {
@@ -83,7 +83,7 @@
     "description": "A cutting-edge cryptocurrency brokerage investment platform.",
     "image": "/projects/eleotrade.webp",
     "href": "https://eleotrade.vercel.app",
-    "roles": ["Creator", "Full-Stack Developer"],
+    "roles": ["Creator", "Full Stack Developer"],
     "years": "2024—2024"
   },
   {
@@ -92,7 +92,7 @@
     "image": "/projects/examshare.webp",
     "href": "https://examshare.vercel.app",
     "repositoryHref": "https://github.com/udohjeremiah/examshare",
-    "roles": ["Creator", "Full-Stack Developer"],
+    "roles": ["Creator", "Full Stack Engineer"],
     "years": "2024—2024"
   }
 ]
