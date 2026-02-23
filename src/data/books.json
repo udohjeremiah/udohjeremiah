@@ -159,6 +159,12 @@
     "category": "Psychology",
     "books": [
       {
+        "image": "https://covers.openlibrary.org/b/olid/OL8631770M-M.jpg",
+        "name": "The Art of Seduction",
+        "author": "Robert Greene",
+        "pageCount": 468
+      },
+      {
         "image": "https://covers.openlibrary.org/b/olid/OL36689110M-M.jpg",
         "name": "Thinking, Fast and Slow",
         "author": "Daniel Kahneman",
