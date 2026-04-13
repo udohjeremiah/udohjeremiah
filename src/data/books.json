@@ -94,6 +94,12 @@
     "category": "Productivity",
     "books": [
       {
+        "image": "https://covers.openlibrary.org/b/olid/OL8641287M-M.jpg",
+        "name": "An Enemy Called Average",
+        "author": "John L. Mason",
+        "pageCount": 123
+      },
+      {
         "image": "https://covers.openlibrary.org/b/olid/OL26879249M-M.jpg",
         "name": "Digital Minimalism",
         "author": "Cal Newport",
