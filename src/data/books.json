@@ -100,6 +100,12 @@
         "pageCount": 123
       },
       {
+        "image": "https://covers.openlibrary.org/b/olid/OL27918581M-M.jpg",
+        "name": "Atomic Habits",
+        "author": "James Clear",
+        "pageCount": 168
+      },
+      {
         "image": "https://covers.openlibrary.org/b/olid/OL26879249M-M.jpg",
         "name": "Digital Minimalism",
         "author": "Cal Newport",
