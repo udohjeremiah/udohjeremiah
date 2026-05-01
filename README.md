@@ -1,4 +1,4 @@
-## Hi there 👋! I'm Udoh Jeremiah. I write, speak and code...
+## Hi there 👋! I'm Udoh Jeremiah. I write, speak and code
 
 As a software engineer, I apply my knowledge of computer programming to develop
 engaging user interfaces that help people succeed and remain productive.
@@ -13,6 +13,7 @@ You can connect with me:
 
 - Website: [udohjeremiah.com](https://udohjeremiah.com)
 - Mail: [hello@udohjeremiah.com](mailto:hello@udohjeremiah.com)
-- GitHub: [Udoh Jeremiah](https://github.com/udohjeremiah)
+- X: [Udoh Jeremiah](https://x.com/udohjeremiah_)
 - LinkedIn: [Udoh Jeremiah](https://www.linkedin.com/in/udohjeremiah)
 - Discord: [Udoh Jeremiah](https://discordapp.com/users/1229921586149331066)
+- GitHub: [Udoh Jeremiah](https://github.com/udohjeremiah)
