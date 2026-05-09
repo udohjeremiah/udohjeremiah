@@ -1,5 +1,6 @@
 # build output
 dist
+
 # generated types
 .astro
 
@@ -10,7 +11,7 @@ dist
 **/.git
 
 # lockfiles
-package-lock.json
+pnpm-lock.yaml
 
 # markdown files in src/content
 src/content/**/*.md

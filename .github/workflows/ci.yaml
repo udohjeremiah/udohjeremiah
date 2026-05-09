@@ -13,16 +13,22 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
 
+      - name: 🧰 Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
       - name: ⎔ Setup node
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: pnpm
 
-      - name: 📥 Download deps
-        uses: bahmutov/npm-install@v1
+      - name: 📥 Install dependencies
+        run: pnpm install --frozen-lockfile
 
-      - name: 💅 Format
-        run: npm run format
+      - name: 💅 Format check
+        run: pnpm format
 
   lint:
     name: ⬣ ESLint
@@ -31,16 +37,22 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
 
+      - name: 🧰 Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
       - name: ⎔ Setup node
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: pnpm
 
-      - name: 📥 Download deps
-        uses: bahmutov/npm-install@v1
+      - name: 📥 Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: 🔬 Lint
-        run: npm run lint
+        run: pnpm lint
 
   typecheck:
     name: ʦ TypeScript
@@ -49,33 +61,23 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
 
+      - name: 🧰 Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
       - name: ⎔ Setup node
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: pnpm
 
-      - name: 📥 Download deps
-        uses: bahmutov/npm-install@v1
+      - name: 📥 Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: 🔎 Type check
-        run: npm run typecheck
+        run: pnpm typecheck
 
-  commitlint:
-    name: ⚙️ commitlint
-    runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]'
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-      - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: ⚙️ commitlint
-        uses: wagoid/commitlint-github-action@v6
-        with:
-          configFile: .commitlintrc.mjs
-          failOnWarnings: true
   build:
     name: 🚀 Build
     runs-on: ubuntu-latest
@@ -83,13 +85,35 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
 
+      - name: 🧰 Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
       - name: ⎔ Setup node
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: pnpm
 
-      - name: 📥 Download deps
-        uses: bahmutov/npm-install@v1
+      - name: 📥 Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: 🚀 Build
-        run: npm run build
+        run: pnpm build
+
+  commitlint:
+    name: ⚙️ commitlint
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: ⚙️ commitlint
+        uses: wagoid/commitlint-github-action@v6
+        with:
+          configFile: .commitlintrc.mjs
+          failOnWarnings: true
