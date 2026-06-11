@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "license": "CC-BY-NC-4.0",
-  "description": "I write, speak and code...",
+  "description": "Eudaimonic",
   "homepage": "https://udohjeremiah.com",
   "author": {
     "name": "Udoh Jeremiah",
@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/udohjeremiah/udohjeremiah/issues"
   },
-  "packageManager": "pnpm@11.0.0",
+  "packageManager": "pnpm@11.4.0",
   "engines": {
     "node": ">=22"
   },

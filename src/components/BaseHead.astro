@@ -45,10 +45,12 @@ const {
   <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
   <link rel="sitemap" href="/sitemap-index.xml" />
   <meta name="creator" content={SITE_AUTHOR} />
+  <meta name="apple-mobile-web-app-title" content="Udoh Jeremiah" />
   <meta name="generator" content={Astro.generator} />
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-  <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
-  <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" href="/favicon-96x96.png" type="image/png" sizes="96x96" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
   <link
     rel="icon"
     type="image/png"
@@ -61,7 +63,6 @@ const {
     href="/android-chrome-512x512.png"
     sizes="512x512"
   />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content={SITE_TITLE} />
@@ -74,8 +75,8 @@ const {
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={new URL(image.src, Astro.url)} />
-  <meta name="twitter:creator" content="@udohjeremiah" />
-  <meta name="twitter:site" content="@udohjeremiah" />
+  <meta name="twitter:creator" content="@udohjeremiah_" />
+  <meta name="twitter:site" content="@udohjeremiah_" />
   <link
     rel="alternate"
     type="application/rss+xml"
