@@ -90,7 +90,7 @@
     "name": "Examshare",
     "description": "An open-source project for sharing past examination questions in higher education.",
     "image": "/projects/examshare.webp",
-    "href": "https://examshare.vercel.app",
+    "href": "https://examshare.udohjeremiah.com",
     "repositoryHref": "https://github.com/udohjeremiah/examshare",
     "roles": ["Creator", "Full Stack Engineer"],
     "years": "2024—2024"
