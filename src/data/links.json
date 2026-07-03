@@ -1,5 +1,29 @@
 [
   {
+    "title": "Learn SQL and SQLx by Building a Book Library CLI in Rust",
+    "href": "https://blog.sheerluck.dev/posts/learn-sql-and-sqlx-by-building-a-book-library-cli-in-rust"
+  },
+  {
+    "title": "Rewriting the world in Rust",
+    "href": "https://bitfieldconsulting.com/posts/rewrite-in-rust"
+  },
+  {
+    "title": "Self-Hosting Guide",
+    "href": "https://github.com/mikeroyal/Self-Hosting-Guide"
+  },
+  {
+    "title": "Meta Harnesses, Agents, and Lessons from the Framework Wars",
+    "href": "https://nx.dev/blog/meta-harnesses-agents-and-lessons-from-the-framework-wars"
+  },
+  {
+    "title": "Who is Speaking On Your Behalf?",
+    "href": "https://dev.to/unicodeveloper/who-is-speaking-on-your-behalf-2c5e"
+  },
+  {
+    "title": "FRIGHTENINGLY AMBITIOUS STARTUP IDEAS",
+    "href": "https://paulgraham.com/ambitious.html"
+  },
+  {
     "title": "How to Earn a Billion Dollars",
     "href": "https://paulgraham.com/earn.html"
   },
@@ -289,7 +313,7 @@
   },
   {
     "title": "Why I'm Giving Up My Design Title—And What That Says About The Future of Design",
-    "href": "https://benn.substack.com/p/everyone-is-crazy-now"
+    "href": "https://www.suffsyed.com/futurememo/why-im-leaving-design"
   },
   {
     "title": "Everyone is crazy now",
