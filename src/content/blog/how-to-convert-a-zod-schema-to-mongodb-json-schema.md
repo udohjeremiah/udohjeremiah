@@ -1,14 +1,14 @@
 ---
 title: How to Convert a Zod Schema to a MongoDB JSON Schema
 description: Learn how to effortlessly transform your Zod schemas into MongoDB-compatible JSON Schemas.
-heroImage: ../../../public/blog/zod-to-mongo-schema.webp
+heroImage: ../../../public/blog/zod-mongo-schema.webp
 publishedOn: 2025-10-31
 tags: [json schema, mongodb, typescript, zod]
 ---
 
 TL;DR: I created a simple library that exports a single function which takes a
 Zod schema and then converts it to a MongoDB JSON Schema. Check it out on
-[GitHub](https://github.com/udohjeremiah/zod-to-mongo-schema).
+[GitHub](https://github.com/udohjeremiah/zod-mongo-schema).
 
 ## Before Zod v4
 
@@ -513,7 +513,7 @@ function _sanitizeSchema(schema: any, inProperties = false): any {
   return sanitized;
 }
 
-export default function zodToMongoSchema(zodSchema: z4.$ZodType) {
+export default function zodMongoSchema(zodSchema: z4.$ZodType) {
   if (!zodSchema) return {};
 
   // Convert to JSON Schema Draft 4
@@ -530,9 +530,9 @@ over again. I think in the future, when I need to annotate and validate a
 MongoDB document, I would likely come for this utility. So, yeah, it deserves to
 be a library.
 
-I created the [`zod-to-mongo-schema`](https://www.npmjs.com/package/zod-to-mongo-schema)
+I created the [`zod-mongo-schema`](https://www.npmjs.com/package/@udohjeremiah/zod-mongo-schema)
 package you can install to use this utility. You can also find the code and a
-detailed documentation on [GitHub](https://github.com/udohjeremiah/zod-to-mongo-schema).
+detailed documentation on [GitHub](https://github.com/udohjeremiah/zod-mongo-schema).
 
 ## Conclusion
 

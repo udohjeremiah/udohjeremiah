@@ -1,5 +1,9 @@
 [
   {
+    "title": "Reverse Engineering ChatGPT Web: How OpenAI Built for a Billion Users",
+    "href": "https://performance.dev/chatgpt"
+  },
+  {
     "title": "Learn SQL and SQLx by Building a Book Library CLI in Rust",
     "href": "https://blog.sheerluck.dev/posts/learn-sql-and-sqlx-by-building-a-book-library-cli-in-rust"
   },
