@@ -1,5 +1,25 @@
 [
   {
+    "title": "100 must know CLI tools for developers",
+    "href": "https://100-cli-tools.netlify.app"
+  },
+  {
+    "title": "The Arguments Against Open Source AI are Very Bad",
+    "href": "https://tombedor.dev/arguments-against-open-source-ai-are-very-bad"
+  },
+  {
+    "title": "The Era of Personal Software",
+    "href": "https://allen.hutchison.org/2025/11/28/the-era-of-personal-software"
+  },
+  {
+    "title": "How coding agents work",
+    "href": "https://simonwillison.net/guides/agentic-engineering-patterns/how-coding-agents-work"
+  },
+  {
+    "title": "pre-commit hooks are fundamentally broken",
+    "href": "https://jyn.dev/pre-commit-hooks-are-fundamentally-broken"
+  },
+  {
     "title": "Reverse Engineering ChatGPT Web: How OpenAI Built for a Billion Users",
     "href": "https://performance.dev/chatgpt"
   },
